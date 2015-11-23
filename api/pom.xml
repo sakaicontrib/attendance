@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+    <artifactId>attendance</artifactId>
+    <groupId>org.sakaiproject.attendance</groupId>
+    <version>1.0-SNAPSHOT</version>
+  </parent>
+	
+	<name>attendance - API</name>
+	<groupId>org.sakaiproject.attendance</groupId>
+		<artifactId>attendance-api</artifactId>
+
+	<packaging>jar</packaging>
+
+	<properties>
+    	<deploy.target>shared</deploy.target>
+  	</properties>
+  	
+  	<dependencies>
+
+    	<!-- project dependencies -->
+		
+    	<!-- third party dependencies -->
+   		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+		</dependency>
+
+		<!-- Sakai dependencies -->
+        <dependency>
+            <groupId>org.sakaiproject.kernel</groupId>
+            <artifactId>sakai-kernel-api</artifactId>
+        </dependency>
+	    
+	</dependencies>
+	
+	<build />
+	 
+</project>
