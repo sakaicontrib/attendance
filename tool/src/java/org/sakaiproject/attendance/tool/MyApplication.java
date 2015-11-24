@@ -1,6 +1,5 @@
 package org.sakaiproject.attendance.tool;
 
-import org.apache.wicket.Page;
 import org.apache.wicket.protocol.http.WebApplication;
 import org.apache.wicket.request.IRequestHandler;
 import org.apache.wicket.request.cycle.IRequestCycleListener;
