@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <registration>
 	<tool id="sakai.attendance" 
-		title="My Sakai App" 
-		description="This description is set in the tool registration file, found in the webapp/tools directory">
+		title="Attendance"
+		description="A simple tool to track student attendance.">
 
 		<!--  This tool will be made available to the following site types via Site Info > Edit Tools -->
 		<category name="course" />
