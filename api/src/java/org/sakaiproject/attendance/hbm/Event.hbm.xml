@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping
+        PUBLIC "-//Hibernate/Hibernate Mapping DTD//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="org.sakaiproject.attendance.model">
+
+    <class name="Event" table="ATTENDANCE_EVENT_T">
+
+        <id name="id">
+            <column name="ID" not-null="true" length="19" />
+            <generator class="native">
+                <param name="sequence">ATTENDANCE_EVENT_S</param>
+            </generator>
+        </id>
+
+        <property name="name"           column="NAME"               type="java.lang.String" />
+        <property name="startDateTime"  column="START_DATE_TIME"    type="java.util.Date" />
+        <property name="endDateTime"    column="END_DATE_TIME"      type="java.util.Date" />
+        <property name="isReoccurring"  column="IS_REOCCURRING"     type="java.lang.Boolean" />
+        <property name="reoccurringID"  column="REOCCURRING_ID"     type="java.lang.Long" />
+        <property name="required"       column="REQUIRED"           type="java.lang.Boolean" />
+        <property name="releasedTo"     column="RELEASED_TO"        type="java.lang.String" />
+        <property name="attendanceID"   column="ATTENDANCE_ID"      type="java.lang.Long" />
+        <property name="location"       column="LOCATION"           type="java.lang.String" />
+    </class>
+
+    <query name="getEvent">
+        <![CDATA[from Event event WHERE event.id = :id]]>
+    </query>
+
+    <!--<query name="getEventsForSite">
+        <![CDATA[from Event event WHERE event.attendanceID = (from Attendance attendance WHERE attendance.siteID = :siteID)]]>
+    </query> -->
+
+    <query name="getEvents">
+        <![CDATA[from Event event]]>
+    </query>
+</hibernate-mapping>

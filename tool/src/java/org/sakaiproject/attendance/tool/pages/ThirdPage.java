@@ -16,7 +16,7 @@ import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 
-import org.sakaiproject.attendance.model.Thing;
+import org.sakaiproject.attendance.model.Event;
 
 /**
  * An example page. This interacts with a list of items from the database
@@ -35,12 +35,12 @@ public class ThirdPage extends BasePage {
 		provider = new ThingsDataProvider();
 		
 		//present the data in a table
-		final DataView<Thing> dataView = new DataView<Thing>("simple", provider) {
+		final DataView<Event> dataView = new DataView<Event>("simple", provider) {
 
 			@Override
 			public void populateItem(final Item item) {
-                final Thing thing = (Thing) item.getModelObject();
-                item.add(new Label("name", thing.getName()));
+                final Event event = (Event) item.getModelObject();
+                item.add(new Label("name", event.getName()));
             }
         };
         dataView.setItemReuseStrategy(new DefaultItemReuseStrategy());
@@ -68,25 +68,25 @@ public class ThirdPage extends BasePage {
         });
         
         //add our form
-        add(new ThingForm("form", new Thing()));
+        add(new ThingForm("form", new Event()));
         
 	}
 	
 	/**
-	 * Form for adding a new Thing. It is automatically linked up if the form fields match the object fields
+	 * Form for adding a new Event. It is automatically linked up if the form fields match the object fields
 	 */
 	private class ThingForm extends Form {
 	   
-		public ThingForm(String id, Thing thing) {
-	        super(id, new CompoundPropertyModel(thing));
+		public ThingForm(String id, Event event) {
+	        super(id, new CompoundPropertyModel(event));
 	        add(new TextField("name"));
 	    }
 		
 		@Override
         public void onSubmit(){
-			Thing t = (Thing)getDefaultModelObject();
+			Event t = (Event)getDefaultModelObject();
 			
-			if(projectLogic.addThing(t)){
+			if(attendanceLogic.addEvent(t)){
 				info("Item added");
 			} else {
 				error("Error adding item");
@@ -98,13 +98,13 @@ public class ThirdPage extends BasePage {
 	 * DataProvider to manage our list
 	 * 
 	 */
-	private class ThingsDataProvider implements IDataProvider<Thing> {
+	private class ThingsDataProvider implements IDataProvider<Event> {
 	   
-		private List<Thing> list;
+		private List<Event> list;
 		
-		private List<Thing> getData() {
+		private List<Event> getData() {
 			if(list == null) {
-				list = projectLogic.getThings();
+				list = attendanceLogic.getEvents();
 				Collections.reverse(list);
 			}
 			return list;
@@ -112,7 +112,7 @@ public class ThirdPage extends BasePage {
 		
 		
 		@Override
-		public Iterator<Thing> iterator(long first, long count){
+		public Iterator<Event> iterator(long first, long count){
 			int f = (int) first; //not ideal but ok for demo
 			int c = (int) count; //not ideal but ok for demo
 			return getData().subList(f, f + c).iterator();
@@ -124,7 +124,7 @@ public class ThirdPage extends BasePage {
 		}
 
 		@Override
-		public IModel<Thing> model(Thing object){
+		public IModel<Event> model(Event object){
 			return new DetachableThingModel(object);
 		}
 
@@ -135,17 +135,17 @@ public class ThirdPage extends BasePage {
 	}
 	
 	/**
-	 * Detachable model to wrap a Thing
+	 * Detachable model to wrap a Event
 	 * 
 	 */
-	private class DetachableThingModel extends LoadableDetachableModel<Thing>{
+	private class DetachableThingModel extends LoadableDetachableModel<Event>{
 
 		private final long id;
 		
 		/**
 		 * @param m
 		 */
-		public DetachableThingModel(Thing t){
+		public DetachableThingModel(Event t){
 			this.id = t.getId();
 		}
 		
@@ -186,10 +186,10 @@ public class ThirdPage extends BasePage {
 		/**
 		 * @see org.apache.wicket.model.LoadableDetachableModel#load()
 		 */
-		protected Thing load(){
+		protected Event load(){
 			
 			// get the thing
-			return projectLogic.getThing(id);
+			return attendanceLogic.getEvent(id);
 		}
 	}
 }

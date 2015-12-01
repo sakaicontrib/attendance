@@ -18,44 +18,49 @@
 		<property name="siteService" ref="org.sakaiproject.site.api.SiteService" />
 		
 	</bean>
-	
-	<!-- ProjectLogic -->
-	<bean id="org.sakaiproject.attendance.logic.ProjectLogic"
-    	class="org.sakaiproject.attendance.logic.ProjectLogicImpl"
-    	init-method="init">
-    	
-    	<property name="dao" ref="org.sakaiproject.attendance.dao.ProjectDao" />	
-    	<property name="cache" ref="org.sakaiproject.attendance.cache" />	
-    	
-    </bean>
-    
+
     <!-- DAO. This uses the DataSource that has already been setup by Sakai  -->
-	<bean id="org.sakaiproject.attendance.dao.ProjectDao"
-		class="org.sakaiproject.attendance.dao.impl.ProjectDaoImpl"
-		init-method="init">
-		<property name="jdbcTemplate">
-			<bean class="org.springframework.jdbc.core.JdbcTemplate">
-				<constructor-arg type="javax.sql.DataSource">
-					<ref bean="javax.sql.DataSource" />
-				</constructor-arg>
-			</bean>
-		</property>	
+	<bean id="org.sakaiproject.attendance.dao.AttendanceDaoTarget"
+		  class="org.sakaiproject.attendance.dao.impl.AttendanceDaoImpl"
+		  init-method="init">
+		<property name="sessionFactory" ref="org.sakaiproject.springframework.orm.hibernate.GlobalSessionFactory" />
 	</bean>
-	
+
+	<bean id="org.sakaiproject.attendance.dao.AttendanceDao"
+		  class="org.sakaiproject.genericdao.springutil.CurrentClassLoaderTxProxyFactoryBean">
+		<property name="transactionManager" ref="org.sakaiproject.springframework.orm.hibernate.GlobalTransactionManager" />
+		<property name="target" ref="org.sakaiproject.attendance.dao.AttendanceDaoTarget" />
+		<property name="transactionAttributes">
+			<props>
+				<prop key="*">PROPAGATION_REQUIRED</prop>
+			</props>
+		</property>
+	</bean>
+
+	<!-- AttendanceLogic -->
+	<bean id="org.sakaiproject.attendance.logic.AttendanceLogic"
+		  class="org.sakaiproject.attendance.logic.AttendanceLogicImpl"
+		  init-method="init">
+
+		<property name="dao" ref="org.sakaiproject.attendance.dao.AttendanceDao" />
+	</bean>
+
+	<!-- Add our HBM files to the Sakai global session factory -->
+	<bean id="org.sakaiproject.attendance.hbm.HBMMappingList"
+		  class="org.sakaiproject.springframework.orm.hibernate.impl.AdditionalHibernateMappingsImpl">
+
+		<property name="mappingResources">
+			<list>
+				<value>org/sakaiproject/attendance/hbm/Event.hbm.xml</value>
+			</list>
+		</property>
+
+	</bean>
+
 	<!-- Cache: ttl=1 hour -->
-    <bean id="org.sakaiproject.attendance.cache"
-        class="org.springframework.cache.ehcache.EhCacheFactoryBean">
-        <property name="cacheManager">
-            <ref bean="org.sakaiproject.memory.api.MemoryService.cacheManager"/>
-        </property>
-        <property name="cacheName">
-            <value>org.sakaiproject.attendance.cache</value>
-        </property>
-        <property name="maxElementsInMemory" value="1000" />
-        <property name="diskPersistent" value="false" />
-        <property name="eternal" value="false" />
-        <property name="timeToLive" value="3600" />
-        <property name="timeToIdle" value="3600" />
-    </bean>
+	<bean id="org.sakaiproject.attendance.cache.CacheManager"
+		  class="org.sakaiproject.attendance.cache.CacheManagerImpl">
+		<property name="memoryService" ref="org.sakaiproject.memory.api.MemoryService" />
+	</bean>
 
 </beans>

@@ -20,7 +20,7 @@ import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
-import org.sakaiproject.attendance.logic.ProjectLogic;
+import org.sakaiproject.attendance.logic.AttendanceLogic;
 import org.sakaiproject.attendance.logic.SakaiProxy;
 
 
@@ -41,8 +41,8 @@ public class BasePage extends WebPage implements IHeaderContributor {
 	@SpringBean(name="org.sakaiproject.attendance.logic.SakaiProxy")
 	protected SakaiProxy sakaiProxy;
 	
-	@SpringBean(name="org.sakaiproject.attendance.logic.ProjectLogic")
-	protected ProjectLogic projectLogic;
+	@SpringBean(name="org.sakaiproject.attendance.logic.AttendanceLogic")
+	protected AttendanceLogic attendanceLogic;
 	
 	Link<Void> firstLink;
 	Link<Void> secondLink;
