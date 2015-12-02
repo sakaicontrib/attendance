@@ -26,13 +26,13 @@ import org.sakaiproject.attendance.model.Event;
  */
 public class ThirdPage extends BasePage {
 
-	ThingsDataProvider provider;
+	EventsDataProvider provider;
 	
 	public ThirdPage() {
 		disableLink(thirdLink);
 		
 		//get list of items from db, wrapped in a dataprovider
-		provider = new ThingsDataProvider();
+		provider = new EventsDataProvider();
 		
 		//present the data in a table
 		final DataView<Event> dataView = new DataView<Event>("simple", provider) {
@@ -68,16 +68,16 @@ public class ThirdPage extends BasePage {
         });
         
         //add our form
-        add(new ThingForm("form", new Event()));
+        add(new EventForm("form", new Event()));
         
 	}
 	
 	/**
 	 * Form for adding a new Event. It is automatically linked up if the form fields match the object fields
 	 */
-	private class ThingForm extends Form {
+	private class EventForm extends Form {
 	   
-		public ThingForm(String id, Event event) {
+		public EventForm(String id, Event event) {
 	        super(id, new CompoundPropertyModel(event));
 	        add(new TextField("name"));
 	    }
@@ -98,7 +98,7 @@ public class ThirdPage extends BasePage {
 	 * DataProvider to manage our list
 	 * 
 	 */
-	private class ThingsDataProvider implements IDataProvider<Event> {
+	private class EventsDataProvider implements IDataProvider<Event> {
 	   
 		private List<Event> list;
 		
@@ -125,7 +125,7 @@ public class ThirdPage extends BasePage {
 
 		@Override
 		public IModel<Event> model(Event object){
-			return new DetachableThingModel(object);
+			return new DetachableEventModel(object);
 		}
 
 		@Override
@@ -138,21 +138,21 @@ public class ThirdPage extends BasePage {
 	 * Detachable model to wrap a Event
 	 * 
 	 */
-	private class DetachableThingModel extends LoadableDetachableModel<Event>{
+	private class DetachableEventModel extends LoadableDetachableModel<Event>{
 
 		private final long id;
 		
 		/**
 		 * @param m
 		 */
-		public DetachableThingModel(Event t){
+		public DetachableEventModel(Event t){
 			this.id = t.getId();
 		}
 		
 		/**
 		 * @param id
 		 */
-		public DetachableThingModel(long id){
+		public DetachableEventModel(long id){
 			this.id = id;
 		}
 		
@@ -176,8 +176,8 @@ public class ThirdPage extends BasePage {
 			else if (obj == null){
 				return false;
 			}
-			else if (obj instanceof DetachableThingModel) {
-				DetachableThingModel other = (DetachableThingModel)obj;
+			else if (obj instanceof DetachableEventModel) {
+				DetachableEventModel other = (DetachableEventModel)obj;
 				return other.id == id;
 			}
 			return false;
