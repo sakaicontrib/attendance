@@ -8,23 +8,23 @@ import org.apache.wicket.markup.html.link.Link;
  * @author Steve Swinsburg (steve.swinsburg@anu.edu.au)
  *
  */
-public class SecondPage extends BasePage {
+public class SettingsPage extends BasePage {
 
-	Link<Void> toThirdPageLink;
+	Link<Void> toAddEventPageLink;
 	
-	public SecondPage() {
-		disableLink(secondLink);
+	public SettingsPage() {
+		disableLink(settingsLink);
 		
 		
 		//link to third page
 		//the i18n label for this is directly in the HTML
-		toThirdPageLink = new Link<Void>("toThirdPageLink") {
+		toAddEventPageLink = new Link<Void>("toAddEventPageLink") {
 			private static final long serialVersionUID = 1L;
 			public void onClick() {
-				setResponsePage(new ThirdPage());
+				setResponsePage(new AddEventPage());
 			}
 		};
-		add(toThirdPageLink);
+		add(toAddEventPageLink);
 
 		
 		

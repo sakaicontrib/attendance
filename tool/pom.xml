@@ -22,6 +22,10 @@
       		<groupId>org.sakaiproject.attendance</groupId>
       		<artifactId>attendance-api</artifactId>
     	</dependency>
+		<dependency>
+			<groupId>org.sakaiproject.attendance</groupId>
+			<artifactId>attendance-bundle</artifactId>
+		</dependency>
     	
     	<!-- third party dependencies -->
 		<dependency>
@@ -33,6 +37,10 @@
 			<groupId>org.apache.wicket</groupId>
 			<artifactId>wicket-spring</artifactId>
     	</dependency>
+		<dependency>
+			<groupId>org.apache.wicket</groupId>
+			<artifactId>wicket-datetime</artifactId>
+		</dependency>
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-log4j12</artifactId>

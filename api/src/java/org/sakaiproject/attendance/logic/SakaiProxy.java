@@ -1,5 +1,7 @@
 package org.sakaiproject.attendance.logic;
 
+import java.util.Locale;
+
 /**
  * An interface to abstract all Sakai related API calls in a central method that can be injected into our app.
  * 
@@ -12,25 +14,31 @@ public interface SakaiProxy {
 	 * Get current siteid
 	 * @return
 	 */
-	public String getCurrentSiteId();
+	String getCurrentSiteId();
 	
 	/**
 	 * Get current user id
 	 * @return
 	 */
-	public String getCurrentUserId();
+	String getCurrentUserId();
 	
 	/**
 	 * Get current user display name
 	 * @return
 	 */
-	public String getCurrentUserDisplayName();
+	String getCurrentUserDisplayName();
+
+	/**
+	 * Get Current User's Locale
+	 * @return
+	 */
+	Locale getCurrentUserLocale();
 	
 	/**
 	 * Is the current user a superUser? (anyone in admin realm)
 	 * @return
 	 */
-	public boolean isSuperUser();
+	boolean isSuperUser();
 	
 	/**
 	 * Post an event to Sakai
@@ -40,7 +48,7 @@ public interface SakaiProxy {
 	 * @param modify		true if something changed, false if just access
 	 * 
 	 */
-	public void postEvent(String event,String reference,boolean modify);
+	void postEvent(String event, String reference, boolean modify);
 		
 	/**
 	 * Get a configuration parameter as a boolean
@@ -48,7 +56,7 @@ public interface SakaiProxy {
 	 * @param	dflt the default value if the param is not set
 	 * @return
 	 */
-	public boolean getConfigParam(String param, boolean dflt);
+	boolean getConfigParam(String param, boolean dflt);
 	
 	/**
 	 * Get a configuration parameter as a String
@@ -56,5 +64,5 @@ public interface SakaiProxy {
 	 * @param	dflt the default value if the param is not set
 	 * @return
 	 */
-	public String getConfigParam(String param, String dflt);
+	String getConfigParam(String param, String dflt);
 }

@@ -1,0 +1,58 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd" >
+
+<body>
+<wicket:extend>
+		
+	<h3>Database items:</h3>
+	<table cellspacing="0" class="dataview">
+    <tbody>
+       <tr wicket:id="simple">
+		   <td><span wicket:id="name">Test Name</span></td>
+		   <td><span wicket:id="startDateTime">Test Start Date Time</span></td>
+		   <td><span wicket:id="endDateTime">Test End Date Time</span></td>
+		   <td><span wicket:id="isReoccurring">Test Reoccurring</span></td>
+		   <td><span wicket:id="isRequired">Test Requirement</span></td>
+		   <td><span wicket:id="location">Test Location</span></td>
+		   <td><span wicket:id="releasedTo">Test Release</span></td>
+       </tr>
+    </tbody>
+	</table>
+
+	<div wicket:id="navigator"></div>
+	
+	
+	<h3>Add a new item to the database:</h3>
+	<form wicket:id="form">
+		<form wicket:id="eventForm">
+		Name: <input type="text" wicket:id="name" id="name" /><br />
+		Start Date: <div wicket:id="startDateTime" id="startDateTime"/><br />
+		End Date: <div wicket:id="endDateTime" id="endDateTime" /><br />
+		Required: <input type="checkbox" wicket:id="isRequired" id="isRequired" /><br />
+		Location: <input type="text" wicket:id="location" id="location" /><br />
+		Released To: <input type="text" wicket:id="releasedTo" id="releasedTo" /><br />
+		Repeats: <input type="checkbox" wicket:id="isReoccurring" id="isReoccurring" /><br />
+		</form>
+		<br />
+		<div wicket:id="reoccurrenceContainer">
+			<form wicket:id="reoccurrenceForm">
+				Frequency: <select wicket:id="frequency" id="frequencySelector" type=""/><br />
+				Days of week: <div wicket:id="reoccurrence-daysOfWeek" id="reoccurrence-daysOfWeek" />
+			</form>
+		</div>
+		<input type="submit"/>
+	</form>
+	
+	<style type="text/css">
+	/* style the Wicket FeedbackPanel to remove the list */
+	.alertMessage ul, .success ul {
+		list-style-type: none !important;
+		margin-left: -40px;
+		margin-bottom: 0px;
+		margin-top: 0px;
+	}
+	</style>
+	
+</wicket:extend>
+</body>
+</html>

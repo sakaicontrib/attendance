@@ -21,7 +21,7 @@
 
 <hibernate-mapping package="org.sakaiproject.attendance.model">
 
-    <class name="Reoccurring" table="ATTENDANCE_REOCCURRING_T">
+    <class name="org.sakaiproject.attendance.model.Reoccurrence" table="ATTENDANCE_REOCCURRING_T">
 
         <id name="id">
             <column name="ID" not-null="true" length="19" />

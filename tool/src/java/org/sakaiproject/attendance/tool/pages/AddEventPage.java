@@ -1,22 +1,22 @@
 package org.sakaiproject.attendance.tool.pages;
 
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.form.AjaxCheckBox;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.markup.html.form.TextField;
+import org.apache.wicket.markup.html.form.*;
+import org.apache.wicket.extensions.yui.calendar.DateTimeField;
 import org.apache.wicket.markup.html.navigation.paging.PagingNavigator;
 import org.apache.wicket.markup.repeater.DefaultItemReuseStrategy;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.markup.repeater.data.IDataProvider;
-import org.apache.wicket.model.CompoundPropertyModel;
-import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.LoadableDetachableModel;
+import org.apache.wicket.model.*;
 
 import org.sakaiproject.attendance.model.Event;
+import org.sakaiproject.attendance.model.Reoccurrence;
 
 /**
  * An example page. This interacts with a list of items from the database
@@ -24,12 +24,15 @@ import org.sakaiproject.attendance.model.Event;
  * @author Steve Swinsburg (steve.swinsburg@anu.edu.au)
  *
  */
-public class ThirdPage extends BasePage {
+public class AddEventPage extends BasePage {
 
+	private ArrayList<String> daysSelected = new ArrayList<String>();
+	private String frequencySelected = "";
+	private Boolean isReoccurringValue = false;
 	EventsDataProvider provider;
 	
-	public ThirdPage() {
-		disableLink(thirdLink);
+	public AddEventPage() {
+		disableLink(addEventLink);
 		
 		//get list of items from db, wrapped in a dataprovider
 		provider = new EventsDataProvider();
@@ -41,6 +44,12 @@ public class ThirdPage extends BasePage {
 			public void populateItem(final Item item) {
                 final Event event = (Event) item.getModelObject();
                 item.add(new Label("name", event.getName()));
+				item.add(new Label("startDateTime", event.getStartDateTime()));
+				item.add(new Label("endDateTime", event.getEndDateTime()));
+				item.add(new Label("isReoccurring", event.getIsReoccurring()));
+				item.add(new Label("isRequired", event.getIsRequired()));
+				item.add(new Label("location", event.getLocation()));
+				item.add(new Label("releasedTo", event.getReleasedTo()));
             }
         };
         dataView.setItemReuseStrategy(new DefaultItemReuseStrategy());
@@ -66,9 +75,34 @@ public class ThirdPage extends BasePage {
         		clearFeedback(feedbackPanel);
         	}
         });
-        
+
+
+
+		// generate Container for Reoccurrence Settings
+		final WebMarkupContainer reoccurrenceContainer = new WebMarkupContainer("reoccurrenceContainer");
+		reoccurrenceContainer.setOutputMarkupPlaceholderTag(true);
+		reoccurrenceContainer.setVisible(isReoccurringValue);
+
+		//AjaxCheckBox
+		AjaxCheckBox isReoccurringAjaxCheckBox = new AjaxCheckBox("isReoccurring", new PropertyModel(this, "isReoccurringValue")) {
+			@Override
+			protected void onUpdate(AjaxRequestTarget ajaxRequestTarget) {
+				reoccurrenceContainer.setVisible(isReoccurringValue);
+				ajaxRequestTarget.add(reoccurrenceContainer);
+			}
+		};
+
         //add our form
-        add(new EventForm("form", new Event()));
+		Form form = new Form("form");
+		EventForm eventForm = new EventForm("eventForm", new Event());
+		eventForm.add(isReoccurringAjaxCheckBox);
+		ReoccurrenceForm reoccurrenceForm = new ReoccurrenceForm("reoccurrenceForm", new Reoccurrence());
+
+		reoccurrenceContainer.add(reoccurrenceForm);
+
+		form.add(eventForm);
+		form.add(reoccurrenceContainer);
+        add(form);
         
 	}
 	
@@ -79,7 +113,12 @@ public class ThirdPage extends BasePage {
 	   
 		public EventForm(String id, Event event) {
 	        super(id, new CompoundPropertyModel(event));
-	        add(new TextField("name"));
+			add(new TextField("name"));
+			add(new DateTimeField("startDateTime"));
+			add(new DateTimeField("endDateTime"));
+			add(new CheckBox("isRequired"));
+			add(new TextField("location"));
+			add(new TextField("releasedTo"));
 	    }
 		
 		@Override
@@ -92,6 +131,15 @@ public class ThirdPage extends BasePage {
 				error("Error adding item");
 			}
         }
+	}
+
+	private class ReoccurrenceForm extends Form {
+		public ReoccurrenceForm(String id, Reoccurrence reoccurrence) {
+			super(id, new CompoundPropertyModel(reoccurrence));
+			add(new DropDownChoice<String>("frequency", new Model(frequencySelected), Arrays.asList(new String[]{"Daily", "Monthly"})));
+			add((new CheckBoxMultipleChoice<String>("reoccurrence-daysOfWeek", new Model(daysSelected), getShortDayInWeekName())).setSuffix(""));
+
+		}
 	}
 	
 	/**
@@ -143,7 +191,7 @@ public class ThirdPage extends BasePage {
 		private final long id;
 		
 		/**
-		 * @param m
+		 * @param t
 		 */
 		public DetachableEventModel(Event t){
 			this.id = t.getId();

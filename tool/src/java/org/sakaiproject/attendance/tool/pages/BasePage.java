@@ -23,6 +23,11 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.sakaiproject.attendance.logic.AttendanceLogic;
 import org.sakaiproject.attendance.logic.SakaiProxy;
 
+import java.text.DateFormatSymbols;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 
 /**
  * This is our base page for our Sakai app. It sets up the containing markup and top navigation.
@@ -45,16 +50,15 @@ public class BasePage extends WebPage implements IHeaderContributor {
 	protected AttendanceLogic attendanceLogic;
 	
 	Link<Void> firstLink;
-	Link<Void> secondLink;
-	Link<Void> thirdLink;
+	Link<Void> settingsLink;
+	Link<Void> addEventLink;
 	
 	FeedbackPanel feedbackPanel;
 	
 	public BasePage() {
 		
 		log.debug("BasePage()");
-		
-		
+
     	//first link
 		firstLink = new Link<Void>("firstLink") {
 			private static final long serialVersionUID = 1L;
@@ -67,31 +71,27 @@ public class BasePage extends WebPage implements IHeaderContributor {
 		firstLink.add(new AttributeModifier("title", new ResourceModel("link.first.tooltip")));
 		add(firstLink);
 		
-		
-		
 		//second link
-		secondLink = new Link<Void>("secondLink") {
+		settingsLink = new Link<Void>("settingsLink") {
 			private static final long serialVersionUID = 1L;
 			public void onClick() {
-				setResponsePage(new SecondPage());
+				setResponsePage(new SettingsPage());
 			}
 		};
-		secondLink.add(new Label("secondLinkLabel",new ResourceModel("link.second")).setRenderBodyOnly(true));
-		secondLink.add(new AttributeModifier("title", new ResourceModel("link.second.tooltip")));
-		add(secondLink);
-		
-		
+		settingsLink.add(new Label("secondLinkLabel", new ResourceModel("link.second")).setRenderBodyOnly(true));
+		settingsLink.add(new AttributeModifier("title", new ResourceModel("link.second.tooltip")));
+		add(settingsLink);
 		
 		//third link
-		thirdLink = new Link<Void>("thirdLink") {
+		addEventLink = new Link<Void>("addEventLink") {
 			private static final long serialVersionUID = 1L;
 			public void onClick() {
-				setResponsePage(new ThirdPage());
+				setResponsePage(new AddEventPage());
 			}
 		};
-		thirdLink.add(new Label("thirdLinkLabel",new StringResourceModel("link.third", null, new String[] {"3"})).setRenderBodyOnly(true));
-		thirdLink.add(new AttributeModifier("title", new ResourceModel("link.third.tooltip")));
-		add(thirdLink);
+		addEventLink.add(new Label("thirdLinkLabel", new StringResourceModel("link.third", null, new String[]{"3"})).setRenderBodyOnly(true));
+		addEventLink.add(new AttributeModifier("title", new ResourceModel("link.third.tooltip")));
+		add(addEventLink);
 		
 		
 		// Add a FeedbackPanel for displaying our messages
@@ -127,26 +127,8 @@ public class BasePage extends WebPage implements IHeaderContributor {
 		}
 	}
 	
-	
-	
-	
-	
-
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	/**
-	 * This block adds the required wrapper markup to style it like a Sakai tool. 
+	 * This block adds the isRequired wrapper markup to style it like a Sakai tool.
 	 * Add to this any additional CSS or JS references that you need.
 	 * 
 	 */
@@ -158,12 +140,11 @@ public class BasePage extends WebPage implements IHeaderContributor {
 		response.render(OnLoadHeaderItem.forScript("setMainFrameHeight( window.name )"));
 		
 		
-		//Tool additions (at end so we can override if required)
+		//Tool additions (at end so we can override if isRequired)
 		response.render(StringHeaderItem.forString("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\" />"));
 		//response.renderCSSReference("css/my_tool_styles.css");
 		//response.renderJavascriptReference("js/my_tool_javascript.js");
 	}
-	
 	
 	/** 
 	 * Helper to disable a link. Add the Sakai class 'current'.
@@ -172,7 +153,14 @@ public class BasePage extends WebPage implements IHeaderContributor {
 		l.add(new AttributeAppender("class", new Model<String>("current"), " "));
 		l.setEnabled(false);
 	}
-	
-	
-	
+
+	/**
+	 * Returns a list of the names of the days of the week
+	 */
+	protected List<String> getShortDayInWeekName() {
+		DateFormatSymbols dateFormatSymbols = new DateFormatSymbols(sakaiProxy.getCurrentUserLocale());
+		ArrayList<String> shortWeekDays = new ArrayList(Arrays.asList(dateFormatSymbols.getShortWeekdays()));
+		shortWeekDays.remove(0); // remove first element which is empty
+		return shortWeekDays;
+	}
 }

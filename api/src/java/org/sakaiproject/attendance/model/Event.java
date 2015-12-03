@@ -39,7 +39,7 @@ public class Event implements Serializable {
 	private 				Date	 	endDateTime;
 	private 				Boolean 	isReoccurring;
 	private 				Long 		reoccurringID;
-	private 				Boolean 	required;
+	private 				Boolean 	isRequired;
 	private 				String		releasedTo;
 	private 				Long		attendanceID;
 	private 				String 		location;

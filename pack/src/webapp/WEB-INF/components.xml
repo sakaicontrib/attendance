@@ -16,6 +16,7 @@
 		<property name="eventTrackingService" ref="org.sakaiproject.event.api.EventTrackingService" />
 		<property name="serverConfigurationService" ref="org.sakaiproject.component.api.ServerConfigurationService" />
 		<property name="siteService" ref="org.sakaiproject.site.api.SiteService" />
+		<property name="preferencesService" ref="org.sakaiproject.user.api.PreferencesService" />
 		
 	</bean>
 

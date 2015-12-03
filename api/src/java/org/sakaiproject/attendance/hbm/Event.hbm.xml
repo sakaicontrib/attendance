@@ -19,7 +19,7 @@
         <property name="endDateTime"    column="END_DATE_TIME"      type="java.util.Date" />
         <property name="isReoccurring"  column="IS_REOCCURRING"     type="java.lang.Boolean" />
         <property name="reoccurringID"  column="REOCCURRING_ID"     type="java.lang.Long" />
-        <property name="required"       column="REQUIRED"           type="java.lang.Boolean" />
+        <property name="isRequired"     column="IS_REQUIRED"        type="java.lang.Boolean" />
         <property name="releasedTo"     column="RELEASED_TO"        type="java.lang.String" />
         <property name="attendanceID"   column="ATTENDANCE_ID"      type="java.lang.Long" />
         <property name="location"       column="LOCATION"           type="java.lang.String" />

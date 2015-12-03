@@ -28,15 +28,20 @@
 			<dependency>
       			<groupId>org.sakaiproject.attendance</groupId>
       			<artifactId>attendance-api</artifactId>
-      			<version>1.0-SNAPSHOT</version>
+      			<version>${project.version}</version>
       			<scope>provided</scope>
     		</dependency>
     		<dependency>
       			<groupId>org.sakaiproject.attendance</groupId>
       			<artifactId>attendance-impl</artifactId>
-      			<version>1.0-SNAPSHOT</version>
+      			<version>${project.version}</version>
       			<scope>runtime</scope>
     		</dependency>
+			<dependency>
+				<groupId>org.sakaiproject.attendance</groupId>
+				<artifactId>attendance-bundle</artifactId>
+				<version>${project.version}</version>
+			</dependency>
 			
 			<!-- third party dependencies -->
 			<dependency>
@@ -50,6 +55,11 @@
 				<artifactId>wicket-spring</artifactId>
 				<version>6.21.0</version>
 	    	</dependency>
+			<dependency>
+				<groupId>org.apache.wicket</groupId>
+				<artifactId>wicket-datetime</artifactId>
+				<version>6.21.0</version>
+			</dependency>
 			<dependency>
 				<groupId>org.slf4j</groupId>
 				<artifactId>slf4j-log4j12</artifactId>
@@ -112,5 +122,6 @@
     <module>api</module>
     <module>impl</module>
     <module>pack</module>
+	<module>bundle</module>
   </modules>
 </project>
