@@ -36,8 +36,22 @@
 		<br />
 		<div wicket:id="reoccurrenceContainer">
 			<form wicket:id="reoccurrenceForm">
-				Frequency: <select wicket:id="frequency" id="frequencySelector" type=""/><br />
-				Days of week: <div wicket:id="reoccurrence-daysOfWeek" id="reoccurrence-daysOfWeek" />
+				Frequency:
+				<select wicket:id="frequency" id="frequencySelector">
+					<option>First Option</option>
+				</select>
+				<div wicket:id="dailyContainer">
+					DailyContainer
+				</div>
+				<div wicket:id="weeklyContainer">
+					Days of week: <div wicket:id="reoccurrence-daysOfWeek" id="reoccurrence-daysOfWeek" />
+				</div>
+				<div wicket:id="monthlyContainer">
+					monthlyContainer
+				</div>
+				<div wicket:id="yearlyContainer">
+					yearlyContainer
+				</div>
 			</form>
 		</div>
 		<input type="submit"/>

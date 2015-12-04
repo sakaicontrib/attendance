@@ -3,6 +3,7 @@ package org.sakaiproject.attendance.tool.pages;
 import java.util.*;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.ajax.markup.html.form.AjaxCheckBox;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
@@ -28,7 +29,7 @@ public class AddEventPage extends BasePage {
 
 	private ArrayList<String> daysSelected = new ArrayList<String>();
 	private String frequencySelected = "";
-	private Boolean isReoccurringValue = false;
+	private List<String> frequencyNames = Arrays.asList("Daily", "Weekly", "Monthly", "Yearly");
 	EventsDataProvider provider;
 	
 	public AddEventPage() {
@@ -76,27 +77,96 @@ public class AddEventPage extends BasePage {
         	}
         });
 
+		// Create Event to be Added
+		final Event newEvent = new Event();
+		newEvent.setIsReoccurring(false);
+
+		// container for settings specific to daily reocurrence events
+		final WebMarkupContainer dailyContainer = new WebMarkupContainer("dailyContainer");
+		dailyContainer.setOutputMarkupPlaceholderTag(true);
+		dailyContainer.setVisible(true);
+
+		// container for settings specific to weekly reocurrence events
+		final WebMarkupContainer weeklyContainer = new WebMarkupContainer("weeklyContainer");
+		weeklyContainer.setOutputMarkupPlaceholderTag(true);
+		weeklyContainer.setVisible(false);
+		weeklyContainer.add((new CheckBoxMultipleChoice<String>("reoccurrence-daysOfWeek", new PropertyModel<ArrayList<String>>(this, "daysSelected"), getShortDayInWeekName())).setSuffix(""));
 
 
-		// generate Container for Reoccurrence Settings
+		// container for settings specific to monthly reocurrence events
+		final WebMarkupContainer monthlyContainer = new WebMarkupContainer("monthlyContainer");
+		monthlyContainer.setOutputMarkupPlaceholderTag(true);
+		monthlyContainer.setVisible(false);
+
+		// container for settings specific to yearly reocurrence events
+		final WebMarkupContainer yearlyContainer = new WebMarkupContainer("yearlyContainer");
+		yearlyContainer.setOutputMarkupPlaceholderTag(true);
+		yearlyContainer.setVisible(false);
+
+		// generate Container for all Reoccurrence Settings
 		final WebMarkupContainer reoccurrenceContainer = new WebMarkupContainer("reoccurrenceContainer");
 		reoccurrenceContainer.setOutputMarkupPlaceholderTag(true);
-		reoccurrenceContainer.setVisible(isReoccurringValue);
+		reoccurrenceContainer.setOutputMarkupId(true);
+		reoccurrenceContainer.setVisible(false);
 
 		//AjaxCheckBox
-		AjaxCheckBox isReoccurringAjaxCheckBox = new AjaxCheckBox("isReoccurring", new PropertyModel(this, "isReoccurringValue")) {
+		AjaxCheckBox isReoccurringAjaxCheckBox = new AjaxCheckBox("isReoccurring", new PropertyModel(newEvent, "isReoccurring")) {
 			@Override
 			protected void onUpdate(AjaxRequestTarget ajaxRequestTarget) {
-				reoccurrenceContainer.setVisible(isReoccurringValue);
+				reoccurrenceContainer.setVisible(newEvent.getIsReoccurring());
 				ajaxRequestTarget.add(reoccurrenceContainer);
 			}
 		};
 
+		final DropDownChoice<String> dropDownChoice = new DropDownChoice<String>("frequency", new PropertyModel<String>(this,"frequencySelected"), frequencyNames);
+
+		final AjaxFormComponentUpdatingBehavior frequencyComponentAjax = new AjaxFormComponentUpdatingBehavior("onchange") {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void onUpdate(AjaxRequestTarget ajaxRequestTarget) {
+				if(frequencySelected.equals(frequencyNames.get(0))){
+					dailyContainer.setVisible(true);
+					weeklyContainer.setVisible(false);
+					monthlyContainer.setVisible(false);
+					yearlyContainer.setVisible(false);
+				} else if (frequencySelected.equals(frequencyNames.get(1))){
+					dailyContainer.setVisible(false);
+					weeklyContainer.setVisible(true);
+					monthlyContainer.setVisible(false);
+					yearlyContainer.setVisible(false);
+				} else if (frequencySelected.equals(frequencyNames.get(2))){
+					dailyContainer.setVisible(false);
+					weeklyContainer.setVisible(false);
+					monthlyContainer.setVisible(true);
+					yearlyContainer.setVisible(false);
+				} else if (frequencySelected.equals(frequencyNames.get(3))){
+					dailyContainer.setVisible(false);
+					weeklyContainer.setVisible(false);
+					monthlyContainer.setVisible(false);
+					yearlyContainer.setVisible(true);
+				}
+
+				ajaxRequestTarget.add(dailyContainer);
+				ajaxRequestTarget.add(weeklyContainer);
+				ajaxRequestTarget.add(monthlyContainer);
+				ajaxRequestTarget.add(yearlyContainer);
+			}
+		};
+
+		dropDownChoice.add(frequencyComponentAjax);
+
+
         //add our form
 		Form form = new Form("form");
-		EventForm eventForm = new EventForm("eventForm", new Event());
+		EventForm eventForm = new EventForm("eventForm", newEvent);
 		eventForm.add(isReoccurringAjaxCheckBox);
 		ReoccurrenceForm reoccurrenceForm = new ReoccurrenceForm("reoccurrenceForm", new Reoccurrence());
+		reoccurrenceForm.add(dropDownChoice);
+		reoccurrenceForm.add(dailyContainer);
+		reoccurrenceForm.add(monthlyContainer);
+		reoccurrenceForm.add(weeklyContainer);
+		reoccurrenceForm.add(yearlyContainer);
 
 		reoccurrenceContainer.add(reoccurrenceForm);
 
@@ -112,7 +182,7 @@ public class AddEventPage extends BasePage {
 	private class EventForm extends Form {
 	   
 		public EventForm(String id, Event event) {
-	        super(id, new CompoundPropertyModel(event));
+	        super(id, new CompoundPropertyModel<Event>(event));
 			add(new TextField("name"));
 			add(new DateTimeField("startDateTime"));
 			add(new DateTimeField("endDateTime"));
@@ -136,9 +206,6 @@ public class AddEventPage extends BasePage {
 	private class ReoccurrenceForm extends Form {
 		public ReoccurrenceForm(String id, Reoccurrence reoccurrence) {
 			super(id, new CompoundPropertyModel(reoccurrence));
-			add(new DropDownChoice<String>("frequency", new Model(frequencySelected), Arrays.asList(new String[]{"Daily", "Monthly"})));
-			add((new CheckBoxMultipleChoice<String>("reoccurrence-daysOfWeek", new Model(daysSelected), getShortDayInWeekName())).setSuffix(""));
-
 		}
 	}
 	
