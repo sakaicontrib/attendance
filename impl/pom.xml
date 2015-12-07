@@ -70,7 +70,6 @@
 		</dependency>
 		
   	</dependencies>
-  	
 	<build>
 		<resources>
             <resource>
@@ -81,5 +80,4 @@
             </resource>
         </resources>
 	</build>
-	
 </project>

@@ -22,10 +22,6 @@
       		<groupId>org.sakaiproject.attendance</groupId>
       		<artifactId>attendance-api</artifactId>
     	</dependency>
-		<dependency>
-			<groupId>org.sakaiproject.attendance</groupId>
-			<artifactId>attendance-bundle</artifactId>
-		</dependency>
     	
     	<!-- third party dependencies -->
 		<dependency>

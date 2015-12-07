@@ -2,9 +2,11 @@ package org.sakaiproject.attendance.tool.pages;
 
 import java.util.*;
 
+import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.ajax.markup.html.form.AjaxCheckBox;
+import org.apache.wicket.extensions.yui.calendar.DateField;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.*;
@@ -30,6 +32,12 @@ public class AddEventPage extends BasePage {
 	private ArrayList<String> daysSelected = new ArrayList<String>();
 	private String frequencySelected = "";
 	private List<String> frequencyNames = Arrays.asList("Daily", "Weekly", "Monthly", "Yearly");
+	private List<Integer> minorFrequency = makeSequence(1,30);
+	private Integer minorFrequencySelected = 0;
+	private String monthlyRepeatBySelection = "";
+	private List<String> monthlyRepeatBy = Arrays.asList("day of the month", "day of the week");
+	private Integer endOccurrenceInput;
+	private Date endDate;
 	EventsDataProvider provider;
 	
 	public AddEventPage() {
@@ -81,27 +89,49 @@ public class AddEventPage extends BasePage {
 		final Event newEvent = new Event();
 		newEvent.setIsReoccurring(false);
 
-		// container for settings specific to daily reocurrence events
-		final WebMarkupContainer dailyContainer = new WebMarkupContainer("dailyContainer");
-		dailyContainer.setOutputMarkupPlaceholderTag(true);
-		dailyContainer.setVisible(true);
+		// weekly items
+		final CheckBoxMultipleChoice<String> weeklyDaysOfWeek = new CheckBoxMultipleChoice<String>("reoccurrence-daysOfWeek", new PropertyModel<ArrayList<String>>(this, "daysSelected"), getShortDayInWeekName());
+		weeklyDaysOfWeek.setSuffix("");
 
 		// container for settings specific to weekly reocurrence events
 		final WebMarkupContainer weeklyContainer = new WebMarkupContainer("weeklyContainer");
 		weeklyContainer.setOutputMarkupPlaceholderTag(true);
 		weeklyContainer.setVisible(false);
-		weeklyContainer.add((new CheckBoxMultipleChoice<String>("reoccurrence-daysOfWeek", new PropertyModel<ArrayList<String>>(this, "daysSelected"), getShortDayInWeekName())).setSuffix(""));
+		weeklyContainer.add(weeklyDaysOfWeek);
 
+		Label monthlyRepeatByLabel = new Label("labelMonthlyRepeatBy", new ResourceModel("attendance.add.label.monthlyRepeatBy"));
+		RadioChoice<String> monthlyRadioChoice = new RadioChoice<String>("monthlyRepeatBy", new PropertyModel<String>(this, "monthlyRepeatBySelection"), monthlyRepeatBy);
+		monthlyRadioChoice.setSuffix("");
 
 		// container for settings specific to monthly reocurrence events
 		final WebMarkupContainer monthlyContainer = new WebMarkupContainer("monthlyContainer");
 		monthlyContainer.setOutputMarkupPlaceholderTag(true);
 		monthlyContainer.setVisible(false);
+		monthlyContainer.add(monthlyRepeatByLabel);
+		monthlyContainer.add(monthlyRadioChoice);
 
-		// container for settings specific to yearly reocurrence events
-		final WebMarkupContainer yearlyContainer = new WebMarkupContainer("yearlyContainer");
-		yearlyContainer.setOutputMarkupPlaceholderTag(true);
-		yearlyContainer.setVisible(false);
+
+		Label endOccurrencePrefixLabel = new Label("labelEndOccurrencePrefix", new ResourceModel("attendance.add.label.endOccurrencePrefix"));
+		Label endOccurrenceSuffixLabel = new Label("labelEndOccurrenceSuffix", new ResourceModel("attendance.add.label.endOccurrenceSuffix"));
+		NumberTextField<Integer> endOccurrences = new NumberTextField<Integer>("endOccurrence", new PropertyModel<Integer>(this, "endOccurrenceInput"));
+		endOccurrences.setMinimum(1);
+		endOccurrences.setMaximum(365);
+
+		Radio endOccurrenceRadio = new Radio("endOccurrenceRadio");
+		endOccurrenceRadio.add(endOccurrencePrefixLabel);
+		endOccurrenceRadio.add(endOccurrences);
+		endOccurrenceRadio.add(endOccurrenceSuffixLabel);
+
+		Label endDateLabel = new Label("labelEndDate", new ResourceModel("attendance.add.label.endDate"));
+		DateField endDate = new DateField("endDate", new PropertyModel<Date>(this, "endDate"));
+
+		Radio endDateRadio = new Radio("endDateRadio");
+		endDateRadio.add(endDateLabel);
+		endDateRadio.add(endDate);
+
+		RadioGroup<Radio> endCriteria = new RadioGroup<Radio>("endCriteriaGroup");
+		endCriteria.add(endOccurrenceRadio);
+		endCriteria.add(endDateRadio);
 
 		// generate Container for all Reoccurrence Settings
 		final WebMarkupContainer reoccurrenceContainer = new WebMarkupContainer("reoccurrenceContainer");
@@ -118,7 +148,7 @@ public class AddEventPage extends BasePage {
 			}
 		};
 
-		final DropDownChoice<String> dropDownChoice = new DropDownChoice<String>("frequency", new PropertyModel<String>(this,"frequencySelected"), frequencyNames);
+		final DropDownChoice<String> frequencyDropDownChoice = new DropDownChoice<String>("frequency", new PropertyModel<String>(this,"frequencySelected"), frequencyNames);
 
 		final AjaxFormComponentUpdatingBehavior frequencyComponentAjax = new AjaxFormComponentUpdatingBehavior("onchange") {
 			private static final long serialVersionUID = 1L;
@@ -126,47 +156,41 @@ public class AddEventPage extends BasePage {
 			@Override
 			protected void onUpdate(AjaxRequestTarget ajaxRequestTarget) {
 				if(frequencySelected.equals(frequencyNames.get(0))){
-					dailyContainer.setVisible(true);
 					weeklyContainer.setVisible(false);
 					monthlyContainer.setVisible(false);
-					yearlyContainer.setVisible(false);
 				} else if (frequencySelected.equals(frequencyNames.get(1))){
-					dailyContainer.setVisible(false);
 					weeklyContainer.setVisible(true);
 					monthlyContainer.setVisible(false);
-					yearlyContainer.setVisible(false);
 				} else if (frequencySelected.equals(frequencyNames.get(2))){
-					dailyContainer.setVisible(false);
 					weeklyContainer.setVisible(false);
 					monthlyContainer.setVisible(true);
-					yearlyContainer.setVisible(false);
 				} else if (frequencySelected.equals(frequencyNames.get(3))){
-					dailyContainer.setVisible(false);
 					weeklyContainer.setVisible(false);
 					monthlyContainer.setVisible(false);
-					yearlyContainer.setVisible(true);
 				}
 
-				ajaxRequestTarget.add(dailyContainer);
 				ajaxRequestTarget.add(weeklyContainer);
 				ajaxRequestTarget.add(monthlyContainer);
-				ajaxRequestTarget.add(yearlyContainer);
 			}
 		};
 
-		dropDownChoice.add(frequencyComponentAjax);
+		frequencyDropDownChoice.add(frequencyComponentAjax);
 
+		final DropDownChoice<Integer> minorFrequencyDropDownChoice = new DropDownChoice<Integer>("minorFrequency", new PropertyModel(this, "minorFrequencySelected"), minorFrequency);
+
+		Label endCriteriaLabel = new Label("labelEndCriteria", new ResourceModel("attendance.add.label.end"));
 
         //add our form
 		Form form = new Form("form");
 		EventForm eventForm = new EventForm("eventForm", newEvent);
 		eventForm.add(isReoccurringAjaxCheckBox);
-		ReoccurrenceForm reoccurrenceForm = new ReoccurrenceForm("reoccurrenceForm", new Reoccurrence());
-		reoccurrenceForm.add(dropDownChoice);
-		reoccurrenceForm.add(dailyContainer);
+		ReoccurrenceForm reoccurrenceForm = new ReoccurrenceForm("reoccurrenceForm");
+		reoccurrenceForm.add(frequencyDropDownChoice);
+		reoccurrenceForm.add(minorFrequencyDropDownChoice);
 		reoccurrenceForm.add(monthlyContainer);
 		reoccurrenceForm.add(weeklyContainer);
-		reoccurrenceForm.add(yearlyContainer);
+		reoccurrenceForm.add(endCriteriaLabel);
+		reoccurrenceForm.add(endCriteria);
 
 		reoccurrenceContainer.add(reoccurrenceForm);
 
@@ -204,8 +228,8 @@ public class AddEventPage extends BasePage {
 	}
 
 	private class ReoccurrenceForm extends Form {
-		public ReoccurrenceForm(String id, Reoccurrence reoccurrence) {
-			super(id, new CompoundPropertyModel(reoccurrence));
+		public ReoccurrenceForm(String id) {
+			super(id);
 		}
 	}
 	
@@ -306,5 +330,13 @@ public class AddEventPage extends BasePage {
 			// get the thing
 			return attendanceLogic.getEvent(id);
 		}
+	}
+
+	protected List<Integer> makeSequence(int begin, int end) {
+		List<Integer> ret = new ArrayList(end - begin + 1);
+
+		for(int i = begin; i <= end; ret.add(i++));
+
+		return ret;
 	}
 }

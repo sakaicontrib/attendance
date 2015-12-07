@@ -40,18 +40,29 @@
 				<select wicket:id="frequency" id="frequencySelector">
 					<option>First Option</option>
 				</select>
-				<div wicket:id="dailyContainer">
-					DailyContainer
-				</div>
+				Repeat every:
+				<select wicket:id="minorFrequency" id="minorFrequency">
+					<option>1</option>
+				</select>
 				<div wicket:id="weeklyContainer">
-					Days of week: <div wicket:id="reoccurrence-daysOfWeek" id="reoccurrence-daysOfWeek" />
+					Repeat On: <span wicket:id="reoccurrence-daysOfWeek" id="reoccurrence-daysOfWeek"></span>
 				</div>
 				<div wicket:id="monthlyContainer">
-					monthlyContainer
+					<span wicket:id="labelMonthlyRepeatBy"></span> <span wicket:id="monthlyRepeatBy"></span>
 				</div>
-				<div wicket:id="yearlyContainer">
-					yearlyContainer
-				</div>
+				<span wicket:id="labelEndCriteria"></span>
+				<span wicket:id="endCriteriaGroup">
+					<input type="radio" wicket:id="endOccurrenceRadio">
+						<span wicket:id="labelEndOccurrencePrefix"></span>
+						<input type="number" wicket:id="endOccurrence" />
+						<span wicket:id="labelEndOccurrenceSuffix"></span>
+					</input>
+					<input type="radio" wicket:id="endDateRadio">
+						<span wicket:id="labelEndDate"></span>
+						<div wicket:id="endDate"></div>
+					</input>
+				</span>
+				Summary:
 			</form>
 		</div>
 		<input type="submit"/>
