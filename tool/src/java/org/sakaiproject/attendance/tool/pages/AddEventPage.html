@@ -25,30 +25,30 @@
 	<h3>Add a new item to the database:</h3>
 	<form wicket:id="form">
 		<form wicket:id="eventForm">
-		Name: <input type="text" wicket:id="name" id="name" /><br />
-		Start Date: <div wicket:id="startDateTime" id="startDateTime"/><br />
-		End Date: <div wicket:id="endDateTime" id="endDateTime" /><br />
-		Required: <input type="checkbox" wicket:id="isRequired" id="isRequired" /><br />
-		Location: <input type="text" wicket:id="location" id="location" /><br />
-		Released To: <input type="text" wicket:id="releasedTo" id="releasedTo" /><br />
-		Repeats: <input type="checkbox" wicket:id="isReoccurring" id="isReoccurring" /><br />
+		<span wicket:id="labelName"></span> <input type="text" wicket:id="name" id="name" /><br />
+		<span wicket:id="labelStartDateTime"></span> <div wicket:id="startDateTime" id="startDateTime"/><br />
+		<span wicket:id="labelEndDateTime"></span> <div wicket:id="endDateTime" id="endDateTime" /><br />
+		<span wicket:id="labelIsRequired"></span> <input type="checkbox" wicket:id="isRequired" id="isRequired" /><br />
+		<span wicket:id="labelLocation"></span> <input type="text" wicket:id="location" id="location" /><br />
+		<span wicket:id="labelReleasedTo"></span> <input type="text" wicket:id="releasedTo" id="releasedTo" /><br />
+		<span wicket:id="labelIsReoccurring"></span> <input type="checkbox" wicket:id="isReoccurring" id="isReoccurring" /><br />
 		</form>
 		<br />
 		<div wicket:id="reoccurrenceContainer">
 			<form wicket:id="reoccurrenceForm">
-				Frequency:
+				<span wicket:id="labelFrequency"></span>
 				<select wicket:id="frequency" id="frequencySelector">
 					<option>First Option</option>
-				</select>
-				Repeat every:
+				</select> <br />
+				<span wicket:id="labelMinorFrequency"></span>
 				<select wicket:id="minorFrequency" id="minorFrequency">
 					<option>1</option>
-				</select>
+				</select> <br />
 				<div wicket:id="weeklyContainer">
-					Repeat On: <span wicket:id="reoccurrence-daysOfWeek" id="reoccurrence-daysOfWeek"></span>
+					<span wicket:id="labelDaysOfWeek"></span> <span wicket:id="daysOfWeek" id="reoccurrence-daysOfWeek"></span><br />
 				</div>
 				<div wicket:id="monthlyContainer">
-					<span wicket:id="labelMonthlyRepeatBy"></span> <span wicket:id="monthlyRepeatBy"></span>
+					<span wicket:id="labelMonthlyRepeatBy"></span> <span wicket:id="monthlyRepeatBy"></span><br />
 				</div>
 				<span wicket:id="labelEndCriteria"></span>
 				<span wicket:id="endCriteriaGroup">
@@ -56,13 +56,12 @@
 						<span wicket:id="labelEndOccurrencePrefix"></span>
 						<input type="number" wicket:id="endOccurrence" />
 						<span wicket:id="labelEndOccurrenceSuffix"></span>
-					</input>
+					</input><br />
 					<input type="radio" wicket:id="endDateRadio">
 						<span wicket:id="labelEndDate"></span>
 						<div wicket:id="endDate"></div>
 					</input>
-				</span>
-				Summary:
+				</span><br />
 			</form>
 		</div>
 		<input type="submit"/>

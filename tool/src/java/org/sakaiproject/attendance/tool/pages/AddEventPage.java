@@ -2,6 +2,7 @@ package org.sakaiproject.attendance.tool.pages;
 
 import java.util.*;
 
+import com.google.ical.values.*;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
@@ -34,10 +35,11 @@ public class AddEventPage extends BasePage {
 	private List<String> frequencyNames = Arrays.asList("Daily", "Weekly", "Monthly", "Yearly");
 	private List<Integer> minorFrequency = makeSequence(1,30);
 	private Integer minorFrequencySelected = 0;
-	private String monthlyRepeatBySelection = "";
 	private List<String> monthlyRepeatBy = Arrays.asList("day of the month", "day of the week");
+	private String monthlyRepeatBySelection = "";
 	private Integer endOccurrenceInput;
 	private Date endDate;
+	private Event newEvent = new Event();
 	EventsDataProvider provider;
 	
 	public AddEventPage() {
@@ -86,18 +88,21 @@ public class AddEventPage extends BasePage {
         });
 
 		// Create Event to be Added
-		final Event newEvent = new Event();
+		//final Event newEvent = new Event();
 		newEvent.setIsReoccurring(false);
 
 		// weekly items
-		final CheckBoxMultipleChoice<String> weeklyDaysOfWeek = new CheckBoxMultipleChoice<String>("reoccurrence-daysOfWeek", new PropertyModel<ArrayList<String>>(this, "daysSelected"), getShortDayInWeekName());
-		weeklyDaysOfWeek.setSuffix("");
+		final CheckBoxMultipleChoice<String> daysOfWeek = new CheckBoxMultipleChoice<String>("daysOfWeek", new PropertyModel<ArrayList<String>>(this, "daysSelected"), getShortDayInWeekName());
+		daysOfWeek.setSuffix("");
+
+		final Label daysOfWeekLabel = new Label("labelDaysOfWeek", new ResourceModel("attendance.add.label.daysOfWeek"));
 
 		// container for settings specific to weekly reocurrence events
 		final WebMarkupContainer weeklyContainer = new WebMarkupContainer("weeklyContainer");
 		weeklyContainer.setOutputMarkupPlaceholderTag(true);
 		weeklyContainer.setVisible(false);
-		weeklyContainer.add(weeklyDaysOfWeek);
+		weeklyContainer.add(daysOfWeekLabel);
+		weeklyContainer.add(daysOfWeek);
 
 		Label monthlyRepeatByLabel = new Label("labelMonthlyRepeatBy", new ResourceModel("attendance.add.label.monthlyRepeatBy"));
 		RadioChoice<String> monthlyRadioChoice = new RadioChoice<String>("monthlyRepeatBy", new PropertyModel<String>(this, "monthlyRepeatBySelection"), monthlyRepeatBy);
@@ -148,6 +153,14 @@ public class AddEventPage extends BasePage {
 			}
 		};
 
+		final Label nameLabel = new Label("labelName", new ResourceModel("attendance.add.label.name"));
+		final Label startDateTimeLabel = new Label("labelStartDateTime", new ResourceModel("attendance.add.label.startDateTime"));
+		final Label endDateTimeLabel = new Label("labelEndDateTime", new ResourceModel("attendance.add.label.endDateTime"));
+		final Label isRequiredLabel = new Label("labelIsRequired", new ResourceModel("attendance.add.label.isRequired"));
+		final Label locationLabel = new Label("labelLocation", new ResourceModel("attendance.add.label.location"));
+		final Label releasedToLabel = new Label("labelReleasedTo", new ResourceModel("attendance.add.label.releasedTo"));
+		final Label isReoccurringLabel = new Label("labelIsReoccurring", new ResourceModel("attendance.add.label.isReoccurring"));
+
 		final DropDownChoice<String> frequencyDropDownChoice = new DropDownChoice<String>("frequency", new PropertyModel<String>(this,"frequencySelected"), frequencyNames);
 
 		final AjaxFormComponentUpdatingBehavior frequencyComponentAjax = new AjaxFormComponentUpdatingBehavior("onchange") {
@@ -176,7 +189,11 @@ public class AddEventPage extends BasePage {
 
 		frequencyDropDownChoice.add(frequencyComponentAjax);
 
+		final Label frequencyLabel = new Label("labelFrequency", new ResourceModel("attendance.add.label.frequency"));
+
 		final DropDownChoice<Integer> minorFrequencyDropDownChoice = new DropDownChoice<Integer>("minorFrequency", new PropertyModel(this, "minorFrequencySelected"), minorFrequency);
+
+		final Label minorFrequencyLabel = new Label("labelMinorFrequency", new ResourceModel("attendance.add.label.minorFrequency"));
 
 		Label endCriteriaLabel = new Label("labelEndCriteria", new ResourceModel("attendance.add.label.end"));
 
@@ -184,8 +201,18 @@ public class AddEventPage extends BasePage {
 		Form form = new Form("form");
 		EventForm eventForm = new EventForm("eventForm", newEvent);
 		eventForm.add(isReoccurringAjaxCheckBox);
+		eventForm.add(nameLabel);
+		eventForm.add(startDateTimeLabel);
+		eventForm.add(endDateTimeLabel);
+		eventForm.add(isRequiredLabel);
+		eventForm.add(locationLabel);
+		eventForm.add(releasedToLabel);
+		eventForm.add(isReoccurringLabel);
+
 		ReoccurrenceForm reoccurrenceForm = new ReoccurrenceForm("reoccurrenceForm");
+		reoccurrenceForm.add(frequencyLabel);
 		reoccurrenceForm.add(frequencyDropDownChoice);
+		reoccurrenceForm.add(minorFrequencyLabel);
 		reoccurrenceForm.add(minorFrequencyDropDownChoice);
 		reoccurrenceForm.add(monthlyContainer);
 		reoccurrenceForm.add(weeklyContainer);
@@ -230,6 +257,82 @@ public class AddEventPage extends BasePage {
 	private class ReoccurrenceForm extends Form {
 		public ReoccurrenceForm(String id) {
 			super(id);
+		}
+
+		public RRule generateReoccurenceString(){
+			RRule rRule = new RRule();
+
+			rRule.setInterval(minorFrequencySelected);
+			if(frequencySelected.equals("Daily")){
+				rRule.setFreq(Frequency.DAILY);
+
+			} else if (frequencySelected.equals("Weekly")) {
+				rRule.setFreq(Frequency.WEEKLY);
+
+				List<String> weekDayNames = getShortDayInWeekName();
+				List<WeekdayNum> byDay = new ArrayList<WeekdayNum>();
+				for(String item : daysSelected){
+					int dayPosition = weekDayNames.indexOf(item);
+					if(dayPosition == 0) {
+						byDay.add(new WeekdayNum(0, Weekday.SU));
+					} else if (dayPosition == 1) {
+						byDay.add(new WeekdayNum(0, Weekday.MO));
+					} else if (dayPosition == 2) {
+						byDay.add(new WeekdayNum(0, Weekday.TU));
+					} else if (dayPosition == 3) {
+						byDay.add(new WeekdayNum(0, Weekday.WE));
+					} else if (dayPosition == 4) {
+						byDay.add(new WeekdayNum(0, Weekday.TH));
+					} else if (dayPosition == 5) {
+						byDay.add(new WeekdayNum(0, Weekday.FR));
+					} else if (dayPosition == 6) {
+						byDay.add(new WeekdayNum(0, Weekday.SA));
+					}
+				}
+				rRule.setByDay(byDay);
+			} else if (frequencySelected.equals("Monthly")) {
+				rRule.setFreq(Frequency.MONTHLY);
+
+				if(monthlyRepeatBySelection.equals("day of the month")){
+					rRule.setByMonthDay(new int[]{newEvent.getStartDateTime().getDay()});
+				} else {
+					Weekday weekDay = null;
+
+					Calendar c = Calendar.getInstance();
+					c.setTime(newEvent.getStartDateTime());
+					int dayPosition = c.get(Calendar.DAY_OF_WEEK);
+
+					if(dayPosition == 0) {
+						weekDay = Weekday.SU;
+					} else if (dayPosition == 1) {
+						weekDay = Weekday.MO;
+					} else if (dayPosition == 2) {
+						weekDay = Weekday.TU;
+					} else if (dayPosition == 3) {
+						weekDay = Weekday.WE;
+					} else if (dayPosition == 4) {
+						weekDay = Weekday.TH;
+					} else if (dayPosition == 5) {
+						weekDay = Weekday.FR;
+					} else if (dayPosition == 6) {
+						weekDay = Weekday.SA;
+					}
+
+					List<WeekdayNum> byDay = new ArrayList<WeekdayNum>();
+
+					byDay.add(new WeekdayNum(0, weekDay));
+					rRule.setByDay(byDay);
+				}
+			} else if(frequencySelected.equals("Yearly")) {
+				rRule.setFreq(Frequency.YEARLY);
+			}
+
+			if(endOccurrenceInput == null){
+				rRule.setUntil(new DateValueImpl(endDate.getYear(), endDate.getMonth(), endDate.getDay()));
+			} else {
+				rRule.setCount(endOccurrenceInput);
+			}
+			return rRule;
 		}
 	}
 	

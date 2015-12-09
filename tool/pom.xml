@@ -57,7 +57,12 @@
 			<groupId>javax.servlet</groupId>
 			<artifactId>servlet-api</artifactId>
 		</dependency>
-		
+		<dependency>
+			<groupId>org.scala-saddle</groupId>
+			<artifactId>google-rfc-2445</artifactId>
+			<version>20110304</version>
+		</dependency>
+
 		<!-- Sakai dependencies -->
        	<dependency>
            	<groupId>org.sakaiproject.kernel</groupId>
