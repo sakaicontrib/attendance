@@ -1,5 +1,9 @@
 package org.sakaiproject.attendance.logic;
 
+import org.sakaiproject.user.api.User;
+import org.sakaiproject.user.api.UserNotDefinedException;
+
+import java.util.List;
 import java.util.Locale;
 
 /**
@@ -65,4 +69,8 @@ public interface SakaiProxy {
 	 * @return
 	 */
 	String getConfigParam(String param, String dflt);
+
+	List<User> getCurrentSiteMembership();
+
+	User getUser(String userId);
 }

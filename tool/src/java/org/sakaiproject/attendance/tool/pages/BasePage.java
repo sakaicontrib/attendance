@@ -64,7 +64,7 @@ public class BasePage extends WebPage implements IHeaderContributor {
 			private static final long serialVersionUID = 1L;
 			public void onClick() {
 				
-				setResponsePage(new FirstPage());
+				setResponsePage(new Overview());
 			}
 		};
 		firstLink.add(new Label("firstLinkLabel",new ResourceModel("link.first")).setRenderBodyOnly(true));

@@ -17,6 +17,7 @@
 		<property name="serverConfigurationService" ref="org.sakaiproject.component.api.ServerConfigurationService" />
 		<property name="siteService" ref="org.sakaiproject.site.api.SiteService" />
 		<property name="preferencesService" ref="org.sakaiproject.user.api.PreferencesService" />
+		<property name="authzGroupService" ref="org.sakaiproject.authz.api.AuthzGroupService" />
 		
 	</bean>
 
