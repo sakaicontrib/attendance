@@ -11,7 +11,7 @@ import org.apache.wicket.spring.injection.annot.SpringComponentInjector;
 
 
 
-import org.sakaiproject.attendance.tool.pages.FirstPage;
+import org.sakaiproject.attendance.tool.pages.Overview;
 
 /**
  * Main application class for our app
@@ -44,8 +44,8 @@ public class MyApplication extends WebApplication {
 		getMarkupSettings().setDefaultAfterDisabledLink(null);
 				
 		// On Wicket session timeout, redirect to main page
-		getApplicationSettings().setPageExpiredErrorPage(FirstPage.class);
-		getApplicationSettings().setAccessDeniedPage(FirstPage.class);
+		getApplicationSettings().setPageExpiredErrorPage(Overview.class);
+		getApplicationSettings().setAccessDeniedPage(Overview.class);
 
         getRequestCycleListeners().add(new IRequestCycleListener() {
 
@@ -136,8 +136,8 @@ public class MyApplication extends WebApplication {
 	 * 
 	 * @see org.apache.wicket.Application#getHomePage()
 	 */
-	public Class<FirstPage> getHomePage() {
-		return FirstPage.class;
+	public Class<Overview> getHomePage() {
+		return Overview.class;
 	}
 	
 	

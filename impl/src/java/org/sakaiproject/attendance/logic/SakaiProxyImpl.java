@@ -4,7 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import org.apache.log4j.Logger;
-import org.sakaiproject.authz.api.SecurityService;
+import org.sakaiproject.authz.api.*;
 import org.sakaiproject.component.api.ServerConfigurationService;
 import org.sakaiproject.entity.api.ResourceProperties;
 import org.sakaiproject.event.api.EventTrackingService;
@@ -12,13 +12,10 @@ import org.sakaiproject.site.api.SiteService;
 import org.sakaiproject.tool.api.Session;
 import org.sakaiproject.tool.api.SessionManager;
 import org.sakaiproject.tool.api.ToolManager;
-import org.sakaiproject.user.api.Preferences;
-import org.sakaiproject.user.api.PreferencesService;
-import org.sakaiproject.user.api.UserDirectoryService;
-import org.sakaiproject.user.api.UserNotDefinedException;
+import org.sakaiproject.user.api.*;
 import org.sakaiproject.util.ResourceLoader;
 
-import java.util.Locale;
+import java.util.*;
 
 /**
  * Implementation of our SakaiProxy API
@@ -113,7 +110,48 @@ public class SakaiProxyImpl implements SakaiProxy {
 	public String getConfigParam(String param, String dflt) {
 		return serverConfigurationService.getString(param, dflt);
 	}
-	
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public List<User> getCurrentSiteMembership() {
+		List<User> returnList = new ArrayList<User>();
+		try {
+			AuthzGroup membership = authzGroupService.getAuthzGroup("/site/" + getCurrentSiteId());
+			Set<Member> memberSet = membership.getMembers();
+			String maintainRole = membership.getMaintainRole();
+
+			for(Member member : memberSet) {
+				if(!maintainRole.equals(member.getRole().getId())) {
+					try {
+						User student = userDirectoryService.getUser(member.getUserId());
+						returnList.add(student);
+					} catch (UserNotDefinedException e) {
+						log.error("Unable to get user " + member.getUserId() + " " + e);
+						e.printStackTrace();
+					}
+				}
+			}
+		} catch (GroupNotDefinedException e) {
+			log.error("Unable to get site membership " + e);
+			e.printStackTrace();
+		}
+		return returnList;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public User getUser(String userId) {
+		try {
+			return userDirectoryService.getUser(userId);
+		} catch (UserNotDefinedException e) {
+			log.error("Unable to get user " + userId + " " + e);
+			e.printStackTrace();
+			return null;
+		}
+	}
+
 	/**
 	 * init - perform any actions required here for when this bean starts up
 	 */
@@ -152,4 +190,7 @@ public class SakaiProxyImpl implements SakaiProxy {
 
 	@Getter @Setter
 	private PreferencesService preferencesService;
+
+	@Getter @Setter
+	private AuthzGroupService authzGroupService;
 }
