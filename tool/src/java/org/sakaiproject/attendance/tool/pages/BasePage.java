@@ -41,7 +41,7 @@ import java.util.List;
  */
 public class BasePage extends WebPage implements IHeaderContributor {
 
-	private static final Logger log = Logger.getLogger(BasePage.class); 
+	protected static final Logger log = Logger.getLogger(BasePage.class);
 	
 	@SpringBean(name="org.sakaiproject.attendance.logic.SakaiProxy")
 	protected SakaiProxy sakaiProxy;
@@ -152,15 +152,5 @@ public class BasePage extends WebPage implements IHeaderContributor {
 	protected void disableLink(Link<Void> l) {
 		l.add(new AttributeAppender("class", new Model<String>("current"), " "));
 		l.setEnabled(false);
-	}
-
-	/**
-	 * Returns a list of the names of the days of the week
-	 */
-	protected List<String> getShortDayInWeekName() {
-		DateFormatSymbols dateFormatSymbols = new DateFormatSymbols(sakaiProxy.getCurrentUserLocale());
-		ArrayList<String> shortWeekDays = new ArrayList(Arrays.asList(dateFormatSymbols.getShortWeekdays()));
-		shortWeekDays.remove(0); // remove first element which is empty
-		return shortWeekDays;
 	}
 }
