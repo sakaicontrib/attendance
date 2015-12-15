@@ -16,9 +16,12 @@
 
 package org.sakaiproject.attendance.dao;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import com.google.ical.values.RRule;
 import org.sakaiproject.attendance.model.Event;
+import org.sakaiproject.attendance.model.Reoccurrence;
 
 /**
  * DAO interface for our project
@@ -49,10 +52,24 @@ public interface AttendanceDao {
 		
 	/**
 	 * Add a new Event record to the database. Only the name property is actually used.
-	 * @param t	Event
+	 * @param t	, Event
 	 * @return	true if success, false if not
 	 */
 	boolean addEvent(Event t);
+
+	/**
+	 * Add a list of events to the Database
+	 * @param es, the ArrayList of events
+	 * @return true if success, false if not
+	 */
+	boolean addEvents(ArrayList<Event> es);
+
+	/**
+	 * Add a Reoccurrence rule
+	 * @param r, the object
+	 * @return true if success, false if not
+	 */
+	boolean addReoccurrence(Reoccurrence r);
 
 	// Hibernate Query Constants
 	String QUERY_GET_EVENT = "getEvent";

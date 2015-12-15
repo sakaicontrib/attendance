@@ -18,7 +18,10 @@ package org.sakaiproject.attendance.logic;
 
 import java.util.List;
 
+import com.google.ical.values.RRule;
+import de.scravy.pair.Pair;
 import org.sakaiproject.attendance.model.Event;
+import org.sakaiproject.attendance.model.Reoccurrence;
 
 /**
  * An example logic interface
@@ -43,7 +46,29 @@ public interface AttendanceLogic {
 	/**
 	 * Add a new Event
 	 * @param t	Event
-	 * @return boolean if success, false if not
+	 * @return true if success, false if not
 	 */
 	boolean addEvent(Event t);
+
+	/**
+	 * Add a reoccurring Event
+	 * @param t, the event model
+	 * @param r, the RFC-2445 RRule
+	 * @return true if success
+	 */
+	boolean addEvents(Event t, RRule r);
+
+	/**
+	 * Add a new Reoccurrence
+	 * @param r, the Rrule for the object
+	 * @return
+	 */
+	Pair<Boolean, Long> addReoccurrence(RRule r);
+
+	/**
+	 * Add Reoccurrence
+	 * @param r, the Reocurrence
+	 * @return true if success, false otherwise
+	 */
+	boolean addReoccurrence(Reoccurrence r);
 }

@@ -7,7 +7,7 @@
  	<bean id="org.sakaiproject.attendance.logic.SakaiProxy"
     	class="org.sakaiproject.attendance.logic.SakaiProxyImpl"
         init-method="init">
-        
+
         <!-- API injection -->
         <property name="securityService" ref="org.sakaiproject.authz.api.SecurityService" />
         <property name="sessionManager" ref="org.sakaiproject.tool.api.SessionManager" />
@@ -18,7 +18,7 @@
 		<property name="siteService" ref="org.sakaiproject.site.api.SiteService" />
 		<property name="preferencesService" ref="org.sakaiproject.user.api.PreferencesService" />
 		<property name="authzGroupService" ref="org.sakaiproject.authz.api.AuthzGroupService" />
-		
+
 	</bean>
 
     <!-- DAO. This uses the DataSource that has already been setup by Sakai  -->
@@ -54,6 +54,8 @@
 		<property name="mappingResources">
 			<list>
 				<value>org/sakaiproject/attendance/hbm/Event.hbm.xml</value>
+				<value>org/sakaiproject/attendance/hbm/Reoccurring.hbm.xml</value>
+				<value>org/sakaiproject/attendance/hbm/Site.hbm.xml</value>
 			</list>
 		</property>
 

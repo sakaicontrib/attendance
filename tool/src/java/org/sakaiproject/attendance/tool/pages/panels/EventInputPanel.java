@@ -45,7 +45,24 @@ public class EventInputPanel extends BasePanel {
     }
 
     private Form<Event> createEventInputForm() {
-        Form<Event> event = new Form<Event>("event", this.eventModel);
+        Form<Event> event = new Form<Event>("event", this.eventModel) {
+            @Override
+            public void onSubmit(){
+                Event t = (Event) getDefaultModelObject();
+                boolean result;
+                if(t.getIsReoccurring()){
+                    result = attendanceLogic.addEvents(t, rPanel.generateRRule());
+                } else {
+                    result = attendanceLogic.addEvent(t);
+                }
+
+                if(result){
+                    info(new ResourceModel("attendance.add.success"));
+                } else {
+                    error(new ResourceModel("Failed to add event."));
+                }
+            }
+        };
         createLabels(event);
         createValues(event);
         createSubForm(event);

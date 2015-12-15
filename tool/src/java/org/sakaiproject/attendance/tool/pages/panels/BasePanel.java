@@ -18,9 +18,9 @@ package org.sakaiproject.attendance.tool.pages.panels;
 
 import org.apache.log4j.Logger;
 import org.apache.wicket.markup.html.panel.Panel;
-import org.apache.wicket.model.ComponentPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.sakaiproject.attendance.logic.AttendanceLogic;
 import org.sakaiproject.attendance.logic.SakaiProxy;
 
 /**
@@ -29,6 +29,9 @@ import org.sakaiproject.attendance.logic.SakaiProxy;
 public class BasePanel extends Panel {
     @SpringBean(name="org.sakaiproject.attendance.logic.SakaiProxy")
     protected SakaiProxy sakaiProxy;
+
+    @SpringBean(name="org.sakaiproject.attendance.logic.AttendanceLogic")
+    protected AttendanceLogic attendanceLogic;
 
     protected static final Logger log = Logger.getLogger(BasePanel.class);
 

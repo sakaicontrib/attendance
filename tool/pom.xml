@@ -60,7 +60,10 @@
 		<dependency>
 			<groupId>org.scala-saddle</groupId>
 			<artifactId>google-rfc-2445</artifactId>
-			<version>20110304</version>
+		</dependency>
+		<dependency>
+			<groupId>de.scravy</groupId>
+			<artifactId>pair</artifactId>
 		</dependency>
 
 		<!-- Sakai dependencies -->
@@ -76,7 +79,6 @@
 			<groupId>org.sakaiproject.kernel</groupId>
 			<artifactId>sakai-kernel-util</artifactId>
 		</dependency>
-
 	</dependencies>
 	
 

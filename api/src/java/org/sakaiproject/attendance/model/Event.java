@@ -43,4 +43,17 @@ public class Event implements Serializable {
 	private 				String		releasedTo;
 	private 				Long		attendanceID;
 	private 				String 		location;
+
+	// Create a copy constructor
+	public Event(Event event){
+		this.name 			= event.name;
+		this.startDateTime 	= event.startDateTime;
+		this.endDateTime 	= event.endDateTime;
+		this.isReoccurring 	= event.isReoccurring;
+		this.reoccurringID 	= event.reoccurringID;
+		this.isRequired 	= event.isRequired;
+		this.releasedTo 	= event.releasedTo;
+		this.attendanceID 	= event.attendanceID;
+		this.location 		= event.location;
+	}
 }

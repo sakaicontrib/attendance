@@ -16,28 +16,33 @@
 
 package org.sakaiproject.attendance.logic;
 
-import java.util.List;
+import java.util.*;
 
+import com.google.ical.compat.jodatime.DateTimeIterator;
+import com.google.ical.compat.jodatime.DateTimeIteratorFactory;
+import com.google.ical.iter.RecurrenceIterator;
+import com.google.ical.iter.RecurrenceIteratorFactory;
+import com.google.ical.values.DateValueImpl;
+import com.google.ical.values.RRule;
+import de.scravy.pair.Pair;
+import de.scravy.pair.Pairs;
 import lombok.Setter;
-
-import net.sf.ehcache.Cache;
-import net.sf.ehcache.Element;
 
 import org.apache.log4j.Logger;
 
+import org.joda.time.DateTime;
 import org.sakaiproject.attendance.dao.AttendanceDao;
 import org.sakaiproject.attendance.model.Event;
+import org.sakaiproject.attendance.model.Reoccurrence;
 
 /**
  * Implementation of {@link AttendanceLogic}
  * 
- * @author Steve Swinsburg (steve.swinsburg@anu.edu.au)
+ * @author Leonardo Canessa [lcanessa1 (at) udayton (dot) edu]
  *
  */
 public class AttendanceLogicImpl implements AttendanceLogic {
-
 	private static final Logger log = Logger.getLogger(AttendanceLogicImpl.class);
-
 	
 	/**
 	 * {@inheritDoc}
@@ -57,7 +62,57 @@ public class AttendanceLogicImpl implements AttendanceLogic {
 	 * {@inheritDoc}
 	 */
 	public boolean addEvent(Event t) {
+		// should probably do some sort of validation here , maybe
 		return dao.addEvent(t);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public boolean addEvents(Event t, RRule r){
+		if(!t.getIsReoccurring()){ // Only for reoccurring events
+			throw new IllegalArgumentException("Event must be reoccurring.");
+		}
+
+		Pair<Boolean, Long> rResult = addReoccurrence(r);
+		if(!rResult.getFirst()) {
+			return false;
+		}
+
+		ArrayList<Event> events = new ArrayList<Event>();
+		Calendar c = Calendar.getInstance();
+		c.setTime(t.getStartDateTime());
+		DateValueImpl startDateValue = new DateValueImpl(c.get(Calendar.DATE), c.get(Calendar.MONTH) + 1, c.get(Calendar.YEAR));
+		RecurrenceIterator reocurrenceIterator = RecurrenceIteratorFactory.createRecurrenceIterator(r, startDateValue, TimeZone.getDefault());
+		DateTimeIterator di = DateTimeIteratorFactory.createDateTimeIterator(reocurrenceIterator);
+		for(;di.hasNext();){
+			DateTime dt = di.next();
+			Event copy = new Event(t);
+			copy.setStartDateTime(dt.toDate());
+
+			events.add(copy);
+		}
+
+		return dao.addEvents(events);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public Pair<Boolean, Long> addReoccurrence(RRule r){
+		Reoccurrence reoccurrence = new Reoccurrence(null, r.toIcal());
+
+		boolean rResult = addReoccurrence(reoccurrence);
+		Pair<Boolean, Long> result = Pairs.from(rResult, reoccurrence.getId());
+
+		return result;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public boolean addReoccurrence(Reoccurrence r) {
+		return dao.addReoccurrence(r);
 	}
 	
 	/**

@@ -12,7 +12,8 @@ import org.sakaiproject.user.api.User;
 /**
  * An example page
  * 
- * @author Steve Swinsburg (steve.swinsburg@anu.edu.au)
+ * @author David Bauer
+ * @author Leonardo Canessa [lcanessa1 (at) udayton (dot) edu]
  *
  */
 public class Overview extends BasePage {

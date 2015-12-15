@@ -36,7 +36,7 @@ import java.util.*;
  */
 public class ReoccurrenceInputPanel extends BasePanel {
     private static final long serialVersionUID = 1L;
-    private IModel<RRuleInputModel> rrule;
+    private IModel<RRuleInputModel> rRuleIIModel;
     private IModel<Event> event;
     private WebMarkupContainer weekly;
     private WebMarkupContainer monthly;
@@ -47,7 +47,7 @@ public class ReoccurrenceInputPanel extends BasePanel {
 
     public  ReoccurrenceInputPanel(String id, IModel<Event> event, IModel<RRuleInputModel> rrule) {
         super(id, rrule);
-        this.rrule = rrule;
+        this.rRuleIIModel = rrule;
         this.event = event;
         setOutputMarkupPlaceholderTag(true);
         setVisible(false);
@@ -57,7 +57,7 @@ public class ReoccurrenceInputPanel extends BasePanel {
 
     public RRule generateRRule(){
         RRule rRule = new RRule();
-        RRuleInputModel rModel = this.rrule.getObject();
+        RRuleInputModel rModel = this.rRuleIIModel.getObject();
         String frequencySelected = rModel.getFrequency();
 
         rRule.setInterval(rModel.getMinorFrequency());
@@ -106,7 +106,7 @@ public class ReoccurrenceInputPanel extends BasePanel {
     }
 
     private Form<RRuleInputModel> createRRuleInputForm() {
-        Form<RRuleInputModel> rrule = new Form<RRuleInputModel>("reoccurrence", this.rrule);
+        Form<RRuleInputModel> rrule = new Form<RRuleInputModel>("reoccurrence", this.rRuleIIModel);
 
         createMainLabels(rrule);
         createWeekly(rrule);
@@ -137,7 +137,7 @@ public class ReoccurrenceInputPanel extends BasePanel {
 
             @Override
             protected void onUpdate(AjaxRequestTarget ajaxRequestTarget) {
-                RRuleInputModel rmodel = rrule.getObject();
+                RRuleInputModel rmodel = rRuleIIModel.getObject();
 
                 if(rmodel.getFrequency().equals(frequencyNames.get(0))){
                     weekly.setVisible(false);
@@ -222,7 +222,7 @@ public class ReoccurrenceInputPanel extends BasePanel {
         final DateField endDate = new DateField("endDate") {
             @Override
             public boolean isRequired() {
-                return endCriteria.getInput().equals(endDateRadio.getValue());
+                return Strings.isEqual(endCriteria.getInput(), endDateRadio.getValue());
             }
         };
         endDateRadio.add(endDate);
@@ -230,7 +230,7 @@ public class ReoccurrenceInputPanel extends BasePanel {
         final NumberTextField<Integer> endOccurrences = new NumberTextField<Integer>("endOccurrence") {
             @Override
             public boolean isRequired(){
-              return endCriteria.getInput().equals(endOccurrenceRadio.getValue());
+                return Strings.isEqual(endCriteria.getInput(), endOccurrenceRadio.getValue());
           }
         };
         endOccurrences.setMinimum(1);

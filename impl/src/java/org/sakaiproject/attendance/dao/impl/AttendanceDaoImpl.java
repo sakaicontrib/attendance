@@ -17,6 +17,7 @@
 package org.sakaiproject.attendance.dao.impl;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.configuration.PropertiesConfiguration;
@@ -29,6 +30,7 @@ import org.hibernate.Session;
 import org.hibernate.HibernateException;
 import org.sakaiproject.attendance.dao.AttendanceDao;
 
+import org.sakaiproject.attendance.model.Reoccurrence;
 import org.springframework.dao.DataAccessException;
 
 import org.sakaiproject.attendance.model.Event;
@@ -128,12 +130,41 @@ public class AttendanceDaoImpl extends HibernateDaoSupport implements Attendance
 			return false;
 		}
 	}
+
+	public boolean addEvents(ArrayList<Event> es){
+		boolean isSuccess = false;
+
+		for(Event e: es){
+			isSuccess = addEvent(e);
+			if(!isSuccess){
+				return isSuccess;
+			}
+		}
+
+		return isSuccess;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public boolean addReoccurrence(Reoccurrence r){
+		if(log.isDebugEnabled()) {
+			log.debug("addEvent( " + r.toString() + ")");
+		}
+
+		try{
+			getHibernateTemplate().save(r);
+			return true;
+		} catch (DataAccessException de) {
+			log.error("addEvent failed.", de);
+			return false;
+		}
+	}
 	
 	/**
 	 * init
 	 */
 	public void init() {
 		log.info("init()");
-
 	}
 }
