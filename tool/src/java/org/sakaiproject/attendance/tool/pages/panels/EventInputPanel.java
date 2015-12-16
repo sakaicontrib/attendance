@@ -82,6 +82,8 @@ public class EventInputPanel extends BasePanel {
         final Label releasedToLabel = new Label("labelReleasedTo", new ResourceModel("attendance.add.label.releasedTo"));
         final Label isReoccurringLabel = new Label("labelIsReoccurring", new ResourceModel("attendance.add.label.isReoccurring"));
 
+        releasedToLabel.setVisible(false);
+
         event.add(nameLabel);
         event.add(startDateTimeLabel);
         event.add(endDateTimeLabel);
@@ -116,6 +118,7 @@ public class EventInputPanel extends BasePanel {
         startDateTime.setRequired(true);
         endDateTime.setRequired(true);
         isRequired.setRequired(true);
+        releasedTo.setVisible(false);
 
         event.add(name);
         event.add(startDateTime);
