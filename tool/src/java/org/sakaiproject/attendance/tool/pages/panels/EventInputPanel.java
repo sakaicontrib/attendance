@@ -28,6 +28,8 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.ResourceModel;
 import org.sakaiproject.attendance.model.Event;
 import org.sakaiproject.attendance.tool.pages.panels.models.RRuleInputModel;
+import org.sakaiproject.attendance.tool.util.PlaceholderBehavior;
+
 
 /**
  * Created by Leonardo Canessa [lcanessa1 (at) udayton (dot) edu]
@@ -90,12 +92,24 @@ public class EventInputPanel extends BasePanel {
     }
 
     private void createValues(Form<Event> event){
-        final TextField name = new TextField("name");
+        final TextField name = new TextField("name") {
+            @Override
+            protected void onInitialize(){
+                super.onInitialize();
+                add(new PlaceholderBehavior(getString("event.placeholder.name")));
+            }
+        };
         final DateTimeField startDateTime = new DateTimeField("startDateTime");
         final DateTimeField endDateTime = new DateTimeField("endDateTime");
         final CheckBox isRequired = new CheckBox("isRequired");
-        final TextField<String> location = new TextField("location");
-        final TextField<String> releasedTo =  new TextField("releasedTo");
+        final TextField<String> location = new TextField<String>("location") {
+            @Override
+            protected void onInitialize(){
+                super.onInitialize();
+                add(new PlaceholderBehavior(getString("event.placeholder.location")));
+            }
+        };
+        final TextField<String> releasedTo =  new TextField<String>("releasedTo");
 
 
         name.setRequired(true);
