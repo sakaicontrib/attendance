@@ -36,6 +36,7 @@ import java.util.*;
  */
 public class ReoccurrenceInputPanel extends BasePanel {
     private static final long serialVersionUID = 1L;
+
     private IModel<RRuleInputModel> rRuleIIModel;
     private IModel<Event> event;
     private WebMarkupContainer weekly;

@@ -28,6 +28,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.ResourceModel;
 import org.sakaiproject.attendance.model.Event;
 import org.sakaiproject.attendance.tool.pages.panels.models.RRuleInputModel;
+import org.sakaiproject.attendance.tool.pages.panels.util.SequentialDateTimeFieldValidator;
 import org.sakaiproject.attendance.tool.util.PlaceholderBehavior;
 
 
@@ -113,11 +114,11 @@ public class EventInputPanel extends BasePanel {
         };
         final TextField<String> releasedTo =  new TextField<String>("releasedTo");
 
-
         name.setRequired(true);
         startDateTime.setRequired(true);
         endDateTime.setRequired(true);
         isRequired.setRequired(true);
+
         releasedTo.setVisible(false);
 
         event.add(name);
@@ -126,6 +127,9 @@ public class EventInputPanel extends BasePanel {
         event.add(isRequired);
         event.add(location);
         event.add(releasedTo);
+
+        // validators
+        event.add(new SequentialDateTimeFieldValidator(startDateTime, endDateTime));
     }
 
     private void createSubForm(Form<Event> event) {
