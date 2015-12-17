@@ -19,7 +19,6 @@ package org.sakaiproject.attendance.dao;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.google.ical.values.RRule;
 import org.sakaiproject.attendance.model.Event;
 import org.sakaiproject.attendance.model.Reoccurrence;
 

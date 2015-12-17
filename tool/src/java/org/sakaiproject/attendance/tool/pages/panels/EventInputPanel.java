@@ -93,7 +93,7 @@ public class EventInputPanel extends BasePanel {
     }
 
     private void createValues(Form<Event> event){
-        final TextField name = new TextField("name") {
+        final TextField name = new TextField<String>("name") {
             @Override
             protected void onInitialize(){
                 super.onInitialize();
