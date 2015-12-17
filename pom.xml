@@ -99,6 +99,7 @@
 				<artifactId>commons-configuration</artifactId>
 				<version>1.6</version>
 			</dependency>
+			<!--
 			<dependency>
 				<groupId>de.scravy</groupId>
 				<artifactId>pair</artifactId>
@@ -109,6 +110,7 @@
 				<artifactId>google-rfc-2445</artifactId>
 				<version>20110304</version>
 			</dependency>
+			-->
 
 
 			<!-- sakai dependencies -->

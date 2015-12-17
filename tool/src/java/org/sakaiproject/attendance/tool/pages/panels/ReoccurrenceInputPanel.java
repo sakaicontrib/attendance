@@ -16,7 +16,7 @@
 
 package org.sakaiproject.attendance.tool.pages.panels;
 
-import com.google.ical.values.*;
+//import com.google.ical.values.*;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.extensions.yui.calendar.DateField;
@@ -56,7 +56,7 @@ public class ReoccurrenceInputPanel extends BasePanel {
         add(createRRuleInputForm());
     }
 
-    public RRule generateRRule(){
+/*    public RRule generateRRule(){
         RRule rRule = new RRule();
         RRuleInputModel rModel = this.rRuleIIModel.getObject();
         String frequencySelected = rModel.getFrequency();
@@ -104,7 +104,7 @@ public class ReoccurrenceInputPanel extends BasePanel {
             rRule.setCount(rModel.getEndOccurrence());
         }
         return rRule;
-    }
+    }*/
 
     private Form<RRuleInputModel> createRRuleInputForm() {
         Form<RRuleInputModel> rrule = new Form<RRuleInputModel>("reoccurrence", this.rRuleIIModel);
@@ -268,7 +268,7 @@ public class ReoccurrenceInputPanel extends BasePanel {
      * @param date
      * @return Weekday
      */
-    private Weekday getDayOfWeek(Date date) {
+    /*private Weekday getDayOfWeek(Date date) {
         Weekday weekDay = null;
 
         Calendar c = Calendar.getInstance();
@@ -292,14 +292,14 @@ public class ReoccurrenceInputPanel extends BasePanel {
         }
 
         return weekDay;
-    }
+    }*/
 
     /*
      *
      * @param dayPosition, 0 based index of the day of the week. 0 = Sunday
      * @return com.google.ical.values.Weekday
      */
-    private Weekday getDayOfWeek(int dayPosition) {
+   /* private Weekday getDayOfWeek(int dayPosition) {
         Weekday weekday = null;
 
         if(dayPosition == 0) {
@@ -319,6 +319,6 @@ public class ReoccurrenceInputPanel extends BasePanel {
         }
 
         return weekday;
-    }
+    }*/
 }
 

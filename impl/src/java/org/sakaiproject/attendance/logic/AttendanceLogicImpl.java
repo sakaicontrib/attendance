@@ -18,19 +18,19 @@ package org.sakaiproject.attendance.logic;
 
 import java.util.*;
 
-import com.google.ical.compat.jodatime.DateTimeIterator;
+/*import com.google.ical.compat.jodatime.DateTimeIterator;
 import com.google.ical.compat.jodatime.DateTimeIteratorFactory;
 import com.google.ical.iter.RecurrenceIterator;
 import com.google.ical.iter.RecurrenceIteratorFactory;
 import com.google.ical.values.DateValueImpl;
 import com.google.ical.values.RRule;
 import de.scravy.pair.Pair;
-import de.scravy.pair.Pairs;
+import de.scravy.pair.Pairs;*/
 import lombok.Setter;
 
 import org.apache.log4j.Logger;
 
-import org.joda.time.DateTime;
+//import org.joda.time.DateTime;
 import org.sakaiproject.attendance.dao.AttendanceDao;
 import org.sakaiproject.attendance.model.Event;
 import org.sakaiproject.attendance.model.Reoccurrence;

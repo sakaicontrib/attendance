@@ -50,6 +50,7 @@
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate</artifactId>
 		</dependency>
+		<!--
 		<dependency>
 			<groupId>org.scala-saddle</groupId>
 			<artifactId>google-rfc-2445</artifactId>
@@ -58,6 +59,7 @@
 			<groupId>de.scravy</groupId>
 			<artifactId>pair</artifactId>
 		</dependency>
+		-->
 		
 		<!-- Sakai dependencies -->
         <dependency>

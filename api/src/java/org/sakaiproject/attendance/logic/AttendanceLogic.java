@@ -18,8 +18,8 @@ package org.sakaiproject.attendance.logic;
 
 import java.util.List;
 
-import com.google.ical.values.RRule;
-import de.scravy.pair.Pair;
+//import com.google.ical.values.RRule;
+//import de.scravy.pair.Pair;
 import org.sakaiproject.attendance.model.Event;
 import org.sakaiproject.attendance.model.Reoccurrence;
 
