@@ -66,9 +66,9 @@ public class AttendanceLogicImpl implements AttendanceLogic {
 		return dao.addEvent(t);
 	}
 
-	/**
+/*	/**
 	 * {@inheritDoc}
-	 */
+	 *//*
 	public boolean addEvents(Event t, RRule r){
 		if(!t.getIsReoccurring()){ // Only for reoccurring events
 			throw new IllegalArgumentException("Event must be reoccurring.");
@@ -98,7 +98,7 @@ public class AttendanceLogicImpl implements AttendanceLogic {
 
 	/**
 	 * {@inheritDoc}
-	 */
+	 *//*
 	public Pair<Boolean, Long> addReoccurrence(RRule r){
 		Reoccurrence reoccurrence = new Reoccurrence(null, r.toIcal());
 
@@ -106,7 +106,7 @@ public class AttendanceLogicImpl implements AttendanceLogic {
 		Pair<Boolean, Long> result = Pairs.from(rResult, reoccurrence.getId());
 
 		return result;
-	}
+	}*/
 
 	/**
 	 * {@inheritDoc}

@@ -50,20 +50,20 @@ public interface AttendanceLogic {
 	 */
 	boolean addEvent(Event t);
 
-	/**
+/*	/**
 	 * Add a reoccurring Event
 	 * @param t, the event model
 	 * @param r, the RFC-2445 RRule
 	 * @return true if success
-	 */
+	 *//*
 	boolean addEvents(Event t, RRule r);
 
 	/**
 	 * Add a new Reoccurrence
 	 * @param r, the Rrule for the object
 	 * @return
-	 */
-	Pair<Boolean, Long> addReoccurrence(RRule r);
+	 *//*
+	Pair<Boolean, Long> addReoccurrence(RRule r);*/
 
 	/**
 	 * Add Reoccurrence

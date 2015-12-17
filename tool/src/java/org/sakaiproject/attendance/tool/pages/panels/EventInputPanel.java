@@ -26,6 +26,7 @@ import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.ResourceModel;
+import org.apache.wicket.model.StringResourceModel;
 import org.sakaiproject.attendance.model.Event;
 import org.sakaiproject.attendance.tool.pages.panels.models.RRuleInputModel;
 import org.sakaiproject.attendance.tool.pages.panels.util.SequentialDateTimeFieldValidator;
@@ -51,18 +52,14 @@ public class EventInputPanel extends BasePanel {
         Form<Event> event = new Form<Event>("event", this.eventModel) {
             @Override
             public void onSubmit(){
-                Event t = (Event) getDefaultModelObject();
-                boolean result;
-                if(t.getIsReoccurring()){
-                    result = attendanceLogic.addEvents(t, rPanel.generateRRule());
-                } else {
-                    result = attendanceLogic.addEvent(t);
-                }
+                Event e = (Event) getDefaultModelObject();
+                boolean result = attendanceLogic.addEvent(e);
 
                 if(result){
-                    info(new ResourceModel("attendance.add.success"));
+                    StringResourceModel temp = new StringResourceModel("attendance.add.success", null, new String[]{e.getName()});
+                    info(temp.toString());
                 } else {
-                    error(new ResourceModel("Failed to add event."));
+                    error(getString("attendance.add.failure"));
                 }
             }
         };
@@ -84,6 +81,7 @@ public class EventInputPanel extends BasePanel {
         final Label isReoccurringLabel = new Label("labelIsReoccurring", new ResourceModel("attendance.add.label.isReoccurring"));
 
         releasedToLabel.setVisible(false);
+        isReoccurringLabel.setVisible(false);
 
         event.add(nameLabel);
         event.add(startDateTimeLabel);
@@ -135,6 +133,7 @@ public class EventInputPanel extends BasePanel {
     private void createSubForm(Form<Event> event) {
         this.rrule = new CompoundPropertyModel<RRuleInputModel>(new RRuleInputModel());
         this.rPanel = new ReoccurrenceInputPanel("reoccurrencePanel", this.eventModel, this.rrule);
+        this.rPanel.setVisible(false);
         event.add(this.rPanel);
     }
 
@@ -147,7 +146,7 @@ public class EventInputPanel extends BasePanel {
             }
 
         };
-
+        isReoccurringAjaxCheckBox.setVisible(false);
         event.add(isReoccurringAjaxCheckBox);
     }
 }
