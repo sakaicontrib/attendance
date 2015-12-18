@@ -19,6 +19,7 @@ package org.sakaiproject.attendance.dao;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.sakaiproject.attendance.model.AttendanceSite;
 import org.sakaiproject.attendance.model.Event;
 import org.sakaiproject.attendance.model.Reoccurrence;
 
@@ -29,6 +30,24 @@ import org.sakaiproject.attendance.model.Reoccurrence;
  *
  */
 public interface AttendanceDao {
+	/**
+	 * Get an attendance site from the DB
+	 */
+	AttendanceSite getAttendanceSite(String id);
+
+	/**
+	 * get a site's information by id
+	 * @param id, the internal ID of the site
+	 * @return AttendanceSite
+     */
+	AttendanceSite getAttendanceSite(Long id);
+
+	/**
+	 * Add a new AttendanceSite record to the database
+	 * @param as
+	 * @return
+     */
+	boolean addAttendanceSite(AttendanceSite as);
 
 	/**
 	 * Gets a single Event from the db
@@ -48,6 +67,13 @@ public interface AttendanceDao {
 	 * @return a list of items, an empty list if no items
 	 */
 	List<Event> getEventsForSite(String siteID);
+
+	/**
+	 * get all the events by site id (long)
+	 * @param id, the Long id
+	 * @return a list of events or empty if no items.
+     */
+	List<Event> getEventsForSite(Long id);
 		
 	/**
 	 * Add a new Event record to the database. Only the name property is actually used.
@@ -74,6 +100,8 @@ public interface AttendanceDao {
 	String QUERY_GET_EVENT = "getEvent";
 	String QUERY_GET_EVENTS_FOR_SITE = "getEventsForSite";
 	String QUERY_GET_EVENTS = "getEvents";
+	String QUERY_GET_SITE_BY_SITE_ID = "getSiteBySiteID";
+	String QUERY_GET_SITE_BY_ID = "getSiteByID";
 
 	// Hibernate Object Fields
 	String ID = "id";

@@ -30,6 +30,7 @@ import org.hibernate.Session;
 import org.hibernate.HibernateException;
 import org.sakaiproject.attendance.dao.AttendanceDao;
 
+import org.sakaiproject.attendance.model.AttendanceSite;
 import org.sakaiproject.attendance.model.Reoccurrence;
 import org.springframework.dao.DataAccessException;
 
@@ -49,7 +50,67 @@ public class AttendanceDaoImpl extends HibernateDaoSupport implements Attendance
 	private static final Logger log = Logger.getLogger(AttendanceDaoImpl.class);
 	
 	private PropertiesConfiguration statements;
-	
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@SuppressWarnings("unchecked")
+	public AttendanceSite getAttendanceSite(final String siteID) {
+		if(log.isDebugEnabled()){
+			log.debug("getSiteBySite_ID ");
+		}
+
+		HibernateCallback hcb = new HibernateCallback() {
+			@Override
+			public Object doInHibernate(Session session) throws HibernateException, SQLException {
+				Query q = session.getNamedQuery(QUERY_GET_SITE_BY_SITE_ID);
+				q.setParameter(SITE_ID, siteID, new StringType());
+				return q.uniqueResult();
+			}
+		};
+
+		return (AttendanceSite) getHibernateTemplate().execute(hcb);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@SuppressWarnings("unchecked")
+	public AttendanceSite getAttendanceSite(final Long id) {
+		if(log.isDebugEnabled()){
+			log.debug("getSiteBySite_ID ");
+		}
+
+		HibernateCallback hcb = new HibernateCallback() {
+			@Override
+			public Object doInHibernate(Session session) throws HibernateException, SQLException {
+				Query q = session.getNamedQuery(QUERY_GET_SITE_BY_ID);
+				q.setParameter(ID, id, new LongType());
+				return q.uniqueResult();
+			}
+		};
+
+		return (AttendanceSite) getHibernateTemplate().execute(hcb);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@SuppressWarnings("unchecked")
+	public boolean addAttendanceSite(AttendanceSite aS) {
+		if(log.isDebugEnabled()) {
+			log.debug("addAttendanceSite ( " + aS.toString() + ")");
+		}
+
+		try {
+			getHibernateTemplate().save(aS);
+			return true;
+		} catch (DataAccessException de) {
+			log.error("addAttendanceSite failed", de);
+			return false;
+		}
+	}
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -71,27 +132,6 @@ public class AttendanceDaoImpl extends HibernateDaoSupport implements Attendance
 
 		return (Event) getHibernateTemplate().execute(hcb);
 	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@SuppressWarnings("unchecked")
-	public List<Event> getEventsForSite(final String siteID) {
-		if(log.isDebugEnabled()) {
-			log.debug("getEventsForSite()");
-		}
-
-		HibernateCallback hcb = new HibernateCallback() {
-			@Override
-			public Object doInHibernate(Session session) throws HibernateException, SQLException {
-				Query q = session.getNamedQuery(QUERY_GET_EVENTS_FOR_SITE);
-				q.setParameter(SITE_ID, new StringType());
-				return q.list();
-			}
-		};
-
-		return null;
-	}
 	
 	/**
 	 * {@inheritDoc}
@@ -112,6 +152,44 @@ public class AttendanceDaoImpl extends HibernateDaoSupport implements Attendance
 
 		return (List<Event>) getHibernateTemplate().execute(hcb);
 	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@SuppressWarnings("unchecked")
+	public List<Event> getEventsForSite(final String siteID) {
+		if(log.isDebugEnabled()) {
+			log.debug("getEventsForSite(String siteID)");
+		}
+
+		AttendanceSite attendanceSite = getAttendanceSite(siteID);
+		final Long id = attendanceSite.getId();
+
+		return getEventsForSite(id);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@SuppressWarnings("unchecked")
+	public List<Event> getEventsForSite(final Long id) {
+		if(log.isDebugEnabled()) {
+			log.debug("getEventsForSite(Long id)");
+		}
+
+		HibernateCallback hcb = new HibernateCallback() {
+			@Override
+			public Object doInHibernate(Session session) throws HibernateException, SQLException {
+				Query q = session.getNamedQuery(QUERY_GET_EVENTS_FOR_SITE);
+				q.setParameter(ID, id, new LongType());
+				return q.list();
+			}
+		};
+
+		return (List<Event>) getHibernateTemplate().executeFind(hcb);
+	}
+
+
 	
 	/**
 	 * {@inheritDoc}

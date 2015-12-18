@@ -45,9 +45,9 @@
         <![CDATA[from Event event WHERE event.id = :id]]>
     </query>
 
-    <!--<query name="getEventsForSite">
-        <![CDATA[from Event event WHERE event.attendanceID = (from Attendance attendance WHERE attendance.siteID = :siteID)]]>
-    </query> -->
+    <query name="getEventsForSite">
+        <![CDATA[from Event event WHERE event.attendanceID = :id]]>
+    </query>
 
     <query name="getEvents">
         <![CDATA[from Event event]]>

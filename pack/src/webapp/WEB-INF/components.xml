@@ -61,6 +61,7 @@
 		  init-method="init">
 
 		<property name="dao" ref="org.sakaiproject.attendance.dao.AttendanceDao" />
+		<property name="sakaiProxy" ref="org.sakaiproject.attendance.logic.SakaiProxy" />
 	</bean>
 
 	<!-- Add our HBM files to the Sakai global session factory -->

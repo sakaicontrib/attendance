@@ -20,6 +20,7 @@ import java.util.List;
 
 //import com.google.ical.values.RRule;
 //import de.scravy.pair.Pair;
+import org.sakaiproject.attendance.model.AttendanceSite;
 import org.sakaiproject.attendance.model.Event;
 import org.sakaiproject.attendance.model.Reoccurrence;
 
@@ -32,23 +33,63 @@ import org.sakaiproject.attendance.model.Reoccurrence;
 public interface AttendanceLogic {
 
 	/**
+	 * Gets the Attendance site by Sakai Site ID
+	 * @param siteID, sakai Site ID
+	 * @return the Attendance Site
+     */
+	AttendanceSite getAttendanceSite(String siteID);
+
+	/**
+	 * Get the Attendance Site
+	 * @param id, the attendance site id
+	 * @return the Attendance Site
+     */
+	AttendanceSite getAttendanceSite(Long id);
+
+	/**
+	 *
+	 * @return The Current Attendance Site
+     */
+	AttendanceSite getCurrentAttendanceSite();
+
+	/**
 	 * Get a Event
 	 * @return
 	 */
 	Event getEvent(long id);
 	
 	/**
-	 * Get all Things
+	 * Get all events (should probably never be used)
 	 * @return
 	 */
 	List<Event> getEvents();
+
+	/**
+	 * Gets all the evetns by Sakai Site ID
+	 * @param siteID, the sakai siteID for a site
+	 * @return a list of events, or empty
+     */
+	List<Event> getEventsForSite(String siteID);
+
+	/**
+	 * gets all the events by (internal) Site id
+	 * @param id
+	 * @return List of events, or empty
+     */
+	List<Event> getEventsForSite(Long id);
+
+	/**
+	 * Get events for curenet site
+	 * @return list of events
+     */
+	List<Event> getEventsForCurrentSite();
 	
 	/**
 	 * Add a new Event
-	 * @param t	Event
+	 * @param e	Event
 	 * @return true if success, false if not
 	 */
-	boolean addEvent(Event t);
+	boolean addEvent(Event e);
 
 /*	/**
 	 * Add a reoccurring Event

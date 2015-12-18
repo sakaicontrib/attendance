@@ -46,7 +46,7 @@ public class EventDataProvider implements IDataProvider<Event>, Serializable {
 
     private List<Event> getData() {
         if(list == null) {
-            list = attendanceLogic.getEvents();
+            list = attendanceLogic.getEventsForCurrentSite();
             Collections.reverse(list);
         }
         return list;

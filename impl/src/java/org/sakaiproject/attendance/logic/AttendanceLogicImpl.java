@@ -32,6 +32,7 @@ import org.apache.log4j.Logger;
 
 //import org.joda.time.DateTime;
 import org.sakaiproject.attendance.dao.AttendanceDao;
+import org.sakaiproject.attendance.model.AttendanceSite;
 import org.sakaiproject.attendance.model.Event;
 import org.sakaiproject.attendance.model.Reoccurrence;
 
@@ -43,7 +44,45 @@ import org.sakaiproject.attendance.model.Reoccurrence;
  */
 public class AttendanceLogicImpl implements AttendanceLogic {
 	private static final Logger log = Logger.getLogger(AttendanceLogicImpl.class);
-	
+
+
+	/**
+	 * {@inheritDoc}
+     */
+	public AttendanceSite getAttendanceSite(String siteID) {
+		return dao.getAttendanceSite(siteID);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public AttendanceSite getAttendanceSite(Long id) {
+		return dao.getAttendanceSite(id);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public AttendanceSite getCurrentAttendanceSite() {
+		String currentSiteID = sakaiProxy.getCurrentSiteId();
+
+		AttendanceSite currentAttendanceSite = getAttendanceSite(currentSiteID);
+
+		if(currentAttendanceSite == null) {
+			currentAttendanceSite = new AttendanceSite(currentSiteID);
+			addSite(currentAttendanceSite);
+		}
+
+		return currentAttendanceSite;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public boolean addSite(AttendanceSite s) {
+		return dao.addAttendanceSite(s);
+	}
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -57,13 +96,39 @@ public class AttendanceLogicImpl implements AttendanceLogic {
 	public List<Event> getEvents() {
 		return dao.getEvents();
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
-	public boolean addEvent(Event t) {
+	public List<Event> getEventsForSite(String siteID) {
+		AttendanceSite currentAttendanceSite = getCurrentAttendanceSite();
+		return getEventsForSite(currentAttendanceSite.getId());
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public List<Event> getEventsForSite(Long id) {
+		return dao.getEventsForSite(id);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public List<Event> getEventsForCurrentSite(){
+		return getEventsForSite(getCurrentAttendanceSite().getId());
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public boolean addEvent(Event e) {
 		// should probably do some sort of validation here , maybe
-		return dao.addEvent(t);
+		AttendanceSite currentAttendanceSite = getCurrentAttendanceSite();
+
+		e.setAttendanceID(currentAttendanceSite.getId());
+
+		return dao.addEvent(e);
 	}
 
 /*	/**
@@ -121,8 +186,16 @@ public class AttendanceLogicImpl implements AttendanceLogic {
 	public void init() {
 		log.info("init");
 	}
+
+	private boolean hasSiteBeenAdded(String siteID) {
+		AttendanceSite attendanceSite = getAttendanceSite(siteID);
+		return (attendanceSite == null);
+	}
 	
 	@Setter
 	private AttendanceDao dao;
+
+	@Setter
+	private SakaiProxy sakaiProxy;
 
 }
