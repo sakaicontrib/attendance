@@ -244,7 +244,7 @@ public class ReoccurrenceInputPanel extends BasePanel {
     //  Returns a list of the names of the days of the week
     private List<String> getShortDayInWeekName() {
         DateFormatSymbols dateFormatSymbols = new DateFormatSymbols(sakaiProxy.getCurrentUserLocale());
-        ArrayList<String> shortWeekDays = new ArrayList(Arrays.asList(dateFormatSymbols.getShortWeekdays()));
+        ArrayList<String> shortWeekDays = new ArrayList<String>(Arrays.asList(dateFormatSymbols.getShortWeekdays()));
         shortWeekDays.remove(0); // remove first element which is empty
         return shortWeekDays;
     }
@@ -256,7 +256,7 @@ public class ReoccurrenceInputPanel extends BasePanel {
      * List<Integer>
      */
     private List<Integer> makeSequence(int begin, int end) {
-        List<Integer> ret = new ArrayList(end - begin + 1);
+        List<Integer> ret = new ArrayList<Integer>(end - begin + 1);
 
         for(int i = begin; i <= end; ret.add(i++));
 

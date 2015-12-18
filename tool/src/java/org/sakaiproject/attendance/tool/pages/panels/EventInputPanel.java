@@ -57,7 +57,7 @@ public class EventInputPanel extends BasePanel {
 
                 if(result){
                     StringResourceModel temp = new StringResourceModel("attendance.add.success", null, new String[]{e.getName()});
-                    info(temp.toString());
+                    info(temp.getString());
                 } else {
                     error(getString("attendance.add.failure"));
                 }
