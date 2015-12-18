@@ -41,7 +41,7 @@ import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 /**
  * Implementation of AttendanceDao
  * 
- * @author Steve Swinsburg (steve.swinsburg@anu.edu.au)
+ * @author Leonardo Canessa [lcanessa1 (at) udayton (dot) edu]
  *
  */
 public class AttendanceDaoImpl extends HibernateDaoSupport implements AttendanceDao {

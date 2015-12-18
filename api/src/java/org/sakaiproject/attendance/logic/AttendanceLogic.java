@@ -26,7 +26,7 @@ import org.sakaiproject.attendance.model.Reoccurrence;
 /**
  * An example logic interface
  * 
- * @author Steve Swinsburg (steve.swinsburg@anu.edu.au)
+ * @author Leonardo Canessa [lcanessa1 (at) udayton (dot) edu]
  *
  */
 public interface AttendanceLogic {
