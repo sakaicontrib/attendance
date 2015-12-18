@@ -21,7 +21,7 @@
 
 <hibernate-mapping package="org.sakaiproject.attendance.model">
 
-    <class name="Site" table="ATTENDANCE_SITE_T">
+    <class name="org.sakaiproject.attendance.model.AttendanceSite" table="ATTENDANCE_SITE_T">
 
         <id name="id">
             <column name="ID" not-null="true" length="19" />
@@ -34,4 +34,12 @@
         <property name="defaultStatus"  column="DEFAULT_STATUS"    type="java.lang.String" />
 
     </class>
+
+    <query name="getSiteBySiteID">
+        <![CDATA[from AttendanceSite attendanceSite WHERE attendanceSite.siteID = :siteID]]>
+    </query>
+
+    <query name="getSiteByID">
+        <![CDATA[from AttendanceSite attendanceSite WHERE attendanceSite.id = :id]]>
+    </query>
 </hibernate-mapping>

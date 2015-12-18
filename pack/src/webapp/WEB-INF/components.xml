@@ -71,7 +71,7 @@
 			<list>
 				<value>org/sakaiproject/attendance/hbm/Event.hbm.xml</value>
 				<value>org/sakaiproject/attendance/hbm/Reoccurring.hbm.xml</value>
-				<value>org/sakaiproject/attendance/hbm/Site.hbm.xml</value>
+				<value>org/sakaiproject/attendance/hbm/AttendanceSite.hbm.xml</value>
 			</list>
 		</property>
 
