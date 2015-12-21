@@ -52,14 +52,6 @@ public class AttendanceLogicImpl implements AttendanceLogic {
 	public AttendanceSite getAttendanceSite(String siteID) {
 		return dao.getAttendanceSite(siteID);
 	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public AttendanceSite getAttendanceSite(Long id) {
-		return dao.getAttendanceSite(id);
-	}
-
 	/**
 	 * {@inheritDoc}
 	 */
@@ -101,22 +93,21 @@ public class AttendanceLogicImpl implements AttendanceLogic {
 	 * {@inheritDoc}
 	 */
 	public List<Event> getEventsForSite(String siteID) {
-		AttendanceSite currentAttendanceSite = getCurrentAttendanceSite();
-		return getEventsForSite(currentAttendanceSite.getId());
+		return dao.getEventsForSite(siteID);
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
-	public List<Event> getEventsForSite(Long id) {
-		return dao.getEventsForSite(id);
+	public List<Event> getEventsForSite(AttendanceSite aS) {
+		return dao.getEventsForSite(aS);
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	public List<Event> getEventsForCurrentSite(){
-		return getEventsForSite(getCurrentAttendanceSite().getId());
+		return getEventsForSite(getCurrentAttendanceSite());
 	}
 
 	/**
@@ -126,7 +117,7 @@ public class AttendanceLogicImpl implements AttendanceLogic {
 		// should probably do some sort of validation here , maybe
 		AttendanceSite currentAttendanceSite = getCurrentAttendanceSite();
 
-		e.setAttendanceID(currentAttendanceSite.getId());
+		e.setAttendanceSite(currentAttendanceSite);
 
 		return dao.addEvent(e);
 	}

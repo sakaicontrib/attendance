@@ -37,8 +37,9 @@
         <property name="reoccurringID"  column="REOCCURRING_ID"     type="java.lang.Long" />
         <property name="isRequired"     column="IS_REQUIRED"        type="java.lang.Boolean" />
         <property name="releasedTo"     column="RELEASED_TO"        type="java.lang.String" />
-        <property name="attendanceID"   column="ATTENDANCE_ID"      type="java.lang.Long" />
         <property name="location"       column="LOCATION"           type="java.lang.String" />
+
+        <many-to-one name="attendanceSite" column="ATTENDANCE_SITE" unique="false" not-null="true" class="org.sakaiproject.attendance.model.AttendanceSite" />
     </class>
 
     <query name="getEvent">
@@ -46,7 +47,7 @@
     </query>
 
     <query name="getEventsForSite">
-        <![CDATA[from Event event WHERE event.attendanceID = :id]]>
+        <![CDATA[from Event event WHERE event.attendanceSite = :attendanceSite]]>
     </query>
 
     <query name="getEvents">

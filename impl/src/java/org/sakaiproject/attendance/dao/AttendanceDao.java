@@ -33,14 +33,7 @@ public interface AttendanceDao {
 	/**
 	 * Get an attendance site from the DB
 	 */
-	AttendanceSite getAttendanceSite(String id);
-
-	/**
-	 * get a site's information by id
-	 * @param id, the internal ID of the site
-	 * @return AttendanceSite
-     */
-	AttendanceSite getAttendanceSite(Long id);
+	AttendanceSite getAttendanceSite(String siteId);
 
 	/**
 	 * Add a new AttendanceSite record to the database
@@ -69,11 +62,11 @@ public interface AttendanceDao {
 	List<Event> getEventsForSite(String siteID);
 
 	/**
-	 * get all the events by site id (long)
-	 * @param id, the Long id
+	 * get all the events by attendanceSite
+	 * @param aS, the AttendanceSite
 	 * @return a list of events or empty if no items.
      */
-	List<Event> getEventsForSite(Long id);
+	List<Event> getEventsForSite(AttendanceSite aS);
 		
 	/**
 	 * Add a new Event record to the database. Only the name property is actually used.
@@ -106,4 +99,5 @@ public interface AttendanceDao {
 	// Hibernate Object Fields
 	String ID = "id";
 	String SITE_ID = "siteID";
+	String ATTENDANCE_SITE = "attendanceSite";
 }

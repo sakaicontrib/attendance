@@ -24,6 +24,7 @@ import org.apache.commons.configuration.PropertiesConfiguration;
 import org.apache.log4j.Logger;
 
 import org.hibernate.type.LongType;
+import org.hibernate.type.ManyToOneType;
 import org.hibernate.type.StringType;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -65,27 +66,6 @@ public class AttendanceDaoImpl extends HibernateDaoSupport implements Attendance
 			public Object doInHibernate(Session session) throws HibernateException, SQLException {
 				Query q = session.getNamedQuery(QUERY_GET_SITE_BY_SITE_ID);
 				q.setParameter(SITE_ID, siteID, new StringType());
-				return q.uniqueResult();
-			}
-		};
-
-		return (AttendanceSite) getHibernateTemplate().execute(hcb);
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@SuppressWarnings("unchecked")
-	public AttendanceSite getAttendanceSite(final Long id) {
-		if(log.isDebugEnabled()){
-			log.debug("getSiteBySite_ID ");
-		}
-
-		HibernateCallback hcb = new HibernateCallback() {
-			@Override
-			public Object doInHibernate(Session session) throws HibernateException, SQLException {
-				Query q = session.getNamedQuery(QUERY_GET_SITE_BY_ID);
-				q.setParameter(ID, id, new LongType());
 				return q.uniqueResult();
 			}
 		};
@@ -162,31 +142,21 @@ public class AttendanceDaoImpl extends HibernateDaoSupport implements Attendance
 			log.debug("getEventsForSite(String siteID)");
 		}
 
-		AttendanceSite attendanceSite = getAttendanceSite(siteID);
-		final Long id = attendanceSite.getId();
+		final AttendanceSite attendanceSite = getAttendanceSite(siteID);
 
-		return getEventsForSite(id);
+		return getEventsForAttendanceSiteHelper(attendanceSite);
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	@SuppressWarnings("unchecked")
-	public List<Event> getEventsForSite(final Long id) {
+	public List<Event> getEventsForSite(final AttendanceSite aS) {
 		if(log.isDebugEnabled()) {
-			log.debug("getEventsForSite(Long id)");
+			log.debug("getEventsForSite(AttendanceSite id)");
 		}
 
-		HibernateCallback hcb = new HibernateCallback() {
-			@Override
-			public Object doInHibernate(Session session) throws HibernateException, SQLException {
-				Query q = session.getNamedQuery(QUERY_GET_EVENTS_FOR_SITE);
-				q.setParameter(ID, id, new LongType());
-				return q.list();
-			}
-		};
-
-		return (List<Event>) getHibernateTemplate().executeFind(hcb);
+		return getEventsForAttendanceSiteHelper(aS);
 	}
 
 
@@ -244,5 +214,23 @@ public class AttendanceDaoImpl extends HibernateDaoSupport implements Attendance
 	 */
 	public void init() {
 		log.info("init()");
+	}
+
+	@SuppressWarnings("unchecked")
+	private List<Event> getEventsForAttendanceSiteHelper(final AttendanceSite aS){
+		if(log.isDebugEnabled()){
+			log.debug("getEventsForSite()");
+		}
+
+		HibernateCallback hcb = new HibernateCallback() {
+			@Override
+			public Object doInHibernate(Session session) throws HibernateException, SQLException {
+				Query q = session.getNamedQuery(QUERY_GET_EVENTS_FOR_SITE);
+				q.setParameter(ATTENDANCE_SITE, aS, new ManyToOneType("org.sakaiproject.attendance.model.AttendanceSite"));
+				return q.list();
+			}
+		};
+
+		return (List<Event>) getHibernateTemplate().executeFind(hcb);
 	}
 }

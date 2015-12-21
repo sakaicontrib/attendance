@@ -40,13 +40,6 @@ public interface AttendanceLogic {
 	AttendanceSite getAttendanceSite(String siteID);
 
 	/**
-	 * Get the Attendance Site
-	 * @param id, the attendance site id
-	 * @return the Attendance Site
-     */
-	AttendanceSite getAttendanceSite(Long id);
-
-	/**
 	 *
 	 * @return The Current Attendance Site
      */
@@ -76,7 +69,7 @@ public interface AttendanceLogic {
 	 * @param id
 	 * @return List of events, or empty
      */
-	List<Event> getEventsForSite(Long id);
+	List<Event> getEventsForSite(AttendanceSite id);
 
 	/**
 	 * Get events for curenet site

@@ -33,16 +33,16 @@ import java.util.Date;
 public class Event implements Serializable {
 	private static final 	long 		serialVersionUID = 1L;
 
-	private 				Long 		id;
-	private 				String 		name;
-	private 				Date 		startDateTime;
-	private 				Date	 	endDateTime;
-	private 				Boolean 	isReoccurring;
-	private 				Long 		reoccurringID;
-	private 				Boolean 	isRequired;
-	private 				String		releasedTo;
-	private 				Long		attendanceID;
-	private 				String 		location;
+	private 				Long 			id;
+	private 				String 			name;
+	private 				Date 			startDateTime;
+	private 				Date	 		endDateTime;
+	private 				Boolean 		isReoccurring;
+	private 				Long 			reoccurringID;
+	private 				Boolean 		isRequired;
+	private 				String			releasedTo;
+	private 				AttendanceSite 	attendanceSite;
+	private 				String 			location;
 
 	// Create a copy constructor
 	public Event(Event event){
@@ -53,7 +53,7 @@ public class Event implements Serializable {
 		this.reoccurringID 	= event.reoccurringID;
 		this.isRequired 	= event.isRequired;
 		this.releasedTo 	= event.releasedTo;
-		this.attendanceID 	= event.attendanceID;
+		this.attendanceSite = event.attendanceSite;
 		this.location 		= event.location;
 	}
 }
