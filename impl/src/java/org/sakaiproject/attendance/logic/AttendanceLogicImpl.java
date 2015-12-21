@@ -62,7 +62,12 @@ public class AttendanceLogicImpl implements AttendanceLogic {
 
 		if(currentAttendanceSite == null) {
 			currentAttendanceSite = new AttendanceSite(currentSiteID);
-			addSite(currentAttendanceSite);
+			if(addSite(currentAttendanceSite)){
+				return currentAttendanceSite;
+			}
+			else {
+				return null;
+			}
 		}
 
 		return currentAttendanceSite;
