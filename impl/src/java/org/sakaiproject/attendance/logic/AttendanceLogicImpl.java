@@ -177,11 +177,6 @@ public class AttendanceLogicImpl implements AttendanceLogic {
 	public void init() {
 		log.info("init");
 	}
-
-	private boolean hasSiteBeenAdded(String siteID) {
-		AttendanceSite attendanceSite = getAttendanceSite(siteID);
-		return (attendanceSite == null);
-	}
 	
 	@Setter
 	private AttendanceDao dao;

@@ -21,7 +21,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
-import java.util.Date;
 
 /**
  * Created by Leonardo Canessa [lcanessa1 (at) udayton (dot) edu]au)
