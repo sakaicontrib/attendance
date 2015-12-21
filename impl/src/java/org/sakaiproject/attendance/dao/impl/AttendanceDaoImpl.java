@@ -179,6 +179,9 @@ public class AttendanceDaoImpl extends HibernateDaoSupport implements Attendance
 		}
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public boolean addEvents(ArrayList<Event> es){
 		boolean isSuccess = false;
 
