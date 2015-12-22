@@ -45,13 +45,13 @@ import org.sakaiproject.attendance.model.Reoccurrence;
 public class AttendanceLogicImpl implements AttendanceLogic {
 	private static final Logger log = Logger.getLogger(AttendanceLogicImpl.class);
 
-
 	/**
 	 * {@inheritDoc}
      */
 	public AttendanceSite getAttendanceSite(String siteID) {
 		return dao.getAttendanceSite(siteID);
 	}
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -59,7 +59,7 @@ public class AttendanceLogicImpl implements AttendanceLogic {
 		String currentSiteID = sakaiProxy.getCurrentSiteId();
 
 		AttendanceSite currentAttendanceSite = getAttendanceSite(currentSiteID);
-
+		// is this the best way to do this?
 		if(currentAttendanceSite == null) {
 			currentAttendanceSite = new AttendanceSite(currentSiteID);
 			if(addSite(currentAttendanceSite)){
@@ -98,7 +98,8 @@ public class AttendanceLogicImpl implements AttendanceLogic {
 	 * {@inheritDoc}
 	 */
 	public List<Event> getEventsForSite(String siteID) {
-		return dao.getEventsForSite(siteID);
+		AttendanceSite aS = getAttendanceSite(siteID);
+		return getEventsForSite(aS);
 	}
 
 	/**
@@ -188,5 +189,4 @@ public class AttendanceLogicImpl implements AttendanceLogic {
 
 	@Setter
 	private SakaiProxy sakaiProxy;
-
 }

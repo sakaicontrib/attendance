@@ -72,13 +72,13 @@ public class EventInputPanel extends BasePanel {
     }
 
     private void createLabels(Form<Event> event){
-        final Label nameLabel = new Label("labelName", new ResourceModel("attendance.add.label.name"));
-        final Label startDateTimeLabel = new Label("labelStartDateTime", new ResourceModel("attendance.add.label.startDateTime"));
-        final Label endDateTimeLabel = new Label("labelEndDateTime", new ResourceModel("attendance.add.label.endDateTime"));
-        final Label isRequiredLabel = new Label("labelIsRequired", new ResourceModel("attendance.add.label.isRequired"));
-        final Label locationLabel = new Label("labelLocation", new ResourceModel("attendance.add.label.location"));
-        final Label releasedToLabel = new Label("labelReleasedTo", new ResourceModel("attendance.add.label.releasedTo"));
-        final Label isReoccurringLabel = new Label("labelIsReoccurring", new ResourceModel("attendance.add.label.isReoccurring"));
+        final Label nameLabel           = new Label("labelName", new ResourceModel("attendance.add.label.name"));
+        final Label startDateTimeLabel  = new Label("labelStartDateTime", new ResourceModel("attendance.add.label.startDateTime"));
+        final Label endDateTimeLabel    = new Label("labelEndDateTime", new ResourceModel("attendance.add.label.endDateTime"));
+        final Label isRequiredLabel     = new Label("labelIsRequired", new ResourceModel("attendance.add.label.isRequired"));
+        final Label locationLabel       = new Label("labelLocation", new ResourceModel("attendance.add.label.location"));
+        final Label releasedToLabel     = new Label("labelReleasedTo", new ResourceModel("attendance.add.label.releasedTo"));
+        final Label isReoccurringLabel  = new Label("labelIsReoccurring", new ResourceModel("attendance.add.label.isReoccurring"));
 
         releasedToLabel.setVisible(false);
         isReoccurringLabel.setVisible(false);
@@ -110,7 +110,7 @@ public class EventInputPanel extends BasePanel {
                 add(new PlaceholderBehavior(getString("event.placeholder.location")));
             }
         };
-        final TextField<String> releasedTo =  new TextField<String>("releasedTo");
+        final TextField<String> releasedTo = new TextField<String>("releasedTo");
 
         name.setRequired(true);
         startDateTime.setRequired(true);
@@ -131,7 +131,7 @@ public class EventInputPanel extends BasePanel {
     }
 
     private void createSubForm(Form<Event> event) {
-        this.rrule = new CompoundPropertyModel<RRuleInputModel>(new RRuleInputModel());
+        this.rrule  = new CompoundPropertyModel<RRuleInputModel>(new RRuleInputModel());
         this.rPanel = new ReoccurrenceInputPanel("reoccurrencePanel", this.eventModel, this.rrule);
         this.rPanel.setVisible(false);
         event.add(this.rPanel);

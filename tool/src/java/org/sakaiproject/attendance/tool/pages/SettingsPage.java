@@ -30,8 +30,7 @@ public class SettingsPage extends BasePage {
 	
 	public SettingsPage() {
 		disableLink(settingsLink);
-		
-		
+
 		//link to third page
 		//the i18n label for this is directly in the HTML
 		toAddEventPageLink = new Link<Void>("toAddEventPageLink") {
@@ -40,9 +39,7 @@ public class SettingsPage extends BasePage {
 				setResponsePage(new AddEventPage());
 			}
 		};
-		add(toAddEventPageLink);
 
-		
-		
+		add(toAddEventPageLink);
 	}
 }

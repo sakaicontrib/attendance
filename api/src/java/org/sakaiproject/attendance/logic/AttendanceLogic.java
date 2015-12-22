@@ -66,10 +66,10 @@ public interface AttendanceLogic {
 
 	/**
 	 * gets all the events by (internal) Site id
-	 * @param id
+	 * @param aS
 	 * @return List of events, or empty
      */
-	List<Event> getEventsForSite(AttendanceSite id);
+	List<Event> getEventsForSite(AttendanceSite aS);
 
 	/**
 	 * Get events for curenet site

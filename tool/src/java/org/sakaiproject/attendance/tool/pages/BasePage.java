@@ -105,7 +105,7 @@ public class BasePage extends WebPage implements IHeaderContributor {
 				setResponsePage(new AddEventPage());
 			}
 		};
-		addEventLink.add(new Label("thirdLinkLabel", new StringResourceModel("link.third", null, new String[]{"3"})).setRenderBodyOnly(true));
+		addEventLink.add(new Label("thirdLinkLabel", new ResourceModel("link.third")).setRenderBodyOnly(true));
 		addEventLink.add(new AttributeModifier("title", new ResourceModel("link.third.tooltip")));
 		add(addEventLink);
 		
