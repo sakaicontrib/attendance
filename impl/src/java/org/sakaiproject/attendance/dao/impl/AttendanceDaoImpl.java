@@ -32,7 +32,7 @@ import org.hibernate.HibernateException;
 import org.sakaiproject.attendance.dao.AttendanceDao;
 
 import org.sakaiproject.attendance.model.AttendanceSite;
-import org.sakaiproject.attendance.model.Reoccurrence;
+//import org.sakaiproject.attendance.model.Reoccurrence;
 import org.springframework.dao.DataAccessException;
 
 import org.sakaiproject.attendance.model.Event;
@@ -198,7 +198,7 @@ public class AttendanceDaoImpl extends HibernateDaoSupport implements Attendance
 	/**
 	 * {@inheritDoc}
 	 */
-	public boolean addReoccurrence(Reoccurrence r){
+/*	public boolean addReoccurrence(Reoccurrence r){
 		if(log.isDebugEnabled()) {
 			log.debug("addReoccurrence( " + r.toString() + ")");
 		}
@@ -210,7 +210,7 @@ public class AttendanceDaoImpl extends HibernateDaoSupport implements Attendance
 			log.error("addReoccurence failed.", de);
 			return false;
 		}
-	}
+	}*/
 	
 	/**
 	 * init

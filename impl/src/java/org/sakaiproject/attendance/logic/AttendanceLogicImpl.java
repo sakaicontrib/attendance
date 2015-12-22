@@ -34,7 +34,7 @@ import org.apache.log4j.Logger;
 import org.sakaiproject.attendance.dao.AttendanceDao;
 import org.sakaiproject.attendance.model.AttendanceSite;
 import org.sakaiproject.attendance.model.Event;
-import org.sakaiproject.attendance.model.Reoccurrence;
+//import org.sakaiproject.attendance.model.Reoccurrence;
 
 /**
  * Implementation of {@link AttendanceLogic}
@@ -173,9 +173,9 @@ public class AttendanceLogicImpl implements AttendanceLogic {
 	/**
 	 * {@inheritDoc}
 	 */
-	public boolean addReoccurrence(Reoccurrence r) {
+	/*public boolean addReoccurrence(Reoccurrence r) {
 		return dao.addReoccurrence(r);
-	}
+	}*/
 	
 	/**
 	 * init - perform any actions required here for when this bean starts up

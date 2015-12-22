@@ -22,7 +22,7 @@ import java.util.List;
 //import de.scravy.pair.Pair;
 import org.sakaiproject.attendance.model.AttendanceSite;
 import org.sakaiproject.attendance.model.Event;
-import org.sakaiproject.attendance.model.Reoccurrence;
+//import org.sakaiproject.attendance.model.Reoccurrence;
 
 /**
  * An example logic interface
@@ -104,5 +104,5 @@ public interface AttendanceLogic {
 	 * @param r, the Reocurrence
 	 * @return true if success, false otherwise
 	 */
-	boolean addReoccurrence(Reoccurrence r);
+//	boolean addReoccurrence(Reoccurrence r);
 }

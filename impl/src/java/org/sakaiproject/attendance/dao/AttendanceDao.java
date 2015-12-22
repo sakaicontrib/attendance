@@ -21,7 +21,7 @@ import java.util.List;
 
 import org.sakaiproject.attendance.model.AttendanceSite;
 import org.sakaiproject.attendance.model.Event;
-import org.sakaiproject.attendance.model.Reoccurrence;
+//import org.sakaiproject.attendance.model.Reoccurrence;
 
 /**
  * DAO interface for our project
@@ -87,7 +87,7 @@ public interface AttendanceDao {
 	 * @param r, the object
 	 * @return true if success, false if not
 	 */
-	boolean addReoccurrence(Reoccurrence r);
+//	boolean addReoccurrence(Reoccurrence r);
 
 	// Hibernate Query Constants
 	String QUERY_GET_EVENT = "getEvent";
