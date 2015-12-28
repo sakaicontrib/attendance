@@ -34,9 +34,10 @@ public class AttendanceSite implements Serializable {
 
 	private 				Long 		id;
 	private 				String 		siteID;
-	private 				String 		defaultStatus;
+	private 				Status 		defaultStatus;
 
 	public AttendanceSite(String siteID){
 		this.siteID = siteID;
+		this.defaultStatus = Status.PRESENT;
 	}
 }

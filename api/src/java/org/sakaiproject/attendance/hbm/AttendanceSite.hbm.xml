@@ -31,7 +31,7 @@
         </id>
 
         <property name="siteID"         column="SITE_ID"           type="java.lang.String" />
-        <property name="defaultStatus"  column="DEFAULT_STATUS"    type="java.lang.String" />
+        <property name="defaultStatus"  column="DEFAULT_STATUS"    type="org.sakaiproject.attendance.hbm.StatusUserType" />
 
     </class>
 

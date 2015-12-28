@@ -33,6 +33,7 @@ import org.sakaiproject.attendance.dao.AttendanceDao;
 
 import org.sakaiproject.attendance.model.AttendanceSite;
 //import org.sakaiproject.attendance.model.Reoccurrence;
+import org.sakaiproject.attendance.model.StatusRecord;
 import org.springframework.dao.DataAccessException;
 
 import org.sakaiproject.attendance.model.Event;
@@ -211,7 +212,45 @@ public class AttendanceDaoImpl extends HibernateDaoSupport implements Attendance
 			return false;
 		}
 	}*/
-	
+
+	/**
+	 * {@inheritDoc}
+     */
+	@SuppressWarnings("unchecked")
+	public List<StatusRecord> getStatusRecordsForEvent(final Event e) {
+		if(log.isDebugEnabled()){
+			log.debug("getStatusRecordsForEvent e: " + e.getName() + " in AttendanceSite: " + e.getAttendanceSite().getSiteID());
+		}
+
+		HibernateCallback hcb = new HibernateCallback() {
+			@Override
+			public Object doInHibernate(Session session) throws HibernateException, SQLException {
+				Query q = session.getNamedQuery(QUERY_GET_STATUS_RECORDS_FOR_EVENT);
+				q.setParameter(EVENT, e, new ManyToOneType("org.sakaiproject.attendance.model.Event"));
+				return q.list();
+			}
+		};
+
+		return (List<StatusRecord>) getHibernateTemplate().executeFind(hcb);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public boolean addStatusRecord(StatusRecord sR) {
+		if(log.isDebugEnabled()){
+			log.debug("addStatusRecord sR for User '" + sR.getUserID() + "' event " + sR.getEvent().getName() + " with Status " + sR.getStatus().toString());
+		}
+
+		try {
+			getHibernateTemplate().save(sR);
+			return true;
+		} catch (DataAccessException de) {
+			log.error("addStatusRecord failed.", de);
+			return false;
+		}
+	}
+
 	/**
 	 * init
 	 */

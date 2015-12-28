@@ -34,6 +34,8 @@ import org.apache.log4j.Logger;
 import org.sakaiproject.attendance.dao.AttendanceDao;
 import org.sakaiproject.attendance.model.AttendanceSite;
 import org.sakaiproject.attendance.model.Event;
+import org.sakaiproject.attendance.model.StatusRecord;
+import org.sakaiproject.user.api.User;
 //import org.sakaiproject.attendance.model.Reoccurrence;
 
 /**
@@ -120,12 +122,21 @@ public class AttendanceLogicImpl implements AttendanceLogic {
 	 * {@inheritDoc}
 	 */
 	public boolean addEvent(Event e) {
-		// should probably do some sort of validation here , maybe
 		AttendanceSite currentAttendanceSite = getCurrentAttendanceSite();
 
 		e.setAttendanceSite(currentAttendanceSite);
+		boolean returnVal = dao.addEvent(e);
 
-		return dao.addEvent(e);
+		if(returnVal) {
+			// add StatusRecords for Each Student
+			List<User> userList = sakaiProxy.getCurrentSiteMembership();
+			for(User user : userList) {
+				StatusRecord statusRecord = new StatusRecord(e, user.getId(), currentAttendanceSite.getDefaultStatus());
+				returnVal = dao.addStatusRecord(statusRecord);
+			}
+		}
+
+		return returnVal;
 	}
 
 /*	/**
