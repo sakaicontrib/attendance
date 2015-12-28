@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2015, The Apereo Foundation
+ *  Copyright (c) 2016, The Apereo Foundation
  *
  *  Licensed under the Educational Community License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -14,28 +14,17 @@
  *  limitations under the License.
  */
 
-package org.sakaiproject.attendance.model;
+package org.sakaiproject.attendance.hbm;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
+import org.sakaiproject.attendance.model.Status;
+import org.sakaiproject.springframework.orm.hibernate.EnumUserType;
 
 /**
  * Created by Leonardo Canessa [lcanessa1 (at) udayton (dot) edu]
+ * Modeled after org.sakaiproject.scheduler.events.hibernate.TriggerEventEnumUserType.java
  */
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
-public class StatusRecord {
-    private Long    id;
-    private Event   event;
-    private String  userID;
-    private Status  status;
-
-    public StatusRecord(Event e, String uId, Status s) {
-        this.event = e;
-        this.userID = uId;
-        this.status = s;
+public class StatusUserType extends EnumUserType<Status> {
+    public StatusUserType(){
+        super(Status.class);
     }
 }
