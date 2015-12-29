@@ -31,7 +31,7 @@ import java.util.List;
 /**
  * An example page
  * 
- * @author David Bauer
+ * @author David Bauer [dbauer1 (at) udayton (dot) edu]
  * @author Leonardo Canessa [lcanessa1 (at) udayton (dot) edu]
  *
  */
