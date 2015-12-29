@@ -101,17 +101,7 @@ public class AttendanceDaoImpl extends HibernateDaoSupport implements Attendance
 			log.debug("getEvent()" + String.valueOf(id));
 		}
 
-		HibernateCallback hcb = new HibernateCallback() {
-			@Override
-			public Object doInHibernate(Session session) throws HibernateException, SQLException {
-				Query q = session.getNamedQuery(QUERY_GET_EVENT);
-				q.setParameter(ID, id, new LongType());
-				q.setMaxResults(1);
-				return q.uniqueResult();
-			}
-		};
-
-		return (Event) getHibernateTemplate().execute(hcb);
+		return (Event) getByIDHelper(id, QUERY_GET_EVENT);
 	}
 	
 	/**
@@ -274,5 +264,24 @@ public class AttendanceDaoImpl extends HibernateDaoSupport implements Attendance
 		};
 
 		return (List<Event>) getHibernateTemplate().executeFind(hcb);
+	}
+
+	// Generic Function to get something by it's ID.
+	private Object getByIDHelper(final long id, final String queryString) {
+		if(log.isDebugEnabled()) {
+			log.debug("getByIDHelper() id: '" + String.valueOf(id) + "' String: " + queryString);
+		}
+
+		HibernateCallback hcb = new HibernateCallback() {
+			@Override
+			public Object doInHibernate(Session session) throws HibernateException, SQLException {
+				Query q = session.getNamedQuery(queryString);
+				q.setParameter(ID, id, new LongType());
+				q.setMaxResults(1);
+				return q.uniqueResult();
+			}
+		};
+
+		return getHibernateTemplate().execute(hcb);
 	}
 }
