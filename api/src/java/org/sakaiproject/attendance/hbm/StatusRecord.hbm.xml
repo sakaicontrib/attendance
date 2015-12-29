@@ -36,7 +36,7 @@
         <many-to-one name="event" column="ATTENDANCE_EVENT" unique="false" not-null="true" class="org.sakaiproject.attendance.model.Event" />
     </class>
 
-    <query name="getStatus">
+    <query name="getStatusRecord">
         <![CDATA[from StatusRecord sR WHERE sR.id = :id]]>
     </query>
 

@@ -22,6 +22,7 @@ import java.util.List;
 //import de.scravy.pair.Pair;
 import org.sakaiproject.attendance.model.AttendanceSite;
 import org.sakaiproject.attendance.model.Event;
+import org.sakaiproject.attendance.model.StatusRecord;
 //import org.sakaiproject.attendance.model.Reoccurrence;
 
 /**
@@ -105,4 +106,11 @@ public interface AttendanceLogic {
 	 * @return true if success, false otherwise
 	 */
 //	boolean addReoccurrence(Reoccurrence r);
+
+	/**
+	 * Get's a StatusRecord
+	 * @param id, the id of the statusRecord
+	 * @return the statusRecord
+     */
+	StatusRecord getStatusRecord(Long id);
 }

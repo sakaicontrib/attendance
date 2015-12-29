@@ -202,6 +202,16 @@ public class AttendanceDaoImpl extends HibernateDaoSupport implements Attendance
 			return false;
 		}
 	}*/
+	/**
+	 * {@inheritDoc}
+	 */
+	public StatusRecord getStatusRecord(final long id) {
+		if(log.isDebugEnabled()) {
+			log.debug("getStatusRecord()" + String.valueOf(id));
+		}
+
+		return (StatusRecord) getByIDHelper(id, QUERY_GET_STATUS_RECORD);
+	}
 
 	/**
 	 * {@inheritDoc}

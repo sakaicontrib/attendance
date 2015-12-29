@@ -187,7 +187,18 @@ public class AttendanceLogicImpl implements AttendanceLogic {
 	/*public boolean addReoccurrence(Reoccurrence r) {
 		return dao.addReoccurrence(r);
 	}*/
-	
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public StatusRecord getStatusRecord(Long id) {
+		if(id == null) {
+			return null;
+		}
+
+		return dao.getStatusRecord(id);
+	}
+
 	/**
 	 * init - perform any actions required here for when this bean starts up
 	 */

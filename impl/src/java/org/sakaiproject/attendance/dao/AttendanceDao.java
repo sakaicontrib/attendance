@@ -91,6 +91,13 @@ public interface AttendanceDao {
 //	boolean addReoccurrence(Reoccurrence r);
 
 	/**
+	 * Get Status Record by ID
+	 * @param id, the id of the status record
+	 * @return the status record
+     */
+	StatusRecord getStatusRecord(long id);
+
+	/**
 	 * Get all the Statuses for an Event
 	 * @param e, the vent
 	 * @return a list of Statuses
@@ -112,6 +119,7 @@ public interface AttendanceDao {
 	String QUERY_GET_SITE_BY_SITE_ID = "getSiteBySiteID";
 	String QUERY_GET_SITE_BY_ID = "getSiteByID";
 
+	String QUERY_GET_STATUS_RECORD = "getStatus";
 	String QUERY_GET_STATUS_RECORDS_FOR_EVENT = "getStatusRecordsForEvent";
 
 	// Hibernate Object Fields
