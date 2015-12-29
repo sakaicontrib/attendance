@@ -25,6 +25,9 @@ import org.sakaiproject.attendance.tool.dataproviders.EventDataProvider;
 import org.sakaiproject.attendance.tool.dataproviders.StudentDataProvider;
 import org.sakaiproject.user.api.User;
 
+import java.util.Collections;
+import java.util.List;
+
 /**
  * An example page
  * 
@@ -33,22 +36,30 @@ import org.sakaiproject.user.api.User;
  *
  */
 public class Overview extends BasePage {
+	private static final long serialVersionUID = 1L;
 
 	public Overview() {
-		disableLink(firstLink);
+		disableLink(this.firstLink);
 		
 		add(new Label("student-name-header", new ResourceModel("student_name")));
 		add(new Label("overview-header", new ResourceModel("overview")));
 
-		add(new DataView<Event>("event-headers", new EventDataProvider()) {
+		List<Event> eventData = attendanceLogic.getEventsForCurrentSite();
+		Collections.reverse(eventData);
+		EventDataProvider eventDataProvider = new EventDataProvider(eventData);
+
+		add(new DataView<Event>("event-headers", eventDataProvider) {
 			@Override
 			protected void populateItem(Item<Event> item) {
 				item.add(new Label("event-name", item.getModelObject().getName()));
 			}
 		});
 
-		add(new DataView<User>("students", new StudentDataProvider()) {
+		List<User> userData = sakaiProxy.getCurrentSiteMembership();
+		Collections.reverse(userData);
+		StudentDataProvider studentDataProvider = new StudentDataProvider(userData);
 
+		add(new DataView<User>("students", studentDataProvider) {
 			@Override
 			protected void populateItem(Item<User> item) {
 				final User student = item.getModelObject();
