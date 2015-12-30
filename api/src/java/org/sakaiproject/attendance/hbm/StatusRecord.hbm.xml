@@ -33,7 +33,7 @@
         <property name="userID"     column="USER_ID"            type="java.lang.String" />
         <property name="status"     column="STATUS"             type="org.sakaiproject.attendance.hbm.StatusUserType"/>
 
-        <many-to-one name="event" column="ATTENDANCE_EVENT" unique="false" not-null="true" class="org.sakaiproject.attendance.model.Event" />
+        <many-to-one name="attendanceEvent" column="ATTENDANCE_EVENT" unique="false" not-null="true" class="AttendanceEvent" />
     </class>
 
     <query name="getStatusRecord">
@@ -44,7 +44,7 @@
         <![CDATA[from StatusRecord sR WHERE sR.userID = :userID]]>
     </query>
 
-    <query name="getStatusForEvent">
-        <![CDATA[from StatusRecord sR WHERE sR.event = :event]]>
+    <query name="getStatusForAttendanceEvent">
+        <![CDATA[from StatusRecord sR WHERE sR.attendanceEvent = :attendanceEvent]]>
     </query>
 </hibernate-mapping>

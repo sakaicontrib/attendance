@@ -27,7 +27,7 @@ import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.model.StringResourceModel;
-import org.sakaiproject.attendance.model.Event;
+import org.sakaiproject.attendance.model.AttendanceEvent;
 import org.sakaiproject.attendance.tool.pages.panels.models.RRuleInputModel;
 import org.sakaiproject.attendance.tool.pages.panels.util.SequentialDateTimeFieldValidator;
 import org.sakaiproject.attendance.tool.util.PlaceholderBehavior;
@@ -38,22 +38,22 @@ import org.sakaiproject.attendance.tool.util.PlaceholderBehavior;
  */
 public class EventInputPanel extends BasePanel {
     private static final long serialVersionUID = 1L;
-    private IModel<Event> eventModel;
+    private IModel<AttendanceEvent> eventModel;
     private IModel<RRuleInputModel> rrule;
     private ReoccurrenceInputPanel rPanel;
 
-    public EventInputPanel(String id, IModel<Event> event) {
+    public EventInputPanel(String id, IModel<AttendanceEvent> event) {
         super(id, event);
         this.eventModel = event;
         add(createEventInputForm());
     }
 
-    private Form<Event> createEventInputForm() {
-        Form<Event> event = new Form<Event>("event", this.eventModel) {
+    private Form<AttendanceEvent> createEventInputForm() {
+        Form<AttendanceEvent> event = new Form<AttendanceEvent>("event", this.eventModel) {
             @Override
             public void onSubmit(){
-                Event e = (Event) getDefaultModelObject();
-                boolean result = attendanceLogic.addEvent(e);
+                AttendanceEvent e = (AttendanceEvent) getDefaultModelObject();
+                boolean result = attendanceLogic.addAttendanceEvent(e);
 
                 if(result){
                     StringResourceModel temp = new StringResourceModel("attendance.add.success", null, new String[]{e.getName()});
@@ -71,7 +71,7 @@ public class EventInputPanel extends BasePanel {
         return event;
     }
 
-    private void createLabels(Form<Event> event){
+    private void createLabels(Form<AttendanceEvent> event){
         final Label nameLabel           = new Label("labelName", new ResourceModel("attendance.add.label.name"));
         final Label startDateTimeLabel  = new Label("labelStartDateTime", new ResourceModel("attendance.add.label.startDateTime"));
         final Label endDateTimeLabel    = new Label("labelEndDateTime", new ResourceModel("attendance.add.label.endDateTime"));
@@ -92,7 +92,7 @@ public class EventInputPanel extends BasePanel {
         event.add(isReoccurringLabel);
     }
 
-    private void createValues(Form<Event> event){
+    private void createValues(Form<AttendanceEvent> event){
         final TextField name = new TextField<String>("name") {
             @Override
             protected void onInitialize(){
@@ -130,14 +130,14 @@ public class EventInputPanel extends BasePanel {
         event.add(new SequentialDateTimeFieldValidator(startDateTime, endDateTime));
     }
 
-    private void createSubForm(Form<Event> event) {
+    private void createSubForm(Form<AttendanceEvent> event) {
         this.rrule  = new CompoundPropertyModel<RRuleInputModel>(new RRuleInputModel());
         this.rPanel = new ReoccurrenceInputPanel("reoccurrencePanel", this.eventModel, this.rrule);
         this.rPanel.setVisible(false);
         event.add(this.rPanel);
     }
 
-    private void createAjax(Form<Event> event) {
+    private void createAjax(Form<AttendanceEvent> event) {
         AjaxCheckBox isReoccurringAjaxCheckBox = new AjaxCheckBox("isReoccurring") {
             @Override
             protected void onUpdate(AjaxRequestTarget ajaxRequestTarget) {

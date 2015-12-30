@@ -21,7 +21,7 @@ import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.sakaiproject.attendance.logic.AttendanceLogic;
 import org.sakaiproject.attendance.logic.SakaiProxy;
-import org.sakaiproject.attendance.model.Event;
+import org.sakaiproject.attendance.model.AttendanceEvent;
 import org.sakaiproject.user.api.User;
 import org.sakaiproject.user.api.UserNotDefinedException;
 

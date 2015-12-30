@@ -30,7 +30,7 @@ import java.util.Date;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Event implements Serializable {
+public class AttendanceEvent implements Serializable {
 	private static final 	long 		serialVersionUID = 1L;
 
 	private 				Long 			id;
@@ -45,15 +45,15 @@ public class Event implements Serializable {
 	private 				String 			location;
 
 	// Create a copy constructor
-	public Event(Event event){
-		this.name 			= event.name;
-		this.startDateTime 	= event.startDateTime;
-		this.endDateTime 	= event.endDateTime;
-		this.isReoccurring 	= event.isReoccurring;
-		this.reoccurringID 	= event.reoccurringID;
-		this.isRequired 	= event.isRequired;
-		this.releasedTo 	= event.releasedTo;
-		this.attendanceSite = event.attendanceSite;
-		this.location 		= event.location;
+	public AttendanceEvent(AttendanceEvent attendanceEvent){
+		this.name 			= attendanceEvent.name;
+		this.startDateTime 	= attendanceEvent.startDateTime;
+		this.endDateTime 	= attendanceEvent.endDateTime;
+		this.isReoccurring 	= attendanceEvent.isReoccurring;
+		this.reoccurringID 	= attendanceEvent.reoccurringID;
+		this.isRequired 	= attendanceEvent.isRequired;
+		this.releasedTo 	= attendanceEvent.releasedTo;
+		this.attendanceSite = attendanceEvent.attendanceSite;
+		this.location 		= attendanceEvent.location;
 	}
 }

@@ -21,7 +21,7 @@ import java.util.List;
 //import com.google.ical.values.RRule;
 //import de.scravy.pair.Pair;
 import org.sakaiproject.attendance.model.AttendanceSite;
-import org.sakaiproject.attendance.model.Event;
+import org.sakaiproject.attendance.model.AttendanceEvent;
 import org.sakaiproject.attendance.model.StatusRecord;
 //import org.sakaiproject.attendance.model.Reoccurrence;
 
@@ -50,40 +50,40 @@ public interface AttendanceLogic {
 	 * Get a Event
 	 * @return
 	 */
-	Event getEvent(long id);
+	AttendanceEvent getAttendanceEvent(long id);
 	
 	/**
 	 * Get all events (should probably never be used)
 	 * @return
 	 */
-	List<Event> getEvents();
+	List<AttendanceEvent> getAttendanceEvents();
 
 	/**
 	 * Gets all the evetns by Sakai Site ID
 	 * @param siteID, the sakai siteID for a site
 	 * @return a list of events, or empty
      */
-	List<Event> getEventsForSite(String siteID);
+	List<AttendanceEvent> getAttendanceEventsForSite(String siteID);
 
 	/**
 	 * gets all the events by (internal) Site id
 	 * @param aS
 	 * @return List of events, or empty
      */
-	List<Event> getEventsForSite(AttendanceSite aS);
+	List<AttendanceEvent> getAttendanceEventsForSite(AttendanceSite aS);
 
 	/**
 	 * Get events for curenet site
 	 * @return list of events
      */
-	List<Event> getEventsForCurrentSite();
+	List<AttendanceEvent> getAttendanceEventsForCurrentSite();
 	
 	/**
 	 * Add a new Event
 	 * @param e	Event
 	 * @return true if success, false if not
 	 */
-	boolean addEvent(Event e);
+	boolean addAttendanceEvent(AttendanceEvent e);
 
 /*	/**
 	 * Add a reoccurring Event

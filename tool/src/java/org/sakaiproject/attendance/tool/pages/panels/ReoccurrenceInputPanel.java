@@ -25,7 +25,7 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.*;
 import org.apache.wicket.model.*;
 import org.apache.wicket.util.string.Strings;
-import org.sakaiproject.attendance.model.Event;
+import org.sakaiproject.attendance.model.AttendanceEvent;
 import org.sakaiproject.attendance.tool.pages.panels.models.RRuleInputModel;
 
 import java.text.DateFormatSymbols;
@@ -38,7 +38,7 @@ public class ReoccurrenceInputPanel extends BasePanel {
     private static final long serialVersionUID = 1L;
 
     private IModel<RRuleInputModel> rRuleIIModel;
-    private IModel<Event> event;
+    private IModel<AttendanceEvent> event;
     private WebMarkupContainer weekly;
     private WebMarkupContainer monthly;
 
@@ -46,7 +46,7 @@ public class ReoccurrenceInputPanel extends BasePanel {
     private List<String> frequencyNames = Arrays.asList("Daily", "Weekly", "Monthly", "Yearly");
     private List<Integer> minorFrequency = makeSequence(1,30);
 
-    public  ReoccurrenceInputPanel(String id, IModel<Event> event, IModel<RRuleInputModel> rrule) {
+    public  ReoccurrenceInputPanel(String id, IModel<AttendanceEvent> event, IModel<RRuleInputModel> rrule) {
         super(id, rrule);
         this.rRuleIIModel = rrule;
         this.event = event;

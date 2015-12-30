@@ -20,9 +20,9 @@ import org.apache.wicket.injection.Injector;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.sakaiproject.attendance.logic.AttendanceLogic;
-import org.sakaiproject.attendance.model.Event;
+import org.sakaiproject.attendance.model.AttendanceEvent;
 
-public class DetachableEventModel extends LoadableDetachableModel<Event> {
+public class DetachableEventModel extends LoadableDetachableModel<AttendanceEvent> {
 
     @SpringBean(name="org.sakaiproject.attendance.logic.AttendanceLogic")
     protected AttendanceLogic attendanceLogic;
@@ -33,7 +33,7 @@ public class DetachableEventModel extends LoadableDetachableModel<Event> {
     /**
      * @param t
      */
-    public DetachableEventModel(Event t){
+    public DetachableEventModel(AttendanceEvent t){
         this.id = t.getId();
     }
 
@@ -74,9 +74,9 @@ public class DetachableEventModel extends LoadableDetachableModel<Event> {
     /**
      * @see org.apache.wicket.model.LoadableDetachableModel#load()
      */
-    protected Event load(){
+    protected AttendanceEvent load(){
         Injector.get().inject(this);
         // get the thing
-        return attendanceLogic.getEvent(id);
+        return attendanceLogic.getAttendanceEvent(id);
     }
 }

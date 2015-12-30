@@ -29,12 +29,12 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class StatusRecord {
     private Long    id;
-    private Event   event;
+    private AttendanceEvent attendanceEvent;
     private String  userID;
     private Status  status;
 
-    public StatusRecord(Event e, String uId, Status s) {
-        this.event = e;
+    public StatusRecord(AttendanceEvent e, String uId, Status s) {
+        this.attendanceEvent = e;
         this.userID = uId;
         this.status = s;
     }

@@ -19,7 +19,7 @@ package org.sakaiproject.attendance.tool.pages;
 import org.apache.wicket.markup.html.form.*;
 import org.apache.wicket.model.*;
 
-import org.sakaiproject.attendance.model.Event;
+import org.sakaiproject.attendance.model.AttendanceEvent;
 import org.sakaiproject.attendance.tool.pages.panels.EventInputPanel;
 
 /**
@@ -35,7 +35,7 @@ public class AddEventPage extends BasePage {
 
 		//add our form
 		Form form = new Form("form");
-		form.add(new EventInputPanel("event", new CompoundPropertyModel<Event>(new Event())));
+		form.add(new EventInputPanel("event", new CompoundPropertyModel<AttendanceEvent>(new AttendanceEvent())));
 		form.add(new SubmitLink("submit"));
         add(form);
 	}

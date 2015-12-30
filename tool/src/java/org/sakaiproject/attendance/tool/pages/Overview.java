@@ -20,7 +20,7 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.model.ResourceModel;
-import org.sakaiproject.attendance.model.Event;
+import org.sakaiproject.attendance.model.AttendanceEvent;
 import org.sakaiproject.attendance.tool.dataproviders.EventDataProvider;
 import org.sakaiproject.attendance.tool.dataproviders.StudentDataProvider;
 import org.sakaiproject.user.api.User;
@@ -44,13 +44,13 @@ public class Overview extends BasePage {
 		add(new Label("student-name-header", new ResourceModel("student_name")));
 		add(new Label("overview-header", new ResourceModel("overview")));
 
-		List<Event> eventData = attendanceLogic.getEventsForCurrentSite();
+		List<AttendanceEvent> eventData = attendanceLogic.getAttendanceEventsForCurrentSite();
 		Collections.reverse(eventData);
 		EventDataProvider eventDataProvider = new EventDataProvider(eventData);
 
-		add(new DataView<Event>("event-headers", eventDataProvider) {
+		add(new DataView<AttendanceEvent>("event-headers", eventDataProvider) {
 			@Override
-			protected void populateItem(Item<Event> item) {
+			protected void populateItem(Item<AttendanceEvent> item) {
 				item.add(new Label("event-name", item.getModelObject().getName()));
 			}
 		});

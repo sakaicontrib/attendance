@@ -33,7 +33,7 @@ import org.apache.log4j.Logger;
 //import org.joda.time.DateTime;
 import org.sakaiproject.attendance.dao.AttendanceDao;
 import org.sakaiproject.attendance.model.AttendanceSite;
-import org.sakaiproject.attendance.model.Event;
+import org.sakaiproject.attendance.model.AttendanceEvent;
 import org.sakaiproject.attendance.model.StatusRecord;
 import org.sakaiproject.user.api.User;
 //import org.sakaiproject.attendance.model.Reoccurrence;
@@ -85,47 +85,47 @@ public class AttendanceLogicImpl implements AttendanceLogic {
 	/**
 	 * {@inheritDoc}
 	 */
-	public Event getEvent(long id) {
-		return dao.getEvent(id);
+	public AttendanceEvent getAttendanceEvent(long id) {
+		return dao.getAttendanceEvent(id);
 	}
 	
 	/**
 	 * {@inheritDoc}
 	 */
-	public List<Event> getEvents() {
-		return dao.getEvents();
+	public List<AttendanceEvent> getAttendanceEvents() {
+		return dao.getAttendanceEvents();
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
-	public List<Event> getEventsForSite(String siteID) {
+	public List<AttendanceEvent> getAttendanceEventsForSite(String siteID) {
 		AttendanceSite aS = getAttendanceSite(siteID);
-		return getEventsForSite(aS);
+		return getAttendanceEventsForSite(aS);
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
-	public List<Event> getEventsForSite(AttendanceSite aS) {
-		return dao.getEventsForSite(aS);
+	public List<AttendanceEvent> getAttendanceEventsForSite(AttendanceSite aS) {
+		return dao.getAttendanceEventsForSite(aS);
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
-	public List<Event> getEventsForCurrentSite(){
-		return getEventsForSite(getCurrentAttendanceSite());
+	public List<AttendanceEvent> getAttendanceEventsForCurrentSite(){
+		return getAttendanceEventsForSite(getCurrentAttendanceSite());
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
-	public boolean addEvent(Event e) {
+	public boolean addAttendanceEvent(AttendanceEvent e) {
 		AttendanceSite currentAttendanceSite = getCurrentAttendanceSite();
 
 		e.setAttendanceSite(currentAttendanceSite);
-		boolean returnVal = dao.addEvent(e);
+		boolean returnVal = dao.addAttendanceEvent(e);
 
 		if(returnVal) {
 			// add StatusRecords for Each Student
@@ -142,7 +142,7 @@ public class AttendanceLogicImpl implements AttendanceLogic {
 /*	/**
 	 * {@inheritDoc}
 	 *//*
-	public boolean addEvents(Event t, RRule r){
+	public boolean addAttendanceEvents(AttendanceEvent t, RRule r){
 		if(!t.getIsReoccurring()){ // Only for reoccurring events
 			throw new IllegalArgumentException("Event must be reoccurring.");
 		}
@@ -152,7 +152,7 @@ public class AttendanceLogicImpl implements AttendanceLogic {
 			return false;
 		}
 
-		ArrayList<Event> events = new ArrayList<Event>();
+		ArrayList<AttendanceEvent> events = new ArrayList<AttendanceEvent>();
 		Calendar c = Calendar.getInstance();
 		c.setTime(t.getStartDateTime());
 		DateValueImpl startDateValue = new DateValueImpl(c.get(Calendar.DATE), c.get(Calendar.MONTH) + 1, c.get(Calendar.YEAR));
@@ -160,13 +160,13 @@ public class AttendanceLogicImpl implements AttendanceLogic {
 		DateTimeIterator di = DateTimeIteratorFactory.createDateTimeIterator(reocurrenceIterator);
 		for(;di.hasNext();){
 			DateTime dt = di.next();
-			Event copy = new Event(t);
+			AttendanceEvent copy = new Event(t);
 			copy.setStartDateTime(dt.toDate());
 
 			events.add(copy);
 		}
 
-		return dao.addEvents(events);
+		return dao.addAttendanceEvents(events);
 	}
 
 	/**

@@ -21,7 +21,7 @@
 
 <hibernate-mapping package="org.sakaiproject.attendance.model">
 
-    <class name="Event" table="ATTENDANCE_EVENT_T">
+    <class name="org.sakaiproject.attendance.model.AttendanceEvent" table="ATTENDANCE_EVENT_T">
 
         <id name="id">
             <column name="ID" not-null="true" length="19" />
@@ -42,15 +42,15 @@
         <many-to-one name="attendanceSite" column="ATTENDANCE_SITE" unique="false" not-null="true" class="org.sakaiproject.attendance.model.AttendanceSite" />
     </class>
 
-    <query name="getEvent">
-        <![CDATA[from Event event WHERE event.id = :id]]>
+    <query name="getAttendanceEvent">
+        <![CDATA[from AttendanceEvent aEvent WHERE aEvent.id = :id]]>
     </query>
 
-    <query name="getEventsForSite">
-        <![CDATA[from Event event WHERE event.attendanceSite = :attendanceSite]]>
+    <query name="getAttendanceEventsForSite">
+        <![CDATA[from AttendanceEvent aEvent WHERE aEvent.attendanceSite = :attendanceSite]]>
     </query>
 
-    <query name="getEvents">
-        <![CDATA[from Event event]]>
+    <query name="getAttendanceEvents">
+        <![CDATA[from AttendanceEvent event]]>
     </query>
 </hibernate-mapping>

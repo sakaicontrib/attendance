@@ -70,8 +70,8 @@
 
 		<property name="mappingResources">
 			<list>
+				<value>org/sakaiproject/attendance/hbm/AttendanceEvent.hbm.xml</value>
 				<value>org/sakaiproject/attendance/hbm/AttendanceSite.hbm.xml</value>
-				<value>org/sakaiproject/attendance/hbm/Event.hbm.xml</value>
                 <!--<value>org/sakaiproject/attendance/hbm/Reoccurring.hbm.xml</value>-->
 				<value>org/sakaiproject/attendance/hbm/StatusRecord.hbm.xml</value>
 			</list>

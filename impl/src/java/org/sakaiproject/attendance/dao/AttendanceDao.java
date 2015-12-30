@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.sakaiproject.attendance.model.AttendanceSite;
-import org.sakaiproject.attendance.model.Event;
+import org.sakaiproject.attendance.model.AttendanceEvent;
 import org.sakaiproject.attendance.model.StatusRecord;
 //import org.sakaiproject.attendance.model.Reoccurrence;
 
@@ -48,40 +48,40 @@ public interface AttendanceDao {
 	 * 
 	 * @return an item or null if no result
 	 */
-	Event getEvent(long id);
+	AttendanceEvent getAttendanceEvent(long id);
 	
 	/**
 	 * Get all Events
 	 * @return a list of items, an empty list if no items
 	 */
-	List<Event> getEvents();
+	List<AttendanceEvent> getAttendanceEvents();
 
 	/**
 	 * Get all Events for A site
 	 * @return a list of items, an empty list if no items
 	 */
-	List<Event> getEventsForSite(String siteID);
+	List<AttendanceEvent> getAttendanceEventsForSite(String siteID);
 
 	/**
 	 * get all the events by attendanceSite
 	 * @param aS, the AttendanceSite
 	 * @return a list of events or empty if no items.
      */
-	List<Event> getEventsForSite(AttendanceSite aS);
+	List<AttendanceEvent> getAttendanceEventsForSite(AttendanceSite aS);
 		
 	/**
 	 * Add a new Event record to the database. Only the name property is actually used.
 	 * @param t	, Event
 	 * @return	true if success, false if not
 	 */
-	boolean addEvent(Event t);
+	boolean addAttendanceEvent(AttendanceEvent t);
 
 	/**
 	 * Add a list of events to the Database
 	 * @param es, the ArrayList of events
 	 * @return true if success, false if not
 	 */
-	boolean addEvents(ArrayList<Event> es);
+	boolean addAttendanceEvents(ArrayList<AttendanceEvent> es);
 
 	/**
 	 * Add a Reoccurrence rule
@@ -102,7 +102,7 @@ public interface AttendanceDao {
 	 * @param e, the vent
 	 * @return a list of Statuses
      */
-	List<StatusRecord> getStatusRecordsForEvent(Event e);
+	List<StatusRecord> getStatusRecordsForAttendanceEvent(AttendanceEvent e);
 
 	/**
 	 * Add a Status
@@ -112,19 +112,19 @@ public interface AttendanceDao {
 	boolean addStatusRecord(StatusRecord sR);
 
 	// Hibernate Query Constants
-	String QUERY_GET_EVENT = "getEvent";
-	String QUERY_GET_EVENTS_FOR_SITE = "getEventsForSite";
-	String QUERY_GET_EVENTS = "getEvents";
+	String QUERY_GET_ATTENDANCE_EVENT = "getAttendanceEvent";
+	String QUERY_GET_ATTENDANCE_EVENTS_FOR_SITE = "getAttendanceEventsForSite";
+	String QUERY_GET_ATTENDANCE_EVENTS = "getAttendanceEvents";
 
 	String QUERY_GET_SITE_BY_SITE_ID = "getSiteBySiteID";
 	String QUERY_GET_SITE_BY_ID = "getSiteByID";
 
 	String QUERY_GET_STATUS_RECORD = "getStatus";
-	String QUERY_GET_STATUS_RECORDS_FOR_EVENT = "getStatusRecordsForEvent";
+	String QUERY_GET_STATUS_RECORDS_FOR_ATTENDANCE_EVENT = "getStatusRecordsForAttendanceEvent";
 
 	// Hibernate Object Fields
 	String ID = "id";
 	String SITE_ID = "siteID";
 	String ATTENDANCE_SITE = "attendanceSite";
-	String EVENT = "event";
+	String ATTENDANCE_EVENT = "attendanceEvent";
 }

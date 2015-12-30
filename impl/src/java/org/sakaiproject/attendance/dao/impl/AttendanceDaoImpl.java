@@ -36,7 +36,7 @@ import org.sakaiproject.attendance.model.AttendanceSite;
 import org.sakaiproject.attendance.model.StatusRecord;
 import org.springframework.dao.DataAccessException;
 
-import org.sakaiproject.attendance.model.Event;
+import org.sakaiproject.attendance.model.AttendanceEvent;
 import org.springframework.orm.hibernate3.HibernateCallback;
 import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 
@@ -96,41 +96,41 @@ public class AttendanceDaoImpl extends HibernateDaoSupport implements Attendance
 	 * {@inheritDoc}
 	 */
 	@SuppressWarnings("unchecked")
-	public Event getEvent(final long id) {
+	public AttendanceEvent getAttendanceEvent(final long id) {
 		if(log.isDebugEnabled()) {
-			log.debug("getEvent()" + String.valueOf(id));
+			log.debug("getAttendanceEvent()" + String.valueOf(id));
 		}
 
-		return (Event) getByIDHelper(id, QUERY_GET_EVENT);
+		return (AttendanceEvent) getByIDHelper(id, QUERY_GET_ATTENDANCE_EVENT);
 	}
 	
 	/**
 	 * {@inheritDoc}
 	 */
 	@SuppressWarnings("unchecked")
-	public List<Event> getEvents() {
+	public List<AttendanceEvent> getAttendanceEvents() {
 		if(log.isDebugEnabled()) {
-			log.debug("getEvents()");
+			log.debug("getAttendanceEvents()");
 		}
 
 		HibernateCallback hcb = new HibernateCallback() {
 			@Override
 			public Object doInHibernate(Session session) throws HibernateException, SQLException {
-				Query q = session.getNamedQuery(QUERY_GET_EVENTS);
+				Query q = session.getNamedQuery(QUERY_GET_ATTENDANCE_EVENTS);
 				return q.list();
 			}
 		};
 
-		return (List<Event>) getHibernateTemplate().execute(hcb);
+		return (List<AttendanceEvent>) getHibernateTemplate().execute(hcb);
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	@SuppressWarnings("unchecked")
-	public List<Event> getEventsForSite(final String siteID) {
+	public List<AttendanceEvent> getAttendanceEventsForSite(final String siteID) {
 		if(log.isDebugEnabled()) {
-			log.debug("getEventsForSite(String siteID)");
+			log.debug("getAttendanceEventsForSite(String siteID)");
 		}
 
 		final AttendanceSite attendanceSite = getAttendanceSite(siteID);
@@ -142,9 +142,9 @@ public class AttendanceDaoImpl extends HibernateDaoSupport implements Attendance
 	 * {@inheritDoc}
 	 */
 	@SuppressWarnings("unchecked")
-	public List<Event> getEventsForSite(final AttendanceSite aS) {
+	public List<AttendanceEvent> getAttendanceEventsForSite(final AttendanceSite aS) {
 		if(log.isDebugEnabled()) {
-			log.debug("getEventsForSite(AttendanceSite id)");
+			log.debug("getAttendanceEventsForSite(AttendanceSite id)");
 		}
 
 		return getEventsForAttendanceSiteHelper(aS);
@@ -155,17 +155,17 @@ public class AttendanceDaoImpl extends HibernateDaoSupport implements Attendance
 	/**
 	 * {@inheritDoc}
 	 */
-	public boolean addEvent(Event event) {
+	public boolean addAttendanceEvent(AttendanceEvent attendanceEvent) {
 		
 		if(log.isDebugEnabled()) {
-			log.debug("addEvent( " + event.toString() + ")");
+			log.debug("addAttendanceEvent( " + attendanceEvent.toString() + ")");
 		}
 
 		try{
-			getHibernateTemplate().save(event);
+			getHibernateTemplate().save(attendanceEvent);
 			return true;
 		} catch (DataAccessException de) {
-			log.error("addEvent failed.", de);
+			log.error("addAttendanceEvent failed.", de);
 			return false;
 		}
 	}
@@ -173,11 +173,11 @@ public class AttendanceDaoImpl extends HibernateDaoSupport implements Attendance
 	/**
 	 * {@inheritDoc}
 	 */
-	public boolean addEvents(ArrayList<Event> es){
+	public boolean addAttendanceEvents(ArrayList<AttendanceEvent> es){
 		boolean isSuccess = false;
 
-		for(Event e: es){
-			isSuccess = addEvent(e);
+		for(AttendanceEvent e: es){
+			isSuccess = addAttendanceEvent(e);
 			if(!isSuccess){
 				return isSuccess;
 			}
@@ -217,16 +217,16 @@ public class AttendanceDaoImpl extends HibernateDaoSupport implements Attendance
 	 * {@inheritDoc}
      */
 	@SuppressWarnings("unchecked")
-	public List<StatusRecord> getStatusRecordsForEvent(final Event e) {
+	public List<StatusRecord> getStatusRecordsForAttendanceEvent(final AttendanceEvent aE) {
 		if(log.isDebugEnabled()){
-			log.debug("getStatusRecordsForEvent e: " + e.getName() + " in AttendanceSite: " + e.getAttendanceSite().getSiteID());
+			log.debug("getStatusRecordsForAttendanceEvent e: " + aE.getName() + " in AttendanceSite: " + aE.getAttendanceSite().getSiteID());
 		}
 
 		HibernateCallback hcb = new HibernateCallback() {
 			@Override
 			public Object doInHibernate(Session session) throws HibernateException, SQLException {
-				Query q = session.getNamedQuery(QUERY_GET_STATUS_RECORDS_FOR_EVENT);
-				q.setParameter(EVENT, e, new ManyToOneType("org.sakaiproject.attendance.model.Event"));
+				Query q = session.getNamedQuery(QUERY_GET_STATUS_RECORDS_FOR_ATTENDANCE_EVENT);
+				q.setParameter(ATTENDANCE_EVENT, aE, new ManyToOneType("org.sakaiproject.attendance.model.AttendanceEvent"));
 				return q.list();
 			}
 		};
@@ -239,7 +239,7 @@ public class AttendanceDaoImpl extends HibernateDaoSupport implements Attendance
 	 */
 	public boolean addStatusRecord(StatusRecord sR) {
 		if(log.isDebugEnabled()){
-			log.debug("addStatusRecord sR for User '" + sR.getUserID() + "' event " + sR.getEvent().getName() + " with Status " + sR.getStatus().toString());
+			log.debug("addStatusRecord sR for User '" + sR.getUserID() + "' event " + sR.getAttendanceEvent().getName() + " with Status " + sR.getStatus().toString());
 		}
 
 		try {
@@ -259,21 +259,21 @@ public class AttendanceDaoImpl extends HibernateDaoSupport implements Attendance
 	}
 
 	@SuppressWarnings("unchecked")
-	private List<Event> getEventsForAttendanceSiteHelper(final AttendanceSite aS){
+	private List<AttendanceEvent> getEventsForAttendanceSiteHelper(final AttendanceSite aS){
 		if(log.isDebugEnabled()){
-			log.debug("getEventsForSite()");
+			log.debug("getAttendanceEventsForSite()");
 		}
 
 		HibernateCallback hcb = new HibernateCallback() {
 			@Override
 			public Object doInHibernate(Session session) throws HibernateException, SQLException {
-				Query q = session.getNamedQuery(QUERY_GET_EVENTS_FOR_SITE);
+				Query q = session.getNamedQuery(QUERY_GET_ATTENDANCE_EVENTS_FOR_SITE);
 				q.setParameter(ATTENDANCE_SITE, aS, new ManyToOneType("org.sakaiproject.attendance.model.AttendanceSite"));
 				return q.list();
 			}
 		};
 
-		return (List<Event>) getHibernateTemplate().executeFind(hcb);
+		return (List<AttendanceEvent>) getHibernateTemplate().executeFind(hcb);
 	}
 
 	// Generic Function to get something by it's ID.

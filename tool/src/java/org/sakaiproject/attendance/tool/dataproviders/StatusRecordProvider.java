@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2015, The Apereo Foundation
+ *  Copyright (c) 2016, The Apereo Foundation
  *
  *  Licensed under the Educational Community License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -17,38 +17,32 @@
 package org.sakaiproject.attendance.tool.dataproviders;
 
 import org.apache.wicket.model.IModel;
-import org.sakaiproject.attendance.model.AttendanceEvent;
-import org.sakaiproject.attendance.tool.models.DetachableEventModel;
+import org.sakaiproject.attendance.model.StatusRecord;
+import org.sakaiproject.attendance.tool.models.DetachableStatusRecordModel;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 /**
- * @author David Bauer ( dbauer1 at udayton dot edu)
- * @author Leonardo Canessa [lcanessa1 (at) udayton (dot) edu]
+ * Created by Leonardo Canessa [lcanessa1 (at) udayton (dot) edu]
  */
-public class EventDataProvider extends BaseProvider<AttendanceEvent> {
-    public EventDataProvider() {
+public class StatusRecordProvider extends BaseProvider<StatusRecord> {
+    public StatusRecordProvider() {
         super();
     }
 
-    public EventDataProvider(List<AttendanceEvent> data) {
-        super();
-        if(data != null && !data.isEmpty()) {
-            this.list = data;
-        }
-    }
-
-    protected List<AttendanceEvent> getData() {
+    protected List<StatusRecord> getData() {
         if(this.list == null) {
-            this.list = attendanceLogic.getAttendanceEventsForCurrentSite();
+            this.list = new ArrayList<StatusRecord>();
             Collections.reverse(this.list);
         }
+
         return this.list;
     }
 
     @Override
-    public IModel<AttendanceEvent> model(AttendanceEvent object){
-        return new DetachableEventModel(object);
+    public IModel<StatusRecord> model(StatusRecord object){
+        return new DetachableStatusRecordModel(object);
     }
 }
