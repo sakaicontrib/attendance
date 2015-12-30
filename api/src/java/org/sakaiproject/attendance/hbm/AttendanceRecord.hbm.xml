@@ -40,10 +40,6 @@
         <![CDATA[from AttendanceRecord aR WHERE aR.id = :id]]>
     </query>
 
-    <query name="getRecordForUser">
-        <![CDATA[from AttendanceRecord aR WHERE aR.userID = :userID]]>
-    </query>
-
     <query name="getRecordsForAttendanceEvent">
         <![CDATA[from AttendanceRecord sR WHERE sR.attendanceEvent = :attendanceEvent]]>
     </query>
