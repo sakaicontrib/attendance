@@ -28,6 +28,9 @@ import java.util.List;
  * @author Leonardo Canessa [lcanessa1 (at) udayton (dot) edu]
  */
 public class EventDataProvider extends BaseProvider<Event> {
+    public EventDataProvider() {
+        super();
+    }
 
     public EventDataProvider(List<Event> data) {
         super();
