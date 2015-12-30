@@ -200,6 +200,17 @@ public class AttendanceLogicImpl implements AttendanceLogic {
 	}
 
 	/**
+	 * {@inheritDoc}
+	 */
+	public boolean updateAttendanceRecord(AttendanceRecord aR) {
+		if(aR == null) {
+			throw new IllegalArgumentException("AttendanceRecord cannot be null");
+		}
+
+		return dao.updateAttendanceRecord(aR);
+	}
+
+	/**
 	 * init - perform any actions required here for when this bean starts up
 	 */
 	public void init() {

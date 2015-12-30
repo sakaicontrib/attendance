@@ -113,4 +113,11 @@ public interface AttendanceLogic {
 	 * @return the attendanceRecord
      */
 	AttendanceRecord getAttendanceRecord(Long id);
+
+	/**
+	 * Update an AttendanceRecord
+	 * @param aR, the AttendanceRecord to update
+	 * @return
+     */
+	boolean updateAttendanceRecord(AttendanceRecord aR);
 }
