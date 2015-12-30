@@ -22,7 +22,7 @@ import java.util.List;
 //import de.scravy.pair.Pair;
 import org.sakaiproject.attendance.model.AttendanceSite;
 import org.sakaiproject.attendance.model.AttendanceEvent;
-import org.sakaiproject.attendance.model.StatusRecord;
+import org.sakaiproject.attendance.model.AttendanceRecord;
 //import org.sakaiproject.attendance.model.Reoccurrence;
 
 /**
@@ -108,9 +108,9 @@ public interface AttendanceLogic {
 //	boolean addReoccurrence(Reoccurrence r);
 
 	/**
-	 * Get's a StatusRecord
-	 * @param id, the id of the statusRecord
-	 * @return the statusRecord
+	 * Get's a AttendanceRecord
+	 * @param id, the id of the attendanceRecord
+	 * @return the attendanceRecord
      */
-	StatusRecord getStatusRecord(Long id);
+	AttendanceRecord getAttendanceRecord(Long id);
 }

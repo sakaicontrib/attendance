@@ -21,12 +21,12 @@
 
 <hibernate-mapping package="org.sakaiproject.attendance.model">
 
-    <class name="StatusRecord" table="ATTENDANCE_STATUS_RECORD_T">
+    <class name="org.sakaiproject.attendance.model.AttendanceRecord" table="ATTENDANCE_RECORD_T">
 
         <id name="id">
             <column name="ID" not-null="true" length="19" />
             <generator class="native">
-                <param name="sequence">ATTENDANCE_STATUS_RECORD_S</param>
+                <param name="sequence">ATTENDANCE_RECORD_S</param>
             </generator>
         </id>
 
@@ -36,15 +36,15 @@
         <many-to-one name="attendanceEvent" column="ATTENDANCE_EVENT" unique="false" not-null="true" class="AttendanceEvent" />
     </class>
 
-    <query name="getStatusRecord">
-        <![CDATA[from StatusRecord sR WHERE sR.id = :id]]>
+    <query name="getAttendanceRecord">
+        <![CDATA[from AttendanceRecord aR WHERE aR.id = :id]]>
     </query>
 
-    <query name="getStatusForUser">
-        <![CDATA[from StatusRecord sR WHERE sR.userID = :userID]]>
+    <query name="getRecordForUser">
+        <![CDATA[from AttendanceRecord aR WHERE aR.userID = :userID]]>
     </query>
 
-    <query name="getStatusForAttendanceEvent">
-        <![CDATA[from StatusRecord sR WHERE sR.attendanceEvent = :attendanceEvent]]>
+    <query name="getRecordsForAttendanceEvent">
+        <![CDATA[from AttendanceRecord sR WHERE sR.attendanceEvent = :attendanceEvent]]>
     </query>
 </hibernate-mapping>

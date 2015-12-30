@@ -31,9 +31,9 @@ import org.hibernate.Session;
 import org.hibernate.HibernateException;
 import org.sakaiproject.attendance.dao.AttendanceDao;
 
+import org.sakaiproject.attendance.model.AttendanceRecord;
 import org.sakaiproject.attendance.model.AttendanceSite;
 //import org.sakaiproject.attendance.model.Reoccurrence;
-import org.sakaiproject.attendance.model.StatusRecord;
 import org.springframework.dao.DataAccessException;
 
 import org.sakaiproject.attendance.model.AttendanceEvent;
@@ -205,48 +205,48 @@ public class AttendanceDaoImpl extends HibernateDaoSupport implements Attendance
 	/**
 	 * {@inheritDoc}
 	 */
-	public StatusRecord getStatusRecord(final long id) {
+	public AttendanceRecord getStatusRecord(final long id) {
 		if(log.isDebugEnabled()) {
-			log.debug("getStatusRecord()" + String.valueOf(id));
+			log.debug("getAttendanceRecord()" + String.valueOf(id));
 		}
 
-		return (StatusRecord) getByIDHelper(id, QUERY_GET_STATUS_RECORD);
+		return (AttendanceRecord) getByIDHelper(id, QUERY_GET_ATTENDANCE_RECORD);
 	}
 
 	/**
 	 * {@inheritDoc}
      */
 	@SuppressWarnings("unchecked")
-	public List<StatusRecord> getStatusRecordsForAttendanceEvent(final AttendanceEvent aE) {
+	public List<AttendanceRecord> getRecordsForAttendanceEvent(final AttendanceEvent aE) {
 		if(log.isDebugEnabled()){
-			log.debug("getStatusRecordsForAttendanceEvent e: " + aE.getName() + " in AttendanceSite: " + aE.getAttendanceSite().getSiteID());
+			log.debug("getRecordsForAttendanceEvent e: " + aE.getName() + " in AttendanceSite: " + aE.getAttendanceSite().getSiteID());
 		}
 
 		HibernateCallback hcb = new HibernateCallback() {
 			@Override
 			public Object doInHibernate(Session session) throws HibernateException, SQLException {
-				Query q = session.getNamedQuery(QUERY_GET_STATUS_RECORDS_FOR_ATTENDANCE_EVENT);
+				Query q = session.getNamedQuery(QUERY_GET_ATTENDANCE_RECORDS_FOR_ATTENDANCE_EVENT);
 				q.setParameter(ATTENDANCE_EVENT, aE, new ManyToOneType("org.sakaiproject.attendance.model.AttendanceEvent"));
 				return q.list();
 			}
 		};
 
-		return (List<StatusRecord>) getHibernateTemplate().executeFind(hcb);
+		return (List<AttendanceRecord>) getHibernateTemplate().executeFind(hcb);
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
-	public boolean addStatusRecord(StatusRecord sR) {
+	public boolean addAttendanceRecord(AttendanceRecord aR) {
 		if(log.isDebugEnabled()){
-			log.debug("addStatusRecord sR for User '" + sR.getUserID() + "' event " + sR.getAttendanceEvent().getName() + " with Status " + sR.getStatus().toString());
+			log.debug("addAttendanceRecord sR for User '" + aR.getUserID() + "' event " + aR.getAttendanceEvent().getName() + " with Status " + aR.getStatus().toString());
 		}
 
 		try {
-			getHibernateTemplate().save(sR);
+			getHibernateTemplate().save(aR);
 			return true;
 		} catch (DataAccessException de) {
-			log.error("addStatusRecord failed.", de);
+			log.error("addAttendanceRecord failed.", de);
 			return false;
 		}
 	}

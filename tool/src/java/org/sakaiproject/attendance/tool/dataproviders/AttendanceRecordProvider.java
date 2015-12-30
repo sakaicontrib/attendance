@@ -17,8 +17,8 @@
 package org.sakaiproject.attendance.tool.dataproviders;
 
 import org.apache.wicket.model.IModel;
-import org.sakaiproject.attendance.model.StatusRecord;
-import org.sakaiproject.attendance.tool.models.DetachableStatusRecordModel;
+import org.sakaiproject.attendance.model.AttendanceRecord;
+import org.sakaiproject.attendance.tool.models.DetachableAttendanceRecordModel;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -27,14 +27,14 @@ import java.util.List;
 /**
  * Created by Leonardo Canessa [lcanessa1 (at) udayton (dot) edu]
  */
-public class StatusRecordProvider extends BaseProvider<StatusRecord> {
-    public StatusRecordProvider() {
+public class AttendanceRecordProvider extends BaseProvider<AttendanceRecord> {
+    public AttendanceRecordProvider() {
         super();
     }
 
-    protected List<StatusRecord> getData() {
+    protected List<AttendanceRecord> getData() {
         if(this.list == null) {
-            this.list = new ArrayList<StatusRecord>();
+            this.list = new ArrayList<AttendanceRecord>();
             Collections.reverse(this.list);
         }
 
@@ -42,7 +42,7 @@ public class StatusRecordProvider extends BaseProvider<StatusRecord> {
     }
 
     @Override
-    public IModel<StatusRecord> model(StatusRecord object){
-        return new DetachableStatusRecordModel(object);
+    public IModel<AttendanceRecord> model(AttendanceRecord object){
+        return new DetachableAttendanceRecordModel(object);
     }
 }

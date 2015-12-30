@@ -20,12 +20,12 @@ import org.apache.wicket.injection.Injector;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.sakaiproject.attendance.logic.AttendanceLogic;
-import org.sakaiproject.attendance.model.StatusRecord;
+import org.sakaiproject.attendance.model.AttendanceRecord;
 
 /**
  * Created by Leonardo Canessa [lcanessa1 (at) udayton (dot) edu]
  */
-public class DetachableStatusRecordModel extends LoadableDetachableModel<StatusRecord> {
+public class DetachableAttendanceRecordModel extends LoadableDetachableModel<AttendanceRecord> {
     @SpringBean(name="org.sakaiproject.attendance.logic.AttendanceLogic")
     protected AttendanceLogic attendanceLogic;
 
@@ -35,14 +35,14 @@ public class DetachableStatusRecordModel extends LoadableDetachableModel<StatusR
     /**
      * @param t
      */
-    public DetachableStatusRecordModel(StatusRecord t){
+    public DetachableAttendanceRecordModel(AttendanceRecord t){
         this.id = t.getId();
     }
 
     /**
      * @param id
      */
-    public DetachableStatusRecordModel(long id){
+    public DetachableAttendanceRecordModel(long id){
         this.id = id;
     }
 
@@ -66,8 +66,8 @@ public class DetachableStatusRecordModel extends LoadableDetachableModel<StatusR
         else if (obj == null){
             return false;
         }
-        else if (obj instanceof DetachableStatusRecordModel) {
-            DetachableStatusRecordModel other = (DetachableStatusRecordModel)obj;
+        else if (obj instanceof DetachableAttendanceRecordModel) {
+            DetachableAttendanceRecordModel other = (DetachableAttendanceRecordModel)obj;
             return other.id == id;
         }
         return false;
@@ -76,9 +76,9 @@ public class DetachableStatusRecordModel extends LoadableDetachableModel<StatusR
     /**
      * @see org.apache.wicket.model.LoadableDetachableModel#load()
      */
-    protected StatusRecord load(){
+    protected AttendanceRecord load(){
         Injector.get().inject(this);
         // get the thing
-        return attendanceLogic.getStatusRecord(id);
+        return attendanceLogic.getAttendanceRecord(id);
     }
 }

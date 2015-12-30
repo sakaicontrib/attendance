@@ -21,7 +21,7 @@ import java.util.List;
 
 import org.sakaiproject.attendance.model.AttendanceSite;
 import org.sakaiproject.attendance.model.AttendanceEvent;
-import org.sakaiproject.attendance.model.StatusRecord;
+import org.sakaiproject.attendance.model.AttendanceRecord;
 //import org.sakaiproject.attendance.model.Reoccurrence;
 
 /**
@@ -95,21 +95,21 @@ public interface AttendanceDao {
 	 * @param id, the id of the status record
 	 * @return the status record
      */
-	StatusRecord getStatusRecord(long id);
+	AttendanceRecord getStatusRecord(long id);
 
 	/**
 	 * Get all the Statuses for an Event
 	 * @param e, the vent
 	 * @return a list of Statuses
      */
-	List<StatusRecord> getStatusRecordsForAttendanceEvent(AttendanceEvent e);
+	List<AttendanceRecord> getRecordsForAttendanceEvent(AttendanceEvent e);
 
 	/**
-	 * Add a Status
-	 * @param sR, the StatusRecord to add
+	 * Add an AttendanceRecord
+	 * @param aR, the AttendanceRecord to add
 	 * @return true if success, false if not
      */
-	boolean addStatusRecord(StatusRecord sR);
+	boolean addAttendanceRecord(AttendanceRecord aR);
 
 	// Hibernate Query Constants
 	String QUERY_GET_ATTENDANCE_EVENT = "getAttendanceEvent";
@@ -119,8 +119,8 @@ public interface AttendanceDao {
 	String QUERY_GET_SITE_BY_SITE_ID = "getSiteBySiteID";
 	String QUERY_GET_SITE_BY_ID = "getSiteByID";
 
-	String QUERY_GET_STATUS_RECORD = "getStatus";
-	String QUERY_GET_STATUS_RECORDS_FOR_ATTENDANCE_EVENT = "getStatusRecordsForAttendanceEvent";
+	String QUERY_GET_ATTENDANCE_RECORD = "getAttendanceRecord";
+	String QUERY_GET_ATTENDANCE_RECORDS_FOR_ATTENDANCE_EVENT = "getRecordsForAttendanceEvent";
 
 	// Hibernate Object Fields
 	String ID = "id";

@@ -27,13 +27,13 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class StatusRecord {
+public class AttendanceRecord {
     private Long    id;
     private AttendanceEvent attendanceEvent;
     private String  userID;
     private Status  status;
 
-    public StatusRecord(AttendanceEvent e, String uId, Status s) {
+    public AttendanceRecord(AttendanceEvent e, String uId, Status s) {
         this.attendanceEvent = e;
         this.userID = uId;
         this.status = s;

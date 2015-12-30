@@ -32,9 +32,9 @@ import org.apache.log4j.Logger;
 
 //import org.joda.time.DateTime;
 import org.sakaiproject.attendance.dao.AttendanceDao;
+import org.sakaiproject.attendance.model.AttendanceRecord;
 import org.sakaiproject.attendance.model.AttendanceSite;
 import org.sakaiproject.attendance.model.AttendanceEvent;
-import org.sakaiproject.attendance.model.StatusRecord;
 import org.sakaiproject.user.api.User;
 //import org.sakaiproject.attendance.model.Reoccurrence;
 
@@ -131,8 +131,8 @@ public class AttendanceLogicImpl implements AttendanceLogic {
 			// add StatusRecords for Each Student
 			List<User> userList = sakaiProxy.getCurrentSiteMembership();
 			for(User user : userList) {
-				StatusRecord statusRecord = new StatusRecord(e, user.getId(), currentAttendanceSite.getDefaultStatus());
-				returnVal = dao.addStatusRecord(statusRecord);
+				AttendanceRecord attendanceRecord = new AttendanceRecord(e, user.getId(), currentAttendanceSite.getDefaultStatus());
+				returnVal = dao.addAttendanceRecord(attendanceRecord);
 			}
 		}
 
@@ -191,7 +191,7 @@ public class AttendanceLogicImpl implements AttendanceLogic {
 	/**
 	 * {@inheritDoc}
 	 */
-	public StatusRecord getStatusRecord(Long id) {
+	public AttendanceRecord getAttendanceRecord(Long id) {
 		if(id == null) {
 			return null;
 		}
