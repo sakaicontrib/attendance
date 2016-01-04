@@ -44,7 +44,7 @@ public class AddEventPage extends BasePage {
 		this.attendanceEvent = aE;
 
 		if(attendanceEvent != null) {
-			ConfirmationLink<Void> deleteEvent = new ConfirmationLink<Void>("delete-event", "Are you sure you want to delete this event?") {
+			ConfirmationLink<Void> deleteEvent = new ConfirmationLink<Void>("delete-event", getString("attendance.delete.confirm")) {
 				@Override
 				public void onClick(AjaxRequestTarget ajaxRequestTarget) {
 					String name = attendanceEvent.getName();
