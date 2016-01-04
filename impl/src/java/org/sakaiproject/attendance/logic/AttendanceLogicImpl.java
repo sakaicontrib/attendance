@@ -211,6 +211,21 @@ public class AttendanceLogicImpl implements AttendanceLogic {
 	}
 
 	/**
+	 * {@inheritDoc}
+	 */
+	public boolean updateAttendanceRecords(List<AttendanceRecord> aRs) {
+		if(aRs == null) {
+			throw new IllegalArgumentException("AttendanceRecordList must not be null");
+		}
+
+		if(aRs.isEmpty()) {
+			throw new IllegalArgumentException("AttendanceRecordList must not be empty");
+		}
+
+		return dao.updateAttendanceRecords(aRs);
+	}
+
+	/**
 	 * init - perform any actions required here for when this bean starts up
 	 */
 	public void init() {

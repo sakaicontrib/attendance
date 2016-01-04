@@ -265,6 +265,20 @@ public class AttendanceDaoImpl extends HibernateDaoSupport implements Attendance
 	}
 
 	/**
+	 * {@inheritDoc}
+	 */
+	public boolean updateAttendanceRecords(List<AttendanceRecord> aRs) {
+		try{
+			getHibernateTemplate().saveOrUpdateAll(aRs);
+			return true;
+		} catch (Exception e) {
+			log.error("update attendanceRecords failed.", e);
+			return false;
+		}
+	}
+
+
+	/**
 	 * init
 	 */
 	public void init() {

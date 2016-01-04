@@ -118,6 +118,13 @@ public interface AttendanceDao {
      */
 	boolean updateAttendanceRecord(AttendanceRecord aR);
 
+	/**
+	 * Update a set of AttendanceRecords
+	 * @param aRs, a List of AttendanceRecords
+	 * @return
+     */
+	boolean updateAttendanceRecords(List<AttendanceRecord> aRs);
+
 	// Hibernate Query Constants
 	String QUERY_GET_ATTENDANCE_EVENT = "getAttendanceEvent";
 	String QUERY_GET_ATTENDANCE_EVENTS_FOR_SITE = "getAttendanceEventsForSite";

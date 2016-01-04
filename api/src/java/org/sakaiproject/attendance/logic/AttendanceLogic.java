@@ -120,4 +120,12 @@ public interface AttendanceLogic {
 	 * @return
      */
 	boolean updateAttendanceRecord(AttendanceRecord aR);
+
+	/**
+	 * update attendance records
+	 * @param aRs, a collection of AttendanceRecords
+	 * @return
+     */
+	boolean updateAttendanceRecords(List<AttendanceRecord> aRs);
+
 }
