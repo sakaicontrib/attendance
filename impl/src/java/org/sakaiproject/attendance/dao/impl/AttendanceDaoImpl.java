@@ -189,6 +189,23 @@ public class AttendanceDaoImpl extends HibernateDaoSupport implements Attendance
 	/**
 	 * {@inheritDoc}
 	 */
+	public boolean updateAttendanceEvent(AttendanceEvent aE) {
+		if(log.isDebugEnabled()) {
+			log.debug("updateAttendanceEvent aE: " + aE.getName());
+		}
+
+		try{
+			getHibernateTemplate().saveOrUpdate(aE);
+			return true;
+		} catch (DataAccessException e){
+			log.error("updateAttendanceEvent failed.", e);
+			return false;
+		}
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
 /*	public boolean addReoccurrence(Reoccurrence r){
 		if(log.isDebugEnabled()) {
 			log.debug("addReoccurrence( " + r.toString() + ")");

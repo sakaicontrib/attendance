@@ -77,6 +77,13 @@ public interface AttendanceDao {
 	boolean addAttendanceEvent(AttendanceEvent t);
 
 	/**
+	 *
+	 * @param aE
+	 * @return
+     */
+	boolean updateAttendanceEvent(AttendanceEvent aE)
+
+	/**
 	 * Add a list of events to the Database
 	 * @param es, the ArrayList of events
 	 * @return true if success, false if not

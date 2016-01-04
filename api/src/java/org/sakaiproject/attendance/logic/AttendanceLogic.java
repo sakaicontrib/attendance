@@ -86,6 +86,13 @@ public interface AttendanceLogic {
 	 */
 	boolean addAttendanceEvent(AttendanceEvent e);
 
+	/**
+	 * Updates an AttendanceEvent
+	 * @param aE, the event to update
+	 * @return
+     */
+	boolean updateAttendanceEvent(AttendanceEvent aE);
+
 /*	/**
 	 * Add a reoccurring Event
 	 * @param t, the event model
