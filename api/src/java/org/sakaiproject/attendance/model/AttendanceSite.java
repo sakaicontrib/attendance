@@ -38,6 +38,6 @@ public class AttendanceSite implements Serializable {
 
 	public AttendanceSite(String siteID){
 		this.siteID = siteID;
-		this.defaultStatus = Status.PRESENT;
+		this.defaultStatus = Status.UNKNOWN;
 	}
 }
