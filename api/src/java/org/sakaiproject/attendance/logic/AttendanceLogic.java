@@ -93,6 +93,13 @@ public interface AttendanceLogic {
      */
 	boolean updateAttendanceEvent(AttendanceEvent aE);
 
+	/**
+	 * Deletes an AttendanceEvent
+	 * @param aE, the event to delete
+	 * @return
+     */
+	boolean deleteAttendanceEvent(AttendanceEvent aE);
+
 /*	/**
 	 * Add a reoccurring Event
 	 * @param t, the event model

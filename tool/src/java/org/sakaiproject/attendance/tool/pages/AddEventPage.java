@@ -16,14 +16,14 @@
 
 package org.sakaiproject.attendance.tool.pages;
 
-import org.apache.wicket.ajax.attributes.AjaxCallListener;
-import org.apache.wicket.ajax.attributes.AjaxRequestAttributes;
-import org.apache.wicket.ajax.markup.html.form.AjaxButton;
+import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.form.*;
+import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.model.*;
 
 import org.sakaiproject.attendance.model.AttendanceEvent;
 import org.sakaiproject.attendance.tool.pages.panels.EventInputPanel;
+import org.sakaiproject.attendance.tool.util.ConfirmationLink;
 
 /**
  * A simple page which allows for events to be added.
@@ -32,49 +32,51 @@ import org.sakaiproject.attendance.tool.pages.panels.EventInputPanel;
  *
  */
 public class AddEventPage extends BasePage {
-	
-	public AddEventPage() {
-		disableLink(addEventLink);
+	protected AttendanceEvent attendanceEvent;
 
-        add(createForm(null));
+	public AddEventPage() {
+		this(null);
 	}
 
 	public AddEventPage(AttendanceEvent aE) {
 		disableLink(addEventLink);
 
-		add(createForm(aE));
+		this.attendanceEvent = aE;
+
+		if(attendanceEvent != null) {
+			ConfirmationLink<Void> deleteEvent = new ConfirmationLink<Void>("delete-event", "Are you sure you want to delete this event?") {
+				@Override
+				public void onClick(AjaxRequestTarget ajaxRequestTarget) {
+					String name = attendanceEvent.getName();
+					if(attendanceLogic.deleteAttendanceEvent(attendanceEvent)) {
+						getSession().info(name + " deleted successfully.");
+						setResponsePage(new Overview());
+					}
+				}
+			};
+			add(deleteEvent);
+		} else {
+			// Add dummy/hidden delete link
+			add(new Link<Void>("delete-event") {
+				@Override
+				public void onClick() {
+					// Do nothing
+				}
+			}.setVisible(false));
+		}
+
+		add(createForm());
 	}
 
-	private Form createForm(AttendanceEvent aE) {
-		boolean isEdit = true;
-		if(aE == null) {
-			aE = new AttendanceEvent();
-			isEdit = false;
+	private Form createForm() {
+		if(attendanceEvent == null) {
+			attendanceEvent = new AttendanceEvent();
 		}
 
 		Form form = new Form("form");
-		form.add(new EventInputPanel("event", new CompoundPropertyModel<AttendanceEvent>(aE)));
+		form.add(new EventInputPanel("event", new CompoundPropertyModel<AttendanceEvent>(attendanceEvent)));
 		form.add(new SubmitLink("submit"));
 
-		if(isEdit) {
-			ResourceModel temp = new ResourceModel("attendance.delete");
-			final String text = temp.getObject();
-			AjaxButton deleteButton = new AjaxButton("delete") {
-				@Override
-				protected void updateAjaxAttributes(AjaxRequestAttributes attributes) {
-					super.updateAjaxAttributes(attributes);
-					AjaxCallListener ajaxCallListener = new AjaxCallListener();
-					ajaxCallListener.onPrecondition( "return confirm('" + text + "');" );
-					attributes.getAjaxCallListeners().add( ajaxCallListener );
-				}
-			};
-
-			form.add(deleteButton);
-		} else{
-			Button hidden = new Button("delete");
-			hidden.setVisible(false);
-			form.add(hidden);
-		}
 		return form;
 	}
 }
