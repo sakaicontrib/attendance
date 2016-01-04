@@ -77,11 +77,11 @@ public interface AttendanceDao {
 	boolean addAttendanceEvent(AttendanceEvent t);
 
 	/**
-	 *
-	 * @param aE
+	 * Update an AttendanceEvent
+	 * @param aE, the AttendanceEvent
 	 * @return
      */
-	boolean updateAttendanceEvent(AttendanceEvent aE)
+	boolean updateAttendanceEvent(AttendanceEvent aE);
 
 	/**
 	 * Add a list of events to the Database
