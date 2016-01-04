@@ -126,18 +126,8 @@ public class AttendanceLogicImpl implements AttendanceLogic {
 		AttendanceSite currentAttendanceSite = getCurrentAttendanceSite();
 
 		e.setAttendanceSite(currentAttendanceSite);
-		boolean returnVal = dao.addAttendanceEvent(e);
 
-		if(returnVal) {
-			// add StatusRecords for Each Student
-			List<User> userList = sakaiProxy.getCurrentSiteMembership();
-			for(User user : userList) {
-				AttendanceRecord attendanceRecord = new AttendanceRecord(e, user.getId(), currentAttendanceSite.getDefaultStatus());
-				returnVal = dao.addAttendanceRecord(attendanceRecord);
-			}
-		}
-
-		return returnVal;
+		return dao.addAttendanceEvent(e);
 	}
 
 /*	/**
