@@ -23,6 +23,7 @@ import java.util.List;
 import org.sakaiproject.attendance.model.AttendanceSite;
 import org.sakaiproject.attendance.model.AttendanceEvent;
 import org.sakaiproject.attendance.model.AttendanceRecord;
+import org.sakaiproject.attendance.model.Status;
 //import org.sakaiproject.attendance.model.Reoccurrence;
 
 /**
@@ -128,4 +129,11 @@ public interface AttendanceLogic {
      */
 	boolean updateAttendanceRecords(List<AttendanceRecord> aRs);
 
+	/**
+	 * Update all AttendanceRecords for an AttendanceEvent
+	 * @param aE, the AttendanceEvent to update
+	 * @param s, the Status to set the Records too
+     * @return
+     */
+	boolean updateAttendanceRecordsForEvent(AttendanceEvent aE, Status s);
 }

@@ -35,6 +35,7 @@ import org.sakaiproject.attendance.dao.AttendanceDao;
 import org.sakaiproject.attendance.model.AttendanceRecord;
 import org.sakaiproject.attendance.model.AttendanceSite;
 import org.sakaiproject.attendance.model.AttendanceEvent;
+import org.sakaiproject.attendance.model.Status;
 import org.sakaiproject.user.api.User;
 //import org.sakaiproject.attendance.model.Reoccurrence;
 
@@ -226,10 +227,58 @@ public class AttendanceLogicImpl implements AttendanceLogic {
 	}
 
 	/**
+	 * {@inheritDoc}
+	 */
+	public boolean updateAttendanceRecordsForEvent(AttendanceEvent aE, Status s) {
+		List<AttendanceRecord> records = dao.getRecordsForAttendanceEvent(aE);
+
+		if(records == null || records.isEmpty()) {
+			records = generateAttendanceRecords(aE, s);
+		}
+
+		for(AttendanceRecord aR : records) {
+			aR.setStatus(s);
+		}
+
+		return dao.updateAttendanceRecords(records);
+	}
+
+	/**
 	 * init - perform any actions required here for when this bean starts up
 	 */
 	public void init() {
 		log.info("init");
+	}
+
+	private List<AttendanceRecord> generateAttendanceRecords(AttendanceEvent aE, Status s) {
+		if(s == null) {
+			s = aE.getAttendanceSite().getDefaultStatus();
+		}
+
+		List<AttendanceRecord> recordList = new ArrayList<AttendanceRecord>();
+		List<User> userList = sakaiProxy.getCurrentSiteMembership();
+
+		if(userList.isEmpty()){
+			// do something
+		}
+
+		for(User user : userList) {
+			AttendanceRecord attendanceRecord = generateAttendanceRecord(aE, user, s);
+			recordList.add(attendanceRecord);
+		}
+
+		return recordList;
+	}
+
+	private AttendanceRecord generateAttendanceRecord(AttendanceEvent aE, User user, Status s) {
+		if(s == null) {
+			s = aE.getAttendanceSite().getDefaultStatus();
+		}
+
+		AttendanceRecord record = new AttendanceRecord(aE, user.getId(), s);
+		dao.addAttendanceRecord(record);
+
+		return record;
 	}
 	
 	@Setter
