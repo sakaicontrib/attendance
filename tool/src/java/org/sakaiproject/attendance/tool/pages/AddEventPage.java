@@ -16,6 +16,9 @@
 
 package org.sakaiproject.attendance.tool.pages;
 
+import org.apache.wicket.ajax.attributes.AjaxCallListener;
+import org.apache.wicket.ajax.attributes.AjaxRequestAttributes;
+import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.markup.html.form.*;
 import org.apache.wicket.model.*;
 
@@ -33,10 +36,45 @@ public class AddEventPage extends BasePage {
 	public AddEventPage() {
 		disableLink(addEventLink);
 
-		//add our form
+        add(createForm(null));
+	}
+
+	public AddEventPage(AttendanceEvent aE) {
+		disableLink(addEventLink);
+
+		add(createForm(aE));
+	}
+
+	private Form createForm(AttendanceEvent aE) {
+		boolean isEdit = true;
+		if(aE == null) {
+			aE = new AttendanceEvent();
+			isEdit = false;
+		}
+
 		Form form = new Form("form");
-		form.add(new EventInputPanel("event", new CompoundPropertyModel<AttendanceEvent>(new AttendanceEvent())));
+		form.add(new EventInputPanel("event", new CompoundPropertyModel<AttendanceEvent>(aE)));
 		form.add(new SubmitLink("submit"));
-        add(form);
+
+		if(isEdit) {
+			ResourceModel temp = new ResourceModel("attendance.delete");
+			final String text = temp.getObject();
+			AjaxButton deleteButton = new AjaxButton("delete") {
+				@Override
+				protected void updateAjaxAttributes(AjaxRequestAttributes attributes) {
+					super.updateAjaxAttributes(attributes);
+					AjaxCallListener ajaxCallListener = new AjaxCallListener();
+					ajaxCallListener.onPrecondition( "return confirm('" + text + "');" );
+					attributes.getAjaxCallListeners().add( ajaxCallListener );
+				}
+			};
+
+			form.add(deleteButton);
+		} else{
+			Button hidden = new Button("delete");
+			hidden.setVisible(false);
+			form.add(hidden);
+		}
+		return form;
 	}
 }

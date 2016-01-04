@@ -141,6 +141,17 @@ public class AttendanceLogicImpl implements AttendanceLogic {
 		return dao.updateAttendanceEvent(aE);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	public boolean deleteAttendanceEvent(AttendanceEvent aE) throws IllegalArgumentException {
+		if(aE == null) {
+			throw new IllegalArgumentException("AttendanceEvent is null");
+		}
+
+		return dao.deleteAttendanceEvent(aE);
+	}
+
 /*	/**
 	 * {@inheritDoc}
 	 *//*
