@@ -20,17 +20,33 @@
 <body>
 <wicket:extend>
 	
-	<h1><span wicket:id="overview-header" /></h1>
+	<h1><span wicket:id="header-overview" /></h1>
 	
 	<table>
-		<tr>
-			<th><span wicket:id="student-name-header"/></th>
-			<th wicket:id="event-headers"><span wicket:id="event-name" /></th>
-		</tr>
-		<tr wicket:id="students">
-			<th><span wicket:id="student-name" /></th>
-			<td><span>Attendance Record</span></td>
-		</tr>
+		<thead>
+			<tr>
+				<th><span wicket:id="header-event-name" /></th>
+				<th><span wicket:id="header-event-date" /></th>
+				<th><span wicket:id="header-status-present" /></th>
+				<th><span wicket:id="header-status-late" /></th>
+				<th><span wicket:id="header-status-left-early" /></th>
+				<th><span wicket:id="header-status-excused" /></th>
+				<th><span wicket:id="header-status-unexcused" /></th>
+				<th><span wicket:id="header-event-settings" /></th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr wicket:id="events">
+				<td><span wicket:id="event-name" /></td>
+				<td><span wicket:id="event-date" /></td>
+				<td><span wicket:id="event-stats-present" /></td>
+				<td><span wicket:id="event-stats-late" /></td>
+				<td><span wicket:id="event-stats-left-early" /></td>
+				<td><span wicket:id="event-stats-excused" /></td>
+				<td><span wicket:id="event-stats-absent" /></td>
+				<td><a wicket:id="event-settings-link"><img src="/library/image/ud_custom/settings.png" alt="a gear icon" /></a></td>
+			</tr>
+		</tbody>
 	</table>
 	
 </wicket:extend>
