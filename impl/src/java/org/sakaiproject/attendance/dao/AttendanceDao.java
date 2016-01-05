@@ -112,13 +112,6 @@ public interface AttendanceDao {
 	AttendanceRecord getStatusRecord(long id);
 
 	/**
-	 * Get all the Statuses for an Event
-	 * @param e, the vent
-	 * @return a list of Statuses
-     */
-	List<AttendanceRecord> getRecordsForAttendanceEvent(AttendanceEvent e);
-
-	/**
 	 * Add an AttendanceRecord
 	 * @param aR, the AttendanceRecord to add
 	 * @return true if success, false if not

@@ -249,27 +249,6 @@ public class AttendanceDaoImpl extends HibernateDaoSupport implements Attendance
 
 	/**
 	 * {@inheritDoc}
-     */
-	@SuppressWarnings("unchecked")
-	public List<AttendanceRecord> getRecordsForAttendanceEvent(final AttendanceEvent aE) {
-		if(log.isDebugEnabled()){
-			log.debug("getRecordsForAttendanceEvent e: " + aE.getName() + " in AttendanceSite: " + aE.getAttendanceSite().getSiteID());
-		}
-
-		HibernateCallback hcb = new HibernateCallback() {
-			@Override
-			public Object doInHibernate(Session session) throws HibernateException, SQLException {
-				Query q = session.getNamedQuery(QUERY_GET_ATTENDANCE_RECORDS_FOR_ATTENDANCE_EVENT);
-				q.setParameter(ATTENDANCE_EVENT, aE, new ManyToOneType("org.sakaiproject.attendance.model.AttendanceEvent"));
-				return q.list();
-			}
-		};
-
-		return (List<AttendanceRecord>) getHibernateTemplate().executeFind(hcb);
-	}
-
-	/**
-	 * {@inheritDoc}
 	 */
 	public boolean addAttendanceRecord(AttendanceRecord aR) {
 		if(log.isDebugEnabled()){

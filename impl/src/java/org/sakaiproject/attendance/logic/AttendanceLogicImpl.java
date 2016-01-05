@@ -242,7 +242,7 @@ public class AttendanceLogicImpl implements AttendanceLogic {
 	 * {@inheritDoc}
 	 */
 	public boolean updateAttendanceRecordsForEvent(AttendanceEvent aE, Status s) {
-		List<AttendanceRecord> records = dao.getRecordsForAttendanceEvent(aE);
+		List<AttendanceRecord> records = new ArrayList<AttendanceRecord>(aE.getRecords());
 
 		if(records == null || records.isEmpty()) {
 			records = generateAttendanceRecords(aE, s);

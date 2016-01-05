@@ -33,16 +33,17 @@ import java.util.Date;
 public class AttendanceEvent implements Serializable {
 	private static final 	long 		serialVersionUID = 1L;
 
-	private 				Long 			id;
-	private 				String 			name;
-	private 				Date 			startDateTime;
-	private 				Date	 		endDateTime;
-	private 				Boolean 		isReoccurring;
-	private 				Long 			reoccurringID;
-	private 				Boolean 		isRequired;
-	private 				String			releasedTo;
-	private 				AttendanceSite 	attendanceSite;
-	private 				String 			location;
+	private 				Long 					id;
+	private 				String 					name;
+	private 				Date 					startDateTime;
+	private 				Date	 				endDateTime;
+	private 				Boolean 				isReoccurring;
+	private 				Long 					reoccurringID;
+	private 				Boolean 				isRequired;
+	private 				String					releasedTo;
+	private 				AttendanceSite 			attendanceSite;
+	private 				String 					location;
+	private 				Set<AttendanceRecord> 	records = new HashSet<AttendanceRecord>(0);
 
 	// Create a copy constructor
 	public AttendanceEvent(AttendanceEvent attendanceEvent){
