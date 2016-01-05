@@ -21,7 +21,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.util.*;
 
 /**
  * Created by Leonardo Canessa [lcanessa1 (at) udayton (dot) edu]au)
@@ -56,5 +56,35 @@ public class AttendanceEvent implements Serializable {
 		this.releasedTo 	= attendanceEvent.releasedTo;
 		this.attendanceSite = attendanceEvent.attendanceSite;
 		this.location 		= attendanceEvent.location;
+	}
+
+	public Map<Status, Integer> getStats() {
+		Map<Status, Integer> results = new HashMap<Status, Integer>();
+
+		if(this.records.isEmpty()){
+			for(Status s : Status.values()){
+				generateStatsHelper(results, s, 0);
+			}
+
+			return results;
+		}
+
+		for(AttendanceRecord r : this.records) {
+			for(Status s : Status.values()){
+				if(r.getStatus() == s) {
+					generateStatsHelper(results, s, 1);
+				}
+			}
+		}
+
+		return results;
+	}
+
+	private void generateStatsHelper(Map<Status, Integer> m, Status s, int base) {
+		if(m.containsKey(s)) {
+			m.put(s, m.get(s) + 1);
+		} else {
+			m.put(s, base);
+		}
 	}
 }
