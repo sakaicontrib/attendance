@@ -24,7 +24,7 @@
     <class name="org.sakaiproject.attendance.model.AttendanceEvent" table="ATTENDANCE_EVENT_T">
 
         <id name="id">
-            <column name="ID" not-null="true" length="19" />
+            <column name="A_EVENT_ID" not-null="true" length="19" />
             <generator class="native">
                 <param name="sequence">ATTENDANCE_EVENT_S</param>
             </generator>
@@ -39,7 +39,7 @@
         <property name="releasedTo"     column="RELEASED_TO"        type="java.lang.String" />
         <property name="location"       column="LOCATION"           type="java.lang.String" />
 
-        <many-to-one name="attendanceSite" column="ATTENDANCE_SITE" unique="false" not-null="true" class="org.sakaiproject.attendance.model.AttendanceSite" />
+        <many-to-one name="attendanceSite" column="A_SITE_ID" unique="false" not-null="true" class="org.sakaiproject.attendance.model.AttendanceSite" />
     </class>
 
     <query name="getAttendanceEvent">

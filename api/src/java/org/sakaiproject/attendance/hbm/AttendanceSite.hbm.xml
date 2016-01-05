@@ -24,7 +24,7 @@
     <class name="org.sakaiproject.attendance.model.AttendanceSite" table="ATTENDANCE_SITE_T">
 
         <id name="id">
-            <column name="ID" not-null="true" length="19" />
+            <column name="A_SITE_ID" not-null="true" length="19" />
             <generator class="native">
                 <param name="sequence">ATTENDANCE_SITE_S</param>
             </generator>

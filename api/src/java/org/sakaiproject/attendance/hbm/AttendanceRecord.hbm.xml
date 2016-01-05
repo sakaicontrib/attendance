@@ -24,7 +24,7 @@
     <class name="org.sakaiproject.attendance.model.AttendanceRecord" table="ATTENDANCE_RECORD_T">
 
         <id name="id">
-            <column name="ID" not-null="true" length="19" />
+            <column name="A_RECORD_ID" not-null="true" length="19" />
             <generator class="native">
                 <param name="sequence">ATTENDANCE_RECORD_S</param>
             </generator>
@@ -33,7 +33,7 @@
         <property name="userID"     column="USER_ID"            type="java.lang.String" />
         <property name="status"     column="STATUS"             type="org.sakaiproject.attendance.hbm.StatusUserType"/>
 
-        <many-to-one name="attendanceEvent" column="ATTENDANCE_EVENT" unique="false" not-null="true" class="AttendanceEvent" />
+        <many-to-one name="attendanceEvent" column="A_EVENT_ID" unique="false" not-null="true" class="AttendanceEvent" />
     </class>
 
     <query name="getAttendanceRecord">
