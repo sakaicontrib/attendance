@@ -87,17 +87,6 @@ public class BasePage extends WebPage implements IHeaderContributor {
 		firstLink.add(new AttributeModifier("title", new ResourceModel("link.first.tooltip")));
 		add(firstLink);
 		
-		//second link
-		settingsLink = new Link<Void>("settingsLink") {
-			private static final long serialVersionUID = 1L;
-			public void onClick() {
-				setResponsePage(new SettingsPage());
-			}
-		};
-		settingsLink.add(new Label("secondLinkLabel", new ResourceModel("link.second")).setRenderBodyOnly(true));
-		settingsLink.add(new AttributeModifier("title", new ResourceModel("link.second.tooltip")));
-		add(settingsLink);
-		
 		//third link
 		addEventLink = new Link<Void>("addEventLink") {
 			private static final long serialVersionUID = 1L;
@@ -129,7 +118,8 @@ public class BasePage extends WebPage implements IHeaderContributor {
         		return newMessageDisplayComponent;
         	}
         };
-        add(feedbackPanel); 
+		feedbackPanel.setOutputMarkupId(true);
+        add(feedbackPanel);
 		
     }
 	

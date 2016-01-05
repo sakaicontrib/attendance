@@ -19,15 +19,35 @@
 
 <body>
 <wicket:extend>
-	<h3>Add a new item to the database:</h3>
-	<form wicket:id="form">
-		<div wicket:id="event">
-			Display the EventInputPanel
-		</div>
-		<input type="submit" wicket:id="submit"/>
-	</form>
 
-	<a wicket:id="delete-event">Delete</a>
+	<div wicket:id="event-form-container" style="border: 1px solid #ccc;padding:5px;display:inline-block;vertical-align: top;">
+		<h3>Add an attendance item</h3>
+		<form wicket:id="form">
+			<div wicket:id="event">
+				Display the EventInputPanel
+			</div>
+			<input type="submit" wicket:id="submit" value="Save"/>
+		</form>
+
+		<a wicket:id="delete-event">Delete</a>
+	</div>
+
+	<div wicket:id="event-list-container" style="display:inline-block;border:1px solid #ccc;line-height: 1.5em;padding:5px;vertical-align: top;">
+		<table>
+			<tr>
+				<th colspan="2">Attendance Items</th>
+			</tr>
+			<tr wicket:id="event-list">
+				<td>
+					<a wicket:id="edit-link"><span wicket:id="event-name" /></a>
+				</td>
+				<td>
+					<a wicket:id="delete-link">X</a>
+				</td>
+			</tr>
+		</table>
+	</div>
+
 	
 	<style type="text/css">
 	/* style the Wicket FeedbackPanel to remove the list */
