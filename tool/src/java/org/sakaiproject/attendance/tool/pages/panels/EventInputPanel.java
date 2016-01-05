@@ -53,7 +53,7 @@ public class EventInputPanel extends BasePanel {
             @Override
             public void onSubmit(){
                 AttendanceEvent e = (AttendanceEvent) getDefaultModelObject();
-                boolean result = attendanceLogic.addAttendanceEvent(e);
+                boolean result = attendanceLogic.updateAttendanceEvent(e);
 
                 if(result){
                     StringResourceModel temp = new StringResourceModel("attendance.add.success", null, new String[]{e.getName()});
