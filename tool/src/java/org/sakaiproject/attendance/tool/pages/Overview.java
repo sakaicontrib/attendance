@@ -28,7 +28,8 @@ import org.sakaiproject.attendance.tool.dataproviders.EventDataProvider;
 import java.util.Map;
 
 /**
- * An example page
+ * The overview page which lists AttendanceEvents and basic statistics of each
+ * events AttendanceRecords.
  * 
  * @author David Bauer [dbauer1 (at) udayton (dot) edu]
  * @author Leonardo Canessa [lcanessa1 (at) udayton (dot) edu]
