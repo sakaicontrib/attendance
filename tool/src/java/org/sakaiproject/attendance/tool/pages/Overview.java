@@ -58,7 +58,7 @@ public class Overview extends BasePage {
 		Label headerStatusLeftEarly = new Label("header-status-left-early", 	new ResourceModel("attendance.overview.header.status.left.early"));
 		Label headerStatusExcused 	= new Label("header-status-excused", 		new ResourceModel("attendance.overview.header.status.excused"));
 		Label headerStatusUnexcused = new Label("header-status-unexcused", 	new ResourceModel("attendance.overview.header.status.unexcused"));
-		Label headerEventSettings	= new Label("header-event-settings", 		new ResourceModel("attendance.overview.header.event.settings"));
+		Label headerEventEdit		= new Label("header-event-edit", 		new ResourceModel("attendance.overview.header.event.edit"));
 
 		add(headerOverview);
 		add(headerEventName);
@@ -68,7 +68,9 @@ public class Overview extends BasePage {
 		add(headerStatusLeftEarly);
 		add(headerStatusExcused);
 		add(headerStatusUnexcused);
-		add(headerEventSettings);
+		add(headerEventEdit);
+
+		add(new Label("overview-info", new ResourceModel("attendance.overview.info")));
 	}
 
 	private void createTable() {
@@ -83,7 +85,7 @@ public class Overview extends BasePage {
 				item.add(new Label("event-stats-left-early", stats.get(Status.LEFT_EARLY)));
 				item.add(new Label("event-stats-excused", stats.get(Status.EXCUSED_ABSENCE)));
 				item.add(new Label("event-stats-absent", stats.get(Status.UNEXCUSED_ABSENCE)));
-				item.add(new Link<Void>("event-settings-link") {
+				item.add(new Link<Void>("event-edit-link") {
 					private static final long serialVersionUID = 1L;
 					public void onClick() {
 						setResponsePage(new AddEventPage(item.getModelObject()));

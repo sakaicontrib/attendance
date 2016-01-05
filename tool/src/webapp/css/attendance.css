@@ -1,0 +1,97 @@
+/*
+ *  Copyright (c) 2016, The Apereo Foundation
+ *
+ *  Licensed under the Educational Community License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *              http://opensource.org/licenses/ecl2
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */
+
+body {
+    color: #111;
+}
+
+h1.overviewHeader {
+    background: url("../images/attendance_icon_32.png") no-repeat left center;
+    padding-left: 32px;
+    color: #555;
+    margin-top: 1.5em;
+    margin-bottom: 1.5em;
+    min-height: 32px;
+}
+
+span.overHeaderSpan {
+    margin: 0 .5em;
+}
+
+img.overviewInfo {
+    vertical-align: middle;
+}
+
+img.overviewInfo:hover {
+    cursor: help;
+}
+
+img.overviewInfo:hover + div.overviewInfo {
+    display: block;
+    position: absolute;
+    padding: .5em;
+    width: 400px;
+    background: #fff;
+    border: 1px solid #004b8d;
+    color: #004b8d;
+    font-size: .6em;
+    line-height: 1.5em;
+    left: 25%;
+    font-weight: normal;
+    -webkit-box-shadow: 0 8px 6px -6px black;
+    -moz-box-shadow: 0 8px 6px -6px black;
+    box-shadow: 0 8px 6px -6px black;
+}
+
+div.overviewInfo {
+    display: none;
+}
+
+table.overviewTable {
+    border: 3px solid #ccc;
+    border-collapse: collapse;
+    padding: .5em;
+    margin-left: 70px;
+}
+
+.overviewTable td, .overviewTable th {
+    border: 1px solid #ccc;
+    padding: .5em;
+    text-align: left;
+}
+
+.overviewTable th {
+    text-align: center;
+    border-bottom-width: 3px;
+    font-size: 1.2em;
+}
+
+.overviewTable thead tr {
+    background: #eee;
+}
+
+.overviewTable tbody tr:hover {
+    background: #deeeff;
+}
+
+th.overviewThickRight, td.overviewThickRight {
+    border-right-width: 3px;
+}
+
+th.overviewEditCol, td.overviewEditCol {
+    border-left-width: 3px;
+    text-align: center;
+}
