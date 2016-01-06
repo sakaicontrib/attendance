@@ -22,8 +22,8 @@ h1.overviewHeader {
     background: url("../images/attendance_icon_32.png") no-repeat left center;
     padding-left: 32px;
     color: #555;
-    margin-top: 1.5em;
-    margin-bottom: 1.5em;
+    margin-top: 1.2em;
+    margin-bottom: 1.2em;
     min-height: 32px;
 }
 
@@ -61,7 +61,7 @@ div.overviewInfo {
 }
 
 table.overviewTable {
-    border: 3px solid #ccc;
+    border: 2px solid #ccc;
     border-collapse: collapse;
     padding: .5em;
     margin-left: 70px;
@@ -75,8 +75,9 @@ table.overviewTable {
 
 .overviewTable th {
     text-align: center;
-    border-bottom-width: 3px;
+    border-bottom-width: 2px;
     font-size: 1.2em;
+    vertical-align: bottom;
 }
 
 .overviewTable thead tr {
@@ -87,11 +88,24 @@ table.overviewTable {
     background: #deeeff;
 }
 
-th.overviewThickRight, td.overviewThickRight {
+th.overviewDateCol, td.overviewDateCol {
     border-right-width: 3px;
 }
 
 th.overviewEditCol, td.overviewEditCol {
     border-left-width: 3px;
     text-align: center;
+    width: 42px;
+}
+
+th.overviewStatusCol, td.overviewStatusCol {
+    width: 84px;
+}
+
+td.overviewStatusCol {
+    text-align: right;
+}
+
+th.overviewStatusCol {
+    background: #e0f7e0;
 }
