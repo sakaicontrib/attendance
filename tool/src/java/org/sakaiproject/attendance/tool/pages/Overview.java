@@ -40,6 +40,8 @@ public class Overview extends BasePage {
 
 	public Overview() {
 		disableLink(this.firstLink);
+
+		add(new Label("overview-info", new ResourceModel("attendance.overview.info")));
 		
 		createHeaders();
 		createTable();
@@ -70,7 +72,6 @@ public class Overview extends BasePage {
 		add(headerStatusUnexcused);
 		add(headerEventEdit);
 
-		add(new Label("overview-info", new ResourceModel("attendance.overview.info")));
 	}
 
 	private void createTable() {
