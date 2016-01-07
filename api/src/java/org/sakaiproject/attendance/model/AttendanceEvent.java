@@ -58,12 +58,8 @@ public class AttendanceEvent implements Serializable {
 	public Map<Status, Integer> getStats() {
 		Map<Status, Integer> results = new HashMap<Status, Integer>();
 
-		if(this.records.isEmpty()){
-			for(Status s : Status.values()){
-				generateStatsHelper(results, s, 0);
-			}
-
-			return results;
+		for(Status s : Status.values()){
+			generateStatsHelper(results, s, 0);
 		}
 
 		for(AttendanceRecord r : this.records) {
