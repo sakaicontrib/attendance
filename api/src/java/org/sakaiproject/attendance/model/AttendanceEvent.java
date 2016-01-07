@@ -16,9 +16,7 @@
 
 package org.sakaiproject.attendance.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.io.Serializable;
 import java.util.*;
@@ -27,23 +25,22 @@ import java.util.*;
  * Created by Leonardo Canessa [lcanessa1 (at) udayton (dot) edu]au)
  *
  */
-@Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class AttendanceEvent implements Serializable {
 	private static final 	long 		serialVersionUID = 1L;
 
-	private 				Long 					id;
-	private 				String 					name;
-	private 				Date 					startDateTime;
-	private 				Date	 				endDateTime;
-	private 				Boolean 				isReoccurring;
-	private 				Long 					reoccurringID;
-	private 				Boolean 				isRequired;
-	private 				String					releasedTo;
-	private 				AttendanceSite 			attendanceSite;
-	private 				String 					location;
-	private 				Set<AttendanceRecord> 	records = new HashSet<AttendanceRecord>(0);
+	@Getter	@Setter	private 				Long 					id;
+	@Getter @Setter private 				String 					name;
+	@Getter @Setter private 				Date 					startDateTime;
+	@Getter @Setter private 				Date	 				endDateTime;
+	@Getter @Setter private 				Boolean 				isReoccurring;
+	@Getter @Setter private 				Long 					reoccurringID;
+	@Getter @Setter private 				Boolean 				isRequired;
+	@Getter @Setter private 				String					releasedTo;
+	@Getter @Setter private 				AttendanceSite 			attendanceSite;
+	@Getter @Setter private 				String 					location;
+	@Getter @Setter private 				Set<AttendanceRecord> 	records = new HashSet<AttendanceRecord>(0);
 
 	// Create a copy constructor
 	public AttendanceEvent(AttendanceEvent attendanceEvent){
@@ -86,5 +83,28 @@ public class AttendanceEvent implements Serializable {
 		} else {
 			m.put(s, base);
 		}
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		AttendanceEvent that = (AttendanceEvent) o;
+		return Objects.equals(id, that.id) &&
+				Objects.equals(name, that.name) &&
+				Objects.equals(startDateTime, that.startDateTime) &&
+				Objects.equals(endDateTime, that.endDateTime) &&
+				Objects.equals(isReoccurring, that.isReoccurring) &&
+				Objects.equals(reoccurringID, that.reoccurringID) &&
+				Objects.equals(isRequired, that.isRequired) &&
+				Objects.equals(releasedTo, that.releasedTo) &&
+				Objects.equals(attendanceSite, that.attendanceSite) &&
+				Objects.equals(location, that.location) &&
+				Objects.equals(records, that.records);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(id);
 	}
 }

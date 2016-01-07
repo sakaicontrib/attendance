@@ -16,26 +16,41 @@
 
 package org.sakaiproject.attendance.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+
+import java.util.Objects;
 
 
 /**
  * Created by Leonardo Canessa [lcanessa1 (at) udayton (dot) edu]
  */
-@Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class AttendanceRecord {
-    private Long    id;
-    private AttendanceEvent attendanceEvent;
-    private String  userID;
-    private Status  status;
+    @Getter @Setter private Long    id;
+    @Getter @Setter private AttendanceEvent attendanceEvent;
+    @Getter @Setter private String  userID;
+    @Getter @Setter private Status  status;
 
     public AttendanceRecord(AttendanceEvent e, String uId, Status s) {
         this.attendanceEvent = e;
         this.userID = uId;
         this.status = s;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        AttendanceRecord that = (AttendanceRecord) o;
+        return Objects.equals(id, that.id) &&
+                Objects.equals(attendanceEvent, that.attendanceEvent) &&
+                Objects.equals(userID, that.userID) &&
+                status == that.status;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }
