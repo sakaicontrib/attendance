@@ -20,31 +20,52 @@
 <body>
 <wicket:extend>
 
-	<div wicket:id="event-form-container" style="border: 1px solid #ccc;padding:5px;display:inline-block;vertical-align: top;">
-		<h3>Add an attendance item</h3>
-		<form wicket:id="form">
-			<div wicket:id="event">
-				Display the EventInputPanel
-			</div>
-			<input type="submit" wicket:id="submit" value="Save"/>
-		</form>
+	<h1 class="itemsHeader indnt1"><span wicket:id="items-header" class="itemsHeaderSpan"/></h1>
 
-		<a wicket:id="delete-event">Delete</a>
-	</div>
+	<div wicket:id="event-form-container" class="addEditContainer">
+		<div class="addEditHeader">
+			<h3 class="addEditHeader"><span wicket:id="add-edit-header"/></h3>
+		</div>
 
-	<div wicket:id="event-list-container" style="display:inline-block;border:1px solid #ccc;line-height: 1.5em;padding:5px;vertical-align: top;">
-		<table>
+        <form wicket:id="form" class="addEditForm">
+            <div wicket:id="event" class="eventFormContainer">
+                [Display the EventInputPanel]
+            </div>
+            <input type="submit" wicket:id="submit" value="Save" style="margin-left:1em;"/>
+        </form>
+		<a wicket:id="delete-event" style="margin-top:1em;">Delete Item</a>
+    </div>
+    <div wicket:id="event-list-container" class="itemListContainer">
+		<div class="itemListHeader">
+			<h3 class="itemListHeader">
+				<span wicket:id="items-list-header"/>
+			</h3>
+		</div>
+		<table class="itemListTable">
+			<thead>
 			<tr>
-				<th colspan="2">Attendance Items</th>
+				<th>Attendance Item</th>
+				<th>Date</th>
+                <th class="itemListEditCol">Edit</th>
+				<th>Remove</th>
 			</tr>
-			<tr wicket:id="event-list">
-				<td>
-					<a wicket:id="edit-link"><span wicket:id="event-name" /></a>
+			</thead>
+			<tbody>
+            <tr wicket:id="event-list">
+				<td class="itemNameCol">
+					<span wicket:id="event-name" />
 				</td>
 				<td>
-					<a wicket:id="delete-link">X</a>
+					<span wicket:id="item-date"/>
+				</td>
+                <td class="itemListEditCol">
+                    <a wicket:id="edit-link"><img src="/library/image/ud_custom/settings.png" alt="Edit" width="24px"/></a>
+                </td>
+				<td class="itemListRemoveCol">
+					<a wicket:id="delete-link"><img src="images/remove.png" width="16px"/></a>
 				</td>
 			</tr>
+			</tbody>
 		</table>
 	</div>
 
