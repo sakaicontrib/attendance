@@ -18,6 +18,7 @@ package org.sakaiproject.attendance.model;
 
 import lombok.*;
 
+import java.io.Serializable;
 import java.util.Objects;
 
 
@@ -26,7 +27,9 @@ import java.util.Objects;
  */
 @NoArgsConstructor
 @AllArgsConstructor
-public class AttendanceRecord {
+public class AttendanceRecord implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     @Getter @Setter private Long    id;
     @Getter @Setter private AttendanceEvent attendanceEvent;
     @Getter @Setter private String  userID;
