@@ -43,7 +43,7 @@
 				<span wicket:id="items-list-header"/>
 			</h3>
 		</div>
-		<table class="itemListTable">
+		<table id="itemListTable" class="itemListTable">
 			<thead>
 			<tr>
 				<th>Attendance Item</th>
@@ -69,6 +69,22 @@
 			</tr>
 			</tbody>
 		</table>
+
+
+        <script type="text/javascript" src="/library/js/jquery/tablesorter/2.0.3/jquery.tablesorter-2.0.3.min.js"></script>
+        <script type="text/javascript">
+            $("#itemListTable").tablesorter({
+                sortList: [[1,0],[0,0]],
+                headers: {
+                    2: {
+                        sorter: false
+                    },
+                    3: {
+                        sorter: false
+                    }
+                }
+            });
+        </script>
 	</div>
 
 	

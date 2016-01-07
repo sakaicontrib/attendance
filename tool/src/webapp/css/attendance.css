@@ -82,6 +82,19 @@ table.overviewTable, table.itemListTable {
     margin-left: 70px;
 }
 
+table.overviewTable thead tr .header, table.itemListTable thead tr .header  {
+    background: url(../images/bg.gif) no-repeat bottom .5em right;
+    cursor: pointer;
+    padding-right: 24px;
+}
+
+table.overviewTable thead tr .headerSortUp, table.itemListTable thead tr .headerSortUp {
+    background-image: url(../images/asc.gif);
+}
+table.overviewTable thead tr .headerSortDown, table.itemListTable thead tr .headerSortDown {
+    background-image: url(../images/desc.gif);
+}
+
 table.itemListTable {
     margin: 0;
 }
@@ -183,6 +196,7 @@ td.noEventsCol {
     font-size: 1.4em;
     line-height: 1.7em;
     background: #ffffff;
+    color: #555;
 }
 
 table.addEditFormTable {
