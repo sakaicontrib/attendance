@@ -75,7 +75,11 @@
         <script type="text/javascript">
             $("#itemListTable").tablesorter({
                 sortList: [[1,0],[0,0]],
+                dateFormat: "mmddyyyy",
                 headers: {
+                    1: {
+                        sorter: "shortDate"
+                    },
                     2: {
                         sorter: false
                     },
