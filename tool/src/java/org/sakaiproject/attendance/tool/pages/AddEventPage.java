@@ -55,6 +55,8 @@ public class AddEventPage extends BasePage {
 	public AddEventPage(AttendanceEvent aE) {
 		disableLink(addEventLink);
 
+		add(new Label("items-header", getString("attendance.items.header")));
+
 		this.attendanceEvent = aE;
 
 		eventFormContainer = new WebMarkupContainer("event-form-container");
@@ -88,6 +90,8 @@ public class AddEventPage extends BasePage {
 		eventForm = createForm();
 		eventFormContainer.add(eventForm);
 
+		eventFormContainer.add(new Label("add-edit-header", getString("attendance.add.edit.header")));
+
 		add(eventFormContainer);
 
 		eventListContainer = new WebMarkupContainer("event-list-container");
@@ -115,12 +119,14 @@ public class AddEventPage extends BasePage {
 						setResponsePage(new AddEventPage(item.getModelObject()));
 					}
 				};
-				editLink.add(new Label("event-name", item.getModelObject().getName()));
 				item.add(editLink);
+				item.add(new Label("event-name", item.getModelObject().getName()));
+				item.add(new Label("item-date", item.getModelObject().getStartDateTime()));
 			}
 		};
 
 		eventListContainer.add(attendanceEventDataView);
+		eventListContainer.add(new Label("items-list-header", getString("attendance.items.list.header")));
 
 		add(eventListContainer);
 	}

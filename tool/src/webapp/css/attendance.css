@@ -18,7 +18,15 @@ body {
     color: #111;
 }
 
-h1.overviewHeader {
+.itemListTable a, .itemListTable a:link, .itemListTable a:visited, .itemListTable a:hover, .itemListTable a:focus, .itemListTable a:active{
+    color: #0064cd;
+}
+
+.overviewTable a, .overviewTable a:link, .overviewTable a:visited, .overviewTable a:hover, .overviewTable a:focus, .overviewTable a:active{
+    color: #0064cd;
+}
+
+h1.overviewHeader, h1.itemsHeader {
     background: url("../images/attendance_icon_32.png") no-repeat left center;
     padding-left: 32px;
     color: #555;
@@ -27,7 +35,7 @@ h1.overviewHeader {
     min-height: 32px;
 }
 
-span.overHeaderSpan {
+span.overHeaderSpan, span.itemsHeaderSpan {
     margin: 0 .5em;
 }
 
@@ -60,31 +68,35 @@ div.overviewInfo {
     display: none;
 }
 
-table.overviewTable {
+table.overviewTable, table.itemListTable {
     border: 2px solid #ccc;
     border-collapse: collapse;
     padding: .5em;
     margin-left: 70px;
 }
 
-.overviewTable td, .overviewTable th {
+table.itemListTable {
+    margin: 0;
+}
+
+.overviewTable td, .overviewTable th, .itemListTable td, .itemListTable th {
     border: 1px solid #ccc;
     padding: .5em;
     text-align: left;
 }
 
-.overviewTable th {
+.overviewTable th, .itemListTable th {
     text-align: center;
     border-bottom-width: 2px;
     font-size: 1.2em;
     vertical-align: bottom;
 }
 
-.overviewTable thead tr {
+.overviewTable thead tr, .itemListTable thead tr {
     background: #eee;
 }
 
-.overviewTable tbody tr:hover {
+.overviewTable tbody tr:hover, .itemListTable tbody tr:hover {
     background: #deeeff;
 }
 
@@ -92,7 +104,7 @@ th.overviewDateCol, td.overviewDateCol {
     border-right-width: 3px;
 }
 
-th.overviewEditCol, td.overviewEditCol {
+th.overviewEditCol, td.overviewEditCol, th.itemListEditCol, td.itemListEditCol {
     border-left-width: 3px;
     text-align: center;
     width: 42px;
@@ -108,4 +120,60 @@ td.overviewStatusCol {
 
 th.overviewStatusCol {
     background: #e0f7e0;
+}
+
+td.itemListRemoveCol {
+    text-align: center;
+}
+
+td.itemNameCol {
+    font-size: 1.2em;
+}
+
+div.addEditContainer, div.itemListContainer {
+    border:1px solid #ccc;
+    padding: 2.5em 2em 2em;
+    vertical-align: top;
+    position:relative;
+    display: block;
+    margin: 2em;
+}
+
+div.addEditContainer, div.itemListContainer {
+    margin-left: 70px;
+}
+
+div.addEditHeader, div.itemListHeader {
+    background-color:#fff;
+    position:absolute;
+    top:-1em;
+    left:.5em;
+}
+
+h3.addEditHeader, h3.itemListHeader {
+    margin: 0;
+    padding: 0 .5em;
+    font-size: 1.4em;
+    font-weight: normal;
+}
+
+div.eventFormContainer {
+    margin: 0;
+}
+
+.eventFormDiv {
+    display: inline-block;
+    margin: 0 2em 1em 0;
+    padding: 0;
+    vertical-align: top;
+    line-height: 2em;
+}
+
+.eventFormDiv span {
+    font-weight: normal;
+    font-size: 1.2em;
+}
+
+form.addEditForm {
+    margin: 0;
 }
