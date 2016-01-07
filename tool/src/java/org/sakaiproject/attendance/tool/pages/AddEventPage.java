@@ -109,6 +109,9 @@ public class AddEventPage extends BasePage {
 						if(attendanceLogic.deleteAttendanceEvent(item.getModelObject())) {
 							getSession().info(name + " deleted successfully.");
 							refreshPageComponents(ajaxRequestTarget);
+						} else {
+							getSession().error("Failed to delete " + name);
+							refreshPageComponents(ajaxRequestTarget);
 						}
 					}
 				};
@@ -143,6 +146,12 @@ public class AddEventPage extends BasePage {
 			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
 				super.onSubmit(target, form);
 				refreshPageComponents(target);
+			}
+
+			@Override
+			protected void onError(AjaxRequestTarget target, Form<?> form) {
+				super.onError(target, form);
+				target.add(feedbackPanel);
 			}
 		});
 

@@ -33,7 +33,9 @@
             </div>
             <input type="submit" wicket:id="submit" value="Save" style="margin-left:1em;"/>
         </form>
-		<a wicket:id="delete-event" style="margin-top:1em;">Delete Item</a>
+        <wicket:enclosure>
+            <div class="addEditDeleteLinkDiv"><a wicket:id="delete-event">Delete Item</a></div>
+        </wicket:enclosure>
     </div>
     <div wicket:id="event-list-container" class="itemListContainer">
 		<div class="itemListHeader">

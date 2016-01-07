@@ -168,16 +168,8 @@ div.eventFormContainer {
     margin: 0;
 }
 
-.eventFormDiv {
-    display: inline-block;
-    margin: 0 2em 1em 0;
-    padding: 0;
-    vertical-align: top;
-    line-height: 2em;
-}
-
-.eventFormDiv span {
-    font-weight: normal;
+span.addEditReq {
+    color: red;
     font-size: 1.2em;
 }
 
@@ -191,4 +183,24 @@ td.noEventsCol {
     font-size: 1.4em;
     line-height: 1.7em;
     background: #ffffff;
+}
+
+table.addEditFormTable {
+    margin-bottom: 1em;
+}
+
+.addEditFormTable {
+    text-align: left;
+    font-size: 1.2em;
+}
+
+.addEditFormTable td {
+    padding-right: 4em;
+}
+
+div.addEditDeleteLinkDiv {
+    background: url("../images/remove.png") no-repeat left center;
+    background-size: 12px;
+    padding-left: 16px;
+    margin-top: 1em;
 }

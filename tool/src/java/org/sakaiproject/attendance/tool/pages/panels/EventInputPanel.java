@@ -131,7 +131,7 @@ public class EventInputPanel extends BasePanel {
         event.add(releasedTo);
 
         // validators
-        event.add(new SequentialDateTimeFieldValidator(startDateTime, endDateTime));
+        //event.add(new SequentialDateTimeFieldValidator(startDateTime, endDateTime));
     }
 
     private void createSubForm(Form<AttendanceEvent> event) {
