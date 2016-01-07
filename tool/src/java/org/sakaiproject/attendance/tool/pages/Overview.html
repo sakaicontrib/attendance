@@ -20,35 +20,52 @@
 <body>
 <wicket:extend>
 	
-	<h1><span wicket:id="header-overview" /></h1>
+	<h1 class="overviewHeader indnt1">
+		<span wicket:id="header-overview" class="overHeaderSpan" />
+		<img src="/library/image/silk/information.png" class="overviewInfo" alt="Overview Information"/>
+		<div class="overviewInfo"><span wicket:id="overview-info" /></div>
+	</h1>
+
+	<p class="overviewInstructions">
+		Select an attendance item to enter attendance records. Click on <strong>Attendance Items</strong> in the menu bar above to add additional items.
+	</p>
 	
-	<table>
+	<table id="overviewTable" class="overviewTable">
 		<thead>
 			<tr>
 				<th><span wicket:id="header-event-name" /></th>
-				<th><span wicket:id="header-event-date" /></th>
-				<th><span wicket:id="header-status-present" /></th>
-				<th><span wicket:id="header-status-late" /></th>
-				<th><span wicket:id="header-status-left-early" /></th>
-				<th><span wicket:id="header-status-excused" /></th>
-				<th><span wicket:id="header-status-unexcused" /></th>
-				<th><span wicket:id="header-event-settings" /></th>
+				<th class="overviewDateCol"><span wicket:id="header-event-date" /></th>
+				<th class="overviewStatusCol"><span wicket:id="header-status-present" /></th>
+				<th class="overviewStatusCol"><span wicket:id="header-status-late" /></th>
+				<th class="overviewStatusCol"><span wicket:id="header-status-left-early" /></th>
+				<th class="overviewStatusCol"><span wicket:id="header-status-excused" /></th>
+				<th class="overviewStatusCol"><span wicket:id="header-status-unexcused" /></th>
+				<th class="overviewEditCol"><span wicket:id="header-event-edit" /></th>
 			</tr>
 		</thead>
 		<tbody>
 			<tr wicket:id="events">
-				<td><span wicket:id="event-name" /></td>
-				<td><span wicket:id="event-date" /></td>
-				<td><span wicket:id="event-stats-present" /></td>
-				<td><span wicket:id="event-stats-late" /></td>
-				<td><span wicket:id="event-stats-left-early" /></td>
-				<td><span wicket:id="event-stats-excused" /></td>
-				<td><span wicket:id="event-stats-absent" /></td>
-				<td><a wicket:id="event-settings-link"><img src="/library/image/ud_custom/settings.png" alt="a gear icon" /></a></td>
+				<td class="itemNameCol"><span wicket:id="event-name" /></td>
+				<td class="overviewDateCol"><span wicket:id="event-date" /></td>
+				<td class="overviewStatusCol"><span wicket:id="event-stats-present" /></td>
+				<td class="overviewStatusCol"><span wicket:id="event-stats-late" /></td>
+				<td class="overviewStatusCol"><span wicket:id="event-stats-left-early" /></td>
+				<td class="overviewStatusCol"><span wicket:id="event-stats-excused" /></td>
+				<td class="overviewStatusCol"><span wicket:id="event-stats-absent" /></td>
+				<td class="overviewEditCol"><a wicket:id="event-edit-link"><img src="/library/image/ud_custom/settings.png" alt="Edit" width="24px"/></a></td>
 			</tr>
+			<wicket:enclosure child="no-events">
+				<tr>
+					<td colspan="8" class="noEventsCol">
+						<span wicket:id="no-events" />
+						<br />
+						<span wicket:id="no-events2" />
+					</td>
+				</tr>
+			</wicket:enclosure>
 		</tbody>
 	</table>
-	
+
 </wicket:extend>
 </body>
 </html>

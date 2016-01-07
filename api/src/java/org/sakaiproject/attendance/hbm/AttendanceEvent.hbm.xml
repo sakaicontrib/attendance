@@ -40,7 +40,7 @@
         <property name="location"       column="LOCATION"           type="java.lang.String" />
 
         <many-to-one name="attendanceSite" column="A_SITE_ID" unique="false" not-null="true" class="org.sakaiproject.attendance.model.AttendanceSite" />
-        <set name="records" table="ATTENDANCE_RECORD_T" fetch="join" inverse="true" lazy="false">
+        <set name="records" table="ATTENDANCE_RECORD_T" fetch="join" inverse="true" lazy="false" cascade="all">
             <key column="A_EVENT_ID" not-null="true"/>
             <one-to-many class="org.sakaiproject.attendance.model.AttendanceRecord" />
         </set>

@@ -18,18 +18,37 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:wicket="http://wicket.apache.org">
 <body>
 <wicket:panel>
-  <form wicket:id="event">
-    <span wicket:id="labelName"></span> <input type="text" wicket:id="name" id="name" /><br />
-    <span wicket:id="labelStartDateTime"></span> <div wicket:id="startDateTime" id="startDateTime"/><br />
-    <span wicket:id="labelEndDateTime"></span> <div wicket:id="endDateTime" id="endDateTime" /><br />
-    <span wicket:id="labelIsRequired"></span> <input type="checkbox" wicket:id="isRequired" id="isRequired" /><br />
-    <span wicket:id="labelLocation"></span> <input type="text" wicket:id="location" id="location" /><br />
-    <span wicket:id="labelReleasedTo"></span> <input type="text" wicket:id="releasedTo" id="releasedTo" /><br />
-    <span wicket:id="labelIsReoccurring"></span> <input type="checkbox" wicket:id="isReoccurring" id="isReoccurring" /><br />
-    <div wicket:id="reoccurrencePanel">
-      Display reoccurrence panel here.
-    </div>
-  </form>
+    <form wicket:id="event">
+        <table class="addEditFormTable">
+            <tr>
+                <th>
+                    <span wicket:id="labelName"></span> <span class="addEditReq">*</span>
+                </th>
+                <th>
+                    <span wicket:id="labelStartDateTime"></span>
+                </th>
+            </tr>
+            <tr>
+                <td>
+                    <span><input type="text" wicket:id="name" id="name" /></span>
+                </td>
+                <td>
+                    <span wicket:id="startDateTime" id="startDateTime"/>
+                </td>
+            </tr>
+        </table>
+
+        <div wicket:enclosure="reoccurrencePanel">
+            <span wicket:id="labelEndDateTime"></span> <div wicket:id="endDateTime" id="endDateTime" />
+            <span wicket:id="labelIsRequired"></span> <input type="checkbox" wicket:id="isRequired" id="isRequired" /><br />
+            <span wicket:id="labelLocation"></span> <input type="text" wicket:id="location" id="location" /><br />
+            <span wicket:id="labelReleasedTo"></span> <input type="text" wicket:id="releasedTo" id="releasedTo" /><br />
+            <span wicket:id="labelIsReoccurring"></span> <input type="checkbox" wicket:id="isReoccurring" id="isReoccurring" /><br />
+            <div wicket:id="reoccurrencePanel">
+                Display reoccurrence panel here.
+            </div>
+        </div>
+    </form>
 </wicket:panel>
 </body>
 </html>

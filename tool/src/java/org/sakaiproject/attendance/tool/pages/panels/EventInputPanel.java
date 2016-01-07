@@ -58,9 +58,9 @@ public class EventInputPanel extends BasePanel {
 
                 if(result){
                     StringResourceModel temp = new StringResourceModel("attendance.add.success", null, new String[]{e.getName()});
-                    info(temp.getString());
+                    getSession().info(temp.getString());
                 } else {
-                    error(getString("attendance.add.failure"));
+                    getSession().error(getString("attendance.add.failure"));
                 }
             }
         };
@@ -83,6 +83,9 @@ public class EventInputPanel extends BasePanel {
 
         releasedToLabel.setVisible(false);
         isReoccurringLabel.setVisible(false);
+        endDateTimeLabel.setVisible(false);
+        locationLabel.setVisible(false);
+        isRequiredLabel.setVisible(false);
 
         event.add(nameLabel);
         event.add(startDateTimeLabel);
@@ -114,11 +117,11 @@ public class EventInputPanel extends BasePanel {
         final TextField<String> releasedTo = new TextField<String>("releasedTo");
 
         name.setRequired(true);
-        startDateTime.setRequired(true);
-        endDateTime.setRequired(true);
-        isRequired.setRequired(true);
 
         releasedTo.setVisible(false);
+        endDateTime.setVisible(false);
+        isRequired.setVisible(false);
+        location.setVisible(false);
 
         event.add(name);
         event.add(startDateTime);
@@ -128,7 +131,7 @@ public class EventInputPanel extends BasePanel {
         event.add(releasedTo);
 
         // validators
-        event.add(new SequentialDateTimeFieldValidator(startDateTime, endDateTime));
+        //event.add(new SequentialDateTimeFieldValidator(startDateTime, endDateTime));
     }
 
     private void createSubForm(Form<AttendanceEvent> event) {

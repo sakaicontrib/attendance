@@ -1,0 +1,206 @@
+/*
+ *  Copyright (c) 2016, The Apereo Foundation
+ *
+ *  Licensed under the Educational Community License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *              http://opensource.org/licenses/ecl2
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */
+
+body {
+    color: #111;
+}
+
+.itemListTable a, .itemListTable a:link, .itemListTable a:visited, .itemListTable a:hover, .itemListTable a:focus, .itemListTable a:active{
+    color: #0064cd;
+}
+
+.overviewTable a, .overviewTable a:link, .overviewTable a:visited, .overviewTable a:hover, .overviewTable a:focus, .overviewTable a:active{
+    color: #0064cd;
+}
+
+h1.overviewHeader, h1.itemsHeader {
+    background: url("../images/attendance_icon_32.png") no-repeat left center;
+    padding-left: 32px;
+    color: #555;
+    margin-top: 1.2em;
+    margin-bottom: 1.2em;
+    min-height: 32px;
+}
+
+span.overHeaderSpan, span.itemsHeaderSpan {
+    margin: 0 .5em;
+}
+
+p.overviewInstructions {
+    font-size: 1.2em;
+    line-height: 1.5em;
+    margin-left: 70px;
+    width: 50%;
+}
+
+img.overviewInfo {
+    vertical-align: middle;
+}
+
+img.overviewInfo:hover {
+    cursor: help;
+}
+
+img.overviewInfo:hover + div.overviewInfo {
+    display: block;
+    position: absolute;
+    padding: .5em;
+    width: 400px;
+    background: #fff;
+    border: 1px solid #004b8d;
+    color: #004b8d;
+    font-size: .6em;
+    line-height: 1.5em;
+    left: 25%;
+    font-weight: normal;
+    -webkit-box-shadow: 0 8px 6px -6px black;
+    -moz-box-shadow: 0 8px 6px -6px black;
+    box-shadow: 0 8px 6px -6px black;
+}
+
+div.overviewInfo {
+    display: none;
+}
+
+table.overviewTable, table.itemListTable {
+    border: 2px solid #ccc;
+    border-collapse: collapse;
+    padding: .5em;
+    margin-left: 70px;
+}
+
+table.itemListTable {
+    margin: 0;
+}
+
+.overviewTable td, .overviewTable th, .itemListTable td, .itemListTable th {
+    border: 1px solid #ccc;
+    padding: .5em;
+    text-align: left;
+}
+
+.overviewTable th, .itemListTable th {
+    text-align: center;
+    border-bottom-width: 2px;
+    font-size: 1.2em;
+    vertical-align: bottom;
+}
+
+.overviewTable thead tr, .itemListTable thead tr {
+    background: #eee;
+}
+
+.overviewTable tbody tr:hover, .itemListTable tbody tr:hover {
+    background: #deeeff;
+}
+
+th.overviewDateCol, td.overviewDateCol {
+    border-right-width: 3px;
+}
+
+th.overviewEditCol, td.overviewEditCol, th.itemListEditCol, td.itemListEditCol {
+    border-left-width: 3px;
+    text-align: center;
+    width: 42px;
+}
+
+th.overviewStatusCol, td.overviewStatusCol {
+    width: 84px;
+}
+
+td.overviewStatusCol {
+    text-align: right;
+}
+
+th.overviewStatusCol {
+    background: #e0f7e0;
+}
+
+td.itemListRemoveCol {
+    text-align: center;
+}
+
+td.itemNameCol {
+    font-size: 1.2em;
+}
+
+div.addEditContainer, div.itemListContainer {
+    border:1px solid #ccc;
+    padding: 2.5em 2em 2em;
+    vertical-align: top;
+    position:relative;
+    display: block;
+    margin: 2em;
+}
+
+div.addEditContainer, div.itemListContainer {
+    margin-left: 70px;
+}
+
+div.addEditHeader, div.itemListHeader {
+    background-color:#fff;
+    position:absolute;
+    top:-1em;
+    left:.5em;
+}
+
+h3.addEditHeader, h3.itemListHeader {
+    margin: 0;
+    padding: 0 .5em;
+    font-size: 1.4em;
+    font-weight: normal;
+}
+
+div.eventFormContainer {
+    margin: 0;
+}
+
+span.addEditReq {
+    color: red;
+    font-size: 1.2em;
+}
+
+form.addEditForm {
+    margin: 0;
+}
+
+td.noEventsCol {
+    text-align: center;
+    font-style: italic;
+    font-size: 1.4em;
+    line-height: 1.7em;
+    background: #ffffff;
+}
+
+table.addEditFormTable {
+    margin-bottom: 1em;
+}
+
+.addEditFormTable {
+    text-align: left;
+    font-size: 1.2em;
+}
+
+.addEditFormTable td {
+    padding-right: 4em;
+}
+
+div.addEditDeleteLinkDiv {
+    background: url("../images/remove.png") no-repeat left center;
+    background-size: 12px;
+    padding-left: 16px;
+    margin-top: 1em;
+}

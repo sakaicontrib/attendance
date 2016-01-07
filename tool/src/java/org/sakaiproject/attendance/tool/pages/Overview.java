@@ -40,6 +40,8 @@ public class Overview extends BasePage {
 
 	public Overview() {
 		disableLink(this.firstLink);
+
+		add(new Label("overview-info", new ResourceModel("attendance.overview.info")));
 		
 		createHeaders();
 		createTable();
@@ -58,7 +60,7 @@ public class Overview extends BasePage {
 		Label headerStatusLeftEarly = new Label("header-status-left-early", 	new ResourceModel("attendance.overview.header.status.left.early"));
 		Label headerStatusExcused 	= new Label("header-status-excused", 		new ResourceModel("attendance.overview.header.status.excused"));
 		Label headerStatusUnexcused = new Label("header-status-unexcused", 	new ResourceModel("attendance.overview.header.status.unexcused"));
-		Label headerEventSettings	= new Label("header-event-settings", 		new ResourceModel("attendance.overview.header.event.settings"));
+		Label headerEventEdit		= new Label("header-event-edit", 		new ResourceModel("attendance.overview.header.event.edit"));
 
 		add(headerOverview);
 		add(headerEventName);
@@ -68,11 +70,13 @@ public class Overview extends BasePage {
 		add(headerStatusLeftEarly);
 		add(headerStatusExcused);
 		add(headerStatusUnexcused);
-		add(headerEventSettings);
+		add(headerEventEdit);
+
 	}
 
 	private void createTable() {
-		add(new DataView<AttendanceEvent>("events", new EventDataProvider()) {
+		EventDataProvider eventDataProvider = new EventDataProvider();
+		DataView<AttendanceEvent> attendanceEventDataView = new DataView<AttendanceEvent>("events", eventDataProvider) {
 			@Override
 			protected void populateItem(final Item<AttendanceEvent> item) {
 				Map<Status, Integer> stats = item.getModelObject().getStats();
@@ -83,13 +87,28 @@ public class Overview extends BasePage {
 				item.add(new Label("event-stats-left-early", stats.get(Status.LEFT_EARLY)));
 				item.add(new Label("event-stats-excused", stats.get(Status.EXCUSED_ABSENCE)));
 				item.add(new Label("event-stats-absent", stats.get(Status.UNEXCUSED_ABSENCE)));
-				item.add(new Link<Void>("event-settings-link") {
+				item.add(new Link<Void>("event-edit-link") {
 					private static final long serialVersionUID = 1L;
 					public void onClick() {
 						setResponsePage(new AddEventPage(item.getModelObject()));
 					}
 				});
 			}
-		});
+		};
+		add(attendanceEventDataView);
+
+		// Create empty table placeholder and make visible based on empty data provider
+		Label noEvents = new Label("no-events", getString("attendance.overview.no.items"));
+		noEvents.setEscapeModelStrings(false);
+		Label noEvents2 = new Label("no-events2", getString("attendance.overview.no.items2"));
+		noEvents2.setEscapeModelStrings(false);
+
+		if(eventDataProvider.size() > 0) {
+			noEvents.setVisible(false);
+			noEvents2.setVisible(false);
+		}
+
+		add(noEvents);
+		add(noEvents2);
 	}
 }

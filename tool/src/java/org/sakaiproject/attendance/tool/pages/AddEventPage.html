@@ -19,15 +19,58 @@
 
 <body>
 <wicket:extend>
-	<h3>Add a new item to the database:</h3>
-	<form wicket:id="form">
-		<div wicket:id="event">
-			Display the EventInputPanel
-		</div>
-		<input type="submit" wicket:id="submit"/>
-	</form>
 
-	<a wicket:id="delete-event">Delete</a>
+	<h1 class="itemsHeader indnt1"><span wicket:id="items-header" class="itemsHeaderSpan"/></h1>
+
+	<div wicket:id="event-form-container" class="addEditContainer">
+		<div class="addEditHeader">
+			<h3 class="addEditHeader"><span wicket:id="add-edit-header"/></h3>
+		</div>
+
+        <form wicket:id="form" class="addEditForm">
+            <div wicket:id="event" class="eventFormContainer">
+                [Display the EventInputPanel]
+            </div>
+            <input type="submit" wicket:id="submit" value="Save" style="margin-left:1em;"/>
+        </form>
+        <wicket:enclosure>
+            <div class="addEditDeleteLinkDiv"><a wicket:id="delete-event">Delete Item</a></div>
+        </wicket:enclosure>
+    </div>
+    <div wicket:id="event-list-container" class="itemListContainer">
+		<div class="itemListHeader">
+			<h3 class="itemListHeader">
+				<span wicket:id="items-list-header"/>
+			</h3>
+		</div>
+		<table class="itemListTable">
+			<thead>
+			<tr>
+				<th>Attendance Item</th>
+				<th>Date</th>
+                <th class="itemListEditCol">Edit</th>
+				<th>Remove</th>
+			</tr>
+			</thead>
+			<tbody>
+            <tr wicket:id="event-list">
+				<td class="itemNameCol">
+					<span wicket:id="event-name" />
+				</td>
+				<td>
+					<span wicket:id="item-date"/>
+				</td>
+                <td class="itemListEditCol">
+                    <a wicket:id="edit-link"><img src="/library/image/ud_custom/settings.png" alt="Edit" width="24px"/></a>
+                </td>
+				<td class="itemListRemoveCol">
+					<a wicket:id="delete-link"><img src="images/remove.png" width="16px"/></a>
+				</td>
+			</tr>
+			</tbody>
+		</table>
+	</div>
+
 	
 	<style type="text/css">
 	/* style the Wicket FeedbackPanel to remove the list */
