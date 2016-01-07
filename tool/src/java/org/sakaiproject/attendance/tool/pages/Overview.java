@@ -103,7 +103,7 @@ public class Overview extends BasePage {
 		Label noEvents2 = new Label("no-events2", getString("attendance.overview.no.items2"));
 		noEvents2.setEscapeModelStrings(false);
 
-		if(eventDataProvider.getSize() > 0) {
+		if(eventDataProvider.size() > 0) {
 			noEvents.setVisible(false);
 			noEvents2.setVisible(false);
 		}

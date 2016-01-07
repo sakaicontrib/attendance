@@ -47,10 +47,6 @@ public class EventDataProvider extends BaseProvider<AttendanceEvent> {
         return this.list;
     }
 
-    public int getSize() {
-        return getData().size();
-    }
-
     @Override
     public IModel<AttendanceEvent> model(AttendanceEvent object){
         return new DetachableEventModel(object);
