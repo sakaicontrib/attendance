@@ -75,7 +75,8 @@ public class Overview extends BasePage {
 	}
 
 	private void createTable() {
-		add(new DataView<AttendanceEvent>("events", new EventDataProvider()) {
+		EventDataProvider eventDataProvider = new EventDataProvider();
+		DataView<AttendanceEvent> attendanceEventDataView = new DataView<AttendanceEvent>("events", eventDataProvider) {
 			@Override
 			protected void populateItem(final Item<AttendanceEvent> item) {
 				Map<Status, Integer> stats = item.getModelObject().getStats();
@@ -93,6 +94,21 @@ public class Overview extends BasePage {
 					}
 				});
 			}
-		});
+		};
+		add(attendanceEventDataView);
+
+		// Create empty table placeholder and make visible based on empty data provider
+		Label noEvents = new Label("no-events", getString("attendance.overview.no.items"));
+		noEvents.setEscapeModelStrings(false);
+		Label noEvents2 = new Label("no-events2", getString("attendance.overview.no.items2"));
+		noEvents2.setEscapeModelStrings(false);
+
+		if(eventDataProvider.getSize() > 0) {
+			noEvents.setVisible(false);
+			noEvents2.setVisible(false);
+		}
+
+		add(noEvents);
+		add(noEvents2);
 	}
 }

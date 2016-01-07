@@ -25,6 +25,10 @@
 		<img src="/library/image/silk/information.png" class="overviewInfo" alt="Overview Information"/>
 		<div class="overviewInfo"><span wicket:id="overview-info" /></div>
 	</h1>
+
+	<p class="overviewInstructions">
+		Select an attendance item to enter attendance records. Click on <strong>Attendance Items</strong> in the menu bar above to add additional items.
+	</p>
 	
 	<table id="overviewTable" class="overviewTable">
 		<thead>
@@ -50,6 +54,15 @@
 				<td class="overviewStatusCol"><span wicket:id="event-stats-absent" /></td>
 				<td class="overviewEditCol"><a wicket:id="event-edit-link"><img src="/library/image/ud_custom/settings.png" alt="Edit" width="24px"/></a></td>
 			</tr>
+			<wicket:enclosure child="no-events">
+				<tr>
+					<td colspan="8" class="noEventsCol">
+						<span wicket:id="no-events" />
+						<br />
+						<span wicket:id="no-events2" />
+					</td>
+				</tr>
+			</wicket:enclosure>
 		</tbody>
 	</table>
 

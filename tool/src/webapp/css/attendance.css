@@ -39,6 +39,13 @@ span.overHeaderSpan, span.itemsHeaderSpan {
     margin: 0 .5em;
 }
 
+p.overviewInstructions {
+    font-size: 1.2em;
+    line-height: 1.5em;
+    margin-left: 70px;
+    width: 50%;
+}
+
 img.overviewInfo {
     vertical-align: middle;
 }
@@ -176,4 +183,12 @@ div.eventFormContainer {
 
 form.addEditForm {
     margin: 0;
+}
+
+td.noEventsCol {
+    text-align: center;
+    font-style: italic;
+    font-size: 1.4em;
+    line-height: 1.7em;
+    background: #ffffff;
 }
