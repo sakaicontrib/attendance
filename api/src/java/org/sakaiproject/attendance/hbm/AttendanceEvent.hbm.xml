@@ -38,8 +38,8 @@
         <property name="isRequired"     column="IS_REQUIRED"        type="java.lang.Boolean" />
         <property name="releasedTo"     column="RELEASED_TO"        type="java.lang.String" />
         <property name="location"       column="LOCATION"           type="java.lang.String" />
-
-        <many-to-one name="attendanceSite" column="A_SITE_ID" unique="false" not-null="true" class="org.sakaiproject.attendance.model.AttendanceSite" />
+        
+        <many-to-one name="attendanceSite" column="A_SITE_ID" unique="false" not-null="true" class="org.sakaiproject.attendance.model.AttendanceSite" lazy="false"/>
         <set name="records" table="ATTENDANCE_RECORD_T" fetch="join" inverse="true" lazy="false" cascade="all">
             <key column="A_EVENT_ID" not-null="true"/>
             <one-to-many class="org.sakaiproject.attendance.model.AttendanceRecord" />
@@ -51,7 +51,7 @@
     </query>
 
     <query name="getAttendanceEventsForSite">
-        <![CDATA[from AttendanceEvent aEvent WHERE aEvent.attendanceSite = :attendanceSite]]>
+        <![CDATA[from AttendanceEvent aEvent JOIN FETCH aEvent.attendanceSite WHERE aEvent.attendanceSite = :attendanceSite]]>
     </query>
 
     <query name="getAttendanceEvents">

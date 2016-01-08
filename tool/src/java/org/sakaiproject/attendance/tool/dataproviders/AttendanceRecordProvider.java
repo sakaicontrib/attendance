@@ -17,12 +17,14 @@
 package org.sakaiproject.attendance.tool.dataproviders;
 
 import org.apache.wicket.model.IModel;
+import org.sakaiproject.attendance.model.AttendanceEvent;
 import org.sakaiproject.attendance.model.AttendanceRecord;
 import org.sakaiproject.attendance.tool.models.DetachableAttendanceRecordModel;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by Leonardo Canessa [lcanessa1 (at) udayton (dot) edu]
@@ -30,6 +32,21 @@ import java.util.List;
 public class AttendanceRecordProvider extends BaseProvider<AttendanceRecord> {
     public AttendanceRecordProvider() {
         super();
+    }
+
+    public AttendanceRecordProvider(AttendanceEvent aE) {
+        super();
+        if(aE != null) {
+            aE = attendanceLogic.getAttendanceEvent(aE.getId());
+            this.list = new ArrayList<AttendanceRecord>(aE.getRecords());
+        }
+    }
+
+    public AttendanceRecordProvider(Set<AttendanceRecord> data) {
+        super();
+        if(data != null && !data.isEmpty()) {
+            this.list = new ArrayList<AttendanceRecord>(data);
+        }
     }
 
     protected List<AttendanceRecord> getData() {

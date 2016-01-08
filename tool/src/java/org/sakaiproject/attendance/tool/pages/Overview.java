@@ -80,7 +80,15 @@ public class Overview extends BasePage {
 			@Override
 			protected void populateItem(final Item<AttendanceEvent> item) {
 				Map<Status, Integer> stats = item.getModelObject().getStats();
-				item.add(new Label("event-name", item.getModelObject().getName()));
+				Link<Void> eventLink = new Link<Void>("event-link") {
+					private static final long serialVersionUID = 1L;
+					public void onClick() {
+						setResponsePage(new EventView(item.getModelObject()));
+					}
+				};
+				eventLink.add(new Label("event-name", item.getModelObject().getName()));
+
+				item.add(eventLink);
 				item.add(new Label("event-date", item.getModelObject().getStartDateTime()));
 				item.add(new Label("event-stats-present", stats.get(Status.PRESENT)));
 				item.add(new Label("event-stats-late", stats.get(Status.LATE)));
