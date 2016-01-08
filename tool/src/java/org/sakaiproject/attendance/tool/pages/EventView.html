@@ -24,6 +24,7 @@
             <a wicket:id="close-link"><span wicket:id="close-link-text" /></a>
             <span>></span>
             <span wicket:id="event-name"></span>
+            <span wicket:id="event-date"></span>
             <a wicket:id="edit-link"><img src="/library/image/ud_custom/settings.png" alt="Edit" width="24px"/></a>
         </h2>
     </div>
@@ -64,31 +65,54 @@
             </h3>
         </div>
 
-        <div class="div-table">
-            <div class="div-table-row div-table-row-header">
-                <div class="div-table-col divHeader divTableName">
-                    Student
-                </div>
-                <div class="div-table-col divHeader">
-                    Present
-                </div>
-                <div class="div-table-col divHeader">
-                    Late
-                </div>
-                <div class="div-table-col divHeader">
-                    Left Early
-                </div>
-                <div class="div-table-col divHeader">
-                    Excused Absence
-                </div>
-                <div class="div-table-col divHeader">
-                    Unexcused Absence
-                </div>
-            </div>
-            <div wicket:id="records" class="div-table-row">
-                <span wicket:id="record" />
-            </div>
-        </div>
+        <table id="takeAttendanceTable" class="takeAttendanceTable">
+            <thead>
+            <tr class="div-table-row">
+                <th class="takeAttendanceNameHeader">
+                    <span wicket:id="student-name" />
+                </th>
+                <th class="takeAttendanceStatusCol">
+                    <div class="div-table-col">
+                        <span wicket:id="status-present" />
+                    </div>
+                    <div class="div-table-col">
+                        <span wicket:id="status-late" />
+                    </div>
+                    <div class="div-table-col">
+                        <span wicket:id="status-left-early" />
+                    </div>
+                    <div class="div-table-col">
+                        <span wicket:id="status-excused" />
+                    </div>
+                    <div class="div-table-col">
+                        <span wicket:id="status-unexcused" />
+                    </div>
+                </th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr wicket:id="records" class="div-table-row">
+                <td>
+                    <span wicket:id="stu-name"></span>
+                </td>
+                <td>
+                    <span wicket:id="record" />
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+        <script type="text/javascript" src="/library/js/jquery/tablesorter/2.0.3/jquery.tablesorter-2.0.3.min.js"></script>
+        <script type="text/javascript">
+            $("#takeAttendanceTable").tablesorter({
+                sortList: [[0,0]],
+                headers: {
+                    1: {
+                        sorter: false
+                    }
+                }
+            });
+        </script>
     </div>
 
 </wicket:extend>

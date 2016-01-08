@@ -26,6 +26,10 @@ body {
     color: #0064cd;
 }
 
+.attendanceBreadcrumbs a, .attendanceBreadcrumbs a:link, .attendanceBreadcrumbs a:visited, .attendanceBreadcrumbs a:hover, .attendanceBreadcrumbs a:focus, .attendanceBreadcrumbs a:active{
+    color: #0064cd;
+}
+
 h1.overviewHeader, h1.itemsHeader {
     background: url("../images/attendance_icon_32.png") no-repeat left center;
     padding-left: 32px;
@@ -74,48 +78,48 @@ div.overviewInfo {
     display: none;
 }
 
-table.overviewTable, table.itemListTable, table.eventViewTable {
+table.overviewTable, table.itemListTable, table.eventViewTable, table.takeAttendanceTable {
     border: 2px solid #ccc;
     border-collapse: collapse;
     padding: .5em;
     margin-left: 70px;
 }
 
-table.overviewTable thead tr .header, table.itemListTable thead tr .header  {
+table.overviewTable thead tr .header, table.itemListTable thead tr .header, table.takeAttendanceTable thead tr .header  {
     background: url(../images/bg.gif) no-repeat bottom .5em right;
     cursor: pointer;
     padding-right: 24px;
 }
 
-table.overviewTable thead tr .headerSortUp, table.itemListTable thead tr .headerSortUp {
+table.overviewTable thead tr .headerSortUp, table.itemListTable thead tr .headerSortUp, table.takeAttendanceTable thead tr .headerSortUp {
     background-image: url(../images/asc.gif);
 }
-table.overviewTable thead tr .headerSortDown, table.itemListTable thead tr .headerSortDown {
+table.overviewTable thead tr .headerSortDown, table.itemListTable thead tr .headerSortDown, table.takeAttendanceTable thead tr .headerSortDown {
     background-image: url(../images/desc.gif);
 }
 
-table.itemListTable, table.eventViewTable {
+table.itemListTable, table.eventViewTable, table.takeAttendanceTable {
     margin: 0;
 }
 
-.overviewTable td, .overviewTable th, .itemListTable td, .itemListTable th, .eventViewTable td, .eventViewTable th {
+.overviewTable td, .overviewTable th, .itemListTable td, .itemListTable th, .eventViewTable td, .eventViewTable th, .takeAttendanceTable td, .takeAttendanceTable th {
     border: 1px solid #ccc;
     padding: .5em;
     text-align: left;
 }
 
-.overviewTable th, .itemListTable th, .eventViewTable th {
+.overviewTable th, .itemListTable th, .eventViewTable th, .takeAttendanceTable th {
     text-align: center;
     border-bottom-width: 2px;
     font-size: 1.2em;
     vertical-align: bottom;
 }
 
-.overviewTable thead tr, .itemListTable thead tr, .eventViewTable thead tr {
+.overviewTable thead tr, .itemListTable thead tr, .eventViewTable thead tr, .takeAttendanceTable thead tr  {
     background-color: #eee;
 }
 
-.overviewTable tbody tr:hover, .itemListTable tbody tr:hover, .eventViewTable tbody tr:hover {
+.overviewTable tbody tr:hover, .itemListTable tbody tr:hover, .eventViewTable tbody tr:hover, .takeAttendanceTable tbody tr:hover {
     background-color: #deeeff;
 }
 
@@ -146,7 +150,7 @@ td.overviewStatusCol {
     text-align: right;
 }
 
-th.overviewStatusCol {
+th.overviewStatusCol, th.takeAttendanceStatusCol {
     background-color: #e0f7e0 !important;
 }
 
@@ -156,6 +160,10 @@ td.itemListRemoveCol {
 
 td.itemNameCol {
     font-size: 1.2em;
+}
+
+th.takeAttendanceNameHeader {
+    min-width: 160px;
 }
 
 div.addEditContainer, div.itemListContainer, div.takeAttendanceContainer, div.itemInfoContainer {
@@ -239,45 +247,18 @@ div.attendanceBreadcrumbs span {
     padding-right: .5em;
 }
 
-.div-table{
-    display:table;
-    width:auto;
-    background-color:#fff;
-    border:1px solid  #ccc;
-    font-size: 1.2em;
-}
-
 .div-table-row {
-    display:table-row;
     width:auto;
     clear:both;
 }
 
-.div-table-row-header {
-    background-color: #eee;
-}
-
 .div-table-col {
     float:left;/*fix for  buggy browsers*/
-    display:table-cell;
     width:80px;
     text-align: center;
-    padding: .5em;
-}
-
-.div-table-row:hover {
-    background-color: #deeeff;
+    padding: 0 .5em;
 }
 
 .div-table-col input:hover {
     cursor: pointer;
-}
-
-.divHeader {
-    font-weight: bold;
-}
-
-.divTableName {
-    width: 160px;
-    text-align: left;
 }

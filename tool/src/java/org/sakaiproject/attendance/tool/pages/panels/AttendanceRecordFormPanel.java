@@ -58,7 +58,7 @@ public class AttendanceRecordFormPanel extends BasePanel {
         };
 
         createStatusRadio(recordForm);
-        createLabel(recordForm);
+        //createLabel(recordForm);
 
         return recordForm;
     }

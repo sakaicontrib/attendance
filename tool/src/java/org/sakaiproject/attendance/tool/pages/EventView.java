@@ -70,6 +70,7 @@ public class EventView extends BasePage {
         createStatsTable();
 
         add(new Label("event-name", attendanceEvent.getName()));
+        add(new Label("event-date", attendanceEvent.getStartDateTime()));
         add(new Label("take-attendance-header", getString("attendance.event.view.take.attendance")));
         add(new Label("item-info-header", getString("attendance.event.view.item.info")));
     }
@@ -121,6 +122,14 @@ public class EventView extends BasePage {
     private void createTable() {
         Set<AttendanceRecord> records = this.attendanceEvent.getRecords();
 
+        add(new Label("student-name", getString("attendance.event.view.student.name")));
+
+        add(new Label("status-present", 		new ResourceModel("attendance.overview.header.status.present")));
+        add(new Label("status-late", 		new ResourceModel("attendance.overview.header.status.late")));
+        add(new Label("status-left-early", 	new ResourceModel("attendance.overview.header.status.left.early")));
+        add(new Label("status-excused", 		new ResourceModel("attendance.overview.header.status.excused")));
+        add(new Label("status-unexcused", 	new ResourceModel("attendance.overview.header.status.unexcused")));
+
         // Generate records if none exist
         if(records == null || records.isEmpty()) {
             attendanceLogic.updateAttendanceRecordsForEvent(this.attendanceEvent, this.attendanceEvent.getAttendanceSite().getDefaultStatus());
@@ -139,6 +148,12 @@ public class EventView extends BasePage {
             @Override
             protected void populateItem(final Item<AttendanceRecord> item) {
                 //item.add(new AttendanceRecordFormPanel("student-record", item.getModel(), true));
+                User student = sakaiProxy.getUser(item.getModelObject().getUserID());
+                if(student != null) {
+                    item.add(new Label("stu-name", student.getSortName()));
+                } else {
+                    item.add(new Label("stu-name", ""));
+                }
                 item.add(new AttendanceRecordFormPanel("record", item.getModel(), false));
             }
         });
