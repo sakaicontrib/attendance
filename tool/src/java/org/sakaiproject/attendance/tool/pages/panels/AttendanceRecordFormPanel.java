@@ -19,15 +19,18 @@ package org.sakaiproject.attendance.tool.pages.panels;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormSubmitBehavior;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.Radio;
 import org.apache.wicket.markup.html.form.RadioGroup;
+import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.sakaiproject.attendance.model.AttendanceRecord;
 import org.sakaiproject.attendance.model.Status;
+import org.sakaiproject.attendance.tool.pages.StudentView;
 import org.sakaiproject.user.api.User;
 
 import java.util.ArrayList;
@@ -64,29 +67,34 @@ public class AttendanceRecordFormPanel extends BasePanel {
     }
 
     private void createLabel(Form<AttendanceRecord> rF) {
-        Label studentName = new Label("student-name") {
+        WebMarkupContainer student = new WebMarkupContainer("student") {
             @Override
             public boolean isVisible(){
                 return isStudent;
             }
         };
-        Label eventName = new Label("event-name") {
+
+        final User studentUser = sakaiProxy.getUser(this.recordIModel.getObject().getUserID());
+        Label studentName = new Label("student-name", studentUser.getSortName());
+
+        Link<Void> studentLink = new Link<Void>("student-link") {
+            @Override
+            public void onClick() {
+                setResponsePage(new StudentView(studentUser.getId(), recordIModel.getObject().getAttendanceEvent().getId()));
+            }
+        };
+
+        Label eventName = new Label("event-name", this.recordIModel.getObject().getAttendanceEvent().getName()){
             @Override
             public boolean isVisible(){
                 return !isStudent;
             }
         };
 
-        if(!this.isStudent) {
-            User student = sakaiProxy.getUser(this.recordIModel.getObject().getUserID());
-            if(student != null) {
-                studentName = new Label("student-name", student.getSortName());
-            }
-        } else {
-            eventName = new Label("event-name", this.recordIModel.getObject().getAttendanceEvent().getName());
-        }
+        student.add(studentLink);
+        student.add(studentName);
 
-        rF.add(studentName);
+        rF.add(student);
         rF.add(eventName);
     }
 
