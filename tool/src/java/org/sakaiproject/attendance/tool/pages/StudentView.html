@@ -18,8 +18,15 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:wicket="http://wicket.apache.org">
 <body>
 <wicket:extend>
-    <div wicket:id="header">
-        <a wicket:id="close-link"><span wicket:id="close-link-text" /></a>
+    <div wicket:id="header" class="attendanceBreadcrumbs">
+        <h2>
+            <a wicket:id="close-link"><span wicket:id="close-link-text" /></a>
+            <span>></span>
+            <a wicket:id="event-link"><span wicket:id="event-link-text"></span></a>
+            <span>></span>
+            <span wicket:id="student-name" />
+        </h2>
+    </div>
     </div>
     <div wicket:id="student-view-data">
         <div class="div-table">

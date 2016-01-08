@@ -156,7 +156,7 @@ public class EventView extends BasePage {
                 } else {
                     item.add(new Label("stu-name", ""));
                 }
-                item.add(new AttendanceRecordFormDataPanel("record", item.getModel(), true));
+                item.add(new AttendanceRecordFormDataPanel("record", item.getModel(), true, returnPage));
             }
         });
     }

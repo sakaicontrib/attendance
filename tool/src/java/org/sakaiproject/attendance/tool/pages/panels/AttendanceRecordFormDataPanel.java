@@ -46,12 +46,14 @@ public class AttendanceRecordFormDataPanel extends BasePanel {
     private                 boolean                     isStudentView;
     private                 boolean                     restricted ;
     private                 List<Component>             ajaxTargets = new ArrayList<Component>();
+    private                 String                      returnPage;
 
-    public AttendanceRecordFormDataPanel(String id, IModel<AttendanceRecord> aR, boolean iS) {
+    public AttendanceRecordFormDataPanel(String id, IModel<AttendanceRecord> aR, boolean iS, String rP) {
         super(id, aR);
         this.recordIModel = aR;
         this.isStudentView = iS;
         this.restricted = this.role.equals("Student");
+        this.returnPage = rP;
         add(createRecordInputForm());
     }
 
@@ -93,7 +95,7 @@ public class AttendanceRecordFormDataPanel extends BasePanel {
             studentLink = new Link<Void>("student-link") {
                 @Override
                 public void onClick() {
-                    setResponsePage(new StudentView(id, recordIModel.getObject().getAttendanceEvent().getId()));
+                    setResponsePage(new StudentView(id, recordIModel.getObject().getAttendanceEvent().getId(), returnPage));
                 }
             };
 
