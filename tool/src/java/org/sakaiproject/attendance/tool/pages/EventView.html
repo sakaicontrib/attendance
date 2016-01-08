@@ -28,33 +28,68 @@
         </h2>
     </div>
 
-    <div class="div-table">
-        <div class="div-table-row div-table-row-header">
-            <div class="div-table-col divHeader divTableName">
-                Student
-            </div>
-            <div class="div-table-col divHeader">
-                Present
-            </div>
-            <div class="div-table-col divHeader">
-                Late
-            </div>
-            <div class="div-table-col divHeader">
-                Left Early
-            </div>
-            <div class="div-table-col divHeader">
-                Excused Absence
-            </div>
-            <div class="div-table-col divHeader">
-                Unexcused Absence
-            </div>
+    <div class="itemInfoContainer">
+        <div class="itemInfoHeader">
+            <h3 class="itemInfoHeader">
+                <span wicket:id="item-info-header"/>
+            </h3>
         </div>
-        <div wicket:id="records" class="div-table-row">
-            <span wicket:id="record" />
-        </div>
+
+        <table class="eventViewTable">
+            <thead>
+            <tr>
+                <th><span wicket:id="header-status-present" /></th>
+                <th><span wicket:id="header-status-late" /></th>
+                <th><span wicket:id="header-status-left-early" /></th>
+                <th><span wicket:id="header-status-excused" /></th>
+                <th><span wicket:id="header-status-unexcused" /></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td><span wicket:id="event-stats-present" /></td>
+                <td><span wicket:id="event-stats-late" /></td>
+                <td><span wicket:id="event-stats-left-early" /></td>
+                <td><span wicket:id="event-stats-excused" /></td>
+                <td><span wicket:id="event-stats-absent" /></td>
+            </tr>
+            </tbody>
+        </table>
     </div>
 
+    <div class="takeAttendanceContainer">
+        <div class="takeAttendanceHeader">
+            <h3 class="takeAttendanceHeader">
+                <span wicket:id="take-attendance-header"/>
+            </h3>
+        </div>
 
+        <div class="div-table">
+            <div class="div-table-row div-table-row-header">
+                <div class="div-table-col divHeader divTableName">
+                    Student
+                </div>
+                <div class="div-table-col divHeader">
+                    Present
+                </div>
+                <div class="div-table-col divHeader">
+                    Late
+                </div>
+                <div class="div-table-col divHeader">
+                    Left Early
+                </div>
+                <div class="div-table-col divHeader">
+                    Excused Absence
+                </div>
+                <div class="div-table-col divHeader">
+                    Unexcused Absence
+                </div>
+            </div>
+            <div wicket:id="records" class="div-table-row">
+                <span wicket:id="record" />
+            </div>
+        </div>
+    </div>
 
 </wicket:extend>
 </body>

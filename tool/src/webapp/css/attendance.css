@@ -74,7 +74,7 @@ div.overviewInfo {
     display: none;
 }
 
-table.overviewTable, table.itemListTable {
+table.overviewTable, table.itemListTable, table.eventViewTable {
     border: 2px solid #ccc;
     border-collapse: collapse;
     padding: .5em;
@@ -94,33 +94,42 @@ table.overviewTable thead tr .headerSortDown, table.itemListTable thead tr .head
     background-image: url(../images/desc.gif);
 }
 
-table.itemListTable {
+table.itemListTable, table.eventViewTable {
     margin: 0;
 }
 
-.overviewTable td, .overviewTable th, .itemListTable td, .itemListTable th {
+.overviewTable td, .overviewTable th, .itemListTable td, .itemListTable th, .eventViewTable td, .eventViewTable th {
     border: 1px solid #ccc;
     padding: .5em;
     text-align: left;
 }
 
-.overviewTable th, .itemListTable th {
+.overviewTable th, .itemListTable th, .eventViewTable th {
     text-align: center;
     border-bottom-width: 2px;
     font-size: 1.2em;
     vertical-align: bottom;
 }
 
-.overviewTable thead tr, .itemListTable thead tr {
+.overviewTable thead tr, .itemListTable thead tr, .eventViewTable thead tr {
     background-color: #eee;
 }
 
-.overviewTable tbody tr:hover, .itemListTable tbody tr:hover {
+.overviewTable tbody tr:hover, .itemListTable tbody tr:hover, .eventViewTable tbody tr:hover {
     background-color: #deeeff;
 }
 
 th.overviewDateCol, td.overviewDateCol {
     border-right-width: 3px;
+}
+
+.eventViewTable td {
+    text-align: right;
+    font-size: 1.2em;
+}
+
+.eventViewTable td, .eventViewTable th {
+    min-width: 84px;
 }
 
 th.overviewEditCol, td.overviewEditCol, th.itemListEditCol, td.itemListEditCol {
@@ -149,27 +158,27 @@ td.itemNameCol {
     font-size: 1.2em;
 }
 
-div.addEditContainer, div.itemListContainer {
+div.addEditContainer, div.itemListContainer, div.takeAttendanceContainer, div.itemInfoContainer {
     border:1px solid #ccc;
     padding: 2.5em 2em 2em;
     vertical-align: top;
     position:relative;
     display: block;
+    margin: 2em 2em 2em 70px;
+}
+
+div.takeAttendanceContainer, div.itemInfoContainer {
     margin: 2em;
 }
 
-div.addEditContainer, div.itemListContainer {
-    margin-left: 70px;
-}
-
-div.addEditHeader, div.itemListHeader {
+div.addEditHeader, div.itemListHeader, div.takeAttendanceHeader, div.itemInfoHeader {
     background-color:#fff;
     position:absolute;
     top:-1em;
     left:.5em;
 }
 
-h3.addEditHeader, h3.itemListHeader {
+h3.addEditHeader, h3.itemListHeader, h3.takeAttendanceHeader, h3.itemInfoHeader {
     margin: 0;
     padding: 0 .5em;
     font-size: 1.4em;
@@ -236,7 +245,6 @@ div.attendanceBreadcrumbs span {
     background-color:#fff;
     border:1px solid  #ccc;
     font-size: 1.2em;
-    margin-left: 70px;
 }
 
 .div-table-row {

@@ -30,6 +30,7 @@ import org.sakaiproject.user.api.User;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -66,7 +67,27 @@ public class EventView extends BasePage {
         createHeaderLinks();
         createTable();
 
+        createStatsTable();
+
         add(new Label("event-name", attendanceEvent.getName()));
+        add(new Label("take-attendance-header", getString("attendance.event.view.take.attendance")));
+        add(new Label("item-info-header", getString("attendance.event.view.item.info")));
+    }
+
+    private void createStatsTable() {
+        Map<Status, Integer> stats = attendanceLogic.getStatsForEvent(attendanceEvent);
+
+        add(new Label("header-status-present", 		new ResourceModel("attendance.overview.header.status.present")));
+        add(new Label("header-status-late", 		new ResourceModel("attendance.overview.header.status.late")));
+        add(new Label("header-status-left-early", 	new ResourceModel("attendance.overview.header.status.left.early")));
+        add(new Label("header-status-excused", 		new ResourceModel("attendance.overview.header.status.excused")));
+        add(new Label("header-status-unexcused", 	new ResourceModel("attendance.overview.header.status.unexcused")));
+
+        add(new Label("event-stats-present", stats.get(Status.PRESENT)));
+        add(new Label("event-stats-late", stats.get(Status.LATE)));
+        add(new Label("event-stats-left-early", stats.get(Status.LEFT_EARLY)));
+        add(new Label("event-stats-excused", stats.get(Status.EXCUSED_ABSENCE)));
+        add(new Label("event-stats-absent", stats.get(Status.UNEXCUSED_ABSENCE)));
     }
 
     private void createHeaderLinks() {
