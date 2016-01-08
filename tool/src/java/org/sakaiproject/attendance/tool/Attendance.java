@@ -35,10 +35,11 @@ import org.sakaiproject.attendance.tool.pages.Overview;
  * @author Steve Swinsburg (steve.swinsburg@gmail.com)
  * @author David F. Torres
  * @author Michael Mertins (mertins@zedat.fu-berlin.de)
+ * @author Leonardo Canessa [lcanessa1 (at) udayton (dot) edu]
  *
  * Cf. https://confluence.sakaiproject.org/pages/viewpage.action?pageId=83034325
  */
-public class MyApplication extends WebApplication {    
+public class Attendance extends WebApplication {
    
 	/**
 	 * Configure your app here
@@ -160,7 +161,7 @@ public class MyApplication extends WebApplication {
 	/**
      * Constructor
      */
-	public MyApplication()
+	public Attendance()
 	{
 	}
 	
