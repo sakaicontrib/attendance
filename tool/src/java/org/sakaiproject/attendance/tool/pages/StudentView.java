@@ -32,18 +32,23 @@ public class StudentView extends BasePage {
     private                 Long        previousEventId;
     private                 boolean     isStudent           = false;
 
+    public StudentView() {
+        this.studentId = sakaiProxy.getCurrentUserId();
+
+        init();
+    }
     public StudentView(String id, Long eventId) {
         this.studentId = id;
-        if(sakaiProxy.getCurrentUserRoleInCurrentSite().equals("student")){
-            isStudent = true;
-        }
-
         this.previousEventId = eventId;
 
         init();
     }
 
     private void init() {
+        if(this.role.equals("Student")){
+            isStudent = true;
+        }
+
         createHeader();
     }
 
