@@ -34,8 +34,17 @@
     </div>
     <div wicket:id="student-view-data">
         <div class="div-table">
-            <span wicket:id="header" />
-            <div wicket:id="records" class="div-table-row">
+            <div class="div-table-row-header">
+                <div class="div-table-col">
+                    <span wicket:id="event-name" />
+                </div>
+                <span wicket:id="header" />
+
+            </div>
+            <div class="div-table-row2"  wicket:id="records ">
+                <div class="div-table-col">
+                    <span wicket:id="record-name" />
+                </div>
                 <span wicket:id="record" />
             </div>
         </div>

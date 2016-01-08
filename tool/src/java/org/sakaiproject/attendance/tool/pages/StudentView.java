@@ -132,7 +132,8 @@ public class StudentView extends BasePage {
     private WebMarkupContainer createTable(){
         WebMarkupContainer studentViewData = new WebMarkupContainer("student-view-data");
 
-        studentViewData.add(new AttendanceRecordFormHeaderPanel("header", !isStudent));
+        studentViewData.add(new AttendanceRecordFormHeaderPanel("header"));
+        studentViewData.add(new Label("event-name", new ResourceModel("attendance.record.form.header.event")));
         studentViewData.add(createData());
 
         return studentViewData;
@@ -142,6 +143,7 @@ public class StudentView extends BasePage {
         DataView<AttendanceRecord> dataView = new DataView<AttendanceRecord>("records", new AttendanceRecordProvider(this.studentId)) {
             @Override
             protected void populateItem(Item<AttendanceRecord> item) {
+                item.add(new Label("record-name", item.getModelObject().getAttendanceEvent().getName()));
                 item.add(new AttendanceRecordFormDataPanel("record", item.getModel(), false, returnPage));
             }
         };

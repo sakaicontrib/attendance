@@ -297,7 +297,7 @@ public class AttendanceLogicImpl implements AttendanceLogic {
 
 		if(missingStudentIds != null && !missingStudentIds.isEmpty()) {
 			for(String studentId : missingStudentIds) {
-				AttendanceRecord attendanceRecord = generateAttendanceRecord(attendanceEvent, sakaiProxy.getUser(studentId), defaultStatus);
+				AttendanceRecord attendanceRecord = generateAttendanceRecord(attendanceEvent, studentId, defaultStatus);
 				if(attendanceRecord != null) {
 					recordList.add(attendanceRecord);
 				}

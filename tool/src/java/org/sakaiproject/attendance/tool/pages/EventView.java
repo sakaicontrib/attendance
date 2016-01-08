@@ -116,8 +116,6 @@ public class EventView extends BasePage {
             closeLink.add(new Label("close-link-text", new ResourceModel("attendance.event.view.link.close.overview")));
         }
 
-        add(new AttendanceRecordFormHeaderPanel("header", true));
-
         add(editLink);
         add(closeLink);
     }
@@ -125,13 +123,9 @@ public class EventView extends BasePage {
     private void createTable() {
         Set<AttendanceRecord> records = this.attendanceEvent.getRecords();
 
-        add(new Label("student-name", getString("attendance.event.view.student.name")));
+        add(new Label("student-name", new ResourceModel("attendance.event.view.student.name")));
 
-        add(new Label("status-present", 		new ResourceModel("attendance.overview.header.status.present")));
-        add(new Label("status-late", 		new ResourceModel("attendance.overview.header.status.late")));
-        add(new Label("status-left-early", 	new ResourceModel("attendance.overview.header.status.left.early")));
-        add(new Label("status-excused", 		new ResourceModel("attendance.overview.header.status.excused")));
-        add(new Label("status-unexcused", 	new ResourceModel("attendance.overview.header.status.unexcused")));
+       add(new AttendanceRecordFormHeaderPanel("record-header"));
 
         // Generate records if none exist
         if(records == null || records.isEmpty()) {
@@ -150,12 +144,18 @@ public class EventView extends BasePage {
         add(new DataView<AttendanceRecord>("records", new AttendanceRecordProvider(this.attendanceEvent)) {
             @Override
             protected void populateItem(final Item<AttendanceRecord> item) {
-                User student = sakaiProxy.getUser(item.getModelObject().getUserID());
-                if(student != null) {
-                    item.add(new Label("stu-name", student.getSortName()));
-                } else {
-                    item.add(new Label("stu-name", ""));
-                }
+                final String stuId = item.getModelObject().getUserID();
+                final String sortName = sakaiProxy.getUserSortName(stuId);
+                Label stuName = new Label("stu-name", sortName);
+
+                Link<Void> studentLink = new Link<Void>("stu-link") {
+                    @Override
+                    public void onClick() {
+                        setResponsePage(new StudentView(stuId, item.getModelObject().getAttendanceEvent().getId(), returnPage));
+                    }
+                };
+                studentLink.add(stuName);
+                item.add(studentLink);
                 item.add(new AttendanceRecordFormDataPanel("record", item.getModel(), true, returnPage));
             }
         });

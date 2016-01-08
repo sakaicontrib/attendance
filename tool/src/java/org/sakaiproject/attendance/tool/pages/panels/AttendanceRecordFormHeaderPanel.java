@@ -16,6 +16,7 @@
 
 package org.sakaiproject.attendance.tool.pages.panels;
 
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.ResourceModel;
 
@@ -23,23 +24,22 @@ import org.apache.wicket.model.ResourceModel;
  * Created by Leonardo Canessa [lcanessa1 (at) udayton (dot) edu]
  */
 public class AttendanceRecordFormHeaderPanel extends BasePanel {
-    private boolean areRecordsOfStudents;
 
-    public AttendanceRecordFormHeaderPanel(String id, boolean iS) {
+    public AttendanceRecordFormHeaderPanel(String id) {
         super(id);
-        this.areRecordsOfStudents = iS;
 
-        add(createItemLabel());
+        add(createStatusHeader());
     }
 
-    private Label createItemLabel() {
-        Label itemLabel;
-        if(areRecordsOfStudents) {
-            itemLabel = new Label("item-type", new ResourceModel("attendance.record.form.header.student"));
-        } else {
-            itemLabel = new Label("item-type", new ResourceModel("attendance.record.form.header.event"));
-        }
+    private WebMarkupContainer createStatusHeader() {
+        WebMarkupContainer status = new WebMarkupContainer("status");
 
-        return itemLabel;
+        status.add(new Label("status-present", 		new ResourceModel("attendance.overview.header.status.present")));
+        status.add(new Label("status-late", 		    new ResourceModel("attendance.overview.header.status.late")));
+        status.add(new Label("status-left-early", 	new ResourceModel("attendance.overview.header.status.left.early")));
+        status.add(new Label("status-excused", 		new ResourceModel("attendance.overview.header.status.excused")));
+        status.add(new Label("status-unexcused", 	    new ResourceModel("attendance.overview.header.status.unexcused")));
+
+        return status;
     }
 }

@@ -18,26 +18,23 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:wicket="http://wicket.apache.org">
 <body>
 <wicket:panel>
-    <div class="div-table-row div-table-row-header">
-        <div class="div-table-col divHeader divTableName">
-            <span wicket:id="item-type"/>
+    <wicket:container wicket:id="status">
+        <div class="div-table-col">
+            <span wicket:id="status-present" />
         </div>
-        <div class="div-table-col divHeader">
-            Present
+        <div class="div-table-col">
+            <span wicket:id="status-late" />
         </div>
-        <div class="div-table-col divHeader">
-            Late
+        <div class="div-table-col">
+            <span wicket:id="status-left-early" />
         </div>
-        <div class="div-table-col divHeader">
-            Left Early
+        <div class="div-table-col">
+            <span wicket:id="status-excused" />
         </div>
-        <div class="div-table-col divHeader">
-            Excused Absence
+        <div class="div-table-col">
+            <span wicket:id="status-unexcused" />
         </div>
-        <div class="div-table-col divHeader">
-            Unexcused Absence
-        </div>
-    </div>
+    </wicket:container>
 </wicket:panel>
 </body>
 </html>
