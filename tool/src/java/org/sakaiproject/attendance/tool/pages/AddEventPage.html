@@ -88,6 +88,14 @@
                     }
                 }
             });
+            // Resize iframe
+            if (top.location != self.location) 	 {
+                var frame = parent.document.getElementById(window.name);
+            }
+            if( frame )
+            {
+                $( frame ).height(document.body.clientHeight + 90);
+            }
         </script>
 	</div>
 
