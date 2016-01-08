@@ -40,13 +40,13 @@ import java.util.List;
 /**
  * Created by Leonardo Canessa [lcanessa1 (at) udayton (dot) edu]
  */
-public class AttendanceRecordFormPanel extends BasePanel {
+public class AttendanceRecordFormDataPanel extends BasePanel {
     private static final    long                        serialVersionUID = 1L;
     private                 IModel<AttendanceRecord>    recordIModel;
     private                 boolean isStudentView;
     private                 List<Component>             ajaxTargets = new ArrayList<Component>();
 
-    public AttendanceRecordFormPanel(String id, IModel<AttendanceRecord> aR, boolean iS) {
+    public AttendanceRecordFormDataPanel(String id, IModel<AttendanceRecord> aR, boolean iS) {
         super(id, aR);
         this.recordIModel = aR;
         this.isStudentView = iS;

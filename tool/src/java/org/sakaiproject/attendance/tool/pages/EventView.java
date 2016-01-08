@@ -25,8 +25,8 @@ import org.sakaiproject.attendance.model.AttendanceEvent;
 import org.sakaiproject.attendance.model.AttendanceRecord;
 import org.sakaiproject.attendance.model.Status;
 import org.sakaiproject.attendance.tool.dataproviders.AttendanceRecordProvider;
+import org.sakaiproject.attendance.tool.pages.panels.AttendanceRecordFormDataPanel;
 import org.sakaiproject.attendance.tool.pages.panels.AttendanceRecordFormHeaderPanel;
-import org.sakaiproject.attendance.tool.pages.panels.AttendanceRecordFormPanel;
 import org.sakaiproject.user.api.User;
 
 import java.util.List;
@@ -156,7 +156,7 @@ public class EventView extends BasePage {
                 } else {
                     item.add(new Label("stu-name", ""));
                 }
-                item.add(new AttendanceRecordFormPanel("record", item.getModel(), true));
+                item.add(new AttendanceRecordFormDataPanel("record", item.getModel(), true));
             }
         });
     }
