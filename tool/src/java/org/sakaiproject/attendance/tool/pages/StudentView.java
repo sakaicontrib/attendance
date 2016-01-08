@@ -20,8 +20,13 @@ package org.sakaiproject.attendance.tool.pages;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
+import org.apache.wicket.markup.repeater.Item;
+import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.model.ResourceModel;
-import org.sakaiproject.user.api.User;
+import org.sakaiproject.attendance.model.AttendanceRecord;
+import org.sakaiproject.attendance.tool.dataproviders.AttendanceRecordProvider;
+import org.sakaiproject.attendance.tool.pages.panels.AttendanceRecordFormDataPanel;
+import org.sakaiproject.attendance.tool.pages.panels.AttendanceRecordFormHeaderPanel;
 
 /**
  * Created by Leonardo Canessa [lcanessa1 (at) udayton (dot) edu]
@@ -51,22 +56,13 @@ public class StudentView extends BasePage {
             hideNavigationLink(this.addEventLink);
         }
 
-        createHeader();
+        add(createHeader());
+        add(createTable());
     }
 
-    private void createHeader() {
+    private WebMarkupContainer createHeader() {
         WebMarkupContainer header = new WebMarkupContainer("header");
         header.setOutputMarkupPlaceholderTag(true);
-
-        Label currentUserRole;
-
-        if(isStudent) {
-            currentUserRole = new Label("CurrentUserRole", "student");
-        } else {
-            currentUserRole = new Label("CurrentUserRole", "not a student");
-        }
-
-        header.add(currentUserRole);
 
         Link<Void> closeLink = new Link<Void>("close-link") {
             @Override
@@ -82,7 +78,26 @@ public class StudentView extends BasePage {
         closeLink.add(new Label("close-link-text", new ResourceModel("attendance.event.link.close")));
         header.add(closeLink);
 
-        add(header);
+        return header;
+    }
 
+    private WebMarkupContainer createTable(){
+        WebMarkupContainer studentViewData = new WebMarkupContainer("student-view-data");
+
+        studentViewData.add(new AttendanceRecordFormHeaderPanel("header"));
+        studentViewData.add(createData());
+
+        return studentViewData;
+    }
+
+    private DataView<AttendanceRecord> createData(){
+        DataView<AttendanceRecord> dataView = new DataView<AttendanceRecord>("records", new AttendanceRecordProvider(this.studentId)) {
+            @Override
+            protected void populateItem(Item<AttendanceRecord> item) {
+                item.add(new AttendanceRecordFormDataPanel("record", item.getModel(), false));
+            }
+        };
+
+        return dataView;
     }
 }

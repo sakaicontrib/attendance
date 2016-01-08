@@ -30,8 +30,17 @@ import java.util.Set;
  * Created by Leonardo Canessa [lcanessa1 (at) udayton (dot) edu]
  */
 public class AttendanceRecordProvider extends BaseProvider<AttendanceRecord> {
+
     public AttendanceRecordProvider() {
         super();
+    }
+
+    public AttendanceRecordProvider(String id) {
+        List<AttendanceRecord> records = attendanceLogic.getAttendanceRecordsForUserInCurrentSite(id);
+        if(!records.isEmpty()) {
+            // don't think records will ever be empty
+            this.list = records;
+        }
     }
 
     public AttendanceRecordProvider(AttendanceEvent aE) {

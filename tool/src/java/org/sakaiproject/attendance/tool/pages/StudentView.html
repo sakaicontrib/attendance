@@ -19,12 +19,14 @@
 <body>
 <wicket:extend>
     <div wicket:id="header">
-        <span wicket:id="CurrentUserRole"/>
         <a wicket:id="close-link"><span wicket:id="close-link-text" /></a>
     </div>
-    <div>
-        <div>
-
+    <div wicket:id="student-view-data">
+        <div class="div-table">
+            <span wicket:id="header" />
+            <div wicket:id="records" class="div-table-row">
+                <span wicket:id="record" />
+            </div>
         </div>
     </div>
 </wicket:extend>
