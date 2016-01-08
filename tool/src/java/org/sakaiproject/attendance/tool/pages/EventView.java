@@ -150,7 +150,7 @@ public class EventView extends BasePage {
                 //item.add(new AttendanceRecordFormPanel("student-record", item.getModel(), true));
                 User student = sakaiProxy.getUser(item.getModelObject().getUserID());
                 if(student != null) {
-                    item.add(new Label("stu-name", student.getSortName()));
+                    item.add(new Label("stu-name", student.getSortName() + " (" + student.getDisplayId() + ")"));
                 } else {
                     item.add(new Label("stu-name", ""));
                 }
