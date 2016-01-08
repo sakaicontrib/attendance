@@ -25,6 +25,7 @@ import org.sakaiproject.attendance.model.AttendanceEvent;
 import org.sakaiproject.attendance.model.AttendanceRecord;
 import org.sakaiproject.attendance.model.Status;
 import org.sakaiproject.attendance.tool.dataproviders.AttendanceRecordProvider;
+import org.sakaiproject.attendance.tool.pages.panels.AttendanceRecordFormHeaderPanel;
 import org.sakaiproject.attendance.tool.pages.panels.AttendanceRecordFormPanel;
 import org.sakaiproject.user.api.User;
 
@@ -63,7 +64,7 @@ public class EventView extends BasePage {
     }
 
     private void init() {
-        createHeaderLinks();
+        createHeader();
         createTable();
 
         createStatsTable();
@@ -90,7 +91,7 @@ public class EventView extends BasePage {
         add(new Label("event-stats-absent", stats.get(Status.UNEXCUSED_ABSENCE)));
     }
 
-    private void createHeaderLinks() {
+    private void createHeader() {
         Link<Void> editLink = new Link<Void>("edit-link") {
             @Override
             public void onClick() {
@@ -114,6 +115,8 @@ public class EventView extends BasePage {
         } else {
             closeLink.add(new Label("close-link-text", new ResourceModel("attendance.event.view.link.close.overview")));
         }
+
+        add(new AttendanceRecordFormHeaderPanel("header"));
 
         add(editLink);
         add(closeLink);
