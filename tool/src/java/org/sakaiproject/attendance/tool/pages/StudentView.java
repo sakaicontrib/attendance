@@ -69,7 +69,7 @@ public class StudentView extends BasePage {
         Link<Void> closeLink = new Link<Void>("close-link") {
             @Override
             public void onClick() {
-                setResponsePage(new EventView(previousEventId));
+                setResponsePage(new EventView(previousEventId, BasePage.OVERVIEW_PAGE));
             }
 
             @Override
