@@ -256,6 +256,28 @@ public class AttendanceLogicImpl implements AttendanceLogic {
 	}
 
 	/**
+	 * {@inheritDoc}
+	 */
+	public boolean updateMissingRecordsForEvent(AttendanceEvent attendanceEvent, Status defaultStatus, List<String> missingStudentIds) {
+		List<AttendanceRecord> recordList = new ArrayList<AttendanceRecord>();
+
+		if(defaultStatus == null) {
+			defaultStatus = attendanceEvent.getAttendanceSite().getDefaultStatus();
+		}
+
+		if(missingStudentIds != null && !missingStudentIds.isEmpty()) {
+			for(String studentId : missingStudentIds) {
+				AttendanceRecord attendanceRecord = generateAttendanceRecord(attendanceEvent, sakaiProxy.getUser(studentId), defaultStatus);
+				if(attendanceRecord != null) {
+					recordList.add(attendanceRecord);
+				}
+			}
+			return dao.updateAttendanceRecords(recordList);
+		}
+		return false;
+	}
+
+	/**
 	 * init - perform any actions required here for when this bean starts up
 	 */
 	public void init() {

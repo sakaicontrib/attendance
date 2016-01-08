@@ -38,7 +38,13 @@ public class AttendanceRecordProvider extends BaseProvider<AttendanceRecord> {
         super();
         if(aE != null) {
             aE = attendanceLogic.getAttendanceEvent(aE.getId());
-            this.list = new ArrayList<AttendanceRecord>(aE.getRecords());
+            List<String> currentStudentIds = sakaiProxy.getCurrentSiteMembershipIds();
+            this.list = new ArrayList<AttendanceRecord>();
+            for(AttendanceRecord record: aE.getRecords()) {
+                if(currentStudentIds.contains(record.getUserID())) {
+                    this.list.add(record);
+                }
+            }
         }
     }
 

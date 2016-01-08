@@ -152,6 +152,15 @@ public interface AttendanceLogic {
      */
 	boolean updateAttendanceRecordsForEvent(AttendanceEvent aE, Status s);
 
+    /**
+     *
+     * @param attendanceEvent
+     * @param defaultStatus
+     * @param missingStudentIds
+     * @return
+     */
+	boolean updateMissingRecordsForEvent(AttendanceEvent attendanceEvent, Status defaultStatus, List<String> missingStudentIds);
+
 	/**
 	 *
 	 * @param event

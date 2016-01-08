@@ -100,8 +100,17 @@ public class EventView extends BasePage {
     private void createTable() {
         Set<AttendanceRecord> records = this.attendanceEvent.getRecords();
 
+        // Generate records if none exist
         if(records == null || records.isEmpty()) {
             attendanceLogic.updateAttendanceRecordsForEvent(this.attendanceEvent, this.attendanceEvent.getAttendanceSite().getDefaultStatus());
+            this.attendanceEvent = attendanceLogic.getAttendanceEvent(this.attendanceEvent.getId());
+        } else {
+            // Generate records for added students
+            List<String> currentStudentIds = sakaiProxy.getCurrentSiteMembershipIds();
+            for(AttendanceRecord record : records) {
+                currentStudentIds.remove(record.getUserID());
+            }
+            attendanceLogic.updateMissingRecordsForEvent(this.attendanceEvent, this.attendanceEvent.getAttendanceSite().getDefaultStatus(), currentStudentIds);
             this.attendanceEvent = attendanceLogic.getAttendanceEvent(this.attendanceEvent.getId());
         }
 
