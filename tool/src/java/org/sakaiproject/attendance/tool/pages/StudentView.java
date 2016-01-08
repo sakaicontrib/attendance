@@ -59,6 +59,7 @@ public class StudentView extends BasePage {
         }
 
         add(createHeader());
+        add(createStudentViewHeader());
         add(createTable());
     }
 
@@ -112,6 +113,20 @@ public class StudentView extends BasePage {
         header.add(studentName);
 
         return header;
+    }
+
+    private WebMarkupContainer createStudentViewHeader() {
+        WebMarkupContainer studentView = new WebMarkupContainer("student-view") {
+            @Override
+            public boolean isVisible() {
+                return isStudent;
+            }
+        };
+
+        studentView.add(new Label("attendance-header", new ResourceModel("attendance.overview.header")));
+        studentView.add(new Label("student-name", sakaiProxy.getUserSortName(this.studentId)));
+
+        return studentView;
     }
 
     private WebMarkupContainer createTable(){
