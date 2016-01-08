@@ -222,9 +222,6 @@ public class AttendanceLogicImpl implements AttendanceLogic {
 	/**
 	 * {@inheritDoc}
 	 */
-	/**
-	 * {@inheritDoc}
-	 */
 	public boolean updateAttendanceRecord(AttendanceRecord aR) {
 		if(aR == null) {
 			throw new IllegalArgumentException("AttendanceRecord cannot be null");
@@ -263,6 +260,29 @@ public class AttendanceLogicImpl implements AttendanceLogic {
 		}
 
 		return dao.updateAttendanceRecords(records);
+	}
+
+	public Map<Status, Integer> getStatsForEvent(AttendanceEvent event) {
+		Map<Status, Integer> results = new HashMap<Status, Integer>();
+		List<String> currentStudents = sakaiProxy.getCurrentSiteMembershipIds();
+
+		for(Status s : Status.values()){
+			generateStatsHelper(results, s, 0);
+		}
+
+		if(event != null) {
+			for(AttendanceRecord r : event.getRecords()) {
+				if(currentStudents.contains(r.getUserID())) {
+					for(Status s : Status.values()){
+						if(r.getStatus() == s) {
+							generateStatsHelper(results, s, 1);
+						}
+					}
+				}
+			}
+		}
+
+		return results;
 	}
 
 	/**
@@ -349,29 +369,6 @@ public class AttendanceLogicImpl implements AttendanceLogic {
 		dao.addAttendanceRecord(record);
 
 		return record;
-	}
-
-	public Map<Status, Integer> getStatsForEvent(AttendanceEvent event) {
-		Map<Status, Integer> results = new HashMap<Status, Integer>();
-		List<String> currentStudents = sakaiProxy.getCurrentSiteMembershipIds();
-
-		for(Status s : Status.values()){
-			generateStatsHelper(results, s, 0);
-		}
-
-		if(event != null) {
-			for(AttendanceRecord r : event.getRecords()) {
-				if(currentStudents.contains(r.getUserID())) {
-					for(Status s : Status.values()){
-						if(r.getStatus() == s) {
-							generateStatsHelper(results, s, 1);
-						}
-					}
-				}
-			}
-		}
-
-		return results;
 	}
 
 	private void generateStatsHelper(Map<Status, Integer> m, Status s, int base) {
