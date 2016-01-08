@@ -49,7 +49,14 @@ public class SakaiProxyImpl implements SakaiProxy {
 	public String getCurrentSiteId(){
 		return toolManager.getCurrentPlacement().getContext();
 	}
-	
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public User getCurrentUser() {
+		return getUser(getCurrentUserId());
+	}
+
 	/**
  	* {@inheritDoc}
  	*/
@@ -97,6 +104,20 @@ public class SakaiProxyImpl implements SakaiProxy {
 		}
 		return loc;
 
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public String getCurrentUserRoleInCurrentSite() {
+		return getCurrentUserRole(getCurrentSiteId());
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public String getCurrentUserRole(String siteId) {
+		return authzGroupService.getUserRole(getCurrentUserId(), "/site/" + siteId);
 	}
 
 	/**

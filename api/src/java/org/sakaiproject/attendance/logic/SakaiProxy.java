@@ -35,7 +35,13 @@ public interface SakaiProxy {
 	 * @return
 	 */
 	String getCurrentSiteId();
-	
+
+	/**
+	 * Get current User
+	 * @return
+     */
+	User getCurrentUser();
+
 	/**
 	 * Get current user id
 	 * @return
@@ -53,7 +59,19 @@ public interface SakaiProxy {
 	 * @return
 	 */
 	Locale getCurrentUserLocale();
-	
+
+	/**
+	 * Get's the current user's role in the current site
+	 * @return
+     */
+	String getCurrentUserRoleInCurrentSite();
+
+	/**
+	 * Get current user's role in site.
+	 * @return
+     */
+	String getCurrentUserRole(String siteId);
+
 	/**
 	 * Is the current user a superUser? (anyone in admin realm)
 	 * @return
