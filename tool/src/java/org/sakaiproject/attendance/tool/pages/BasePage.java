@@ -159,4 +159,7 @@ public class BasePage extends WebPage implements IHeaderContributor {
 		l.add(new AttributeAppender("class", new Model<String>("current"), " "));
 		l.setEnabled(false);
 	}
+
+	public static final String OVERVIEW_PAGE = "overview";
+	public static final String ITEMS_PAGE = "items";
 }

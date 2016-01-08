@@ -19,18 +19,43 @@
 
 <body>
 <wicket:extend>
-        <div id="">
-            <a wicket:id="edit-link"><span wicket:id="edit-link-text" /></a>
+    <div class="attendanceBreadcrumbs">
+        <h2>
             <a wicket:id="close-link"><span wicket:id="close-link-text" /></a>
-        </div>
+            <span>></span>
+            <span wicket:id="event-name"></span>
+            <a wicket:id="edit-link"><img src="/library/image/ud_custom/settings.png" alt="Edit" width="24px"/></a>
+        </h2>
+    </div>
 
-        <table>
-            <tbody>
-                <tr wicket:id="records">
-                    <td><span wicket:id="record" /></td>
-                </tr>
-            </tbody>
-        </table>
+    <div class="div-table">
+        <div class="div-table-row div-table-row-header">
+            <div class="div-table-col divHeader divTableName">
+                Student
+            </div>
+            <div class="div-table-col divHeader">
+                Present
+            </div>
+            <div class="div-table-col divHeader">
+                Late
+            </div>
+            <div class="div-table-col divHeader">
+                Left Early
+            </div>
+            <div class="div-table-col divHeader">
+                Excused Absence
+            </div>
+            <div class="div-table-col divHeader">
+                Unexcused Absence
+            </div>
+        </div>
+        <div wicket:id="records" class="div-table-row">
+            <span wicket:id="record" />
+        </div>
+    </div>
+
+
+
 </wicket:extend>
 </body>
 </html>

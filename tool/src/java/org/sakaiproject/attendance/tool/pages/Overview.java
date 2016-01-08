@@ -83,7 +83,7 @@ public class Overview extends BasePage {
 				Link<Void> eventLink = new Link<Void>("event-link") {
 					private static final long serialVersionUID = 1L;
 					public void onClick() {
-						setResponsePage(new EventView(item.getModelObject()));
+						setResponsePage(new EventView(item.getModelObject(), BasePage.OVERVIEW_PAGE));
 					}
 				};
 				eventLink.add(new Label("event-name", item.getModelObject().getName()));

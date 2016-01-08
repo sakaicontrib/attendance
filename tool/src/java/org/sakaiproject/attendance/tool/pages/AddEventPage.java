@@ -123,7 +123,14 @@ public class AddEventPage extends BasePage {
 					}
 				};
 				item.add(editLink);
-				item.add(new Label("event-name", item.getModelObject().getName()));
+				Link<Void> eventLink = new Link<Void>("event-link") {
+					private static final long serialVersionUID = 1L;
+					public void onClick() {
+						setResponsePage(new EventView(item.getModelObject(), BasePage.ITEMS_PAGE));
+					}
+				};
+				eventLink.add(new Label("event-name", item.getModelObject().getName()));
+				item.add(eventLink);
 				item.add(new Label("item-date", item.getModelObject().getStartDateTime()));
 			}
 		};

@@ -41,17 +41,23 @@ public class EventView extends BasePage {
     private                 Long                attendanceID;
     private                 AttendanceEvent     attendanceEvent;
 
-    public EventView(Long id) {
+    private                 String              returnPage;
+
+    public EventView(Long id, String fromPage) {
         super();
         this.attendanceID = id;
         this.attendanceEvent = attendanceLogic.getAttendanceEvent(this.attendanceID);
 
+        this.returnPage = fromPage;
+
         init();
     }
 
-    public EventView(AttendanceEvent aE) {
+    public EventView(AttendanceEvent aE, String fromPage) {
         super();
         this.attendanceEvent = aE;
+
+        this.returnPage = fromPage;
 
         init();
     }
@@ -59,6 +65,8 @@ public class EventView extends BasePage {
     private void init() {
         createHeaderLinks();
         createTable();
+
+        add(new Label("event-name", attendanceEvent.getName()));
     }
 
     private void createHeaderLinks() {
@@ -68,15 +76,22 @@ public class EventView extends BasePage {
                 setResponsePage(new AddEventPage(attendanceEvent));
             }
         };
-        editLink.add(new Label("edit-link-text", new ResourceModel("attendance.event.view.link.edit")));
 
         Link<Void> closeLink = new Link<Void>("close-link") {
             @Override
             public void onClick() {
-                setResponsePage(new Overview());
+                if(returnPage.equals(BasePage.ITEMS_PAGE)) {
+                    setResponsePage(new AddEventPage());
+                } else {
+                    setResponsePage(new Overview());
+                }
             }
         };
-        closeLink.add(new Label("close-link-text", new ResourceModel("attendance.event.view.link.close")));
+        if(returnPage.equals(BasePage.ITEMS_PAGE)) {
+            closeLink.add(new Label("close-link-text", new ResourceModel("attendance.event.view.link.close.items")));
+        } else {
+            closeLink.add(new Label("close-link-text", new ResourceModel("attendance.event.view.link.close.overview")));
+        }
 
         add(editLink);
         add(closeLink);

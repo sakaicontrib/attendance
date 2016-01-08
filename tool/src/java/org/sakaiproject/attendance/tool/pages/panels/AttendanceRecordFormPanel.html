@@ -19,13 +19,25 @@
 <body>
 <wicket:panel>
     <form wicket:id="attendanceRecord">
-        <span wicket:id="student-name" /><span wicket:id="event-name" />
+        <div class="div-table-col divTableName">
+            <span wicket:id="student-name" /><span wicket:id="event-name" />
+        </div>
         <wicket:container wicket:id="attendance-record-status-group">
-            <input type="radio" wicket:id="record-status-present" />
-            <input type="radio" wicket:id="record-status-late" />
-            <input type="radio" wicket:id="record-status-left-early" />
-            <input type="radio" wicket:id="record-status-excused" />
-            <input type="radio" wicket:id="record-status-absent" />
+            <div class="div-table-col">
+                <input type="radio" wicket:id="record-status-present" />
+            </div>
+            <div class="div-table-col">
+                <input type="radio" wicket:id="record-status-late" />
+            </div>
+            <div class="div-table-col">
+                <input type="radio" wicket:id="record-status-left-early" />
+            </div>
+            <div class="div-table-col">
+                <input type="radio" wicket:id="record-status-excused" />
+            </div>
+            <div class="div-table-col">
+                <input type="radio" wicket:id="record-status-absent" />
+            </div>
         </wicket:container>
     </form>
 </wicket:panel>

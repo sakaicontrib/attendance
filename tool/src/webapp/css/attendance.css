@@ -217,3 +217,59 @@ div.addEditDeleteLinkDiv {
     padding-left: 16px;
     margin-top: 1em;
 }
+
+div.attendanceBreadcrumbs h2 {
+    margin-left: 70px;
+}
+
+div.attendanceBreadcrumbs img {
+    vertical-align: middle;
+}
+
+div.attendanceBreadcrumbs span {
+    padding-right: .5em;
+}
+
+.div-table{
+    display:table;
+    width:auto;
+    background-color:#fff;
+    border:1px solid  #ccc;
+    font-size: 1.2em;
+    margin-left: 70px;
+}
+
+.div-table-row {
+    display:table-row;
+    width:auto;
+    clear:both;
+}
+
+.div-table-row-header {
+    background-color: #eee;
+}
+
+.div-table-col {
+    float:left;/*fix for  buggy browsers*/
+    display:table-cell;
+    width:80px;
+    text-align: center;
+    padding: .5em;
+}
+
+.div-table-row:hover {
+    background-color: #deeeff;
+}
+
+.div-table-col input:hover {
+    cursor: pointer;
+}
+
+.divHeader {
+    font-weight: bold;
+}
+
+.divTableName {
+    width: 160px;
+    text-align: left;
+}
