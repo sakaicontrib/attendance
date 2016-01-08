@@ -131,6 +131,13 @@ public interface AttendanceLogic {
 	AttendanceRecord getAttendanceRecord(Long id);
 
 	/**
+	 * get AttendanceRecords For a User
+	 * @param id
+	 * @return
+     */
+	List<AttendanceRecord> getAttendanceRecordsForUserInCurrentSite(String id);
+
+	/**
 	 * Update an AttendanceRecord
 	 * @param aR, the AttendanceRecord to update
 	 * @return

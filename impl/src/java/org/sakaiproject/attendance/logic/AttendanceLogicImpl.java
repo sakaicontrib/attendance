@@ -215,6 +215,16 @@ public class AttendanceLogicImpl implements AttendanceLogic {
 	/**
 	 * {@inheritDoc}
 	 */
+	public List<AttendanceRecord> getAttendanceRecordsForUserInCurrentSite(String id) {
+		return generateAttendanceRecords(id);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	/**
+	 * {@inheritDoc}
+	 */
 	public boolean updateAttendanceRecord(AttendanceRecord aR) {
 		if(aR == null) {
 			throw new IllegalArgumentException("AttendanceRecord cannot be null");
@@ -284,6 +294,32 @@ public class AttendanceLogicImpl implements AttendanceLogic {
 		log.info("init");
 	}
 
+	private List<AttendanceRecord> generateAttendanceRecords(String id) {
+		List<AttendanceEvent> aEs = getAttendanceEventsForCurrentSite();
+		List<AttendanceRecord> records = new ArrayList<AttendanceRecord>(aEs.size());
+		Status s = getCurrentAttendanceSite().getDefaultStatus();
+		// Is there a faster way to do this? Would querying the DB be faster?
+		for(AttendanceEvent e : aEs) {
+			boolean recordPresent = false;
+			Set<AttendanceRecord> eRecords = e.getRecords();
+
+			if(!eRecords.isEmpty()) {
+				for (AttendanceRecord r : eRecords) {
+					if (r.getUserID().equals(id)) {
+						recordPresent = true;
+						records.add(r);
+					}
+				}
+			}
+
+			if(!recordPresent) {
+				records.add(generateAttendanceRecord(e, id, s));
+			}
+		}
+
+		return records;
+	}
+
 	private List<AttendanceRecord> generateAttendanceRecords(AttendanceEvent aE, Status s) {
 		if(s == null) {
 			s = aE.getAttendanceSite().getDefaultStatus();
@@ -297,19 +333,19 @@ public class AttendanceLogicImpl implements AttendanceLogic {
 		}
 
 		for(User user : userList) {
-			AttendanceRecord attendanceRecord = generateAttendanceRecord(aE, user, s);
+			AttendanceRecord attendanceRecord = generateAttendanceRecord(aE, user.getId(), s);
 			recordList.add(attendanceRecord);
 		}
 
 		return recordList;
 	}
 
-	private AttendanceRecord generateAttendanceRecord(AttendanceEvent aE, User user, Status s) {
+	private AttendanceRecord generateAttendanceRecord(AttendanceEvent aE, String id, Status s) {
 		if(s == null) {
 			s = aE.getAttendanceSite().getDefaultStatus();
 		}
 
-		AttendanceRecord record = new AttendanceRecord(aE, user.getId(), s);
+		AttendanceRecord record = new AttendanceRecord(aE, id, s);
 		dao.addAttendanceRecord(record);
 
 		return record;
