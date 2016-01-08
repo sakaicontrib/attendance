@@ -109,6 +109,7 @@ public class EventView extends BasePage {
                 }
             }
         };
+
         if(returnPage.equals(BasePage.ITEMS_PAGE)) {
             closeLink.add(new Label("close-link-text", new ResourceModel("attendance.event.view.link.close.items")));
         } else {
