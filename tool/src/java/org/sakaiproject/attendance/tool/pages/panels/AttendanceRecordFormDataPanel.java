@@ -43,13 +43,15 @@ import java.util.List;
 public class AttendanceRecordFormDataPanel extends BasePanel {
     private static final    long                        serialVersionUID = 1L;
     private                 IModel<AttendanceRecord>    recordIModel;
-    private                 boolean isStudentView;
+    private                 boolean                     isStudentView;
+    private                 boolean                     restricted ;
     private                 List<Component>             ajaxTargets = new ArrayList<Component>();
 
     public AttendanceRecordFormDataPanel(String id, IModel<AttendanceRecord> aR, boolean iS) {
         super(id, aR);
         this.recordIModel = aR;
         this.isStudentView = iS;
+        this.restricted = this.role.equals("Student");
         add(createRecordInputForm());
     }
 
@@ -170,6 +172,7 @@ public class AttendanceRecordFormDataPanel extends BasePanel {
         group.add(left_early);
         group.add(excused);
         group.add(absent);
+        group.setEnabled(!this.restricted);
 
         rF.add(group);
     }
