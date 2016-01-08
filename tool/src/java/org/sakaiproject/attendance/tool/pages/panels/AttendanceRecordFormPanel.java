@@ -147,9 +147,6 @@ public class AttendanceRecordFormPanel extends BasePanel {
         group.add(left_early);
         group.add(excused);
         group.add(absent);
-        group.add(new AjaxFormSubmitBehavior(rF, "onclick"){
-
-        });
 
         rF.add(group);
     }
