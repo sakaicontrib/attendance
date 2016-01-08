@@ -113,11 +113,11 @@ table.itemListTable {
 }
 
 .overviewTable thead tr, .itemListTable thead tr {
-    background: #eee;
+    background-color: #eee;
 }
 
 .overviewTable tbody tr:hover, .itemListTable tbody tr:hover {
-    background: #deeeff;
+    background-color: #deeeff;
 }
 
 th.overviewDateCol, td.overviewDateCol {
@@ -139,7 +139,7 @@ td.overviewStatusCol {
 }
 
 th.overviewStatusCol {
-    background: #e0f7e0;
+    background-color: #e0f7e0 !important;
 }
 
 td.itemListRemoveCol {
