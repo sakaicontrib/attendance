@@ -21,7 +21,6 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.model.ResourceModel;
-import org.sakaiproject.attendance.tool.util.BasicLink;
 import org.sakaiproject.user.api.User;
 
 /**
@@ -29,12 +28,12 @@ import org.sakaiproject.user.api.User;
  */
 public class StudentView extends BasePage {
     private static final    long        serialVersionUID    = 1L;
-    private                 User        studentToView;
+    private                 String      studentId;
     private                 Long        previousEventId;
     private                 boolean     isStudent           = false;
 
     public StudentView(String id, Long eventId) {
-        this.studentToView = sakaiProxy.getUser(id);
+        this.studentId = id;
         if(sakaiProxy.getCurrentUserRoleInCurrentSite().equals("student")){
             isStudent = true;
         }
@@ -62,7 +61,12 @@ public class StudentView extends BasePage {
 
         header.add(currentUserRole);
 
-        Link<Void> closeLink = new BasicLink("close-link", new EventView(this.previousEventId));
+        Link<Void> closeLink = new Link<Void>("close-link") {
+            @Override
+            public void onClick() {
+                setResponsePage(new EventView(previousEventId));
+            }
+        };
         closeLink.add(new Label("close-link-text", new ResourceModel("attendance.event.link.close")));
         header.add(closeLink);
 

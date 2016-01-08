@@ -28,7 +28,6 @@ import org.sakaiproject.attendance.tool.dataproviders.AttendanceRecordProvider;
 import org.sakaiproject.attendance.tool.pages.panels.AttendanceRecordFormPanel;
 import org.sakaiproject.user.api.User;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -148,14 +147,13 @@ public class EventView extends BasePage {
         add(new DataView<AttendanceRecord>("records", new AttendanceRecordProvider(this.attendanceEvent)) {
             @Override
             protected void populateItem(final Item<AttendanceRecord> item) {
-                //item.add(new AttendanceRecordFormPanel("student-record", item.getModel(), true));
                 User student = sakaiProxy.getUser(item.getModelObject().getUserID());
                 if(student != null) {
                     item.add(new Label("stu-name", student.getSortName()));
                 } else {
                     item.add(new Label("stu-name", ""));
                 }
-                item.add(new AttendanceRecordFormPanel("record", item.getModel(), false));
+                item.add(new AttendanceRecordFormPanel("record", item.getModel(), true));
             }
         });
     }

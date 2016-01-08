@@ -116,5 +116,17 @@ public interface SakaiProxy {
 	 */
 	List<User> getCurrentSiteMembership();
 
+	/**
+	 * get user
+	 * @param userId
+	 * @return
+     */
 	User getUser(String userId);
+
+	/**
+	 * get's a user sort name
+	 * @param userId
+	 * @return
+     */
+	String getUserSortName(String userId);
 }

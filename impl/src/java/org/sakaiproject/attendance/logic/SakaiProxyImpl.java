@@ -202,6 +202,18 @@ public class SakaiProxyImpl implements SakaiProxy {
 	}
 
 	/**
+	 * {@inheritDoc}
+	 */
+	public String getUserSortName(String userId) {
+		User u = getUser(userId);
+		if(u != null){
+			return u.getSortName();
+		}
+
+		return "";
+	}
+
+	/**
 	 * init - perform any actions required here for when this bean starts up
 	 */
 	public void init() {

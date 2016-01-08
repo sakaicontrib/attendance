@@ -28,6 +28,7 @@ import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.model.ResourceModel;
 import org.sakaiproject.attendance.model.AttendanceRecord;
 import org.sakaiproject.attendance.model.Status;
 import org.sakaiproject.attendance.tool.pages.StudentView;
@@ -42,13 +43,13 @@ import java.util.List;
 public class AttendanceRecordFormPanel extends BasePanel {
     private static final    long                        serialVersionUID = 1L;
     private                 IModel<AttendanceRecord>    recordIModel;
-    private                 boolean                     isStudent;
+    private                 boolean isStudentView;
     private                 List<Component>             ajaxTargets = new ArrayList<Component>();
 
     public AttendanceRecordFormPanel(String id, IModel<AttendanceRecord> aR, boolean iS) {
         super(id, aR);
         this.recordIModel = aR;
-        this.isStudent = iS;
+        this.isStudentView = iS;
         add(createRecordInputForm());
     }
 
@@ -70,29 +71,43 @@ public class AttendanceRecordFormPanel extends BasePanel {
         WebMarkupContainer student = new WebMarkupContainer("student") {
             @Override
             public boolean isVisible(){
-                return isStudent;
+                return isStudentView;
             }
         };
 
-        final User studentUser = sakaiProxy.getUser(this.recordIModel.getObject().getUserID());
-        Label studentName = new Label("student-name", studentUser.getSortName());
-
+        Label studentName = new Label("student-name");
         Link<Void> studentLink = new Link<Void>("student-link") {
             @Override
-            public void onClick() {
-                setResponsePage(new StudentView(studentUser.getId(), recordIModel.getObject().getAttendanceEvent().getId()));
+            public void onClick(){
+                // do nothing
             }
         };
+
+        if(isStudentView) {
+            final String id = this.recordIModel.getObject().getUserID();
+            String s = sakaiProxy.getUserSortName(id);
+            studentName = new Label("student-name", s.equals("") ? new ResourceModel("attendance.student.name.unknown") : s);
+
+            studentLink = new Link<Void>("student-link") {
+                @Override
+                public void onClick() {
+                    setResponsePage(new StudentView(id, recordIModel.getObject().getAttendanceEvent().getId()));
+                }
+            };
+
+
+        }
+
+        studentLink.add(studentName);
+        student.add(studentLink);
 
         Label eventName = new Label("event-name", this.recordIModel.getObject().getAttendanceEvent().getName()){
             @Override
             public boolean isVisible(){
-                return !isStudent;
+                return !isStudentView;
             }
         };
 
-        student.add(studentLink);
-        student.add(studentName);
 
         rF.add(student);
         rF.add(eventName);
