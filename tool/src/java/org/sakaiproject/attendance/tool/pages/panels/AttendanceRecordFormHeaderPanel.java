@@ -16,11 +16,30 @@
 
 package org.sakaiproject.attendance.tool.pages.panels;
 
+import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.model.ResourceModel;
+
 /**
  * Created by Leonardo Canessa [lcanessa1 (at) udayton (dot) edu]
  */
 public class AttendanceRecordFormHeaderPanel extends BasePanel {
-    public AttendanceRecordFormHeaderPanel(String id) {
+    private boolean areRecordsOfStudents;
+
+    public AttendanceRecordFormHeaderPanel(String id, boolean iS) {
         super(id);
+        this.areRecordsOfStudents = iS;
+
+        add(createItemLabel());
+    }
+
+    private Label createItemLabel() {
+        Label itemLabel;
+        if(areRecordsOfStudents) {
+            itemLabel = new Label("item-type", new ResourceModel("attendance.record.form.header.student"));
+        } else {
+            itemLabel = new Label("item-type", new ResourceModel("attendance.record.form.header.event"));
+        }
+
+        return itemLabel;
     }
 }

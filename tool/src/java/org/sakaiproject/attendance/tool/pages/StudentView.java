@@ -84,7 +84,7 @@ public class StudentView extends BasePage {
     private WebMarkupContainer createTable(){
         WebMarkupContainer studentViewData = new WebMarkupContainer("student-view-data");
 
-        studentViewData.add(new AttendanceRecordFormHeaderPanel("header"));
+        studentViewData.add(new AttendanceRecordFormHeaderPanel("header", !isStudent));
         studentViewData.add(createData());
 
         return studentViewData;

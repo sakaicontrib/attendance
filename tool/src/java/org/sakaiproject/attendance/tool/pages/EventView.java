@@ -116,7 +116,7 @@ public class EventView extends BasePage {
             closeLink.add(new Label("close-link-text", new ResourceModel("attendance.event.view.link.close.overview")));
         }
 
-        add(new AttendanceRecordFormHeaderPanel("header"));
+        add(new AttendanceRecordFormHeaderPanel("header", true));
 
         add(editLink);
         add(closeLink);
