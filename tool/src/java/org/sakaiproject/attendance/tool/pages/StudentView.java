@@ -17,16 +17,56 @@
 package org.sakaiproject.attendance.tool.pages;
 
 
+import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.link.Link;
+import org.apache.wicket.model.ResourceModel;
+import org.sakaiproject.attendance.tool.util.BasicLink;
 import org.sakaiproject.user.api.User;
 
 /**
  * Created by Leonardo Canessa [lcanessa1 (at) udayton (dot) edu]
  */
 public class StudentView extends BasePage {
-    private static final long serialVersionUID = 1L;
-    private User user;
+    private static final    long        serialVersionUID    = 1L;
+    private                 User        studentToView;
+    private                 Long        previousEventId;
+    private                 boolean     isStudent           = false;
 
-    public StudentView(String id) {
-        this.user = sakaiProxy.getUser(id);
+    public StudentView(String id, Long eventId) {
+        this.studentToView = sakaiProxy.getUser(id);
+        if(sakaiProxy.getCurrentUserRoleInCurrentSite().equals("student")){
+            isStudent = true;
+        }
+
+        this.previousEventId = eventId;
+
+        init();
+    }
+
+    private void init() {
+        createHeader();
+    }
+
+    private void createHeader() {
+        WebMarkupContainer header = new WebMarkupContainer("header");
+        header.setOutputMarkupPlaceholderTag(true);
+
+        Label currentUserRole;
+
+        if(isStudent) {
+            currentUserRole = new Label("CurrentUserRole", "student");
+        } else {
+            currentUserRole = new Label("CurrentUserRole", "not a student");
+        }
+
+        header.add(currentUserRole);
+
+        Link<Void> closeLink = new BasicLink("close-link", new EventView(this.previousEventId));
+        closeLink.add(new Label("close-link-text", new ResourceModel("attendance.event.link.close")));
+        header.add(closeLink);
+
+        add(header);
+
     }
 }
