@@ -17,6 +17,7 @@
 package org.sakaiproject.attendance.logic;
 
 import java.util.List;
+import java.util.Map;
 
 //import com.google.ical.values.RRule;
 //import de.scravy.pair.Pair;
@@ -150,4 +151,11 @@ public interface AttendanceLogic {
      * @return
      */
 	boolean updateAttendanceRecordsForEvent(AttendanceEvent aE, Status s);
+
+	/**
+	 *
+	 * @param event
+	 * @return
+	 */
+	public Map<Status, Integer> getStatsForEvent(AttendanceEvent event);
 }

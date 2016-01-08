@@ -86,6 +86,16 @@ public interface SakaiProxy {
 	 */
 	String getConfigParam(String param, String dflt);
 
+	/**
+	 *
+	 * @return List of userIds in the current site
+	 */
+	List<String> getCurrentSiteMembershipIds();
+
+	/**
+	 *
+	 * @return List of Users in the current site
+	 */
 	List<User> getCurrentSiteMembership();
 
 	User getUser(String userId);

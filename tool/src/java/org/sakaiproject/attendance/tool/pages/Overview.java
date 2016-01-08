@@ -79,7 +79,7 @@ public class Overview extends BasePage {
 		DataView<AttendanceEvent> attendanceEventDataView = new DataView<AttendanceEvent>("events", eventDataProvider) {
 			@Override
 			protected void populateItem(final Item<AttendanceEvent> item) {
-				Map<Status, Integer> stats = item.getModelObject().getStats();
+				Map<Status, Integer> stats = attendanceLogic.getStatsForEvent(item.getModelObject());
 				Link<Void> eventLink = new Link<Void>("event-link") {
 					private static final long serialVersionUID = 1L;
 					public void onClick() {

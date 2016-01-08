@@ -130,6 +130,18 @@ public class SakaiProxyImpl implements SakaiProxy {
 	/**
 	 * {@inheritDoc}
 	 */
+	public List<String> getCurrentSiteMembershipIds() {
+		List<User> members = getCurrentSiteMembership();
+		List<String> studentIds = new ArrayList<String>();
+		for(User user : members) {
+			studentIds.add(user.getId());
+		}
+		return studentIds;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
 	public List<User> getCurrentSiteMembership() {
 		List<User> returnList = new ArrayList<User>();
 		try {

@@ -292,6 +292,37 @@ public class AttendanceLogicImpl implements AttendanceLogic {
 
 		return record;
 	}
+
+	public Map<Status, Integer> getStatsForEvent(AttendanceEvent event) {
+		Map<Status, Integer> results = new HashMap<Status, Integer>();
+		List<String> currentStudents = sakaiProxy.getCurrentSiteMembershipIds();
+
+		for(Status s : Status.values()){
+			generateStatsHelper(results, s, 0);
+		}
+
+		if(event != null) {
+			for(AttendanceRecord r : event.getRecords()) {
+				if(currentStudents.contains(r.getUserID())) {
+					for(Status s : Status.values()){
+						if(r.getStatus() == s) {
+							generateStatsHelper(results, s, 1);
+						}
+					}
+				}
+			}
+		}
+
+		return results;
+	}
+
+	private void generateStatsHelper(Map<Status, Integer> m, Status s, int base) {
+		if(m.containsKey(s)) {
+			m.put(s, m.get(s) + 1);
+		} else {
+			m.put(s, base);
+		}
+	}
 	
 	@Setter
 	private AttendanceDao dao;
