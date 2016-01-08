@@ -71,6 +71,11 @@ public class StudentView extends BasePage {
             public void onClick() {
                 setResponsePage(new EventView(previousEventId));
             }
+
+            @Override
+            public boolean isVisible(){
+                return !isStudent;
+            }
         };
         closeLink.add(new Label("close-link-text", new ResourceModel("attendance.event.link.close")));
         header.add(closeLink);
