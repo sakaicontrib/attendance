@@ -50,7 +50,12 @@ public class AttendanceRecordFormPanel extends BasePanel {
     }
 
     private Form<AttendanceRecord> createRecordInputForm() {
-        Form<AttendanceRecord> recordForm = new Form<AttendanceRecord>("attendanceRecord", this.recordIModel);
+        Form<AttendanceRecord> recordForm = new Form<AttendanceRecord>("attendanceRecord", this.recordIModel) {
+            protected void onSubmit() {
+                AttendanceRecord aR = (AttendanceRecord) getDefaultModelObject();
+                attendanceLogic.updateAttendanceRecord(aR);
+            }
+        };
 
         createStatusRadio(recordForm);
         createLabel(recordForm);
