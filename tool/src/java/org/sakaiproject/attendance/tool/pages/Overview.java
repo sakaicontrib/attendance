@@ -42,7 +42,7 @@ public class Overview extends BasePage {
 	public Overview() {
 		disableLink(this.firstLink);
 
-		if (this.role.equals("Student")) {
+		if (this.role != null && this.role.equals("Student")) {
 			throw new RestartResponseException(StudentView.class);
 		}
 
