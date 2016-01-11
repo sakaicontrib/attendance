@@ -63,7 +63,7 @@ public class AttendanceRecordFormDataPanel extends BasePanel {
             protected void onSubmit() {
                 AttendanceRecord aR = (AttendanceRecord) getDefaultModelObject();
                 boolean result = attendanceLogic.updateAttendanceRecord(aR);
-                String[] resultMsgVars = new String[]{sakaiProxy.getUserSortName(aR.getUserID()), aR.getAttendanceEvent().getName(), aR.getStatus().toString()};
+                String[] resultMsgVars = new String[]{sakaiProxy.getUserSortName(aR.getUserID()), aR.getAttendanceEvent().getName(), getStatusString(aR.getStatus())};
                 StringResourceModel temp;
                 if(result){
                     temp = new StringResourceModel("attendance.record.save.success", null, resultMsgVars);
@@ -187,5 +187,23 @@ public class AttendanceRecordFormDataPanel extends BasePanel {
         group.setEnabled(!this.restricted);
 
         rF.add(group);
+    }
+
+    private String getStatusString(Status s) {
+        ResourceModel rModel = new ResourceModel(null);
+
+        if(s == Status.PRESENT){
+            rModel = new ResourceModel("attendance.overview.header.status.present");
+        } else if (s == Status.LATE) {
+            rModel = new ResourceModel("attendance.overview.header.status.late");
+        } else if (s == Status.LEFT_EARLY) {
+            rModel = new ResourceModel("attendance.overview.header.status.left.early");
+        } else if (s == Status.EXCUSED_ABSENCE) {
+            rModel = new ResourceModel("attendance.overview.header.status.excused");
+        } else if (s == Status.UNEXCUSED_ABSENCE) {
+            rModel = new ResourceModel("attendance.overview.header.status.unexcused");
+        }
+
+        return rModel.getObject();
     }
 }
