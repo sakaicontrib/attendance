@@ -159,7 +159,7 @@ public class StudentView extends BasePage {
                     disableLink(eventLink);
                 }
                 item.add(eventLink);
-                item.add(new AttendanceRecordFormDataPanel("record", item.getModel(), false, returnPage));
+                item.add(new AttendanceRecordFormDataPanel("record", item.getModel(), false, returnPage, feedbackPanel));
             }
         };
 

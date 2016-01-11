@@ -157,7 +157,7 @@ public class EventView extends BasePage {
                 };
                 studentLink.add(stuName);
                 item.add(studentLink);
-                item.add(new AttendanceRecordFormDataPanel("record", item.getModel(), true, returnPage));
+                item.add(new AttendanceRecordFormDataPanel("record", item.getModel(), true, returnPage, feedbackPanel));
             }
         });
     }
