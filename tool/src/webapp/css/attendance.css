@@ -18,6 +18,14 @@ body {
     color: #111;
 }
 
+/* style the Wicket FeedbackPanel to remove the list */
+.alertMessage ul, .success ul {
+    list-style-type: none !important;
+    margin-left: -40px;
+    margin-bottom: 0px;
+    margin-top: 0px;
+}
+
 .itemListTable a, .itemListTable a:link, .itemListTable a:visited, .itemListTable a:hover, .itemListTable a:focus, .itemListTable a:active{
     color: #0064cd;
 }
@@ -305,4 +313,11 @@ div.attendanceBreadcrumbs span {
 .divTableName {
     width: 160px;
     text-align: left;
+}
+
+p.setAll {
+    font-size: 1.2em;
+    color: #555;
+    font-weight: bold;
+    margin-top: 0;
 }

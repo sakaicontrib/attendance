@@ -16,10 +16,17 @@
 
 package org.sakaiproject.attendance.tool.pages;
 
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.form.AjaxFormSubmitBehavior;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.form.DropDownChoice;
+import org.apache.wicket.markup.html.form.EnumChoiceRenderer;
+import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.data.DataView;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.model.ResourceModel;
 import org.sakaiproject.attendance.model.AttendanceEvent;
 import org.sakaiproject.attendance.model.AttendanceRecord;
@@ -27,8 +34,8 @@ import org.sakaiproject.attendance.model.Status;
 import org.sakaiproject.attendance.tool.dataproviders.AttendanceRecordProvider;
 import org.sakaiproject.attendance.tool.pages.panels.AttendanceRecordFormDataPanel;
 import org.sakaiproject.attendance.tool.pages.panels.AttendanceRecordFormHeaderPanel;
-import org.sakaiproject.user.api.User;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -42,7 +49,10 @@ public class EventView extends BasePage {
     private                 Long                attendanceID;
     private                 AttendanceEvent     attendanceEvent;
 
-    private                 String              returnPage;
+    private                 String                  returnPage;
+
+    private                 WebMarkupContainer      infoContainer;
+    private                 DropDownChoice<Status>  setAllStatus;
 
     public EventView(Long id, String fromPage) {
         super();
@@ -72,23 +82,47 @@ public class EventView extends BasePage {
         add(new Label("event-name", attendanceEvent.getName()));
         add(new Label("event-date", attendanceEvent.getStartDateTime()));
         add(new Label("take-attendance-header", getString("attendance.event.view.take.attendance")));
-        add(new Label("item-info-header", getString("attendance.event.view.item.info")));
+
+        final Form<?> setAllForm = new Form<Void>("set-all-form"){
+            @Override
+            protected void onSubmit() {
+                if(attendanceLogic.updateAttendanceRecordsForEvent(attendanceEvent, setAllStatus.getModelObject())){
+                    getSession().info("All attendance records for " + attendanceEvent.getName() + " set to " + setAllStatus.getModelObject());
+                    setResponsePage(new EventView(attendanceEvent, returnPage));
+                }
+            }
+        };
+        setAllForm.add(setAllStatus = new DropDownChoice<Status>("set-all-status", new Model<Status>(), Arrays.asList(Status.values()), new EnumChoiceRenderer<Status>(this)));
+        setAllStatus.add(new AjaxFormSubmitBehavior("onchange") {
+            @Override
+            protected void onSubmit(AjaxRequestTarget target) {
+                super.onSubmit(target);
+            }
+        });
+        add(setAllForm);
     }
 
     private void createStatsTable() {
+        infoContainer = new WebMarkupContainer("info-container");
+        infoContainer.setOutputMarkupId(true);
+
+        infoContainer.add(new Label("item-info-header", getString("attendance.event.view.item.info")));
+
         Map<Status, Integer> stats = attendanceLogic.getStatsForEvent(attendanceEvent);
 
-        add(new Label("header-status-present", 		new ResourceModel("attendance.overview.header.status.present")));
-        add(new Label("header-status-late", 		new ResourceModel("attendance.overview.header.status.late")));
-        add(new Label("header-status-left-early", 	new ResourceModel("attendance.overview.header.status.left.early")));
-        add(new Label("header-status-excused", 		new ResourceModel("attendance.overview.header.status.excused")));
-        add(new Label("header-status-unexcused", 	new ResourceModel("attendance.overview.header.status.unexcused")));
+        infoContainer.add(new Label("header-status-present", 		new ResourceModel("attendance.overview.header.status.present")));
+        infoContainer.add(new Label("header-status-late", 		new ResourceModel("attendance.overview.header.status.late")));
+        infoContainer.add(new Label("header-status-left-early", 	new ResourceModel("attendance.overview.header.status.left.early")));
+        infoContainer.add(new Label("header-status-excused", 		new ResourceModel("attendance.overview.header.status.excused")));
+        infoContainer.add(new Label("header-status-unexcused", 	new ResourceModel("attendance.overview.header.status.unexcused")));
 
-        add(new Label("event-stats-present", stats.get(Status.PRESENT)));
-        add(new Label("event-stats-late", stats.get(Status.LATE)));
-        add(new Label("event-stats-left-early", stats.get(Status.LEFT_EARLY)));
-        add(new Label("event-stats-excused", stats.get(Status.EXCUSED_ABSENCE)));
-        add(new Label("event-stats-absent", stats.get(Status.UNEXCUSED_ABSENCE)));
+        infoContainer.add(new Label("event-stats-present", stats.get(Status.PRESENT)));
+        infoContainer.add(new Label("event-stats-late", stats.get(Status.LATE)));
+        infoContainer.add(new Label("event-stats-left-early", stats.get(Status.LEFT_EARLY)));
+        infoContainer.add(new Label("event-stats-excused", stats.get(Status.EXCUSED_ABSENCE)));
+        infoContainer.add(new Label("event-stats-absent", stats.get(Status.UNEXCUSED_ABSENCE)));
+
+        add(infoContainer);
     }
 
     private void createHeader() {
@@ -125,7 +159,7 @@ public class EventView extends BasePage {
 
         add(new Label("student-name", new ResourceModel("attendance.event.view.student.name")));
 
-       add(new AttendanceRecordFormHeaderPanel("record-header"));
+        add(new AttendanceRecordFormHeaderPanel("record-header"));
 
         // Generate records if none exist
         if(records == null || records.isEmpty()) {

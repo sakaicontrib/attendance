@@ -29,7 +29,7 @@
         </h2>
     </div>
     
-    <div class="itemInfoContainer">
+    <div wicket:id="info-container" class="itemInfoContainer">
         <div class="itemInfoHeader">
             <h3 class="itemInfoHeader">
                 <span wicket:id="item-info-header"/>
@@ -64,6 +64,10 @@
                 <span wicket:id="take-attendance-header"/>
             </h3>
         </div>
+
+        <form wicket:id="set-all-form">
+            <p class="setAll">Set all to <select wicket:id="set-all-status" /></p>
+        </form>
 
         <table id="takeAttendanceTable" class="takeAttendanceTable">
             <thead>
