@@ -109,7 +109,7 @@ public class StudentView extends BasePage {
 
         header.add(eventLink);
 
-        Label studentName = new Label("student-name", sakaiProxy.getUserSortName(this.studentId));
+        Label studentName = new Label("student-name", sakaiProxy.getUserSortName(this.studentId) + " (" + sakaiProxy.getUserDisplayId(this.studentId) + ")");
         header.add(studentName);
 
         return header;
@@ -124,7 +124,7 @@ public class StudentView extends BasePage {
         };
 
         studentView.add(new Label("attendance-header", new ResourceModel("attendance.overview.header")));
-        studentView.add(new Label("student-name", sakaiProxy.getUserSortName(this.studentId)));
+        studentView.add(new Label("student-name", sakaiProxy.getUserSortName(this.studentId) + " (" + sakaiProxy.getUserDisplayId(this.studentId) + ")"));
 
         return studentView;
     }
