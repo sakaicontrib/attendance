@@ -25,10 +25,10 @@ import org.sakaiproject.attendance.model.AttendanceEvent;
 import org.sakaiproject.attendance.model.AttendanceRecord;
 import org.sakaiproject.attendance.model.Status;
 import org.sakaiproject.attendance.tool.dataproviders.AttendanceRecordProvider;
-import org.sakaiproject.attendance.tool.pages.panels.AttendanceRecordFormPanel;
+import org.sakaiproject.attendance.tool.pages.panels.AttendanceRecordFormDataPanel;
+import org.sakaiproject.attendance.tool.pages.panels.AttendanceRecordFormHeaderPanel;
 import org.sakaiproject.user.api.User;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -64,7 +64,7 @@ public class EventView extends BasePage {
     }
 
     private void init() {
-        createHeaderLinks();
+        createHeader();
         createTable();
 
         createStatsTable();
@@ -91,7 +91,7 @@ public class EventView extends BasePage {
         add(new Label("event-stats-absent", stats.get(Status.UNEXCUSED_ABSENCE)));
     }
 
-    private void createHeaderLinks() {
+    private void createHeader() {
         Link<Void> editLink = new Link<Void>("edit-link") {
             @Override
             public void onClick() {
@@ -109,6 +109,7 @@ public class EventView extends BasePage {
                 }
             }
         };
+
         if(returnPage.equals(BasePage.ITEMS_PAGE)) {
             closeLink.add(new Label("close-link-text", new ResourceModel("attendance.event.view.link.close.items")));
         } else {
@@ -122,13 +123,9 @@ public class EventView extends BasePage {
     private void createTable() {
         Set<AttendanceRecord> records = this.attendanceEvent.getRecords();
 
-        add(new Label("student-name", getString("attendance.event.view.student.name")));
+        add(new Label("student-name", new ResourceModel("attendance.event.view.student.name")));
 
-        add(new Label("status-present", 		new ResourceModel("attendance.overview.header.status.present")));
-        add(new Label("status-late", 		new ResourceModel("attendance.overview.header.status.late")));
-        add(new Label("status-left-early", 	new ResourceModel("attendance.overview.header.status.left.early")));
-        add(new Label("status-excused", 		new ResourceModel("attendance.overview.header.status.excused")));
-        add(new Label("status-unexcused", 	new ResourceModel("attendance.overview.header.status.unexcused")));
+       add(new AttendanceRecordFormHeaderPanel("record-header"));
 
         // Generate records if none exist
         if(records == null || records.isEmpty()) {
@@ -147,14 +144,20 @@ public class EventView extends BasePage {
         add(new DataView<AttendanceRecord>("records", new AttendanceRecordProvider(this.attendanceEvent)) {
             @Override
             protected void populateItem(final Item<AttendanceRecord> item) {
-                //item.add(new AttendanceRecordFormPanel("student-record", item.getModel(), true));
-                User student = sakaiProxy.getUser(item.getModelObject().getUserID());
-                if(student != null) {
-                    item.add(new Label("stu-name", student.getSortName() + " (" + student.getDisplayId() + ")"));
-                } else {
-                    item.add(new Label("stu-name", ""));
-                }
-                item.add(new AttendanceRecordFormPanel("record", item.getModel(), false));
+                final String stuId = item.getModelObject().getUserID();
+                final String sortName = sakaiProxy.getUserSortName(stuId);
+                final String displayId = sakaiProxy.getUserDisplayId(stuId);
+                Label stuName = new Label("stu-name", sortName + " (" + displayId + ")");
+
+                Link<Void> studentLink = new Link<Void>("stu-link") {
+                    @Override
+                    public void onClick() {
+                        setResponsePage(new StudentView(stuId, item.getModelObject().getAttendanceEvent().getId(), returnPage));
+                    }
+                };
+                studentLink.add(stuName);
+                item.add(studentLink);
+                item.add(new AttendanceRecordFormDataPanel("record", item.getModel(), true, returnPage));
             }
         });
     }

@@ -64,6 +64,8 @@ public class BasePage extends WebPage implements IHeaderContributor {
 	
 	@SpringBean(name="org.sakaiproject.attendance.logic.AttendanceLogic")
 	protected AttendanceLogic attendanceLogic;
+
+	protected String role;
 	
 	Link<Void> firstLink;
 	Link<Void> settingsLink;
@@ -74,6 +76,8 @@ public class BasePage extends WebPage implements IHeaderContributor {
 	public BasePage() {
 		
 		log.debug("BasePage()");
+
+		this.role = sakaiProxy.getCurrentUserRoleInCurrentSite();
 
     	//first link
 		firstLink = new Link<Void>("firstLink") {
@@ -160,6 +164,14 @@ public class BasePage extends WebPage implements IHeaderContributor {
 		l.setEnabled(false);
 	}
 
+	/**
+	 * Helper to disable the Link Headers
+	 */
+	protected void hideNavigationLink(Link<Void> l) {
+		l.setVisible(false);
+	}
+
 	public static final String OVERVIEW_PAGE = "overview";
 	public static final String ITEMS_PAGE = "items";
+	public static final String STUDENT_PAGE = "student_view";
 }

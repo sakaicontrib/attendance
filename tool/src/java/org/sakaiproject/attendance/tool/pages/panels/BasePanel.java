@@ -35,11 +35,19 @@ public class BasePanel extends Panel {
 
     protected static final Logger log = Logger.getLogger(BasePanel.class);
 
+    protected String role;
+
     public BasePanel(String id) {
         super(id);
+        init();
     }
 
     public BasePanel(String id, IModel<?> i){
         super(id, i);
+        init();
+    }
+
+    private void init(){
+        this.role = sakaiProxy.getCurrentUserRoleInCurrentSite();
     }
 }

@@ -49,7 +49,14 @@ public class SakaiProxyImpl implements SakaiProxy {
 	public String getCurrentSiteId(){
 		return toolManager.getCurrentPlacement().getContext();
 	}
-	
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public User getCurrentUser() {
+		return getUser(getCurrentUserId());
+	}
+
 	/**
  	* {@inheritDoc}
  	*/
@@ -97,6 +104,20 @@ public class SakaiProxyImpl implements SakaiProxy {
 		}
 		return loc;
 
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public String getCurrentUserRoleInCurrentSite() {
+		return getCurrentUserRole(getCurrentSiteId());
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public String getCurrentUserRole(String siteId) {
+		return authzGroupService.getUserRole(getCurrentUserId(), "/site/" + siteId);
 	}
 
 	/**
@@ -178,6 +199,31 @@ public class SakaiProxyImpl implements SakaiProxy {
 			e.printStackTrace();
 			return null;
 		}
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public String getUserSortName(String userId) {
+		User u = getUser(userId);
+		if(u != null){
+			return u.getSortName();
+		}
+
+		return "";
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public String getUserDisplayId(String userId) {
+		User u = getUser(userId);
+
+		if(u != null) {
+			return u.getDisplayId();
+		}
+
+		return "";
 	}
 
 	/**

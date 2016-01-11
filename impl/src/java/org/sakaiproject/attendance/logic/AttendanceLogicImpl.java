@@ -215,6 +215,13 @@ public class AttendanceLogicImpl implements AttendanceLogic {
 	/**
 	 * {@inheritDoc}
 	 */
+	public List<AttendanceRecord> getAttendanceRecordsForUserInCurrentSite(String id) {
+		return generateAttendanceRecords(id);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
 	public boolean updateAttendanceRecord(AttendanceRecord aR) {
 		if(aR == null) {
 			throw new IllegalArgumentException("AttendanceRecord cannot be null");
@@ -255,66 +262,6 @@ public class AttendanceLogicImpl implements AttendanceLogic {
 		return dao.updateAttendanceRecords(records);
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
-	public boolean updateMissingRecordsForEvent(AttendanceEvent attendanceEvent, Status defaultStatus, List<String> missingStudentIds) {
-		List<AttendanceRecord> recordList = new ArrayList<AttendanceRecord>();
-
-		if(defaultStatus == null) {
-			defaultStatus = attendanceEvent.getAttendanceSite().getDefaultStatus();
-		}
-
-		if(missingStudentIds != null && !missingStudentIds.isEmpty()) {
-			for(String studentId : missingStudentIds) {
-				AttendanceRecord attendanceRecord = generateAttendanceRecord(attendanceEvent, sakaiProxy.getUser(studentId), defaultStatus);
-				if(attendanceRecord != null) {
-					recordList.add(attendanceRecord);
-				}
-			}
-			return dao.updateAttendanceRecords(recordList);
-		}
-		return false;
-	}
-
-	/**
-	 * init - perform any actions required here for when this bean starts up
-	 */
-	public void init() {
-		log.info("init");
-	}
-
-	private List<AttendanceRecord> generateAttendanceRecords(AttendanceEvent aE, Status s) {
-		if(s == null) {
-			s = aE.getAttendanceSite().getDefaultStatus();
-		}
-
-		List<AttendanceRecord> recordList = new ArrayList<AttendanceRecord>();
-		List<User> userList = sakaiProxy.getCurrentSiteMembership();
-
-		if(userList.isEmpty()){
-			// do something
-		}
-
-		for(User user : userList) {
-			AttendanceRecord attendanceRecord = generateAttendanceRecord(aE, user, s);
-			recordList.add(attendanceRecord);
-		}
-
-		return recordList;
-	}
-
-	private AttendanceRecord generateAttendanceRecord(AttendanceEvent aE, User user, Status s) {
-		if(s == null) {
-			s = aE.getAttendanceSite().getDefaultStatus();
-		}
-
-		AttendanceRecord record = new AttendanceRecord(aE, user.getId(), s);
-		dao.addAttendanceRecord(record);
-
-		return record;
-	}
-
 	public Map<Status, Integer> getStatsForEvent(AttendanceEvent event) {
 		Map<Status, Integer> results = new HashMap<Status, Integer>();
 		List<String> currentStudents = sakaiProxy.getCurrentSiteMembershipIds();
@@ -336,6 +283,92 @@ public class AttendanceLogicImpl implements AttendanceLogic {
 		}
 
 		return results;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public boolean updateMissingRecordsForEvent(AttendanceEvent attendanceEvent, Status defaultStatus, List<String> missingStudentIds) {
+		List<AttendanceRecord> recordList = new ArrayList<AttendanceRecord>();
+
+		if(defaultStatus == null) {
+			defaultStatus = attendanceEvent.getAttendanceSite().getDefaultStatus();
+		}
+
+		if(missingStudentIds != null && !missingStudentIds.isEmpty()) {
+			for(String studentId : missingStudentIds) {
+				AttendanceRecord attendanceRecord = generateAttendanceRecord(attendanceEvent, studentId, defaultStatus);
+				if(attendanceRecord != null) {
+					recordList.add(attendanceRecord);
+				}
+			}
+			return dao.updateAttendanceRecords(recordList);
+		}
+		return false;
+	}
+
+	/**
+	 * init - perform any actions required here for when this bean starts up
+	 */
+	public void init() {
+		log.info("init");
+	}
+
+	private List<AttendanceRecord> generateAttendanceRecords(String id) {
+		List<AttendanceEvent> aEs = getAttendanceEventsForCurrentSite();
+		List<AttendanceRecord> records = new ArrayList<AttendanceRecord>(aEs.size());
+		Status s = getCurrentAttendanceSite().getDefaultStatus();
+		// Is there a faster way to do this? Would querying the DB be faster?
+		for(AttendanceEvent e : aEs) {
+			boolean recordPresent = false;
+			Set<AttendanceRecord> eRecords = e.getRecords();
+
+			if(!eRecords.isEmpty()) {
+				for (AttendanceRecord r : eRecords) {
+					if (r.getUserID().equals(id)) {
+						recordPresent = true;
+						records.add(r);
+					}
+				}
+			}
+
+			if(!recordPresent) {
+				records.add(generateAttendanceRecord(e, id, s));
+			}
+		}
+
+		return records;
+	}
+
+	private List<AttendanceRecord> generateAttendanceRecords(AttendanceEvent aE, Status s) {
+		if(s == null) {
+			s = aE.getAttendanceSite().getDefaultStatus();
+		}
+
+		List<AttendanceRecord> recordList = new ArrayList<AttendanceRecord>();
+		List<User> userList = sakaiProxy.getCurrentSiteMembership();
+
+		if(userList.isEmpty()){
+			// do something
+		}
+
+		for(User user : userList) {
+			AttendanceRecord attendanceRecord = generateAttendanceRecord(aE, user.getId(), s);
+			recordList.add(attendanceRecord);
+		}
+
+		return recordList;
+	}
+
+	private AttendanceRecord generateAttendanceRecord(AttendanceEvent aE, String id, Status s) {
+		if(s == null) {
+			s = aE.getAttendanceSite().getDefaultStatus();
+		}
+
+		AttendanceRecord record = new AttendanceRecord(aE, id, s);
+		dao.addAttendanceRecord(record);
+
+		return record;
 	}
 
 	private void generateStatsHelper(Map<Status, Integer> m, Status s, int base) {

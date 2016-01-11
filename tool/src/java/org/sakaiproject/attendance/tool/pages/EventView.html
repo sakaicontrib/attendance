@@ -28,7 +28,7 @@
             <a wicket:id="edit-link"><img src="/library/image/ud_custom/settings.png" alt="Edit" width="24px"/></a>
         </h2>
     </div>
-
+    
     <div class="itemInfoContainer">
         <div class="itemInfoHeader">
             <h3 class="itemInfoHeader">
@@ -72,28 +72,14 @@
                     <span wicket:id="student-name" />
                 </th>
                 <th class="takeAttendanceStatusCol">
-                    <div class="div-table-col">
-                        <span wicket:id="status-present" />
-                    </div>
-                    <div class="div-table-col">
-                        <span wicket:id="status-late" />
-                    </div>
-                    <div class="div-table-col">
-                        <span wicket:id="status-left-early" />
-                    </div>
-                    <div class="div-table-col">
-                        <span wicket:id="status-excused" />
-                    </div>
-                    <div class="div-table-col">
-                        <span wicket:id="status-unexcused" />
-                    </div>
+                    <span wicket:id="record-header"/>
                 </th>
             </tr>
             </thead>
             <tbody>
             <tr wicket:id="records" class="div-table-row">
                 <td>
-                    <span wicket:id="stu-name"></span>
+                    <a wicket:id="stu-link"><span wicket:id="stu-name"></span></a>
                 </td>
                 <td>
                     <span wicket:id="record" />

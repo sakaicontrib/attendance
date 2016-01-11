@@ -19,15 +19,19 @@ package org.sakaiproject.attendance.tool.pages.panels;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormSubmitBehavior;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.Radio;
 import org.apache.wicket.markup.html.form.RadioGroup;
+import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.model.ResourceModel;
 import org.sakaiproject.attendance.model.AttendanceRecord;
 import org.sakaiproject.attendance.model.Status;
+import org.sakaiproject.attendance.tool.pages.StudentView;
 import org.sakaiproject.user.api.User;
 
 import java.util.ArrayList;
@@ -36,16 +40,20 @@ import java.util.List;
 /**
  * Created by Leonardo Canessa [lcanessa1 (at) udayton (dot) edu]
  */
-public class AttendanceRecordFormPanel extends BasePanel {
+public class AttendanceRecordFormDataPanel extends BasePanel {
     private static final    long                        serialVersionUID = 1L;
     private                 IModel<AttendanceRecord>    recordIModel;
-    private                 boolean                     isStudent;
+    private                 boolean                     isStudentView;
+    private                 boolean                     restricted ;
     private                 List<Component>             ajaxTargets = new ArrayList<Component>();
+    private                 String                      returnPage;
 
-    public AttendanceRecordFormPanel(String id, IModel<AttendanceRecord> aR, boolean iS) {
+    public AttendanceRecordFormDataPanel(String id, IModel<AttendanceRecord> aR, boolean iS, String rP) {
         super(id, aR);
         this.recordIModel = aR;
-        this.isStudent = iS;
+        this.isStudentView = iS;
+        this.restricted = this.role.equals("Student");
+        this.returnPage = rP;
         add(createRecordInputForm());
     }
 
@@ -64,29 +72,48 @@ public class AttendanceRecordFormPanel extends BasePanel {
     }
 
     private void createLabel(Form<AttendanceRecord> rF) {
-        Label studentName = new Label("student-name") {
+        WebMarkupContainer student = new WebMarkupContainer("student") {
             @Override
             public boolean isVisible(){
-                return isStudent;
-            }
-        };
-        Label eventName = new Label("event-name") {
-            @Override
-            public boolean isVisible(){
-                return !isStudent;
+                return isStudentView;
             }
         };
 
-        if(!this.isStudent) {
-            User student = sakaiProxy.getUser(this.recordIModel.getObject().getUserID());
-            if(student != null) {
-                studentName = new Label("student-name", student.getSortName());
+        Label studentName = new Label("student-name");
+        Link<Void> studentLink = new Link<Void>("student-link") {
+            @Override
+            public void onClick(){
+                // do nothing
             }
-        } else {
-            eventName = new Label("event-name", this.recordIModel.getObject().getAttendanceEvent().getName());
+        };
+
+        if(isStudentView) {
+            final String id = this.recordIModel.getObject().getUserID();
+            String s = sakaiProxy.getUserSortName(id);
+            studentName = new Label("student-name", s.equals("") ? new ResourceModel("attendance.student.name.unknown") : s);
+
+            studentLink = new Link<Void>("student-link") {
+                @Override
+                public void onClick() {
+                    setResponsePage(new StudentView(id, recordIModel.getObject().getAttendanceEvent().getId(), returnPage));
+                }
+            };
+
+
         }
 
-        rF.add(studentName);
+        studentLink.add(studentName);
+        student.add(studentLink);
+
+        Label eventName = new Label("event-name", this.recordIModel.getObject().getAttendanceEvent().getName()){
+            @Override
+            public boolean isVisible(){
+                return !isStudentView;
+            }
+        };
+
+
+        rF.add(student);
         rF.add(eventName);
     }
 
@@ -147,6 +174,7 @@ public class AttendanceRecordFormPanel extends BasePanel {
         group.add(left_early);
         group.add(excused);
         group.add(absent);
+        group.setEnabled(!this.restricted);
 
         rF.add(group);
     }

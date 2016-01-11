@@ -16,6 +16,7 @@
 
 package org.sakaiproject.attendance.tool.pages;
 
+import org.apache.wicket.RestartResponseException;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.repeater.Item;
@@ -40,6 +41,10 @@ public class Overview extends BasePage {
 
 	public Overview() {
 		disableLink(this.firstLink);
+
+		if (this.role.equals("Student")) {
+			throw new RestartResponseException(StudentView.class);
+		}
 
 		add(new Label("overview-info", new ResourceModel("attendance.overview.info")));
 		

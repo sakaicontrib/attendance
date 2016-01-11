@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~  Copyright (c) 2016, The Apereo Foundation
+  ~
+  ~  Licensed under the Educational Community License, Version 2.0 (the "License");
+  ~  you may not use this file except in compliance with the License.
+  ~  You may obtain a copy of the License at
+  ~
+  ~              http://opensource.org/licenses/ecl2
+  ~
+  ~  Unless required by applicable law or agreed to in writing, software
+  ~  distributed under the License is distributed on an "AS IS" BASIS,
+  ~  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~  See the License for the specific language governing permissions and
+  ~  limitations under the License.
+  -->
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:wicket="http://wicket.apache.org">
+<body>
+<wicket:extend>
+    <div wicket:id="header" class="attendanceBreadcrumbs">
+        <h2>
+            <a wicket:id="close-link"><span wicket:id="close-link-text" /></a>
+            <span>></span>
+            <a wicket:id="event-link"><span wicket:id="event-link-text"></span></a>
+            <span>></span>
+            <span wicket:id="student-name" />
+        </h2>
+    </div>
+    <div wicket:id="student-view">
+        <h2>
+            <span wicket:id="attendance-header" /> <span>></span> <span wicket:id="student-name" />
+        </h2>
+    </div>
+    <div wicket:id="student-view-data">
+        <div class="div-table">
+            <div class="div-table-row-header">
+                <div class="div-table-col">
+                    <span wicket:id="event-name" />
+                </div>
+                <span wicket:id="header" />
+
+            </div>
+            <div class="div-table-row2"  wicket:id="records ">
+                <div class="div-table-col">
+                    <span wicket:id="record-name" />
+                </div>
+                <span wicket:id="record" />
+            </div>
+        </div>
+    </div>
+</wicket:extend>
+</body>
+</html>

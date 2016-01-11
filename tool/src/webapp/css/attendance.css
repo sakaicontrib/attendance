@@ -262,3 +262,47 @@ div.attendanceBreadcrumbs span {
 .div-table-col input:hover {
     cursor: pointer;
 }
+
+.div-table{
+    display:table;
+    width:auto;
+    background-color:#fff;
+    border:1px solid  #ccc;
+    font-size: 1.2em;
+    margin-left: 70px;
+}
+
+.div-table-row2 {
+    display:table-row;
+    width:auto;
+    clear:both;
+}
+
+.div-table-row-header {
+    background-color: #eee;
+}
+
+.div-table-col {
+    float:left;/*fix for  buggy browsers*/
+    display:table-cell;
+    width:80px;
+    text-align: center;
+    padding: .5em;
+}
+
+.div-table-row:hover {
+    background-color: #deeeff;
+}
+
+.div-table-col input:hover {
+    cursor: pointer;
+}
+
+.divHeader {
+    font-weight: bold;
+}
+
+.divTableName {
+    width: 160px;
+    text-align: left;
+}

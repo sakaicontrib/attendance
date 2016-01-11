@@ -23,10 +23,6 @@ import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.Url;
 import org.apache.wicket.spring.injection.annot.SpringComponentInjector;
 
-
-
-
-
 import org.sakaiproject.attendance.tool.pages.Overview;
 
 /**
@@ -35,17 +31,19 @@ import org.sakaiproject.attendance.tool.pages.Overview;
  * @author Steve Swinsburg (steve.swinsburg@gmail.com)
  * @author David F. Torres
  * @author Michael Mertins (mertins@zedat.fu-berlin.de)
+ * @author Leonardo Canessa [lcanessa1 (at) udayton (dot) edu]
  *
  * Cf. https://confluence.sakaiproject.org/pages/viewpage.action?pageId=83034325
  */
-public class MyApplication extends WebApplication {    
+public class Attendance extends WebApplication {
    
 	/**
 	 * Configure your app here
 	 */
 	@Override
 	protected void init() {
-		
+		super.init();
+
 		//Configure for Spring injection
         getComponentInstantiationListeners().add(new SpringComponentInjector(this));
 
@@ -160,7 +158,7 @@ public class MyApplication extends WebApplication {
 	/**
      * Constructor
      */
-	public MyApplication()
+	public Attendance()
 	{
 	}
 	
