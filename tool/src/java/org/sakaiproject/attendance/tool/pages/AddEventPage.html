@@ -58,7 +58,7 @@
 					<a wicket:id="event-link"><span wicket:id="event-name" /></a>
 				</td>
 				<td>
-					<span wicket:id="item-date"/>
+					<span wicket:id="item-date" />
 				</td>
                 <td class="itemListEditCol">
                     <a wicket:id="edit-link"><img src="/library/image/ud_custom/settings.png" alt="Edit" width="24px"/></a>
@@ -70,15 +70,13 @@
 			</tbody>
 		</table>
 
-
-        <script type="text/javascript" src="/library/js/jquery/tablesorter/2.0.3/jquery.tablesorter-2.0.3.min.js"></script>
+        <script type="text/javascript" src="javascript/jquery.tablesorter.min.js"></script>
         <script type="text/javascript">
             $("#itemListTable").tablesorter({
                 sortList: [[1,0],[0,0]],
-                dateFormat: "mmddyyyy",
                 headers: {
                     1: {
-                        sorter: "shortDate"
+                        sorter: "attendanceDate"
                     },
                     2: {
                         sorter: false

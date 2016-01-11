@@ -66,15 +66,14 @@
 		</tbody>
 	</table>
 
-	<script type="text/javascript" src="/library/js/jquery/tablesorter/2.0.3/jquery.tablesorter-2.0.3.min.js"></script>
+	<script type="text/javascript" src="javascript/jquery.tablesorter.min.js"></script>
 	<script type="text/javascript">
 		$("p.overviewInstructions").width($("#overviewTable").outerWidth());
 		$("#overviewTable").tablesorter({
 			sortList: [[1,0],[0,0]],
-			dateFormat: "mmddyyyy",
 			headers: {
 				1: {
-					sorter: "shortDate"
+					sorter: "attendanceDate"
 				},
 				7: {
 					sorter: false

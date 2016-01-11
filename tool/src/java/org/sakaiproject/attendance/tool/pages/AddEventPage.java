@@ -31,6 +31,8 @@ import org.sakaiproject.attendance.tool.dataproviders.EventDataProvider;
 import org.sakaiproject.attendance.tool.pages.panels.EventInputPanel;
 import org.sakaiproject.attendance.tool.util.ConfirmationLink;
 
+import java.util.Date;
+
 /**
  * A simple page which allows for events to be added.
  * 
