@@ -133,12 +133,12 @@ public class AttendanceRecordFormDataPanel extends BasePanel {
         Radio late          = new Radio<Status>("record-status-late",       new Model<Status>(Status.LATE));
         Radio left_early    = new Radio<Status>("record-status-left-early", new Model<Status>(Status.LEFT_EARLY));
         Radio excused       = new Radio<Status>("record-status-excused",    new Model<Status>(Status.EXCUSED_ABSENCE));
-        Radio absent        = new Radio<Status>("record-status-absent",     new Model<Status>(Status.UNEXCUSED_ABSENCE));
+        Radio unexcused        = new Radio<Status>("record-status-unexcused",     new Model<Status>(Status.UNEXCUSED_ABSENCE));
         ajaxTargets.add(present);
         ajaxTargets.add(late);
         ajaxTargets.add(left_early);
         ajaxTargets.add(excused);
-        ajaxTargets.add(absent);
+        ajaxTargets.add(unexcused);
 
         present.add(new AjaxFormSubmitBehavior(rF, "onclick") {
             protected void onSubmit(AjaxRequestTarget target) {
@@ -168,7 +168,7 @@ public class AttendanceRecordFormDataPanel extends BasePanel {
                 }
             }
         });
-        absent.add(new AjaxFormSubmitBehavior(rF, "onclick") {
+        unexcused.add(new AjaxFormSubmitBehavior(rF, "onclick") {
             protected void onSubmit(AjaxRequestTarget target) {
                 for (Component c : ajaxTargets) {
                     target.add(c);
@@ -183,7 +183,7 @@ public class AttendanceRecordFormDataPanel extends BasePanel {
         group.add(late);
         group.add(left_early);
         group.add(excused);
-        group.add(absent);
+        group.add(unexcused);
         group.setEnabled(!this.restricted);
 
         rF.add(group);
