@@ -25,10 +25,8 @@ import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.Radio;
 import org.apache.wicket.markup.html.form.RadioGroup;
 import org.apache.wicket.markup.html.link.Link;
-import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
-import org.apache.wicket.model.PropertyModel;
-import org.apache.wicket.model.ResourceModel;
+import org.apache.wicket.markup.html.panel.FeedbackPanel;
+import org.apache.wicket.model.*;
 import org.sakaiproject.attendance.model.AttendanceRecord;
 import org.sakaiproject.attendance.model.Status;
 import org.sakaiproject.attendance.tool.pages.StudentView;
@@ -47,13 +45,16 @@ public class AttendanceRecordFormDataPanel extends BasePanel {
     private                 boolean                     restricted ;
     private                 List<Component>             ajaxTargets = new ArrayList<Component>();
     private                 String                      returnPage;
+    private                 FeedbackPanel               pageFeedbackPanel;
 
-    public AttendanceRecordFormDataPanel(String id, IModel<AttendanceRecord> aR, boolean iS, String rP) {
+    public AttendanceRecordFormDataPanel(String id, IModel<AttendanceRecord> aR, boolean iS, String rP, FeedbackPanel fP) {
         super(id, aR);
         this.recordIModel = aR;
         this.isStudentView = iS;
         this.restricted = this.role != null && this.role.equals("Student");
         this.returnPage = rP;
+        this.pageFeedbackPanel = fP;
+        this.ajaxTargets.add(this.pageFeedbackPanel);
         add(createRecordInputForm());
     }
 
@@ -61,7 +62,16 @@ public class AttendanceRecordFormDataPanel extends BasePanel {
         Form<AttendanceRecord> recordForm = new Form<AttendanceRecord>("attendanceRecord", this.recordIModel) {
             protected void onSubmit() {
                 AttendanceRecord aR = (AttendanceRecord) getDefaultModelObject();
-                attendanceLogic.updateAttendanceRecord(aR);
+                boolean result = attendanceLogic.updateAttendanceRecord(aR);
+                String[] resultMsgVars = new String[]{sakaiProxy.getUserSortName(aR.getUserID()), aR.getAttendanceEvent().getName(), aR.getStatus().toString()};
+                StringResourceModel temp;
+                if(result){
+                    temp = new StringResourceModel("attendance.record.save.success", null, resultMsgVars);
+                    getSession().info(temp.getString());
+                } else {
+                    temp = new StringResourceModel("attendance.record.save.failure", null, resultMsgVars);
+                    getSession().error(temp.getString());
+                }
             }
         };
 
@@ -117,7 +127,7 @@ public class AttendanceRecordFormDataPanel extends BasePanel {
         rF.add(eventName);
     }
 
-    private void createStatusRadio(Form<AttendanceRecord> rF) {
+    private void createStatusRadio(final Form<AttendanceRecord> rF) {
         // probably a programmatic way to do this...
         Radio present       = new Radio<Status>("record-status-present",    new Model<Status>(Status.PRESENT));
         Radio late          = new Radio<Status>("record-status-late",       new Model<Status>(Status.LATE));

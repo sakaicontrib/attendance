@@ -144,7 +144,7 @@ public class StudentView extends BasePage {
             @Override
             protected void populateItem(Item<AttendanceRecord> item) {
                 item.add(new Label("record-name", item.getModelObject().getAttendanceEvent().getName()));
-                item.add(new AttendanceRecordFormDataPanel("record", item.getModel(), false, returnPage));
+                item.add(new AttendanceRecordFormDataPanel("record", item.getModel(), false, returnPage, feedbackPanel));
             }
         };
 
