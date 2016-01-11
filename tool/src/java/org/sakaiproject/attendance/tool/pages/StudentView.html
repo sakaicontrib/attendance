@@ -32,22 +32,47 @@
             <span wicket:id="attendance-header" /> <span>></span> <span wicket:id="student-name" />
         </h2>
     </div>
-    <div wicket:id="student-view-data">
-        <div class="div-table">
-            <div class="div-table-row-header">
-                <div class="div-table-col">
-                    <span wicket:id="event-name" />
-                </div>
-                <span wicket:id="header" />
-
-            </div>
-            <div class="div-table-row2"  wicket:id="records ">
-                <div class="div-table-col">
-                    <span wicket:id="record-name" />
-                </div>
-                <span wicket:id="record" />
-            </div>
+    <div wicket:id="student-view-data" class="takeAttendanceContainer">
+        <div class="takeAttendanceHeader">
+            <h3 class="takeAttendanceHeader">
+                <span wicket:id="take-attendance-header"/>
+            </h3>
         </div>
+
+        <table id="takeAttendanceTable" class="takeAttendanceTable">
+            <thead>
+            <tr class="div-table-row">
+                <th class="takeAttendanceNameHeader">
+                    <span wicket:id="event-name" />
+                </th>
+                <th class="takeAttendanceStatusCol">
+                    <span wicket:id="header"/>
+                </th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr wicket:id="records" class="div-table-row">
+                <td>
+                    <a wicket:id="event-link"><span wicket:id="record-name"></span></a>
+                </td>
+                <td>
+                    <span wicket:id="record" />
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+        <script type="text/javascript" src="/library/js/jquery/tablesorter/2.0.3/jquery.tablesorter-2.0.3.min.js"></script>
+        <script type="text/javascript">
+            $("#takeAttendanceTable").tablesorter({
+                sortList: [[0,0]],
+                headers: {
+                    1: {
+                        sorter: false
+                    }
+                }
+            });
+        </script>
     </div>
 </wicket:extend>
 </body>

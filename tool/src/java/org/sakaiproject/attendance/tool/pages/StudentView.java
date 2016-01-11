@@ -132,6 +132,11 @@ public class StudentView extends BasePage {
     private WebMarkupContainer createTable(){
         WebMarkupContainer studentViewData = new WebMarkupContainer("student-view-data");
 
+        if(!isStudent) {
+            studentViewData.add(new Label("take-attendance-header", getString("attendance.student.view.take.attendance")));
+        } else {
+            studentViewData.add(new Label("take-attendance-header", getString("attendance.student.view.attendance")));
+        }
         studentViewData.add(new AttendanceRecordFormHeaderPanel("header"));
         studentViewData.add(new Label("event-name", new ResourceModel("attendance.record.form.header.event")));
         studentViewData.add(createData());
@@ -142,8 +147,18 @@ public class StudentView extends BasePage {
     private DataView<AttendanceRecord> createData(){
         DataView<AttendanceRecord> dataView = new DataView<AttendanceRecord>("records", new AttendanceRecordProvider(this.studentId)) {
             @Override
-            protected void populateItem(Item<AttendanceRecord> item) {
-                item.add(new Label("record-name", item.getModelObject().getAttendanceEvent().getName()));
+            protected void populateItem(final Item<AttendanceRecord> item) {
+                Link<Void> eventLink = new Link<Void>("event-link") {
+                    private static final long serialVersionUID = 1L;
+                    public void onClick() {
+                        setResponsePage(new EventView(item.getModelObject().getAttendanceEvent(), returnPage));
+                    }
+                };
+                eventLink.add(new Label("record-name", item.getModelObject().getAttendanceEvent().getName()));
+                if(isStudent) {
+                    disableLink(eventLink);
+                }
+                item.add(eventLink);
                 item.add(new AttendanceRecordFormDataPanel("record", item.getModel(), false, returnPage));
             }
         };
