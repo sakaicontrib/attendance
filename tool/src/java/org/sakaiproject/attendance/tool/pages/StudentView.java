@@ -52,7 +52,7 @@ public class StudentView extends BasePage {
     }
 
     private void init() {
-        if(this.role.equals("Student")){
+        if(this.role != null && this.role.equals("Student")){
             this.isStudent = true;
             hideNavigationLink(this.firstLink);
             hideNavigationLink(this.addEventLink);

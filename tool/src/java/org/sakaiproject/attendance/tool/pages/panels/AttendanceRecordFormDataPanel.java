@@ -52,7 +52,7 @@ public class AttendanceRecordFormDataPanel extends BasePanel {
         super(id, aR);
         this.recordIModel = aR;
         this.isStudentView = iS;
-        this.restricted = this.role.equals("Student");
+        this.restricted = this.role != null && this.role.equals("Student");
         this.returnPage = rP;
         add(createRecordInputForm());
     }
