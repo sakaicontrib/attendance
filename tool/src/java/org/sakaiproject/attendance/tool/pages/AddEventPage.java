@@ -76,7 +76,7 @@ public class AddEventPage extends BasePage {
 					}
 				}
 			};
-			eventFormContainer.add(deleteItem);
+
 		} else {
 			// Add dummy/hidden delete link
 			deleteItem = new ConfirmationLink<Void>("delete-event", "") {
@@ -86,8 +86,8 @@ public class AddEventPage extends BasePage {
 				}
 			};
 			deleteItem.setVisible(false);
-			eventFormContainer.add(deleteItem);
 		}
+		eventFormContainer.add(deleteItem);
 
 		eventForm = createForm();
 		eventFormContainer.add(eventForm);
