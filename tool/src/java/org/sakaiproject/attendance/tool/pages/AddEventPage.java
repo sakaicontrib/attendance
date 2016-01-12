@@ -61,12 +61,12 @@ public class AddEventPage extends BasePage {
 
 		this.attendanceEvent = aE;
 
-		eventFormContainer = new WebMarkupContainer("event-form-container");
+		this.eventFormContainer = new WebMarkupContainer("event-form-container");
 		eventFormContainer.setOutputMarkupId(true);
 
 
 		if(attendanceEvent != null) {
-			deleteItem = new ConfirmationLink<Void>("delete-event", getString("attendance.delete.confirm")) {
+			this.deleteItem = new ConfirmationLink<Void>("delete-event", getString("attendance.delete.confirm")) {
 				@Override
 				public void onClick(AjaxRequestTarget ajaxRequestTarget) {
 					String name = attendanceEvent.getName();
@@ -79,7 +79,7 @@ public class AddEventPage extends BasePage {
 
 		} else {
 			// Add dummy/hidden delete link
-			deleteItem = new ConfirmationLink<Void>("delete-event", "") {
+			this.deleteItem = new ConfirmationLink<Void>("delete-event", "") {
 				@Override
 				public void onClick(AjaxRequestTarget ajaxRequestTarget) {
 					// Do nothing
@@ -96,10 +96,10 @@ public class AddEventPage extends BasePage {
 
 		add(eventFormContainer);
 
-		eventListContainer = new WebMarkupContainer("event-list-container");
+		this.eventListContainer = new WebMarkupContainer("event-list-container");
 		eventListContainer.setOutputMarkupId(true);
 
-		eventDataProvider = new EventDataProvider();
+		this.eventDataProvider = new EventDataProvider();
 
 		DataView<AttendanceEvent> attendanceEventDataView = new DataView<AttendanceEvent>("event-list", eventDataProvider) {
 			@Override
@@ -145,11 +145,11 @@ public class AddEventPage extends BasePage {
 
 	private Form createForm() {
 		if(attendanceEvent == null) {
-			attendanceEvent = new AttendanceEvent();
+			this.attendanceEvent = new AttendanceEvent();
 		}
 
 		Form form = new Form("form");
-		form.add(new EventInputPanel("event", new CompoundPropertyModel<AttendanceEvent>(attendanceEvent)));
+		form.add(new EventInputPanel("event", new CompoundPropertyModel<AttendanceEvent>(this.attendanceEvent)));
 		form.add(new AjaxSubmitLink("submit") {
 			@Override
 			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
@@ -168,13 +168,13 @@ public class AddEventPage extends BasePage {
 	}
 
 	private void refreshPageComponents(AjaxRequestTarget target) {
-		attendanceEvent = null;
-		eventForm = createForm();
-		eventFormContainer.addOrReplace(eventForm);
-		deleteItem.setVisible(false);
-		eventFormContainer.addOrReplace(deleteItem);
-		target.add(eventFormContainer);
-		target.add(eventListContainer);
-		target.add(feedbackPanel);
+		this.attendanceEvent = null;
+		this.eventForm = createForm();
+		this.eventFormContainer.addOrReplace(this.eventForm);
+		this.deleteItem.setVisible(false);
+		this.eventFormContainer.addOrReplace(deleteItem);
+		target.add(this.eventFormContainer);
+		target.add(this.eventListContainer);
+		target.add(this.feedbackPanel);
 	}
 }
