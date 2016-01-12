@@ -148,7 +148,12 @@ public class AddEventPage extends BasePage {
 			this.attendanceEvent = new AttendanceEvent();
 		}
 
-		Form form = new Form("form");
+		Form form = new Form("form") {
+			@Override
+			public void onSubmit() {
+				refreshPageComponents(null);
+			}
+		};
 		form.add(new EventInputPanel("event", new CompoundPropertyModel<AttendanceEvent>(this.attendanceEvent)));
 		form.add(new AjaxSubmitLink("submit") {
 			@Override
@@ -173,8 +178,10 @@ public class AddEventPage extends BasePage {
 		this.eventFormContainer.addOrReplace(this.eventForm);
 		this.deleteItem.setVisible(false);
 		this.eventFormContainer.addOrReplace(deleteItem);
-		target.add(this.eventFormContainer);
-		target.add(this.eventListContainer);
-		target.add(this.feedbackPanel);
+		if(target != null) {
+			target.add(this.eventFormContainer);
+			target.add(this.eventListContainer);
+			target.add(this.feedbackPanel);
+		}
 	}
 }
