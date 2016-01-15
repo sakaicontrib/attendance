@@ -215,7 +215,7 @@ public class AttendanceLogicImpl implements AttendanceLogic {
 	/**
 	 * {@inheritDoc}
 	 */
-	public List<AttendanceRecord> getAttendanceRecordsForUserInCurrentSite(String id) {
+	public List<AttendanceRecord> getAttendanceRecordsForUser(String id) {
 		return getAttendanceRecordsForUser(id, getCurrentAttendanceSite());
 	}
 
