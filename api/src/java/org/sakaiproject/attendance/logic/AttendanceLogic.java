@@ -182,4 +182,19 @@ public interface AttendanceLogic {
 	 * @return A Map with Status as the key and Integer (number of occurrences) as the value
 	 */
 	Map<Status, Integer> getStatsForEvent(AttendanceEvent event);
+
+	/**
+	 * Get statistics for user in current site
+	 * @param userId
+	 * @return
+     */
+	Map<Status, Integer> getStatsForUser(String userId);
+
+	/**
+	 * get statistics for user in site
+	 * @param userId, the user to get stats for
+	 * @param aS, the AttendanceSite to get the stats for
+     * @return
+     */
+	Map<Status, Integer> getStatsForUser(String userId, AttendanceSite aS);
 }

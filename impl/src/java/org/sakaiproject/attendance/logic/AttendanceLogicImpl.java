@@ -318,6 +318,36 @@ public class AttendanceLogicImpl implements AttendanceLogic {
 	}
 
 	/**
+	 * {@inheritDoc}
+	 */
+	public Map<Status, Integer> getStatsForUser(String userId) {
+		return getStatsForUser(userId, getCurrentAttendanceSite());
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public Map<Status, Integer> getStatsForUser(String userId, AttendanceSite aS) {
+		Map<Status, Integer> results = new HashMap<Status, Integer>();
+
+		for(Status s : Status.values()){
+			generateStatsHelper(results, s, 0);
+		}
+
+		List<AttendanceRecord> records = getAttendanceRecordsForUser(userId, aS);
+
+		if(!records.isEmpty()) {
+			for(AttendanceRecord record : records) {
+				if(record.getUserID().equals(userId)){
+					generateStatsHelper(results, record.getStatus(), 1);
+				}
+			}
+		}
+
+		return results;
+	}
+
+	/**
 	 * init - perform any actions required here for when this bean starts up
 	 */
 	public void init() {
