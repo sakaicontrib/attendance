@@ -138,6 +138,14 @@ public interface AttendanceLogic {
 	List<AttendanceRecord> getAttendanceRecordsForUserInCurrentSite(String id);
 
 	/**
+	 * get AttendanceRecords for User in AttendanceSite
+	 * @param id
+	 * @param aS
+	 * @return
+	 */
+	List<AttendanceRecord> getAttendanceRecordsForUser(String id, AttendanceSite aS);
+
+	/**
 	 * Update an AttendanceRecord
 	 * @param aR, the AttendanceRecord to update
 	 * @return
@@ -173,5 +181,5 @@ public interface AttendanceLogic {
 	 * @param event, the AttendanceEvent
 	 * @return A Map with Status as the key and Integer (number of occurrences) as the value
 	 */
-	public Map<Status, Integer> getStatsForEvent(AttendanceEvent event);
+	Map<Status, Integer> getStatsForEvent(AttendanceEvent event);
 }

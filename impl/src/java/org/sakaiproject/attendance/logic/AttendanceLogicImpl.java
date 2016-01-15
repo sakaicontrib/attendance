@@ -216,7 +216,14 @@ public class AttendanceLogicImpl implements AttendanceLogic {
 	 * {@inheritDoc}
 	 */
 	public List<AttendanceRecord> getAttendanceRecordsForUserInCurrentSite(String id) {
-		return generateAttendanceRecords(id);
+		return getAttendanceRecordsForUser(id, getCurrentAttendanceSite());
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public List<AttendanceRecord> getAttendanceRecordsForUser(String id, AttendanceSite aS) {
+		return generateAttendanceRecords(id, aS);
 	}
 
 	/**
@@ -317,8 +324,8 @@ public class AttendanceLogicImpl implements AttendanceLogic {
 		log.info("init");
 	}
 
-	private List<AttendanceRecord> generateAttendanceRecords(String id) {
-		List<AttendanceEvent> aEs = getAttendanceEventsForCurrentSite();
+	private List<AttendanceRecord> generateAttendanceRecords(String id, AttendanceSite aS) {
+		List<AttendanceEvent> aEs = getAttendanceEventsForSite(aS);
 		List<AttendanceRecord> records = new ArrayList<AttendanceRecord>(aEs.size());
 		Status s = getCurrentAttendanceSite().getDefaultStatus();
 		// Is there a faster way to do this? Would querying the DB be faster?
