@@ -262,6 +262,31 @@ public class AttendanceLogicImpl implements AttendanceLogic {
 		return dao.updateAttendanceRecords(records);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	public boolean updateMissingRecordsForEvent(AttendanceEvent attendanceEvent, Status defaultStatus, List<String> missingStudentIds) {
+		List<AttendanceRecord> recordList = new ArrayList<AttendanceRecord>();
+
+		if(defaultStatus == null) {
+			defaultStatus = attendanceEvent.getAttendanceSite().getDefaultStatus();
+		}
+
+		if(missingStudentIds != null && !missingStudentIds.isEmpty()) {
+			for(String studentId : missingStudentIds) {
+				AttendanceRecord attendanceRecord = generateAttendanceRecord(attendanceEvent, studentId, defaultStatus);
+				if(attendanceRecord != null) {
+					recordList.add(attendanceRecord);
+				}
+			}
+			return dao.updateAttendanceRecords(recordList);
+		}
+		return false;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
 	public Map<Status, Integer> getStatsForEvent(AttendanceEvent event) {
 		Map<Status, Integer> results = new HashMap<Status, Integer>();
 		List<String> currentStudents = sakaiProxy.getCurrentSiteMembershipIds();
@@ -283,28 +308,6 @@ public class AttendanceLogicImpl implements AttendanceLogic {
 		}
 
 		return results;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public boolean updateMissingRecordsForEvent(AttendanceEvent attendanceEvent, Status defaultStatus, List<String> missingStudentIds) {
-		List<AttendanceRecord> recordList = new ArrayList<AttendanceRecord>();
-
-		if(defaultStatus == null) {
-			defaultStatus = attendanceEvent.getAttendanceSite().getDefaultStatus();
-		}
-
-		if(missingStudentIds != null && !missingStudentIds.isEmpty()) {
-			for(String studentId : missingStudentIds) {
-				AttendanceRecord attendanceRecord = generateAttendanceRecord(attendanceEvent, studentId, defaultStatus);
-				if(attendanceRecord != null) {
-					recordList.add(attendanceRecord);
-				}
-			}
-			return dao.updateAttendanceRecords(recordList);
-		}
-		return false;
 	}
 
 	/**

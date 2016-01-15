@@ -169,9 +169,9 @@ public interface AttendanceLogic {
 	boolean updateMissingRecordsForEvent(AttendanceEvent attendanceEvent, Status defaultStatus, List<String> missingStudentIds);
 
 	/**
-	 *
-	 * @param event
-	 * @return
+	 * Get statistics (total counts for each status) for an event
+	 * @param event, the AttendanceEvent
+	 * @return A Map with Status as the key and Integer (number of occurrences) as the value
 	 */
 	public Map<Status, Integer> getStatsForEvent(AttendanceEvent event);
 }
