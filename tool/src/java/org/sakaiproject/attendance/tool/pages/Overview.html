@@ -27,8 +27,12 @@
 	</h1>
 
 	<p class="overviewInstructions">
-		Select an attendance item to enter attendance records. Click on <strong>Attendance Items</strong> in the menu bar above to add additional items.
+		Select an attendance item to take attendance for that item. Click on <strong>Attendance Items</strong> in the menu bar above to add additional items.
 	</p>
+
+	<div wicket:id="print-container">
+		<span wicket:id="print-panel"/>
+	</div>
 	
 	<table id="overviewTable" class="overviewTable">
 		<thead>
@@ -41,6 +45,7 @@
 				<th class="overviewStatusCol"><span wicket:id="header-status-late" /></th>
 				<th class="overviewStatusCol"><span wicket:id="header-status-left-early" /></th>
 				<th class="overviewEditCol"><span wicket:id="header-event-edit" /></th>
+				<th class="overviewPrintCol"><span wicket:id="header-print-links" /></th>
 			</tr>
 		</thead>
 		<tbody>
@@ -53,6 +58,9 @@
 				<td class="overviewStatusCol"><span wicket:id="event-stats-late" /></td>
 				<td class="overviewStatusCol"><span wicket:id="event-stats-left-early" /></td>
 				<td class="overviewEditCol"><a wicket:id="event-edit-link"><img src="/library/image/ud_custom/settings.png" alt="Edit" width="24px"/></a></td>
+				<td class="overviewPrintCol">
+					<a wicket:id="print-link">Print</a>
+				</td>
 			</tr>
 			<wicket:enclosure child="no-events">
 				<tr>
@@ -76,6 +84,9 @@
 					sorter: "attendanceDate"
 				},
 				7: {
+					sorter: false
+				},
+				8: {
 					sorter: false
 				}
 			}

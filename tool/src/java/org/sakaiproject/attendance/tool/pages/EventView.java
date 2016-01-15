@@ -34,6 +34,7 @@ import org.sakaiproject.attendance.model.Status;
 import org.sakaiproject.attendance.tool.dataproviders.AttendanceRecordProvider;
 import org.sakaiproject.attendance.tool.pages.panels.AttendanceRecordFormDataPanel;
 import org.sakaiproject.attendance.tool.pages.panels.AttendanceRecordFormHeaderPanel;
+import org.sakaiproject.attendance.tool.pages.panels.PrintPanel;
 
 import java.util.Arrays;
 import java.util.List;
@@ -100,6 +101,8 @@ public class EventView extends BasePage {
             }
         });
         add(setAllForm);
+
+        add(new PrintPanel("print-panel", new Model<AttendanceEvent>(this.attendanceEvent)));
     }
 
     private void createStatsTable() {
