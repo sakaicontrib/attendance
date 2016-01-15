@@ -56,6 +56,7 @@ public class StudentView extends BasePage {
             this.isStudent = true;
             hideNavigationLink(this.firstLink);
             hideNavigationLink(this.addEventLink);
+            hideNavigationLink(this.studentOverviewLink);
         }
 
         add(createHeader());

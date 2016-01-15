@@ -56,7 +56,6 @@ import java.util.List;
  *
  */
 public class BasePage extends WebPage implements IHeaderContributor {
-
 	protected static final Logger log = Logger.getLogger(BasePage.class);
 	
 	@SpringBean(name="org.sakaiproject.attendance.logic.SakaiProxy")
@@ -70,6 +69,7 @@ public class BasePage extends WebPage implements IHeaderContributor {
 	Link<Void> firstLink;
 	Link<Void> settingsLink;
 	Link<Void> addEventLink;
+	Link<Void> studentOverviewLink;
 	
 	FeedbackPanel feedbackPanel;
 	
@@ -101,6 +101,17 @@ public class BasePage extends WebPage implements IHeaderContributor {
 		addEventLink.add(new Label("thirdLinkLabel", new ResourceModel("link.third")).setRenderBodyOnly(true));
 		addEventLink.add(new AttributeModifier("title", new ResourceModel("link.third.tooltip")));
 		add(addEventLink);
+
+		//student Overview Link
+		studentOverviewLink = new Link<Void>("student-overview-link") {
+			private static final long serialVersionUID = 1L;
+			public void onClick() {
+				setResponsePage(new StudentOverview());
+			}
+		};
+		studentOverviewLink.add(new Label("student-overview-label", new ResourceModel("attendance.link.student.overview")).setRenderBodyOnly(true));
+		studentOverviewLink.add(new AttributeModifier("title", new ResourceModel("attendance.link.student.overview.tooltip")));
+		add(studentOverviewLink);
 		
 		
 		// Add a FeedbackPanel for displaying our messages
