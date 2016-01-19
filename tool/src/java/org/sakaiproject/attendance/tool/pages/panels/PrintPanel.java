@@ -28,13 +28,16 @@ import org.sakaiproject.attendance.model.AttendanceEvent;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Arrays;
+import java.util.List;
 
 public class PrintPanel extends BasePanel {
     private static final long serialVersionUID = 1L;
 
     private IModel<AttendanceEvent> eventModel;
 
-    private AttendanceEvent selectedEvent;
+    private static final List<String> PRINT_OPTIONS = Arrays.asList("Sign-In Sheet", "Attendance Sheet");
+
+    private String selected = "Sign-In Sheet";
 
     private RadioGroup<String> printFormatGroup;
 
@@ -52,7 +55,7 @@ public class PrintPanel extends BasePanel {
             @Override
             protected void onSubmit() {
 
-                final boolean isSignIn = printFormatGroup.getModelObject().equals("signin");
+                final boolean isSignIn = selected.equals("Sign-In Sheet");
                 String filename = eventModel.getObject().getName().trim().replaceAll("\\s+", "") + (isSignIn?"-signin.pdf":"-attendance.pdf");
 
                     AbstractResourceStreamWriter rstream = new AbstractResourceStreamWriter() {
@@ -71,20 +74,20 @@ public class PrintPanel extends BasePanel {
             }
         };
 
-        printForm.add(new Label("event-name", eventModel.getObject().getName()));
+        if(eventModel.getObject() != null) {
+            printForm.add(new Label("event-name", eventModel.getObject().getName()));
+            printForm.add(new Label("event-date", eventModel.getObject().getStartDateTime()));
+        } else {
+            printForm.add(new Label("event-name", ""));
+            printForm.add(new Label("event-date", ""));
+        }
 
         DropDownChoice<String> groupIdChoice = new DropDownChoice<String>("group-id-choice", new Model<String>(), Arrays.asList(new String[]{sakaiProxy.getCurrentSiteId()}));
         printForm.add(groupIdChoice);
 
-        Radio<String> signIn = new Radio<String>("sign-in-radio", new Model<String>("signin"));
-        Radio<String> attendance = new Radio<String>("attendance-radio", new Model<String>("attendance"));
+        RadioChoice<String> printFormat = new RadioChoice<String>("print-format", new PropertyModel<String>(this, "selected"), PRINT_OPTIONS);
 
-        printFormatGroup = new RadioGroup<String>("format-group", new Model<String>());
-
-        printFormatGroup.add(signIn);
-        printFormatGroup.add(attendance);
-
-        printForm.add(printFormatGroup);
+        printForm.add(printFormat);
 
         SubmitLink print = new SubmitLink("print");
 

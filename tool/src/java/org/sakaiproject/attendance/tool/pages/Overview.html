@@ -30,10 +30,6 @@
 		Select an attendance item to take attendance for that item. Click on <strong>Attendance Items</strong> in the menu bar above to add additional items.
 	</p>
 
-	<div wicket:id="print-container">
-		<span wicket:id="print-panel"/>
-	</div>
-	
 	<table id="overviewTable" class="overviewTable">
 		<thead>
 			<tr>
@@ -59,7 +55,7 @@
 				<td class="overviewStatusCol"><span wicket:id="event-stats-left-early" /></td>
 				<td class="overviewEditCol"><a wicket:id="event-edit-link"><img src="/library/image/ud_custom/settings.png" alt="Edit" width="24px"/></a></td>
 				<td class="overviewPrintCol">
-					<a wicket:id="print-link">Print</a>
+					<a class="printLink" wicket:id="print-link"><img src="images/print.png" alt="Print"/></a>
 				</td>
 			</tr>
 			<wicket:enclosure child="no-events">
@@ -73,6 +69,12 @@
 			</wicket:enclosure>
 		</tbody>
 	</table>
+
+	<div id="printContainer" class="printContainer" wicket:id="print-container">
+		<span wicket:id="print-panel"/>
+	</div>
+
+	<div id="printMask" class="printMask" style="display:none;"></div>
 
 	<script type="text/javascript" src="javascript/jquery.tablesorter.min.js"></script>
 	<script type="text/javascript">
@@ -92,6 +94,7 @@
 			}
 		});
 	</script>
+	<script type="text/javascript" src="javascript/print.js"></script>
 
 </wicket:extend>
 </body>

@@ -18,6 +18,7 @@ package org.sakaiproject.attendance.tool.pages;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormSubmitBehavior;
+import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.DropDownChoice;
@@ -54,6 +55,9 @@ public class EventView extends BasePage {
 
     private                 WebMarkupContainer      infoContainer;
     private                 DropDownChoice<Status>  setAllStatus;
+
+                            PrintPanel              printPanel;
+                            WebMarkupContainer      printContainer;
 
     public EventView(Long id, String fromPage) {
         super();
@@ -102,7 +106,14 @@ public class EventView extends BasePage {
         });
         add(setAllForm);
 
-        add(new PrintPanel("print-panel", new Model<AttendanceEvent>(this.attendanceEvent)));
+        this.printContainer = new WebMarkupContainer("print-container");
+        printContainer.setOutputMarkupId(true);
+
+        this.printPanel = new PrintPanel("print-panel", new Model<AttendanceEvent>(attendanceEvent));
+
+        printContainer.add(printPanel);
+
+        add(printContainer);
     }
 
     private void createStatsTable() {

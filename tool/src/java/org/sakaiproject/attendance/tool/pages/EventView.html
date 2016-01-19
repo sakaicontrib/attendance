@@ -25,11 +25,10 @@
             <span>></span>
             <span wicket:id="event-name"></span>
             <span wicket:id="event-date"></span>
-            <a wicket:id="edit-link"><img src="/library/image/ud_custom/settings.png" alt="Edit" width="24px"/></a>
+            <span><a wicket:id="edit-link"><img src="/library/image/ud_custom/settings.png" alt="Edit" width="24px"/></a></span>
+            <span id="eventPrintLink"><img src="images/print.png" alt="Print" class="printImage"/></span>
         </h2>
     </div>
-
-    <span wicket:id="print-panel" />
     
     <div wicket:id="info-container" class="itemInfoContainer">
         <div class="itemInfoHeader">
@@ -106,6 +105,14 @@
             });
         </script>
     </div>
+
+    <div id="printContainer" class="printContainer" wicket:id="print-container">
+        <span wicket:id="print-panel"/>
+    </div>
+
+    <div id="printMask" class="printMask" style="display:none;"></div>
+
+    <script type="text/javascript" src="javascript/print.js"></script>
 
 </wicket:extend>
 </body>

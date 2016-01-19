@@ -17,6 +17,7 @@
 package org.sakaiproject.attendance.tool.pages;
 
 import org.apache.wicket.RestartResponseException;
+import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -133,6 +134,7 @@ public class Overview extends BasePage {
 					@Override
 					public void onClick(AjaxRequestTarget ajaxRequestTarget) {
 						printPanel = new PrintPanel("print-panel", item.getModel());
+						printContainer.setOutputMarkupId(true);
 						printContainer.addOrReplace(printPanel);
 						ajaxRequestTarget.add(printContainer);
 					}

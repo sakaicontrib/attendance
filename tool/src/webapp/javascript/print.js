@@ -13,3 +13,21 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
+
+$("#printContainer").hide();
+
+$(".printLink").on("click", function(){
+    parent.window.scrollTo(0,0);
+    $("#printMask").show();
+    return true;
+});
+
+$("#eventPrintLink").on("click", function(){
+    $("#printContainer").slideDown("fast");
+    $("#printMask").show();
+});
+
+$("#printMask").on("click", function(){
+    $("#printContainer").slideUp("fast");
+    $("#printMask").hide();
+});
