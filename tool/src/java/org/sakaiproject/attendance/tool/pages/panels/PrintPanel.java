@@ -16,6 +16,7 @@
 
 package org.sakaiproject.attendance.tool.pages.panels;
 
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.*;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
@@ -39,7 +40,7 @@ public class PrintPanel extends BasePanel {
 
     public PrintPanel(String id, IModel<AttendanceEvent> event) {
         super(id, event);
-        this.selectedEvent = event==null?new AttendanceEvent():event.getObject();
+        this.eventModel = event;
 
         add(createPrintForm());
     }
@@ -52,15 +53,15 @@ public class PrintPanel extends BasePanel {
             protected void onSubmit() {
 
                 final boolean isSignIn = printFormatGroup.getModelObject().equals("signin");
-                String filename = selectedEvent.getName().trim().replaceAll("\\s+", "") + (isSignIn?"-signin.pdf":"-attendance.pdf");
+                String filename = eventModel.getObject().getName().trim().replaceAll("\\s+", "") + (isSignIn?"-signin.pdf":"-attendance.pdf");
 
                     AbstractResourceStreamWriter rstream = new AbstractResourceStreamWriter() {
                         @Override
                         public void write(OutputStream outputStream) throws IOException {
                             if(isSignIn){
-                                pdfExporter.createSignInPdf(selectedEvent, outputStream);
+                                pdfExporter.createSignInPdf(eventModel.getObject(), outputStream);
                             } else {
-                                pdfExporter.createAttendanceSheetPdf(selectedEvent, outputStream);
+                                pdfExporter.createAttendanceSheetPdf(eventModel.getObject(), outputStream);
                             }
                         }
                     };
@@ -70,18 +71,7 @@ public class PrintPanel extends BasePanel {
             }
         };
 
-        DropDownChoice<AttendanceEvent> eventChoice = new DropDownChoice<AttendanceEvent>("event-choice", new PropertyModel<AttendanceEvent>(this, "selectedEvent"), attendanceLogic.getAttendanceEventsForCurrentSite(), new IChoiceRenderer<AttendanceEvent>() {
-            @Override
-            public Object getDisplayValue(AttendanceEvent attendanceEvent) {
-                return attendanceEvent.getName();
-            }
-
-            @Override
-            public String getIdValue(AttendanceEvent attendanceEvent, int i) {
-                return String.valueOf(i);
-            }
-        });
-        printForm.add(eventChoice);
+        printForm.add(new Label("event-name", eventModel.getObject().getName()));
 
         DropDownChoice<String> groupIdChoice = new DropDownChoice<String>("group-id-choice", new Model<String>(), Arrays.asList(new String[]{sakaiProxy.getCurrentSiteId()}));
         printForm.add(groupIdChoice);

@@ -24,6 +24,7 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.data.DataView;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.request.handler.resource.ResourceStreamRequestHandler;
 import org.apache.wicket.util.resource.AbstractResourceStreamWriter;
@@ -65,7 +66,7 @@ public class Overview extends BasePage {
 		this.printContainer = new WebMarkupContainer("print-container");
 		printContainer.setOutputMarkupId(true);
 
-		this.printPanel = new PrintPanel("print-panel", null);
+		this.printPanel = new PrintPanel("print-panel", new Model<AttendanceEvent>());
 
 		printContainer.add(printPanel);
 
