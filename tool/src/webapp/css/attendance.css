@@ -131,7 +131,7 @@ table.itemListTable, table.eventViewTable, table.takeAttendanceTable {
     background-color: #deeeff;
 }
 
-th.overviewDateCol, td.overviewDateCol {
+th.overviewDateCol, td.overviewDateCol, td.takeAttendanceDateHeader, th.takeAttendanceDateHeader {
     border-right-width: 3px;
 }
 
