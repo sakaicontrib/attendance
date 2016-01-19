@@ -171,7 +171,7 @@ public class SakaiProxyImpl implements SakaiProxy {
 			String maintainRole = membership.getMaintainRole();
 
 			for(Member member : memberSet) {
-				if(!maintainRole.equals(member.getRole().getId())) {
+				if(!maintainRole.equals(member.getRole().getId()) && member.isActive()) {
 					try {
 						User student = userDirectoryService.getUser(member.getUserId());
 						returnList.add(student);
