@@ -56,7 +56,7 @@ public class AttendanceRecordFormDataPanel extends BasePanel {
         this.restricted = this.role != null && this.role.equals("Student");
         this.returnPage = rP;
         this.pageFeedbackPanel = fP;
-        this.ajaxTargets.add(this.pageFeedbackPanel);;
+        this.ajaxTargets.add(this.pageFeedbackPanel);
         add(createRecordInputForm());
     }
 
