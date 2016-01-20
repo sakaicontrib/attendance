@@ -59,6 +59,14 @@
         </tbody>
     </table>
 
+    <script type="text/javascript" src="javascript/jquery.tablesorter.min.js"></script>
+    <script type="text/javascript">
+        $("p.overviewInstructions").width($("#overviewTable").outerWidth());
+        $("#overviewTable").tablesorter({
+            sortList: [[0,0]]
+        });
+    </script>
+
 </wicket:extend>
 </body>
 </html>
