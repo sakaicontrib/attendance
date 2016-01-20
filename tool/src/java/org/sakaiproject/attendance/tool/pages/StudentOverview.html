@@ -18,7 +18,46 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:wicket="http://wicket.apache.org">
 <body>
 <wicket:extend>
-    My First page
+    <div wicket:id="student-overview-header" id="header">
+        <h1 class="overviewHeader indnt1">
+            <span wicket:id="student-overview-title"/>
+        </h1>
+        <p class="overviewInstructions">
+            <span wicket:id="student-overview-subtitle" />
+        </p>
+    </div>
+
+    <table wicket:id="student-overview-stats-table" id="overviewTable" class="overviewTable">
+        <thead>
+        <tr>
+            <th><span wicket:id="header-student-name" /></th>
+            <th class="overviewStatusCol"><span wicket:id="header-status-present" /></th>
+            <th class="overviewStatusCol"><span wicket:id="header-status-unexcused" /></th>
+            <th class="overviewStatusCol"><span wicket:id="header-status-excused" /></th>
+            <th class="overviewStatusCol"><span wicket:id="header-status-late" /></th>
+            <th class="overviewStatusCol"><span wicket:id="header-status-left-early" /></th>
+        </tr>
+        </thead>
+        <tbody>
+            <tr wicket:id="students">
+                <td class="studentNameCol"><a wicket:id="student-link"><span wicket:id="student-name" /></a></td>
+                <td class="overviewStatusCol"><span wicket:id="student-stats-present" /></td>
+                <td class="overviewStatusCol"><span wicket:id="student-stats-absent" /></td>
+                <td class="overviewStatusCol"><span wicket:id="student-stats-excused" /></td>
+                <td class="overviewStatusCol"><span wicket:id="student-stats-late" /></td>
+                <td class="overviewStatusCol"><span wicket:id="student-stats-left-early" /></td>
+            </tr>
+            <wicket:enclosure child="no-students">
+                <tr>
+                    <td colspan="6" class="noStudentsCol">
+                        <span wicket:id="no-students" />
+                        <br />
+                        <span wicket:id="no-students2" />
+                    </td>
+                </tr>
+            </wicket:enclosure>
+        </tbody>
+    </table>
 
 </wicket:extend>
 </body>
