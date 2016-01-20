@@ -43,6 +43,14 @@ public class StudentView extends BasePage {
 
         init();
     }
+
+    public StudentView(String id, String fromPage) {
+        this.studentId = id;
+        this.returnPage = fromPage;
+
+        init();
+    }
+
     public StudentView(String id, Long eventId, String fromPage) {
         this.studentId = id;
         this.previousEventId = eventId;
@@ -78,21 +86,30 @@ public class StudentView extends BasePage {
             public void onClick() {
                 if(returnPage.equals(BasePage.ITEMS_PAGE)) {
                     setResponsePage(new AddEventPage());
+                } else if(returnPage.equals(BasePage.STUDENT_OVERVIEW_PAGE)) {
+                    setResponsePage(new StudentOverview());
                 } else {
                     setResponsePage(new Overview());
                 }
             }
-
-
         };
 
         if(returnPage.equals(BasePage.ITEMS_PAGE)) {
             closeLink.add(new Label("close-link-text", new ResourceModel("attendance.event.view.link.close.items")));
+        } else if(returnPage.equals(BasePage.STUDENT_OVERVIEW_PAGE)){
+            closeLink.add(new Label("close-link-text", new ResourceModel("attendance.event.view.link.close.student.overview")));
         } else {
             closeLink.add(new Label("close-link-text", new ResourceModel("attendance.event.view.link.close.overview")));
         }
 
         header.add(closeLink);
+
+        WebMarkupContainer event = new WebMarkupContainer("event") {
+            @Override
+            public boolean isVisible() {
+                return !returnPage.equals(BasePage.STUDENT_OVERVIEW_PAGE);
+            }
+        };
 
         Link<Void> eventLink = new Link<Void>("event-link") {
             @Override
@@ -101,14 +118,15 @@ public class StudentView extends BasePage {
             }
         };
 
-        if(!isStudent) {
+        if(!isStudent && previousEventId != null) {
             eventLink.add(new Label("event-link-text", attendanceLogic.getAttendanceEvent(previousEventId).getName()));
         } else {
             eventLink.add(new Label("event-link-text", ""));
         }
+        event.add(eventLink);
 
 
-        header.add(eventLink);
+        header.add(event);
 
         Label studentName = new Label("student-name", sakaiProxy.getUserSortName(this.studentId) + " (" + sakaiProxy.getUserDisplayId(this.studentId) + ")");
         header.add(studentName);

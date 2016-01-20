@@ -22,8 +22,10 @@
         <h2>
             <a wicket:id="close-link"><span wicket:id="close-link-text" /></a>
             <span>></span>
-            <a wicket:id="event-link"><span wicket:id="event-link-text"></span></a>
-            <span>></span>
+            <wicket:container wicket:id="event">
+                <a wicket:id="event-link"><span wicket:id="event-link-text"></span></a>
+                <span>></span>
+            </wicket:container>
             <span wicket:id="student-name" />
         </h2>
     </div>

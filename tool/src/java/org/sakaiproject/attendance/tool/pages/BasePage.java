@@ -185,4 +185,5 @@ public class BasePage extends WebPage implements IHeaderContributor {
 	public static final String OVERVIEW_PAGE = "overview";
 	public static final String ITEMS_PAGE = "items";
 	public static final String STUDENT_PAGE = "student_view";
+	public static final String STUDENT_OVERVIEW_PAGE = "student_overview";
 }
