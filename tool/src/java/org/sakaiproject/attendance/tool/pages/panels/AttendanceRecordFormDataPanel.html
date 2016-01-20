@@ -36,6 +36,21 @@
                 <input type="radio" wicket:id="record-status-left-early" />
             </div>
         </wicket:container>
+        <div class="div-table-col" style="position:relative">
+            <div class="commentToggle" wicket:id="comment-container">
+                <div wicket:id="no-comment">
+                    <img src="images/no_comment_24.png" />
+                </div>
+                <div wicket:id="yes-comment">
+                    <img src="images/comment_24.png" />
+                </div>
+            </div>
+            <div class="addComment" style="position:absolute;top:-100px;left:-200px;background-color:#fff;border: 1px solid #ccc;width:200px;height:100px;padding:1em;display:none;">
+                <h3>Add Comment</h3>
+                <textarea wicket:id="comment" />
+                <input type="submit" wicket:id="save-comment" value="Save"/>
+            </div>
+        </div>
     </form>
 </wicket:panel>
 </body>

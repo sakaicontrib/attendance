@@ -34,6 +34,7 @@ public class AttendanceRecord implements Serializable {
     @Getter @Setter private AttendanceEvent attendanceEvent;
     @Getter @Setter private String  userID;
     @Getter @Setter private Status  status;
+    @Getter @Setter private String  comment;
 
     public AttendanceRecord(AttendanceEvent e, String uId, Status s) {
         this.attendanceEvent = e;
@@ -49,7 +50,8 @@ public class AttendanceRecord implements Serializable {
         return Objects.equals(id, that.id) &&
                 Objects.equals(attendanceEvent, that.attendanceEvent) &&
                 Objects.equals(userID, that.userID) &&
-                status == that.status;
+                status == that.status &&
+                Objects.equals(comment, that.comment);
     }
 
     @Override

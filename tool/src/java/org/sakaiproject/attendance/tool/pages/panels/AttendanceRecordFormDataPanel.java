@@ -19,11 +19,11 @@ package org.sakaiproject.attendance.tool.pages.panels;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormSubmitBehavior;
+import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
+import org.apache.wicket.markup.html.WebComponent;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.markup.html.form.Radio;
-import org.apache.wicket.markup.html.form.RadioGroup;
+import org.apache.wicket.markup.html.form.*;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.*;
@@ -76,6 +76,7 @@ public class AttendanceRecordFormDataPanel extends BasePanel {
         };
 
         createStatusRadio(recordForm);
+        createCommentBox(recordForm);
         //createLabel(recordForm);
 
         return recordForm;
@@ -187,6 +188,40 @@ public class AttendanceRecordFormDataPanel extends BasePanel {
         group.setEnabled(!this.restricted);
 
         rF.add(group);
+    }
+
+    private void createCommentBox(final Form<AttendanceRecord> rF) {
+
+        final WebMarkupContainer commentIconContainer = new WebMarkupContainer("comment-container");
+        commentIconContainer.setOutputMarkupId(true);
+
+        WebMarkupContainer noComment = new WebMarkupContainer("no-comment");
+        WebMarkupContainer yesComment = new WebMarkupContainer("yes-comment");
+
+        if(recordIModel.getObject().getComment() != null && !recordIModel.getObject().getComment().equals("")) {
+            noComment.setVisible(false);
+        } else {
+            yesComment.setVisible(false);
+        }
+
+        commentIconContainer.add(noComment);
+        commentIconContainer.add(yesComment);
+
+        rF.add(commentIconContainer);
+
+        final TextArea<String> commentBox = new TextArea<String>("comment", new PropertyModel<String>(this.recordIModel, "comment"));
+
+        final AjaxSubmitLink saveComment = new AjaxSubmitLink("save-comment") {
+            @Override
+            protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+                super.onSubmit(target, form);
+                for (Component c : ajaxTargets) {
+                    target.add(c);
+                }
+            }
+        };
+        rF.add(saveComment);
+        rF.add(commentBox);
     }
 
     private String getStatusString(Status s) {
