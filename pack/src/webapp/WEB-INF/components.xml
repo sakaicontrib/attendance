@@ -64,6 +64,16 @@
 		<property name="sakaiProxy" ref="org.sakaiproject.attendance.logic.SakaiProxy" />
 	</bean>
 
+	<!-- PDFEventExporter -->
+	<bean id="org.sakaiproject.attendance.export.PDFEventExporter"
+		  class="org.sakaiproject.attendance.export.PDFEventExporterImpl"
+		  init-method="init">
+
+		<property name="attendanceLogic" ref="org.sakaiproject.attendance.logic.AttendanceLogic" />
+		<property name="sakaiProxy" ref="org.sakaiproject.attendance.logic.SakaiProxy" />
+
+	</bean>
+
 	<!-- Add our HBM files to the Sakai global session factory -->
 	<bean id="org.sakaiproject.attendance.hbm.HBMMappingList"
 		  class="org.sakaiproject.springframework.orm.hibernate.impl.AdditionalHibernateMappingsImpl">

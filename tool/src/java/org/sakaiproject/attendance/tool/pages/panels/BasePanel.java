@@ -20,6 +20,7 @@ import org.apache.log4j.Logger;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.sakaiproject.attendance.export.PDFEventExporter;
 import org.sakaiproject.attendance.logic.AttendanceLogic;
 import org.sakaiproject.attendance.logic.SakaiProxy;
 
@@ -32,6 +33,9 @@ public class BasePanel extends Panel {
 
     @SpringBean(name="org.sakaiproject.attendance.logic.AttendanceLogic")
     protected AttendanceLogic attendanceLogic;
+
+    @SpringBean(name="org.sakaiproject.attendance.export.PDFEventExporter")
+    protected PDFEventExporter pdfExporter;
 
     protected static final Logger log = Logger.getLogger(BasePanel.class);
 
