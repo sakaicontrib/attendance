@@ -16,28 +16,45 @@
 
 package org.sakaiproject.attendance.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Objects;
+import java.util.Set;
 
 /**
  * Created by Leonardo Canessa [lcanessa1 (at) udayton (dot) edu]au)
  *
  */
-@Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class AttendanceSite implements Serializable {
 	private static final 	long 		serialVersionUID = 1L;
 
-	private 				Long 		id;
-	private 				String 		siteID;
-	private 				Status 		defaultStatus;
+	@Getter	@Setter	private 				Long 					id;
+	@Getter	@Setter	private 				String 					siteID;
+	@Getter	@Setter	private 				Status 					defaultStatus;
+	@Getter	@Setter	private 				Set<AttendanceStatus>	activeStatuses		= new HashSet<AttendanceStatus>(0);
 
 	public AttendanceSite(String siteID){
 		this.siteID = siteID;
 		this.defaultStatus = Status.UNKNOWN;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		AttendanceSite that = (AttendanceSite) o;
+		return Objects.equals(getId(), that.getId()) &&
+				Objects.equals(getSiteID(), that.getSiteID()) &&
+				getDefaultStatus() == that.getDefaultStatus() &&
+				Objects.equals(getActiveStatuses(), that.getActiveStatuses());
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(getId());
 	}
 }

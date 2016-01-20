@@ -83,6 +83,7 @@
 				<value>org/sakaiproject/attendance/hbm/AttendanceEvent.hbm.xml</value>
 				<value>org/sakaiproject/attendance/hbm/AttendanceRecord.hbm.xml</value>
 				<value>org/sakaiproject/attendance/hbm/AttendanceSite.hbm.xml</value>
+				<value>org/sakaiproject/attendance/hbm/AttendanceStatus.hbm.xml</value>
                 <!--<value>org/sakaiproject/attendance/hbm/Reoccurring.hbm.xml</value>-->
 			</list>
 		</property>
