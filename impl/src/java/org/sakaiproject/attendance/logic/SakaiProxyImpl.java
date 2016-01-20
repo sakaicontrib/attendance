@@ -24,6 +24,7 @@ import org.sakaiproject.authz.api.*;
 import org.sakaiproject.component.api.ServerConfigurationService;
 import org.sakaiproject.entity.api.ResourceProperties;
 import org.sakaiproject.event.api.EventTrackingService;
+import org.sakaiproject.exception.IdUnusedException;
 import org.sakaiproject.site.api.SiteService;
 import org.sakaiproject.tool.api.Session;
 import org.sakaiproject.tool.api.SessionManager;
@@ -48,6 +49,19 @@ public class SakaiProxyImpl implements SakaiProxy {
  	*/
 	public String getCurrentSiteId(){
 		return toolManager.getCurrentPlacement().getContext();
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public String getSiteTitle(String siteId) {
+		try {
+			return siteService.getSite(siteId).getTitle();
+		} catch (IdUnusedException e) {
+			log.error("getSiteTitle " + siteId + ": id unused exception.");
+			e.printStackTrace();
+			return "";
+		}
 	}
 
 	/**
@@ -171,7 +185,7 @@ public class SakaiProxyImpl implements SakaiProxy {
 			String maintainRole = membership.getMaintainRole();
 
 			for(Member member : memberSet) {
-				if(!maintainRole.equals(member.getRole().getId())) {
+				if(!maintainRole.equals(member.getRole().getId()) && member.isActive()) {
 					try {
 						User student = userDirectoryService.getUser(member.getUserId());
 						returnList.add(student);

@@ -13,3 +13,16 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
+
+package org.sakaiproject.attendance.export.util;
+
+import org.sakaiproject.user.api.User;
+
+import java.util.Comparator;
+
+public class SortNameUserComparator implements Comparator<User>{
+    @Override
+    public int compare(User o1, User o2) {
+        return o1.getSortName().compareTo(o2.getSortName());
+    }
+}

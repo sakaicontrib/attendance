@@ -37,6 +37,13 @@ public interface SakaiProxy {
 	String getCurrentSiteId();
 
 	/**
+	 * Get the title of a particular site
+	 * @param siteId
+	 * @return
+	 */
+	String getSiteTitle(String siteId);
+
+	/**
 	 * Get current User
 	 * @return
      */

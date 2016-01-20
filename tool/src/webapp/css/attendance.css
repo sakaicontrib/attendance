@@ -131,7 +131,7 @@ table.itemListTable, table.eventViewTable, table.takeAttendanceTable {
     background-color: #deeeff;
 }
 
-th.overviewDateCol, td.overviewDateCol {
+th.overviewDateCol, td.overviewDateCol, td.takeAttendanceDateHeader, th.takeAttendanceDateHeader {
     border-right-width: 3px;
 }
 
@@ -168,6 +168,10 @@ td.itemListRemoveCol {
 
 td.itemNameCol {
     font-size: 1.2em;
+}
+
+td.overviewPrintCol {
+    text-align: center;
 }
 
 th.takeAttendanceNameHeader {
@@ -347,4 +351,69 @@ p.setAll {
 
 .commentToggle:hover {
     cursor: pointer;
+}
+
+div.printContainer {
+    position: absolute;
+    min-width: 300px;
+    padding: .5em 1em;
+    background: #fff;
+    border: 1px solid #004b8d;
+    line-height: 1.5em;
+    left: 25%;
+    top: 10%;
+    font-weight: normal;
+    -webkit-box-shadow: 0 8px 6px -6px black;
+    -moz-box-shadow: 0 8px 6px -6px black;
+    box-shadow: 0 8px 6px -6px black;
+    z-index: 999;
+}
+
+.printTable td {
+    vertical-align: top;
+    padding:.5em;
+}
+
+.printTable td:nth-child(odd) {
+    font-weight: bold;
+    text-align: right;
+    color: #111;
+}
+
+h2.printHeader {
+    margin: .5em 0;
+    padding: 0;
+}
+
+div.printMask {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #ccc;
+    z-index: 900;
+    opacity: 0.75;
+}
+
+div.printMask:hover {
+    cursor: pointer;
+}
+
+span.cancelPrint {
+    color: #0064cd;
+    padding-left: .5em;
+}
+
+span.cancelPrint:hover {
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+img.printImage:hover {
+    cursor: pointer;
+}
+
+p.printAction {
+    text-align: center;
 }

@@ -29,7 +29,7 @@
     </div>
     <div wicket:id="student-view">
         <h2>
-            <span wicket:id="attendance-header" /> <span>></span> <span wicket:id="student-name" />
+            <span wicket:id="student-name" />
         </h2>
     </div>
     <div wicket:id="student-view-data" class="takeAttendanceContainer">
@@ -43,7 +43,10 @@
             <thead>
             <tr class="div-table-row">
                 <th class="takeAttendanceNameHeader">
-                    <span wicket:id="event-name" />
+                    <span wicket:id="event-name-header" />
+                </th>
+                <th class="takeAttendanceDateHeader">
+                    <span wicket:id="event-date-header" />
                 </th>
                 <th class="takeAttendanceStatusCol">
                     <span wicket:id="header"/>
@@ -55,6 +58,9 @@
                 <td>
                     <a wicket:id="event-link"><span wicket:id="record-name"></span></a>
                 </td>
+                <td class="takeAttendanceDateHeader">
+                    <span wicket:id="event-date" />
+                </td>
                 <td>
                     <span wicket:id="record" />
                 </td>
@@ -65,9 +71,12 @@
         <script type="text/javascript" src="/library/js/jquery/tablesorter/2.0.3/jquery.tablesorter-2.0.3.min.js"></script>
         <script type="text/javascript">
             $("#takeAttendanceTable").tablesorter({
-                sortList: [[0,0]],
+                sortList: [[1,0],[0,0]],
                 headers: {
                     1: {
+                        sorter: "attendanceDate"
+                    },
+                    2: {
                         sorter: false
                     }
                 }
