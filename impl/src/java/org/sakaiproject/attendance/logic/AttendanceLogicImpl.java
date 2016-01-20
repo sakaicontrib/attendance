@@ -32,10 +32,7 @@ import org.apache.log4j.Logger;
 
 //import org.joda.time.DateTime;
 import org.sakaiproject.attendance.dao.AttendanceDao;
-import org.sakaiproject.attendance.model.AttendanceRecord;
-import org.sakaiproject.attendance.model.AttendanceSite;
-import org.sakaiproject.attendance.model.AttendanceEvent;
-import org.sakaiproject.attendance.model.Status;
+import org.sakaiproject.attendance.model.*;
 import org.sakaiproject.user.api.User;
 //import org.sakaiproject.attendance.model.Reoccurrence;
 
@@ -305,6 +302,27 @@ public class AttendanceLogicImpl implements AttendanceLogic {
 			return dao.updateAttendanceRecords(recordList);
 		}
 		return false;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public List<AttendanceStatus> getActiveStatusesForCurrentSite() {
+		return getActiveStatusesForSite(getCurrentAttendanceSite());
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public List<AttendanceStatus> getActiveStatusesForSite(String siteId) {
+		return dao.getActiveStatusesForSite(getAttendanceSite(siteId));
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public List<AttendanceStatus> getActiveStatusesForSite(AttendanceSite attendanceSite) {
+		return dao.getActiveStatusesForSite(attendanceSite);
 	}
 
 	/**

@@ -22,6 +22,7 @@ import java.util.List;
 import org.sakaiproject.attendance.model.AttendanceSite;
 import org.sakaiproject.attendance.model.AttendanceEvent;
 import org.sakaiproject.attendance.model.AttendanceRecord;
+import org.sakaiproject.attendance.model.AttendanceStatus;
 //import org.sakaiproject.attendance.model.Reoccurrence;
 
 /**
@@ -132,6 +133,20 @@ public interface AttendanceDao {
      */
 	boolean updateAttendanceRecords(List<AttendanceRecord> aRs);
 
+	/**
+	 * Update a set of AttendanceStatuses
+	 * @param attendanceStatusList, a List of AttendanceStatuses
+	 * @return
+     */
+	boolean updateAttendanceStatuses(List<AttendanceStatus> attendanceStatusList);
+
+	/**
+	 * Get a list of the active statuses in an Attendance Site
+	 * @param attendanceSite
+	 * @return
+     */
+	List<AttendanceStatus> getActiveStatusesForSite(AttendanceSite attendanceSite);
+
 	// Hibernate Query Constants
 	String QUERY_GET_ATTENDANCE_EVENT = "getAttendanceEvent";
 	String QUERY_GET_ATTENDANCE_EVENTS_FOR_SITE = "getAttendanceEventsForSite";
@@ -142,6 +157,8 @@ public interface AttendanceDao {
 
 	String QUERY_GET_ATTENDANCE_RECORD = "getAttendanceRecord";
 	String QUERY_GET_ATTENDANCE_RECORDS_FOR_ATTENDANCE_EVENT = "getRecordsForAttendanceEvent";
+
+	String QUERY_GET_ACTIVE_ATTENDANCE_STATUSES_FOR_SITE = "getActiveAttendanceStatusesForSite";
 
 	// Hibernate Object Fields
 	String ID = "id";

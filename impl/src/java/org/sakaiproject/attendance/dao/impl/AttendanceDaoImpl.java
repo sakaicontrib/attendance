@@ -34,6 +34,7 @@ import org.sakaiproject.attendance.dao.AttendanceDao;
 import org.sakaiproject.attendance.model.AttendanceRecord;
 import org.sakaiproject.attendance.model.AttendanceSite;
 //import org.sakaiproject.attendance.model.Reoccurrence;
+import org.sakaiproject.attendance.model.AttendanceStatus;
 import org.springframework.dao.DataAccessException;
 
 import org.sakaiproject.attendance.model.AttendanceEvent;
@@ -290,6 +291,39 @@ public class AttendanceDaoImpl extends HibernateDaoSupport implements Attendance
 		}
 	}
 
+	/**
+	 * {@inheritDoc}
+     */
+	public boolean updateAttendanceStatuses(List<AttendanceStatus> attendanceStatusList) {
+		try{
+			getHibernateTemplate().saveOrUpdate(attendanceStatusList);
+			return true;
+		} catch (Exception e) {
+			log.error("update attendanceStatuses failed.", e);
+			return false;
+		}
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@SuppressWarnings("unchecked")
+	public List<AttendanceStatus> getActiveStatusesForSite(final AttendanceSite attendanceSite) {
+		if(log.isDebugEnabled()){
+			log.debug("getActiveStatusesForSite(String siteId)");
+		}
+
+		HibernateCallback hcb = new HibernateCallback() {
+			@Override
+			public Object doInHibernate(Session session) throws HibernateException, SQLException {
+				Query q = session.getNamedQuery(QUERY_GET_ACTIVE_ATTENDANCE_STATUSES_FOR_SITE);
+				q.setParameter(ATTENDANCE_SITE, attendanceSite, new ManyToOneType("org.sakaiproject.attendance.model.AttendanceSite"));
+				return q.list();
+			}
+		};
+
+		return (List<AttendanceStatus>) getHibernateTemplate().executeFind(hcb);
+	}
 
 	/**
 	 * init

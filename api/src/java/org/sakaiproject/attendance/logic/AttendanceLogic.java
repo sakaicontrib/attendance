@@ -21,10 +21,7 @@ import java.util.Map;
 
 //import com.google.ical.values.RRule;
 //import de.scravy.pair.Pair;
-import org.sakaiproject.attendance.model.AttendanceSite;
-import org.sakaiproject.attendance.model.AttendanceEvent;
-import org.sakaiproject.attendance.model.AttendanceRecord;
-import org.sakaiproject.attendance.model.Status;
+import org.sakaiproject.attendance.model.*;
 //import org.sakaiproject.attendance.model.Reoccurrence;
 
 /**
@@ -136,6 +133,26 @@ public interface AttendanceLogic {
 	 * @return
      */
 	List<AttendanceRecord> getAttendanceRecordsForUserInCurrentSite(String id);
+
+	/**
+	 * get the active statuses for the current site
+	 * @return
+     */
+	List<AttendanceStatus> getActiveStatusesForCurrentSite();
+
+	/**
+	 * get the active statuses for a site
+	 * @param siteId
+	 * @return
+     */
+	List<AttendanceStatus> getActiveStatusesForSite(String siteId);
+
+	/**
+	 * get the active statuses for a site
+	 * @param attendanceSite
+	 * @return
+     */
+	List<AttendanceStatus> getActiveStatusesForSite(AttendanceSite attendanceSite);
 
 	/**
 	 * Update an AttendanceRecord
