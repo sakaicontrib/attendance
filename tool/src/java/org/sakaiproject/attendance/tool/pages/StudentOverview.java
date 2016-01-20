@@ -48,9 +48,9 @@ public class StudentOverview extends BasePage {
     }
 
     private WebMarkupContainer createHeader() {
-        WebMarkupContainer contain = new WebMarkupContainer("student-overview-header");
-        Label title = new Label("student-overview-title", new ResourceModel("attendance.student.overview.title"));
-        Label subtitle = new Label("student-overview-subtitle", new ResourceModel("attendance.student.overview.subtitle"));
+        WebMarkupContainer  contain         = new WebMarkupContainer("student-overview-header");
+        Label               title           = new Label("student-overview-title", new ResourceModel("attendance.student.overview.title"));
+        Label               subtitle        = new Label("student-overview-subtitle", new ResourceModel("attendance.student.overview.subtitle"));
 
         contain.add(title);
         contain.add(subtitle);
@@ -59,8 +59,8 @@ public class StudentOverview extends BasePage {
     }
 
     private WebMarkupContainer createStatsTable() {
-        WebMarkupContainer statsTable = new WebMarkupContainer("student-overview-stats-table");
-        statsTable.setOutputMarkupPlaceholderTag(true);
+        WebMarkupContainer  statsTable      = new WebMarkupContainer("student-overview-stats-table");
+
         createStatsTableHeader(statsTable);
         createStatsTableData(statsTable);
 
@@ -68,25 +68,25 @@ public class StudentOverview extends BasePage {
     }
 
     private void createStatsTableHeader(WebMarkupContainer t) {
-        Label studentName = new Label("header-student-name", new ResourceModel("attendance.header.student"));
         //headers for the table
-        Label headerStatusPresent 	= new Label("header-status-present", 		new ResourceModel("attendance.overview.header.status.present"));
-        Label headerStatusLate 		= new Label("header-status-late", 		new ResourceModel("attendance.overview.header.status.late"));
-        Label headerStatusLeftEarly = new Label("header-status-left-early", 	new ResourceModel("attendance.overview.header.status.left.early"));
-        Label headerStatusExcused 	= new Label("header-status-excused", 		new ResourceModel("attendance.overview.header.status.excused"));
-        Label headerStatusUnexcused = new Label("header-status-unexcused", 	new ResourceModel("attendance.overview.header.status.unexcused"));
+        Label               studentName     = new Label("header-student-name",       new ResourceModel("attendance.header.student"));
+        Label               statusPresent 	= new Label("header-status-present", 		new ResourceModel("attendance.overview.header.status.present"));
+        Label               statusLate      = new Label("header-status-late", 		new ResourceModel("attendance.overview.header.status.late"));
+        Label               statusLeftEarly = new Label("header-status-left-early", 	new ResourceModel("attendance.overview.header.status.left.early"));
+        Label               statusExcused   = new Label("header-status-excused", 		new ResourceModel("attendance.overview.header.status.excused"));
+        Label               statusUnexcused = new Label("header-status-unexcused", 	new ResourceModel("attendance.overview.header.status.unexcused"));
 
         t.add(studentName);
-        t.add(headerStatusPresent);
-        t.add(headerStatusLate);
-        t.add(headerStatusLeftEarly);
-        t.add(headerStatusExcused);
-        t.add(headerStatusUnexcused);
+        t.add(statusPresent);
+        t.add(statusLate);
+        t.add(statusLeftEarly);
+        t.add(statusExcused);
+        t.add(statusUnexcused);
     }
 
     private void createStatsTableData(WebMarkupContainer t) {
-        StudentDataProvider studentDataProvider = new StudentDataProvider();
-        final DataView<User> userDataView = new DataView<User>("students", studentDataProvider) {
+        StudentDataProvider     sDP         = new StudentDataProvider();
+        final DataView<User>    uDataView   = new DataView<User>("students", sDP) {
             @Override
             protected void populateItem(Item<User> item) {
                 final String id = item.getModelObject().getId();
@@ -111,19 +111,18 @@ public class StudentOverview extends BasePage {
         Label noStudents = new Label("no-students", new ResourceModel("attendance.student.overview.no.students")) {
             @Override
             public boolean isVisible(){
-                return userDataView.size() <= 0;
+                return uDataView.size() <= 0;
             }
         };
         Label noStudents2 = new Label("no-students2", new ResourceModel("attendance.student.overview.no.students.2")) {
             @Override
             public boolean isVisible(){
-                return userDataView.size() <= 0;
+                return uDataView.size() <= 0;
             }
         };
 
-        t.add(userDataView);
+        t.add(uDataView);
         t.add(noStudents);
         t.add(noStudents2);
     }
-
 }
