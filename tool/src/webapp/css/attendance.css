@@ -176,6 +176,11 @@ td.overviewPrintCol {
 
 th.takeAttendanceNameHeader {
     min-width: 160px;
+    vertical-align: middle;
+}
+
+th.takeAttendanceDateHeader {
+    vertical-align: middle;
 }
 
 div.addEditContainer, div.itemListContainer, div.takeAttendanceContainer, div.itemInfoContainer {
