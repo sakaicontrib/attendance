@@ -97,6 +97,7 @@ public class StudentOverview extends BasePage {
                     }
                 };
                 studentLink.add(new Label("student-name", item.getModelObject().getSortName()));
+                studentLink.add(new Label("student-eid", "(" + item.getModelObject().getEid() + ")"));
 
                 item.add(studentLink);
                 item.add(new Label("student-stats-present", stats.get(Status.PRESENT)));
