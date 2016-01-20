@@ -20,7 +20,6 @@ import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormSubmitBehavior;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
-import org.apache.wicket.markup.html.WebComponent;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.*;
@@ -30,7 +29,6 @@ import org.apache.wicket.model.*;
 import org.sakaiproject.attendance.model.AttendanceRecord;
 import org.sakaiproject.attendance.model.Status;
 import org.sakaiproject.attendance.tool.pages.StudentView;
-import org.sakaiproject.user.api.User;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,6 +45,10 @@ public class AttendanceRecordFormDataPanel extends BasePanel {
     private                 String                      returnPage;
     private                 FeedbackPanel               pageFeedbackPanel;
 
+    private                 WebMarkupContainer          commentContainer;
+    private                 WebMarkupContainer          noComment;
+    private                 WebMarkupContainer          yesComment;
+
     public AttendanceRecordFormDataPanel(String id, IModel<AttendanceRecord> aR, boolean iS, String rP, FeedbackPanel fP) {
         super(id, aR);
         this.recordIModel = aR;
@@ -54,7 +56,7 @@ public class AttendanceRecordFormDataPanel extends BasePanel {
         this.restricted = this.role != null && this.role.equals("Student");
         this.returnPage = rP;
         this.pageFeedbackPanel = fP;
-        this.ajaxTargets.add(this.pageFeedbackPanel);
+        this.ajaxTargets.add(this.pageFeedbackPanel);;
         add(createRecordInputForm());
     }
 
@@ -192,11 +194,14 @@ public class AttendanceRecordFormDataPanel extends BasePanel {
 
     private void createCommentBox(final Form<AttendanceRecord> rF) {
 
-        final WebMarkupContainer commentIconContainer = new WebMarkupContainer("comment-container");
-        commentIconContainer.setOutputMarkupId(true);
+        commentContainer = new WebMarkupContainer("comment-container");
+        commentContainer.setOutputMarkupId(true);
 
-        WebMarkupContainer noComment = new WebMarkupContainer("no-comment");
-        WebMarkupContainer yesComment = new WebMarkupContainer("yes-comment");
+        noComment = new WebMarkupContainer("no-comment");
+        noComment.setOutputMarkupId(true);
+
+        yesComment = new WebMarkupContainer("yes-comment");
+        yesComment.setOutputMarkupId(true);
 
         if(recordIModel.getObject().getComment() != null && !recordIModel.getObject().getComment().equals("")) {
             noComment.setVisible(false);
@@ -204,10 +209,8 @@ public class AttendanceRecordFormDataPanel extends BasePanel {
             yesComment.setVisible(false);
         }
 
-        commentIconContainer.add(noComment);
-        commentIconContainer.add(yesComment);
-
-        rF.add(commentIconContainer);
+        commentContainer.add(noComment);
+        commentContainer.add(yesComment);
 
         final TextArea<String> commentBox = new TextArea<String>("comment", new PropertyModel<String>(this.recordIModel, "comment"));
 
@@ -215,13 +218,31 @@ public class AttendanceRecordFormDataPanel extends BasePanel {
             @Override
             protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
                 super.onSubmit(target, form);
+                if(recordIModel.getObject().getComment() != null && !recordIModel.getObject().getComment().equals("")) {
+                    noComment.setVisible(false);
+                    yesComment.setVisible(true);
+                } else {
+                    noComment.setVisible(true);
+                    yesComment.setVisible(false);
+                }
+                commentContainer.addOrReplace(noComment);
+                commentContainer.addOrReplace(yesComment);
                 for (Component c : ajaxTargets) {
                     target.add(c);
                 }
             }
         };
-        rF.add(saveComment);
-        rF.add(commentBox);
+
+        commentContainer.add(saveComment);
+        commentContainer.add(commentBox);
+
+        ajaxTargets.add(commentContainer);
+
+        if(restricted) {
+            commentContainer.setVisible(false);
+        }
+
+        rF.add(commentContainer);
     }
 
     private String getStatusString(Status s) {
@@ -237,6 +258,8 @@ public class AttendanceRecordFormDataPanel extends BasePanel {
             rModel = new ResourceModel("attendance.overview.header.status.excused");
         } else if (s == Status.UNEXCUSED_ABSENCE) {
             rModel = new ResourceModel("attendance.overview.header.status.unexcused");
+        } else {
+            rModel = new ResourceModel("attendance.overview.header.status.unknown");
         }
 
         return rModel.getObject();
