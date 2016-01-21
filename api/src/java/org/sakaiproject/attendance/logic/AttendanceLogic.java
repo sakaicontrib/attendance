@@ -128,11 +128,19 @@ public interface AttendanceLogic {
 	AttendanceRecord getAttendanceRecord(Long id);
 
 	/**
-	 * get AttendanceRecords For a User
+	 * get AttendanceRecords For a User in the current site
 	 * @param id
 	 * @return
      */
-	List<AttendanceRecord> getAttendanceRecordsForUserInCurrentSite(String id);
+	List<AttendanceRecord> getAttendanceRecordsForUser(String id);
+
+	/**
+	 * get AttendanceRecords for User in AttendanceSite
+	 * @param id
+	 * @param aS
+	 * @return
+	 */
+	List<AttendanceRecord> getAttendanceRecordsForUser(String id, AttendanceSite aS);
 
 	/**
 	 * get the active statuses for the current site
@@ -186,9 +194,24 @@ public interface AttendanceLogic {
 	boolean updateMissingRecordsForEvent(AttendanceEvent attendanceEvent, Status defaultStatus, List<String> missingStudentIds);
 
 	/**
-	 *
-	 * @param event
-	 * @return
+	 * Get statistics (total counts for each status) for an event
+	 * @param event, the AttendanceEvent
+	 * @return A Map with Status as the key and Integer (number of occurrences) as the value
 	 */
-	public Map<Status, Integer> getStatsForEvent(AttendanceEvent event);
+	Map<Status, Integer> getStatsForEvent(AttendanceEvent event);
+
+	/**
+	 * Get statistics for user in current site
+	 * @param userId
+	 * @return
+     */
+	Map<Status, Integer> getStatsForUser(String userId);
+
+	/**
+	 * get statistics for user in site
+	 * @param userId, the user to get stats for
+	 * @param aS, the AttendanceSite to get the stats for
+     * @return
+     */
+	Map<Status, Integer> getStatsForUser(String userId, AttendanceSite aS);
 }

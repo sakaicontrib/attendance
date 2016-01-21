@@ -36,7 +36,7 @@ public class AttendanceRecordProvider extends BaseProvider<AttendanceRecord> {
     }
 
     public AttendanceRecordProvider(String id) {
-        List<AttendanceRecord> records = attendanceLogic.getAttendanceRecordsForUserInCurrentSite(id);
+        List<AttendanceRecord> records = attendanceLogic.getAttendanceRecordsForUser(id);
         if(!records.isEmpty()) {
             // don't think records will ever be empty
             this.list = records;

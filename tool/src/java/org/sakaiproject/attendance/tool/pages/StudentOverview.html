@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~  Copyright (c) 2016, The Apereo Foundation
+  ~
+  ~  Licensed under the Educational Community License, Version 2.0 (the "License");
+  ~  you may not use this file except in compliance with the License.
+  ~  You may obtain a copy of the License at
+  ~
+  ~              http://opensource.org/licenses/ecl2
+  ~
+  ~  Unless required by applicable law or agreed to in writing, software
+  ~  distributed under the License is distributed on an "AS IS" BASIS,
+  ~  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~  See the License for the specific language governing permissions and
+  ~  limitations under the License.
+  -->
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:wicket="http://wicket.apache.org">
+<body>
+<wicket:extend>
+    <div wicket:id="student-overview-header" id="header">
+        <h1 class="overviewHeader indnt1">
+            <span wicket:id="student-overview-title"/>
+        </h1>
+        <p class="overviewInstructions">
+            <span wicket:id="student-overview-subtitle" />
+        </p>
+    </div>
+
+    <table wicket:id="student-overview-stats-table" id="overviewTable" class="overviewTable">
+        <thead>
+        <tr>
+            <th><span wicket:id="header-student-name" /></th>
+            <th class="overviewStatusCol"><span wicket:id="header-status-present" /></th>
+            <th class="overviewStatusCol"><span wicket:id="header-status-unexcused" /></th>
+            <th class="overviewStatusCol"><span wicket:id="header-status-excused" /></th>
+            <th class="overviewStatusCol"><span wicket:id="header-status-late" /></th>
+            <th class="overviewStatusCol"><span wicket:id="header-status-left-early" /></th>
+        </tr>
+        </thead>
+        <tbody>
+            <tr wicket:id="students">
+                <td class="studentNameCol"><a wicket:id="student-link" class="studentLink"><span wicket:id="student-name" /><span class="studentEid" wicket:id="student-eid"/></a></td>
+                <td class="overviewStatusCol"><span wicket:id="student-stats-present" /></td>
+                <td class="overviewStatusCol"><span wicket:id="student-stats-absent" /></td>
+                <td class="overviewStatusCol"><span wicket:id="student-stats-excused" /></td>
+                <td class="overviewStatusCol"><span wicket:id="student-stats-late" /></td>
+                <td class="overviewStatusCol"><span wicket:id="student-stats-left-early" /></td>
+            </tr>
+            <wicket:enclosure child="no-students">
+                <tr>
+                    <td colspan="6" class="noStudentsCol">
+                        <span wicket:id="no-students" />
+                        <br />
+                        <span wicket:id="no-students2" />
+                    </td>
+                </tr>
+            </wicket:enclosure>
+        </tbody>
+    </table>
+
+    <script type="text/javascript" src="javascript/jquery.tablesorter.min.js"></script>
+    <script type="text/javascript">
+        $("p.overviewInstructions").width($("#overviewTable").outerWidth());
+        $("#overviewTable").tablesorter({
+            sortList: [[0,0]]
+        });
+    </script>
+
+</wicket:extend>
+</body>
+</html>

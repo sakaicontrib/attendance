@@ -212,8 +212,15 @@ public class AttendanceLogicImpl implements AttendanceLogic {
 	/**
 	 * {@inheritDoc}
 	 */
-	public List<AttendanceRecord> getAttendanceRecordsForUserInCurrentSite(String id) {
-		return generateAttendanceRecords(id);
+	public List<AttendanceRecord> getAttendanceRecordsForUser(String id) {
+		return getAttendanceRecordsForUser(id, getCurrentAttendanceSite());
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public List<AttendanceRecord> getAttendanceRecordsForUser(String id, AttendanceSite aS) {
+		return generateAttendanceRecords(id, aS);
 	}
 
 	/**
@@ -259,6 +266,31 @@ public class AttendanceLogicImpl implements AttendanceLogic {
 		return dao.updateAttendanceRecords(records);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	public boolean updateMissingRecordsForEvent(AttendanceEvent attendanceEvent, Status defaultStatus, List<String> missingStudentIds) {
+		List<AttendanceRecord> recordList = new ArrayList<AttendanceRecord>();
+
+		if(defaultStatus == null) {
+			defaultStatus = attendanceEvent.getAttendanceSite().getDefaultStatus();
+		}
+
+		if(missingStudentIds != null && !missingStudentIds.isEmpty()) {
+			for(String studentId : missingStudentIds) {
+				AttendanceRecord attendanceRecord = generateAttendanceRecord(attendanceEvent, studentId, defaultStatus);
+				if(attendanceRecord != null) {
+					recordList.add(attendanceRecord);
+				}
+			}
+			return dao.updateAttendanceRecords(recordList);
+		}
+		return false;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
 	public Map<Status, Integer> getStatsForEvent(AttendanceEvent event) {
 		Map<Status, Integer> results = new HashMap<Status, Integer>();
 		List<String> currentStudents = sakaiProxy.getCurrentSiteMembershipIds();
@@ -285,23 +317,31 @@ public class AttendanceLogicImpl implements AttendanceLogic {
 	/**
 	 * {@inheritDoc}
 	 */
-	public boolean updateMissingRecordsForEvent(AttendanceEvent attendanceEvent, Status defaultStatus, List<String> missingStudentIds) {
-		List<AttendanceRecord> recordList = new ArrayList<AttendanceRecord>();
+	public Map<Status, Integer> getStatsForUser(String userId) {
+		return getStatsForUser(userId, getCurrentAttendanceSite());
+	}
 
-		if(defaultStatus == null) {
-			defaultStatus = attendanceEvent.getAttendanceSite().getDefaultStatus();
+	/**
+	 * {@inheritDoc}
+	 */
+	public Map<Status, Integer> getStatsForUser(String userId, AttendanceSite aS) {
+		Map<Status, Integer> results = new HashMap<Status, Integer>();
+
+		for(Status s : Status.values()){
+			generateStatsHelper(results, s, 0);
 		}
 
-		if(missingStudentIds != null && !missingStudentIds.isEmpty()) {
-			for(String studentId : missingStudentIds) {
-				AttendanceRecord attendanceRecord = generateAttendanceRecord(attendanceEvent, studentId, defaultStatus);
-				if(attendanceRecord != null) {
-					recordList.add(attendanceRecord);
+		List<AttendanceRecord> records = getAttendanceRecordsForUser(userId, aS);
+
+		if(!records.isEmpty()) {
+			for(AttendanceRecord record : records) {
+				if(record.getUserID().equals(userId)){
+					generateStatsHelper(results, record.getStatus(), 1);
 				}
 			}
-			return dao.updateAttendanceRecords(recordList);
 		}
-		return false;
+
+		return results;
 	}
 
 	/**
@@ -332,8 +372,8 @@ public class AttendanceLogicImpl implements AttendanceLogic {
 		log.info("init");
 	}
 
-	private List<AttendanceRecord> generateAttendanceRecords(String id) {
-		List<AttendanceEvent> aEs = getAttendanceEventsForCurrentSite();
+	private List<AttendanceRecord> generateAttendanceRecords(String id, AttendanceSite aS) {
+		List<AttendanceEvent> aEs = getAttendanceEventsForSite(aS);
 		List<AttendanceRecord> records = new ArrayList<AttendanceRecord>(aEs.size());
 		Status s = getCurrentAttendanceSite().getDefaultStatus();
 		// Is there a faster way to do this? Would querying the DB be faster?

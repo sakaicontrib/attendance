@@ -331,6 +331,17 @@ p.setAll {
     margin-top: 0;
 }
 
+.studentEid {
+    float: right;
+    margin-left: .5em;
+}
+
+tr td a.studentLink {
+    display: block;
+    text-decoration: none;
+    border-bottom: thin solid #004b8d;
+}
+
 .addComment {
     position:absolute;
     top:-130px;

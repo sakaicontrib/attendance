@@ -28,6 +28,9 @@ import java.util.List;
  * @author Leonardo Canessa [lcanessa1 (at) udayton (dot) edu]
  */
 public class StudentDataProvider extends BaseProvider<User> {
+    public StudentDataProvider() {
+        super();
+    }
 
     public StudentDataProvider(List<User> l) {
         super();
