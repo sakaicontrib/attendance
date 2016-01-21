@@ -32,6 +32,7 @@
 
         <property name="userID"     column="USER_ID"            type="java.lang.String" />
         <property name="status"     column="STATUS"             type="org.sakaiproject.attendance.hbm.StatusUserType"/>
+        <property name="comment"    column="RECORD_COMMENT"     type="text" length="4000"/>
 
         <many-to-one name="attendanceEvent" column="A_EVENT_ID" unique="false" not-null="true" class="AttendanceEvent" lazy="false"/>
     </class>

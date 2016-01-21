@@ -142,7 +142,6 @@ public class StudentView extends BasePage {
             }
         };
 
-        studentView.add(new Label("attendance-header", new ResourceModel("attendance.overview.header")));
         studentView.add(new Label("student-name", sakaiProxy.getUserSortName(this.studentId) + " (" + sakaiProxy.getUserDisplayId(this.studentId) + ")"));
 
         return studentView;
@@ -157,7 +156,8 @@ public class StudentView extends BasePage {
             studentViewData.add(new Label("take-attendance-header", getString("attendance.student.view.attendance")));
         }
         studentViewData.add(new AttendanceRecordFormHeaderPanel("header"));
-        studentViewData.add(new Label("event-name", new ResourceModel("attendance.record.form.header.event")));
+        studentViewData.add(new Label("event-name-header", new ResourceModel("attendance.record.form.header.event")));
+        studentViewData.add(new Label("event-date-header", new ResourceModel("attendance.record.form.header.date")));
         studentViewData.add(createData());
 
         return studentViewData;
@@ -178,6 +178,7 @@ public class StudentView extends BasePage {
                     disableLink(eventLink);
                 }
                 item.add(eventLink);
+                item.add(new Label("event-date", item.getModelObject().getAttendanceEvent().getStartDateTime()));
                 item.add(new AttendanceRecordFormDataPanel("record", item.getModel(), false, returnPage, feedbackPanel));
             }
         };

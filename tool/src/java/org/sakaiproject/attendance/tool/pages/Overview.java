@@ -17,15 +17,25 @@
 package org.sakaiproject.attendance.tool.pages;
 
 import org.apache.wicket.RestartResponseException;
+import org.apache.wicket.ajax.AjaxEventBehavior;
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.AjaxLink;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.data.DataView;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.model.ResourceModel;
+import org.apache.wicket.request.handler.resource.ResourceStreamRequestHandler;
+import org.apache.wicket.util.resource.AbstractResourceStreamWriter;
 import org.sakaiproject.attendance.model.AttendanceEvent;
 import org.sakaiproject.attendance.model.Status;
 import org.sakaiproject.attendance.tool.dataproviders.EventDataProvider;
+import org.sakaiproject.attendance.tool.pages.panels.PrintPanel;
 
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.Map;
 
 /**
@@ -39,6 +49,9 @@ import java.util.Map;
 public class Overview extends BasePage {
 	private static final long serialVersionUID = 1L;
 
+	PrintPanel printPanel;
+	WebMarkupContainer printContainer;
+
 	public Overview() {
 		disableLink(this.firstLink);
 
@@ -51,21 +64,31 @@ public class Overview extends BasePage {
 		createHeaders();
 		createTable();
 
+		this.printContainer = new WebMarkupContainer("print-container");
+		printContainer.setOutputMarkupId(true);
+
+		this.printPanel = new PrintPanel("print-panel", new Model<AttendanceEvent>());
+
+		printContainer.add(printPanel);
+
+		add(printContainer);
+
 	}
 
 	private void createHeaders() {
 		// Main header
-		Label headerOverview 		= new Label("header-overview",			new ResourceModel("attendance.overview.header"));
+		Label headerOverview 		= new Label("header-overview",				new ResourceModel("attendance.overview.header"));
 
 		//headers for the table
 		Label headerEventName 		= new Label("header-event-name", 			new ResourceModel("attendance.overview.header.event.name"));
 		Label headerEventDate 		= new Label("header-event-date", 			new ResourceModel("attendance.overview.header.event.date"));
 		Label headerStatusPresent 	= new Label("header-status-present", 		new ResourceModel("attendance.overview.header.status.present"));
-		Label headerStatusLate 		= new Label("header-status-late", 		new ResourceModel("attendance.overview.header.status.late"));
+		Label headerStatusLate 		= new Label("header-status-late", 			new ResourceModel("attendance.overview.header.status.late"));
 		Label headerStatusLeftEarly = new Label("header-status-left-early", 	new ResourceModel("attendance.overview.header.status.left.early"));
 		Label headerStatusExcused 	= new Label("header-status-excused", 		new ResourceModel("attendance.overview.header.status.excused"));
-		Label headerStatusUnexcused = new Label("header-status-unexcused", 	new ResourceModel("attendance.overview.header.status.unexcused"));
-		Label headerEventEdit		= new Label("header-event-edit", 		new ResourceModel("attendance.overview.header.event.edit"));
+		Label headerStatusUnexcused = new Label("header-status-unexcused", 		new ResourceModel("attendance.overview.header.status.unexcused"));
+		Label headerEventEdit		= new Label("header-event-edit", 			new ResourceModel("attendance.overview.header.event.edit"));
+		Label headerPrintLinks		= new Label("header-print-links",			new ResourceModel("attendance.overview.header.print"));
 
 		add(headerOverview);
 		add(headerEventName);
@@ -76,6 +99,7 @@ public class Overview extends BasePage {
 		add(headerStatusExcused);
 		add(headerStatusUnexcused);
 		add(headerEventEdit);
+		add(headerPrintLinks);
 
 	}
 
@@ -104,6 +128,15 @@ public class Overview extends BasePage {
 					private static final long serialVersionUID = 1L;
 					public void onClick() {
 						setResponsePage(new AddEventPage(item.getModelObject()));
+					}
+				});
+				item.add(new AjaxLink<Void>("print-link"){
+					@Override
+					public void onClick(AjaxRequestTarget ajaxRequestTarget) {
+						printPanel = new PrintPanel("print-panel", item.getModel());
+						printContainer.setOutputMarkupId(true);
+						printContainer.addOrReplace(printPanel);
+						ajaxRequestTarget.add(printContainer);
 					}
 				});
 			}

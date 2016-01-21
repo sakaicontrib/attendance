@@ -19,18 +19,16 @@ package org.sakaiproject.attendance.tool.pages.panels;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormSubmitBehavior;
+import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.markup.html.form.Radio;
-import org.apache.wicket.markup.html.form.RadioGroup;
+import org.apache.wicket.markup.html.form.*;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.*;
 import org.sakaiproject.attendance.model.AttendanceRecord;
 import org.sakaiproject.attendance.model.Status;
 import org.sakaiproject.attendance.tool.pages.StudentView;
-import org.sakaiproject.user.api.User;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,6 +44,10 @@ public class AttendanceRecordFormDataPanel extends BasePanel {
     private                 List<Component>             ajaxTargets = new ArrayList<Component>();
     private                 String                      returnPage;
     private                 FeedbackPanel               pageFeedbackPanel;
+
+    private                 WebMarkupContainer          commentContainer;
+    private                 WebMarkupContainer          noComment;
+    private                 WebMarkupContainer          yesComment;
 
     public AttendanceRecordFormDataPanel(String id, IModel<AttendanceRecord> aR, boolean iS, String rP, FeedbackPanel fP) {
         super(id, aR);
@@ -76,6 +78,7 @@ public class AttendanceRecordFormDataPanel extends BasePanel {
         };
 
         createStatusRadio(recordForm);
+        createCommentBox(recordForm);
         //createLabel(recordForm);
 
         return recordForm;
@@ -189,6 +192,59 @@ public class AttendanceRecordFormDataPanel extends BasePanel {
         rF.add(group);
     }
 
+    private void createCommentBox(final Form<AttendanceRecord> rF) {
+
+        commentContainer = new WebMarkupContainer("comment-container");
+        commentContainer.setOutputMarkupId(true);
+
+        noComment = new WebMarkupContainer("no-comment");
+        noComment.setOutputMarkupId(true);
+
+        yesComment = new WebMarkupContainer("yes-comment");
+        yesComment.setOutputMarkupId(true);
+
+        if(recordIModel.getObject().getComment() != null && !recordIModel.getObject().getComment().equals("")) {
+            noComment.setVisible(false);
+        } else {
+            yesComment.setVisible(false);
+        }
+
+        commentContainer.add(noComment);
+        commentContainer.add(yesComment);
+
+        final TextArea<String> commentBox = new TextArea<String>("comment", new PropertyModel<String>(this.recordIModel, "comment"));
+
+        final AjaxSubmitLink saveComment = new AjaxSubmitLink("save-comment") {
+            @Override
+            protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+                super.onSubmit(target, form);
+                if(recordIModel.getObject().getComment() != null && !recordIModel.getObject().getComment().equals("")) {
+                    noComment.setVisible(false);
+                    yesComment.setVisible(true);
+                } else {
+                    noComment.setVisible(true);
+                    yesComment.setVisible(false);
+                }
+                commentContainer.addOrReplace(noComment);
+                commentContainer.addOrReplace(yesComment);
+                for (Component c : ajaxTargets) {
+                    target.add(c);
+                }
+            }
+        };
+
+        commentContainer.add(saveComment);
+        commentContainer.add(commentBox);
+
+        ajaxTargets.add(commentContainer);
+
+        if(restricted) {
+            commentContainer.setVisible(false);
+        }
+
+        rF.add(commentContainer);
+    }
+
     private String getStatusString(Status s) {
         ResourceModel rModel = new ResourceModel(null);
 
@@ -202,6 +258,8 @@ public class AttendanceRecordFormDataPanel extends BasePanel {
             rModel = new ResourceModel("attendance.overview.header.status.excused");
         } else if (s == Status.UNEXCUSED_ABSENCE) {
             rModel = new ResourceModel("attendance.overview.header.status.unexcused");
+        } else {
+            rModel = new ResourceModel("attendance.overview.header.status.unknown");
         }
 
         return rModel.getObject();

@@ -36,6 +36,31 @@
                 <input type="radio" wicket:id="record-status-left-early" />
             </div>
         </wicket:container>
+        <div class="div-table-col" style="position:relative"  wicket:id="comment-container">
+            <div class="commentToggle">
+                <div wicket:id="no-comment">
+                    <img src="images/no_comment_24.png" />
+                </div>
+                <div wicket:id="yes-comment">
+                    <img src="images/comment_24.png" />
+                </div>
+            </div>
+            <div class="addComment" style="display:none;">
+                <h3>Add Comment</h3>
+                <textarea wicket:id="comment" />
+                <input type="submit" wicket:id="save-comment" value="Save" class="saveComment"/>
+            </div>
+            <script type="text/javascript">
+                $("div.commentToggle").unbind().click(function(){
+                    if($(this).next(".addComment").is(":visible")){
+                        $(this).next(".addComment").slideUp("fast");
+                    } else {
+                        $(".addComment").hide();
+                        $(this).next(".addComment").slideDown("fast");
+                    }
+                });
+            </script>
+        </div>
     </form>
 </wicket:panel>
 </body>
