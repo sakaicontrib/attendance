@@ -32,7 +32,7 @@
 
         <property name="siteID"         column="SITE_ID"           type="java.lang.String" />
         <property name="defaultStatus"  column="DEFAULT_STATUS"    type="org.sakaiproject.attendance.hbm.StatusUserType" />
-        <set name="activeStatuses" table="ATTENDANCE_STATUS_T" fetch="join" inverse="true" lazy="false" cascade="all">
+        <set name="attendanceStatuses" table="ATTENDANCE_STATUS_T" fetch="join" inverse="true" lazy="false" cascade="all">
             <key column="A_SITE_ID" not-null="true"/>
             <one-to-many class="org.sakaiproject.attendance.model.AttendanceStatus" />
         </set>

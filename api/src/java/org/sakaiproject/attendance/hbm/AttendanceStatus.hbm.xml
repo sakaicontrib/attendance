@@ -40,5 +40,8 @@
     <query name="getActiveAttendanceStatusesForSite">
         <![CDATA[from AttendanceStatus aStatus JOIN FETCH aStatus.attendanceSite WHERE aStatus.attendanceSite = :attendanceSite and aStatus.isActive = true]]>
     </query>
+    <query name="getAllAttendanceStatusesForSite">
+        <![CDATA[from AttendanceStatus aStatus JOIN FETCH aStatus.attendanceSite WHERE aStatus.attendanceSite = :attendanceSite]]>
+    </query>
 
 </hibernate-mapping>

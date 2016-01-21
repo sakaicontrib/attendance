@@ -35,7 +35,7 @@ public class AttendanceSite implements Serializable {
 	@Getter	@Setter	private 				Long 					id;
 	@Getter	@Setter	private 				String 					siteID;
 	@Getter	@Setter	private 				Status 					defaultStatus;
-	@Getter	@Setter	private 				Set<AttendanceStatus>	activeStatuses		= new HashSet<AttendanceStatus>(0);
+	@Getter	@Setter	private 				Set<AttendanceStatus>	attendanceStatuses		= new HashSet<AttendanceStatus>(0);
 
 	public AttendanceSite(String siteID){
 		this.siteID = siteID;
@@ -50,7 +50,7 @@ public class AttendanceSite implements Serializable {
 		return Objects.equals(getId(), that.getId()) &&
 				Objects.equals(getSiteID(), that.getSiteID()) &&
 				getDefaultStatus() == that.getDefaultStatus() &&
-				Objects.equals(getActiveStatuses(), that.getActiveStatuses());
+				Objects.equals(getAttendanceStatuses(), that.getAttendanceStatuses());
 	}
 
 	@Override

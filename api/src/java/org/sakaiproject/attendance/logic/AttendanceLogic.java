@@ -163,6 +163,13 @@ public interface AttendanceLogic {
 	List<AttendanceStatus> getActiveStatusesForSite(AttendanceSite attendanceSite);
 
 	/**
+	 * Get all of the attendance statuses for a site
+	 * @param attendanceSite
+	 * @return
+     */
+	List<AttendanceStatus> getAllStatusesForSite(AttendanceSite attendanceSite);
+
+	/**
 	 * Update an AttendanceRecord
 	 * @param aR, the AttendanceRecord to update
 	 * @return

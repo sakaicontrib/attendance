@@ -147,6 +147,13 @@ public interface AttendanceDao {
      */
 	List<AttendanceStatus> getActiveStatusesForSite(AttendanceSite attendanceSite);
 
+	/**
+	 * Get a lit of all of the attendance statuses for a site
+	 * @param attendanceSite
+	 * @return
+     */
+	List<AttendanceStatus> getAllStatusesForSite(AttendanceSite attendanceSite);
+
 	// Hibernate Query Constants
 	String QUERY_GET_ATTENDANCE_EVENT = "getAttendanceEvent";
 	String QUERY_GET_ATTENDANCE_EVENTS_FOR_SITE = "getAttendanceEventsForSite";
@@ -159,6 +166,7 @@ public interface AttendanceDao {
 	String QUERY_GET_ATTENDANCE_RECORDS_FOR_ATTENDANCE_EVENT = "getRecordsForAttendanceEvent";
 
 	String QUERY_GET_ACTIVE_ATTENDANCE_STATUSES_FOR_SITE = "getActiveAttendanceStatusesForSite";
+	String QUERY_GET_ALL_ATTENDANCE_STATUSES_FOR_SITE = "getAllAttendanceStatusesForSite";
 
 	// Hibernate Object Fields
 	String ID = "id";

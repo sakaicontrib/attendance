@@ -62,12 +62,13 @@ public class AttendanceLogicImpl implements AttendanceLogic {
 		// is this the best way to do this?
 		if(currentAttendanceSite == null) {
 			currentAttendanceSite = new AttendanceSite(currentSiteID);
-			if(addSite(currentAttendanceSite)){
-				return currentAttendanceSite;
-			}
-			else {
+			if(!addSite(currentAttendanceSite)){
 				return null;
 			}
+		}
+
+		if(generateMissingAttendanceStatusesForSite(currentAttendanceSite)) {
+			currentAttendanceSite = getAttendanceSite(currentSiteID);
 		}
 
 		return currentAttendanceSite;
@@ -366,6 +367,13 @@ public class AttendanceLogicImpl implements AttendanceLogic {
 	}
 
 	/**
+	 * {@inheritDoc}
+	 */
+	public List<AttendanceStatus> getAllStatusesForSite(AttendanceSite attendanceSite) {
+		return dao.getAllStatusesForSite(attendanceSite);
+	}
+
+	/**
 	 * init - perform any actions required here for when this bean starts up
 	 */
 	public void init() {
@@ -435,6 +443,49 @@ public class AttendanceLogicImpl implements AttendanceLogic {
 		} else {
 			m.put(s, base);
 		}
+	}
+
+	private boolean generateMissingAttendanceStatusesForSite(AttendanceSite attendanceSite) {
+
+		Set<AttendanceStatus> currentAttendanceStatuses = attendanceSite.getAttendanceStatuses();
+		List<Status> previouslyCreatedStatuses = new ArrayList<Status>();
+		List<AttendanceStatus> statusesToBeAdded = new ArrayList<AttendanceStatus>();
+
+		// Get the max sort order
+		int nextSortOrder = getNextSortOrder(new ArrayList<AttendanceStatus>(currentAttendanceStatuses));
+
+		// Generate the list of statuses that already have a record for the site
+		for (AttendanceStatus attendanceStatus : currentAttendanceStatuses) {
+			previouslyCreatedStatuses.add(attendanceStatus.getStatus());
+		}
+
+		// Add attendance status record for each Status that is missing a record
+		for (Status status : Status.values()) {
+			if (!previouslyCreatedStatuses.contains(status)) {
+				AttendanceStatus missingAttendanceStatus = new AttendanceStatus();
+				missingAttendanceStatus.setAttendanceSite(attendanceSite);
+				missingAttendanceStatus.setStatus(status);
+				missingAttendanceStatus.setIsActive(true);
+				missingAttendanceStatus.setSortOrder(nextSortOrder);
+				nextSortOrder++;
+				statusesToBeAdded.add(missingAttendanceStatus);
+			}
+		}
+
+		return statusesToBeAdded.isEmpty() || dao.updateAttendanceStatuses(statusesToBeAdded);
+
+	}
+
+	private int getNextSortOrder(List<AttendanceStatus> attendanceStatusList) {
+		int maxSortOrder = -1;
+
+		for(AttendanceStatus attendanceStatus : attendanceStatusList) {
+			if(attendanceStatus.getSortOrder() > maxSortOrder) {
+				maxSortOrder = attendanceStatus.getSortOrder();
+			}
+		}
+
+		return maxSortOrder + 1;
 	}
 	
 	@Setter

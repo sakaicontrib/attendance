@@ -53,7 +53,6 @@ public class EventView extends BasePage {
 
     private                 String                  returnPage;
 
-    private                 WebMarkupContainer      infoContainer;
     private                 DropDownChoice<Status>  setAllStatus;
 
                             PrintPanel              printPanel;
@@ -117,7 +116,7 @@ public class EventView extends BasePage {
     }
 
     private void createStatsTable() {
-        infoContainer = new WebMarkupContainer("info-container");
+        WebMarkupContainer infoContainer = new WebMarkupContainer("info-container");
         infoContainer.setOutputMarkupId(true);
 
         infoContainer.add(new Label("item-info-header", getString("attendance.event.view.item.info")));

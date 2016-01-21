@@ -26,5 +26,7 @@ public class SettingsPage extends BasePage {
 
 		Label headerSettings = new Label("header-settings",	new ResourceModel("attendance.settings.header"));
 		add(headerSettings);
+
+
 	}
 }
