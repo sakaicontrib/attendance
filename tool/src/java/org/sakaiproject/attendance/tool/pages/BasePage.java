@@ -35,6 +35,7 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
+import org.apache.wicket.validation.validator.RangeValidator;
 import org.sakaiproject.attendance.export.PDFEventExporter;
 import org.sakaiproject.attendance.logic.AttendanceLogic;
 import org.sakaiproject.attendance.logic.SakaiProxy;
@@ -74,7 +75,7 @@ public class BasePage extends WebPage implements IHeaderContributor {
 
 		this.role = sakaiProxy.getCurrentUserRoleInCurrentSite();
 
-    	//first link
+    	//Take Attendance Overview link
 		firstLink = new Link<Void>("firstLink") {
 			private static final long serialVersionUID = 1L;
 			public void onClick() {
@@ -86,7 +87,7 @@ public class BasePage extends WebPage implements IHeaderContributor {
 		firstLink.add(new AttributeModifier("title", new ResourceModel("link.first.tooltip")));
 		add(firstLink);
 		
-		//third link
+		//Attendance Items link
 		addEventLink = new Link<Void>("addEventLink") {
 			private static final long serialVersionUID = 1L;
 			public void onClick() {
@@ -107,7 +108,16 @@ public class BasePage extends WebPage implements IHeaderContributor {
 		studentOverviewLink.add(new Label("student-overview-label", new ResourceModel("attendance.link.student.overview")).setRenderBodyOnly(true));
 		studentOverviewLink.add(new AttributeModifier("title", new ResourceModel("attendance.link.student.overview.tooltip")));
 		add(studentOverviewLink);
-		
+
+		settingsLink = new Link<Void>("settings-link") {
+			private static final long serialVersionUID = 1L;
+			public void onClick() {
+				setResponsePage(new SettingsPage());
+			}
+		};
+		settingsLink.add(new Label("settings-link-label", new ResourceModel("settings.link.label")).setRenderBodyOnly(true));
+		settingsLink.add(new AttributeModifier("title", new ResourceModel("settings.link.tooltip")));
+		add(settingsLink);
 		
 		// Add a FeedbackPanel for displaying our messages
         feedbackPanel = new FeedbackPanel("feedback"){

@@ -38,7 +38,7 @@ body {
     color: #0064cd;
 }
 
-h1.overviewHeader, h1.itemsHeader {
+h1.overviewHeader, h1.itemsHeader, h1.settingsHeader {
     background: url("../images/attendance_icon_32.png") no-repeat left center;
     padding-left: 32px;
     color: #555;
@@ -47,7 +47,7 @@ h1.overviewHeader, h1.itemsHeader {
     min-height: 32px;
 }
 
-span.overHeaderSpan, span.itemsHeaderSpan {
+span.overHeaderSpan, span.itemsHeaderSpan, span.settingsHeaderSpan {
     margin: 0 .5em;
 }
 
@@ -433,3 +433,4 @@ img.printImage:hover {
 p.printAction {
     text-align: center;
 }
+
