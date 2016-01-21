@@ -36,6 +36,7 @@ import org.sakaiproject.attendance.tool.dataproviders.AttendanceRecordProvider;
 import org.sakaiproject.attendance.tool.pages.panels.AttendanceRecordFormDataPanel;
 import org.sakaiproject.attendance.tool.pages.panels.AttendanceRecordFormHeaderPanel;
 import org.sakaiproject.attendance.tool.pages.panels.PrintPanel;
+import org.sakaiproject.attendance.tool.pages.panels.StatisticsPanel;
 
 import java.util.Arrays;
 import java.util.List;
@@ -53,7 +54,7 @@ public class EventView extends BasePage {
 
     private                 String                  returnPage;
 
-    private                 WebMarkupContainer      infoContainer;
+    private                 StatisticsPanel         infoContainer;
     private                 DropDownChoice<Status>  setAllStatus;
 
                             PrintPanel              printPanel;
@@ -117,24 +118,7 @@ public class EventView extends BasePage {
     }
 
     private void createStatsTable() {
-        infoContainer = new WebMarkupContainer("info-container");
-        infoContainer.setOutputMarkupId(true);
-
-        infoContainer.add(new Label("item-info-header", getString("attendance.event.view.item.info")));
-
-        Map<Status, Integer> stats = attendanceLogic.getStatsForEvent(attendanceEvent);
-
-        infoContainer.add(new Label("header-status-present", 		new ResourceModel("attendance.overview.header.status.present")));
-        infoContainer.add(new Label("header-status-late", 		new ResourceModel("attendance.overview.header.status.late")));
-        infoContainer.add(new Label("header-status-left-early", 	new ResourceModel("attendance.overview.header.status.left.early")));
-        infoContainer.add(new Label("header-status-excused", 		new ResourceModel("attendance.overview.header.status.excused")));
-        infoContainer.add(new Label("header-status-unexcused", 	new ResourceModel("attendance.overview.header.status.unexcused")));
-
-        infoContainer.add(new Label("event-stats-present", stats.get(Status.PRESENT)));
-        infoContainer.add(new Label("event-stats-late", stats.get(Status.LATE)));
-        infoContainer.add(new Label("event-stats-left-early", stats.get(Status.LEFT_EARLY)));
-        infoContainer.add(new Label("event-stats-excused", stats.get(Status.EXCUSED_ABSENCE)));
-        infoContainer.add(new Label("event-stats-absent", stats.get(Status.UNEXCUSED_ABSENCE)));
+        infoContainer = new StatisticsPanel("statistics", attendanceEvent);
 
         add(infoContainer);
     }
