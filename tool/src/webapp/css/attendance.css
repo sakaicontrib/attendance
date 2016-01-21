@@ -416,12 +416,12 @@ div.printMask:hover {
     cursor: pointer;
 }
 
-span.cancelPrint {
+span.cancelPrint, span.cancelAddComment {
     color: #0064cd;
     padding-left: .5em;
 }
 
-span.cancelPrint:hover {
+span.cancelPrint:hover, span.cancelAddComment:hover {
     text-decoration: underline;
     cursor: pointer;
 }
