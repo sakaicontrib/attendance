@@ -28,10 +28,10 @@ import java.util.Map;
  * Created by Leonardo Canessa [lcanessa1 (at) udayton (dot) edu]
  */
 public class StatisticsPanel extends BasePanel {
-    private static final long serialVersionUID = 1L;
+    private static final    long            serialVersionUID = 1L;
 
-    private AttendanceEvent attendanceEvent;
-    private String userId;
+    private                 AttendanceEvent attendanceEvent;
+    private                 String          userId;
 
     public StatisticsPanel(String id, AttendanceEvent aE) {
         super(id);
@@ -69,11 +69,11 @@ public class StatisticsPanel extends BasePanel {
         infoContainer.add(new Label("header-status-excused", 		new ResourceModel("attendance.overview.header.status.excused")));
         infoContainer.add(new Label("header-status-unexcused", 	new ResourceModel("attendance.overview.header.status.unexcused")));
 
-        infoContainer.add(new Label("event-stats-present", stats.get(Status.PRESENT)));
-        infoContainer.add(new Label("event-stats-late", stats.get(Status.LATE)));
-        infoContainer.add(new Label("event-stats-left-early", stats.get(Status.LEFT_EARLY)));
-        infoContainer.add(new Label("event-stats-excused", stats.get(Status.EXCUSED_ABSENCE)));
-        infoContainer.add(new Label("event-stats-absent", stats.get(Status.UNEXCUSED_ABSENCE)));
+        infoContainer.add(new Label("event-stats-present",      stats.get(Status.PRESENT)));
+        infoContainer.add(new Label("event-stats-late",         stats.get(Status.LATE)));
+        infoContainer.add(new Label("event-stats-left-early",   stats.get(Status.LEFT_EARLY)));
+        infoContainer.add(new Label("event-stats-excused",      stats.get(Status.EXCUSED_ABSENCE)));
+        infoContainer.add(new Label("event-stats-absent",       stats.get(Status.UNEXCUSED_ABSENCE)));
 
         return infoContainer;
     }
