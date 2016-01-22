@@ -18,9 +18,12 @@ package org.sakaiproject.attendance.tool.pages.panels;
 
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.model.ResourceModel;
 import org.sakaiproject.attendance.model.AttendanceEvent;
 import org.sakaiproject.attendance.model.Status;
+import org.sakaiproject.attendance.tool.pages.EventView;
+import org.sakaiproject.attendance.tool.pages.StudentView;
 
 import java.util.Map;
 
@@ -32,25 +35,31 @@ public class StatisticsPanel extends BasePanel {
 
     private                 AttendanceEvent attendanceEvent;
     private                 String          userId;
+    private                 String          fromPage;
+    private                 Long            previousEventId;
 
-    public StatisticsPanel(String id, AttendanceEvent aE) {
+    public StatisticsPanel(String id, String fromPage, AttendanceEvent aE) {
         super(id);
         this.attendanceEvent = aE;
-        init();
+        init(fromPage);
     }
 
-    public StatisticsPanel(String id, String userID) {
+    public StatisticsPanel(String id, String fromPage, String userID, Long eId) {
         super(id);
         this.userId = userID;
-        init();
+        this.previousEventId = eId;
+        init(fromPage);
     }
 
-    private void init() {
+    private void init(String fromPage) {
+        setOutputMarkupPlaceholderTag(true);
+        this.fromPage = fromPage;
         add(createTable());
     }
 
     private WebMarkupContainer createTable() {
         WebMarkupContainer infoContainer = new WebMarkupContainer("info-container");
+        infoContainer.add(createRefreshLink());
         infoContainer.setOutputMarkupId(true);
 
         Map<Status, Integer> stats;
@@ -75,6 +84,21 @@ public class StatisticsPanel extends BasePanel {
         infoContainer.add(new Label("event-stats-excused",      stats.get(Status.EXCUSED_ABSENCE)));
         infoContainer.add(new Label("event-stats-absent",       stats.get(Status.UNEXCUSED_ABSENCE)));
 
+        infoContainer.add(new Label("info", new ResourceModel("attendance.statistics.info")));
+
         return infoContainer;
+    }
+
+    private Link<Void> createRefreshLink() {
+        Link<Void> refreshPage = new Link<Void>("refreshPage") {
+            public void onClick() {
+                if(attendanceEvent != null) {
+                    setResponsePage(new EventView(attendanceEvent, fromPage));
+                } else {
+                    setResponsePage(new StudentView(userId, previousEventId,fromPage));
+                }
+            }
+        };
+        return refreshPage;
     }
 }

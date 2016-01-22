@@ -118,7 +118,7 @@ public class EventView extends BasePage {
     }
 
     private void createStatsTable() {
-        infoContainer = new StatisticsPanel("statistics", attendanceEvent);
+        infoContainer = new StatisticsPanel("statistics", returnPage, attendanceEvent);
 
         add(infoContainer);
     }

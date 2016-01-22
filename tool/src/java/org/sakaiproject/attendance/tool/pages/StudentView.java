@@ -137,7 +137,7 @@ public class StudentView extends BasePage {
     }
 
     private StatisticsPanel createStatistics() {
-        return new StatisticsPanel("statistics", studentId);
+        return new StatisticsPanel("statistics", returnPage, studentId, previousEventId);
     }
 
     private WebMarkupContainer createStudentViewHeader() {
