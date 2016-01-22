@@ -36,7 +36,7 @@ public class SettingsPage extends BasePage {
 	private void createEditStatusesPanel() {
 
 		WebMarkupContainer allStatusesContainer = new WebMarkupContainer("all-statuses-container");
-		allStatusesContainer.add(new AttendanceStatusFormPanel("edit-status-panel"));
+		allStatusesContainer.add(new AttendanceStatusFormPanel("edit-status-panel", feedbackPanel));
 		add(allStatusesContainer);
 	}
 }

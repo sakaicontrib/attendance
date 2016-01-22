@@ -19,34 +19,11 @@
 <body>
 <wicket:panel>
     <form wicket:id="edit-status-settings-form">
-        <table>
-            <thead>
-            <tr>
-                <th>
-                    Active
-                </th>
-                <th>
-                    Order
-                </th>
-                <th>
-                    Status
-                </th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr wicket:id="all-statuses">
-                <td>
-                    <input type="checkbox" wicket:id="is-active" />
-                </td>
-                <td>
-                    <span wicket:id="sort-order" />
-                </td>
-                <td>
-                    <span wicket:id="status" />
-                </td>
-            </tr>
-            </tbody>
-        </table>
+        <ul>
+            <li wicket:id="all-statuses">
+                <input type="checkbox" wicket:id="is-active"> <input type="text" wicket:id="sort-order"> <span wicket:id="status" />
+            </li>
+        </ul>
         <input type="submit" wicket:id="submit-link" />
     </form>
 </wicket:panel>

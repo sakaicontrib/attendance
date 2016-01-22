@@ -21,37 +21,41 @@ import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.markup.repeater.Item;
-import org.apache.wicket.markup.repeater.data.DataView;
+import org.apache.wicket.markup.html.form.TextField;
+import org.apache.wicket.markup.html.list.ListItem;
+import org.apache.wicket.markup.html.list.ListView;
+import org.apache.wicket.markup.html.panel.FeedbackPanel;
+import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.sakaiproject.attendance.model.AttendanceSite;
 import org.sakaiproject.attendance.model.AttendanceStatus;
-import org.sakaiproject.attendance.tool.dataproviders.AttendanceStatusProvider;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class AttendanceStatusFormPanel extends BasePanel {
     private static final long serialVersionUID = 1L;
     private IModel<AttendanceSite> attendanceSiteIModel;
+    private FeedbackPanel pageFeedbackPanel;
 
-    public AttendanceStatusFormPanel(String id) {
+    public AttendanceStatusFormPanel(String id, FeedbackPanel feedbackPanel) {
         super(id);
+        this.pageFeedbackPanel = feedbackPanel;
         this.attendanceSiteIModel = new Model<AttendanceSite>(attendanceLogic.getCurrentAttendanceSite());
         init();
     }
 
-    public AttendanceStatusFormPanel(String id, IModel<AttendanceSite> attendanceSiteIModel) {
+    public AttendanceStatusFormPanel(String id, IModel<AttendanceSite> attendanceSiteIModel, FeedbackPanel feedbackPanel) {
         super(id, attendanceSiteIModel);
+        this.pageFeedbackPanel = feedbackPanel;
         this.attendanceSiteIModel = attendanceSiteIModel;
         init();
     }
 
     private void init() {
 
-        Form<AttendanceSite> editStatusSettingsForm = new Form<AttendanceSite>("edit-status-settings-form", this.attendanceSiteIModel) {
+        Form<AttendanceSite> editStatusSettingsForm = new Form<AttendanceSite>("edit-status-settings-form", new CompoundPropertyModel<AttendanceSite>(this.attendanceSiteIModel)) {
             @Override
             protected void onSubmit() {
                 AttendanceSite aS = (AttendanceSite) getDefaultModelObject();
@@ -66,24 +70,35 @@ public class AttendanceStatusFormPanel extends BasePanel {
         };
         add(editStatusSettingsForm);
 
-        AttendanceStatusProvider attendanceStatusProvider = new AttendanceStatusProvider(attendanceSiteIModel.getObject(), AttendanceStatusProvider.DISPLAY);
-        DataView<AttendanceStatus> attendanceStatusDataView = new DataView<AttendanceStatus>("all-statuses", attendanceStatusProvider) {
+        final IModel<List<AttendanceStatus>> listModel = new PropertyModel<List<AttendanceStatus>>(this.attendanceSiteIModel, "attendanceStatuses") {
             @Override
-            protected void populateItem(Item<AttendanceStatus> item) {
+            public List<AttendanceStatus> getObject() {
+                List<AttendanceStatus> attendanceStatuses = new ArrayList((Set)super.getObject());
+                Collections.sort(attendanceStatuses, new Comparator<AttendanceStatus>() {
+                    @Override
+                    public int compare(AttendanceStatus o1, AttendanceStatus o2) {
+                        return o1.getSortOrder() - o2.getSortOrder();
+                    }
+                });
+                return attendanceStatuses;
+            }
+        };
+        editStatusSettingsForm.add(new ListView<AttendanceStatus>("all-statuses", listModel) {
+            @Override
+            protected void populateItem(ListItem<AttendanceStatus> item) {
                 String statusName = attendanceLogic.getStatusString(item.getModelObject().getStatus());
                 final CheckBox isActive = new CheckBox("is-active", new PropertyModel<Boolean>(item.getModelObject(), "isActive"));
                 item.add(isActive);
                 item.add(new Label("status", statusName));
-                item.add(new Label("sort-order", item.getModelObject().getSortOrder()));
+                item.add(new TextField<Integer>("sort-order", new PropertyModel<Integer>(item.getModelObject(), "sortOrder")));
             }
-        };
-
-        editStatusSettingsForm.add(attendanceStatusDataView);
+        });
 
         AjaxSubmitLink submit = new AjaxSubmitLink("submit-link") {
             @Override
             protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
                 super.onSubmit(target, form);
+                target.add(pageFeedbackPanel);
             }
         };
 
