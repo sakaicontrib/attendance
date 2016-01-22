@@ -27,6 +27,7 @@ import org.sakaiproject.attendance.model.AttendanceRecord;
 import org.sakaiproject.attendance.tool.dataproviders.AttendanceRecordProvider;
 import org.sakaiproject.attendance.tool.pages.panels.AttendanceRecordFormDataPanel;
 import org.sakaiproject.attendance.tool.pages.panels.AttendanceRecordFormHeaderPanel;
+import org.sakaiproject.attendance.tool.pages.panels.StatisticsPanel;
 
 /**
  * Created by Leonardo Canessa [lcanessa1 (at) udayton (dot) edu]
@@ -68,6 +69,7 @@ public class StudentView extends BasePage {
         }
 
         add(createHeader());
+        add(createStatistics());
         add(createStudentViewHeader());
         add(createTable());
     }
@@ -132,6 +134,10 @@ public class StudentView extends BasePage {
         header.add(studentName);
 
         return header;
+    }
+
+    private StatisticsPanel createStatistics() {
+        return new StatisticsPanel("statistics", returnPage, studentId, previousEventId);
     }
 
     private WebMarkupContainer createStudentViewHeader() {

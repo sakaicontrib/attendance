@@ -30,34 +30,7 @@
         </h2>
     </div>
     
-    <div wicket:id="info-container" class="itemInfoContainer">
-        <div class="itemInfoHeader">
-            <h3 class="itemInfoHeader">
-                <span wicket:id="item-info-header"/>
-            </h3>
-        </div>
-
-        <table class="eventViewTable">
-            <thead>
-            <tr>
-                <th><span wicket:id="header-status-present" /></th>
-                <th><span wicket:id="header-status-unexcused" /></th>
-                <th><span wicket:id="header-status-excused" /></th>
-                <th><span wicket:id="header-status-late" /></th>
-                <th><span wicket:id="header-status-left-early" /></th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr>
-                <td><span wicket:id="event-stats-present" /></td>
-                <td><span wicket:id="event-stats-absent" /></td>
-                <td><span wicket:id="event-stats-excused" /></td>
-                <td><span wicket:id="event-stats-late" /></td>
-                <td><span wicket:id="event-stats-left-early" /></td>
-            </tr>
-            </tbody>
-        </table>
-    </div>
+    <wicket:container wicket:id="statistics"></wicket:container>
 
     <div class="takeAttendanceContainer">
         <div class="takeAttendanceHeader">
