@@ -373,6 +373,26 @@ public class AttendanceLogicImpl implements AttendanceLogic {
 		return dao.getAllStatusesForSite(attendanceSite);
 	}
 
+	public AttendanceStatus getAttendanceStatusById(Long id) {
+		return dao.getAttendanceStatusById(id);
+	}
+
+	public boolean updateAttendanceStatuses(List<AttendanceStatus> attendanceStatuses) {
+		return attendanceStatuses != null && dao.updateAttendanceStatuses(attendanceStatuses);
+	}
+
+	public String getStatusString(Status s) {
+		switch (s)
+		{
+			case PRESENT: return "Present";
+			case EXCUSED_ABSENCE: return "Excused";
+			case UNEXCUSED_ABSENCE: return "Absent";
+			case LATE: return "Late";
+			case LEFT_EARLY: return "Left Early";
+			default: return "None";
+		}
+	}
+
 	/**
 	 * init - perform any actions required here for when this bean starts up
 	 */

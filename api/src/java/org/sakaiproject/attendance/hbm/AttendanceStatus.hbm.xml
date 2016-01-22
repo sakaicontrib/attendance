@@ -37,6 +37,9 @@
         <many-to-one name="attendanceSite" column="A_SITE_ID" unique="false" not-null="true" class="AttendanceSite" lazy="false"/>
     </class>
 
+    <query name="getAttendanceStatus">
+        <![CDATA[from AttendanceStatus aStatus WHERE aStatus.id = :id]]>
+    </query>
     <query name="getActiveAttendanceStatusesForSite">
         <![CDATA[from AttendanceStatus aStatus JOIN FETCH aStatus.attendanceSite WHERE aStatus.attendanceSite = :attendanceSite and aStatus.isActive = true]]>
     </query>

@@ -170,6 +170,20 @@ public interface AttendanceLogic {
 	List<AttendanceStatus> getAllStatusesForSite(AttendanceSite attendanceSite);
 
 	/**
+	 * Get an attendance status record by its id
+	 * @param id
+	 * @return
+     */
+	AttendanceStatus getAttendanceStatusById(Long id);
+
+	/**
+	 * Update attendance statuses
+	 * @param attendanceStatuses
+	 * @return
+     */
+	boolean updateAttendanceStatuses(List<AttendanceStatus> attendanceStatuses);
+
+	/**
 	 * Update an AttendanceRecord
 	 * @param aR, the AttendanceRecord to update
 	 * @return
@@ -221,4 +235,11 @@ public interface AttendanceLogic {
      * @return
      */
 	Map<Status, Integer> getStatsForUser(String userId, AttendanceSite aS);
+
+	/**
+	 * Get the display string for a Status
+	 * @param s
+	 * @return
+     */
+	String getStatusString(Status s);
 }

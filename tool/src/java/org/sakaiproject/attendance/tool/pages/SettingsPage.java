@@ -16,10 +16,13 @@
 package org.sakaiproject.attendance.tool.pages;
 
 
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.ResourceModel;
+import org.sakaiproject.attendance.tool.pages.panels.AttendanceStatusFormPanel;
 
 public class SettingsPage extends BasePage {
+	private static final long serialVersionUID = 1L;
 	
 	public SettingsPage() {
 		disableLink(settingsLink);
@@ -27,6 +30,13 @@ public class SettingsPage extends BasePage {
 		Label headerSettings = new Label("header-settings",	new ResourceModel("attendance.settings.header"));
 		add(headerSettings);
 
+		createEditStatusesPanel();
+	}
 
+	private void createEditStatusesPanel() {
+
+		WebMarkupContainer allStatusesContainer = new WebMarkupContainer("all-statuses-container");
+		allStatusesContainer.add(new AttendanceStatusFormPanel("edit-status-panel"));
+		add(allStatusesContainer);
 	}
 }

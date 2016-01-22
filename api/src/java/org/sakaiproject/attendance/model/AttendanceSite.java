@@ -19,9 +19,7 @@ package org.sakaiproject.attendance.model;
 import lombok.*;
 
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Created by Leonardo Canessa [lcanessa1 (at) udayton (dot) edu]au)
