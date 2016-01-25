@@ -32,12 +32,18 @@
         <tr>
             <th><span wicket:id="header-student-name" /></th>
             <th wicket:id="status-headers" class="overviewStatusCol"><span wicket:id="header-status-name" /></th>
+            <th><span wicket:id="header-grade" /></th>
         </tr>
         </thead>
         <tbody>
             <tr wicket:id="students">
                 <td class="studentNameCol"><a wicket:id="student-link" class="studentLink"><span wicket:id="student-name" /><span class="studentEid" wicket:id="student-eid"/></a></td>
                 <td wicket:id="active-status-stats" class="overviewStatusCol"><span wicket:id="student-stats" /></td>
+                <td>
+                    <form wicket:id="attendance-grade">
+                        <input wicket:id="grade" type="number" />
+                    </form>
+                </td>
             </tr>
             <wicket:enclosure child="no-students">
                 <tr>
@@ -55,7 +61,12 @@
     <script type="text/javascript">
         $("p.overviewInstructions").width($("#overviewTable").outerWidth());
         $("#overviewTable").tablesorter({
-            sortList: [[0,0]]
+            sortList: [[0,0]],
+            headers: {
+                6: {
+                    sorter: false
+                }
+            }
         });
     </script>
 

@@ -18,13 +18,18 @@ package org.sakaiproject.attendance.tool.pages;
 
 
 import org.apache.wicket.RestartResponseException;
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.form.AjaxFormSubmitBehavior;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.NumberTextField;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.data.DataView;
-import org.apache.wicket.model.ResourceModel;
 import org.sakaiproject.attendance.model.AttendanceStatus;
+import org.apache.wicket.model.*;
+import org.sakaiproject.attendance.model.AttendanceGrade;
 import org.sakaiproject.attendance.model.Status;
 import org.sakaiproject.attendance.tool.dataproviders.AttendanceStatusProvider;
 import org.sakaiproject.attendance.tool.dataproviders.StudentDataProvider;
@@ -76,6 +81,7 @@ public class StudentOverview extends BasePage {
     private void createStatsTableHeader(WebMarkupContainer t) {
         //headers for the table
         Label               studentName     = new Label("header-student-name",       new ResourceModel("attendance.header.student"));
+        Label               grade           = new Label("header-grade",               new ResourceModel("attendance.header.grade"));
 
         DataView<AttendanceStatus> statusHeaders = new DataView<AttendanceStatus>("status-headers", attendanceStatusProvider) {
             @Override
@@ -83,12 +89,14 @@ public class StudentOverview extends BasePage {
                 item.add(new Label("header-status-name", getStatusString(item.getModelObject().getStatus())));
             }
         };
-        t.add(statusHeaders);
 
         t.add(studentName);
+        t.add(grade);
+        t.add(statusHeaders);
     }
 
     private void createStatsTableData(WebMarkupContainer t) {
+        final Map<String, AttendanceGrade> gradeMap = attendanceLogic.getAttendanceGrades();
         StudentDataProvider     sDP         = new StudentDataProvider();
         final DataView<User>    uDataView   = new DataView<User>("students", sDP) {
             @Override
@@ -112,6 +120,7 @@ public class StudentOverview extends BasePage {
                     }
                 };
                 item.add(activeStatusStats);
+                item.add(createGradeForm(new CompoundPropertyModel<AttendanceGrade>(gradeMap.get(id))));
             }
         };
 
@@ -131,5 +140,43 @@ public class StudentOverview extends BasePage {
         t.add(uDataView);
         t.add(noStudents);
         t.add(noStudents2);
+    }
+
+    private Form<AttendanceGrade> createGradeForm(IModel<AttendanceGrade> aGModel) {
+        Form<AttendanceGrade> gForm = new Form<AttendanceGrade>("attendance-grade", aGModel) {
+            @Override
+            public void onSubmit() {
+                AttendanceGrade aG = (AttendanceGrade) getDefaultModelObject();
+                if(aG.getGrade() != null) {
+                    boolean result = attendanceLogic.updateAttendanceGrade(aG);
+
+                    String displayName = sakaiProxy.getUserSortName(aG.getUserID());
+
+                    StringResourceModel temp;
+
+                    if (result) {
+                        temp = new StringResourceModel("attendance.grade.update.success", null, new String[]{aG.getGrade().toString(), displayName});
+                        getSession().info(temp.getString());
+                    } else {
+                        temp = new StringResourceModel("attendance.grade.update.failure", null, new String[]{displayName});
+                        getSession().error(temp.getString());
+                    }
+                }
+            }
+        };
+
+        NumberTextField<Double> points = new NumberTextField<Double>("grade");
+        points.setMinimum(0.0);
+        points.add(new AjaxFormSubmitBehavior(gForm, "input") {
+            protected void onSubmit(AjaxRequestTarget target) {
+                if(target != null) {
+                    target.add(feedbackPanel);
+                }
+            }
+        });
+
+        gForm.add(points);
+
+        return gForm;
     }
 }
