@@ -374,12 +374,47 @@ public class AttendanceLogicImpl implements AttendanceLogic {
 		return dao.getAllStatusesForSite(attendanceSite);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public AttendanceStatus getAttendanceStatusById(Long id) {
 		return dao.getAttendanceStatusById(id);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public boolean updateAttendanceStatuses(List<AttendanceStatus> attendanceStatuses) {
 		return attendanceStatuses != null && dao.updateAttendanceStatuses(attendanceStatuses);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public Map<String, AttendanceGrade> getAttendanceGrades() {
+		Map<String, AttendanceGrade> aGHashMap = new HashMap<String, AttendanceGrade>();
+		AttendanceSite aS = getCurrentAttendanceSite();
+		List<AttendanceGrade> aGs = dao.getAttendanceGrades(aS);
+		if(aGs == null || aGs.isEmpty()) {
+			aGs = generateAttendanceGrades(aS);
+		} else {
+			List<String> userList = sakaiProxy.getCurrentSiteMembershipIds();
+			for(AttendanceGrade aG : aGs) {
+				userList.remove(aG.getUserID());
+			}
+
+			if(!userList.isEmpty()) {
+				for(String u : userList) {
+					aGs.add(generateAttendanceGrade(u, aS));
+				}
+			}
+		}
+
+		for(AttendanceGrade aG : aGs) {
+			aGHashMap.put(aG.getUserID(), aG);
+		}
+
+		return aGHashMap;
 	}
 
 	/**
@@ -387,6 +422,27 @@ public class AttendanceLogicImpl implements AttendanceLogic {
 	 */
 	public void init() {
 		log.info("init");
+	}
+
+	private List<AttendanceGrade> generateAttendanceGrades(AttendanceSite aS) {
+		List<String> userList = sakaiProxy.getCurrentSiteMembershipIds();
+		List<AttendanceGrade> aGList = new ArrayList<AttendanceGrade>(userList.size());
+
+		for(String u : userList){
+			aGList.add(generateAttendanceGrade(u, aS));
+		}
+
+		return aGList;
+	}
+
+	private AttendanceGrade generateAttendanceGrade(String userId, AttendanceSite aS) {
+		if(aS == null) {
+			aS = getCurrentAttendanceSite();
+		}
+
+		AttendanceGrade grade = new AttendanceGrade(aS, userId);
+		dao.addAttendanceGrade(grade);
+		return grade;
 	}
 
 	private List<AttendanceRecord> generateAttendanceRecords(String id, AttendanceSite aS) {

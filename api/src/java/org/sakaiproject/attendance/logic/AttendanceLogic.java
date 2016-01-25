@@ -235,4 +235,10 @@ public interface AttendanceLogic {
      * @return
      */
 	Map<Status, Integer> getStatsForUser(String userId, AttendanceSite aS);
+
+	/**
+	 * Returns a Map of AttendanceGrades for the current Site with the userId being the key.
+	 * @return
+     */
+	Map<String, AttendanceGrade> getAttendanceGrades();
 }
