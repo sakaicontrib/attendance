@@ -241,4 +241,11 @@ public interface AttendanceLogic {
 	 * @return
      */
 	Map<String, AttendanceGrade> getAttendanceGrades();
+
+	/**
+	 * Updates an AttendanceGrade
+	 * @param aG, the AG to update
+	 * @return
+     */
+	boolean updateAttendanceGrade(AttendanceGrade aG);
 }

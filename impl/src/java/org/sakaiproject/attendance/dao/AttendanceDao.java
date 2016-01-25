@@ -176,6 +176,13 @@ public interface AttendanceDao {
      */
 	boolean addAttendanceGrade(AttendanceGrade aG);
 
+	/**
+	 * Updates an AttendanceGrade
+	 * @param aG, the AG to update
+	 * @return
+     */
+	boolean updateAttendanceGrade(AttendanceGrade aG);
+
 	// Hibernate Query Constants
 	String QUERY_GET_ATTENDANCE_EVENT = "getAttendanceEvent";
 	String QUERY_GET_ATTENDANCE_EVENTS_FOR_SITE = "getAttendanceEventsForSite";
