@@ -19,6 +19,7 @@ package org.sakaiproject.attendance.dao;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.sakaiproject.attendance.model.AttendanceGrade;
 import org.sakaiproject.attendance.model.AttendanceSite;
 import org.sakaiproject.attendance.model.AttendanceEvent;
 import org.sakaiproject.attendance.model.AttendanceRecord;
@@ -161,6 +162,14 @@ public interface AttendanceDao {
      */
 	AttendanceStatus getAttendanceStatusById(Long id);
 
+	/**
+	 * Get a list of AttendanceGrades
+	 * @param aS, the AttendanceSite to get the AGs for.
+	 * @return
+     */
+	List<AttendanceGrade> getAttendanceGrades(AttendanceSite aS);
+
+
 	// Hibernate Query Constants
 	String QUERY_GET_ATTENDANCE_EVENT = "getAttendanceEvent";
 	String QUERY_GET_ATTENDANCE_EVENTS_FOR_SITE = "getAttendanceEventsForSite";
@@ -175,6 +184,8 @@ public interface AttendanceDao {
 	String QUERY_GET_ATTENDANCE_STATUS = "getAttendanceStatus";
 	String QUERY_GET_ACTIVE_ATTENDANCE_STATUSES_FOR_SITE = "getActiveAttendanceStatusesForSite";
 	String QUERY_GET_ALL_ATTENDANCE_STATUSES_FOR_SITE = "getAllAttendanceStatusesForSite";
+
+	String QUERY_GET_ATTENDANCE_GRADES_FOR_SITE = "getAttendanceGradesForSite";
 
 	// Hibernate Object Fields
 	String ID = "id";

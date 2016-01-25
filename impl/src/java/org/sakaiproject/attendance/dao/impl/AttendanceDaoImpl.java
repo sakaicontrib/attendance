@@ -31,6 +31,7 @@ import org.hibernate.Session;
 import org.hibernate.HibernateException;
 import org.sakaiproject.attendance.dao.AttendanceDao;
 
+import org.sakaiproject.attendance.model.AttendanceGrade;
 import org.sakaiproject.attendance.model.AttendanceRecord;
 import org.sakaiproject.attendance.model.AttendanceSite;
 //import org.sakaiproject.attendance.model.Reoccurrence;
@@ -355,6 +356,32 @@ public class AttendanceDaoImpl extends HibernateDaoSupport implements Attendance
 		}
 
 		return (AttendanceStatus) getByIDHelper(id, QUERY_GET_ATTENDANCE_STATUS);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@SuppressWarnings("unchecked")
+	public List<AttendanceGrade> getAttendanceGrades(final AttendanceSite aS) {
+		if(log.isDebugEnabled()){
+			log.debug("getAttendanceGrades for: " + aS.getSiteID());
+		}
+
+		try{
+			HibernateCallback hcb = new HibernateCallback() {
+				@Override
+				public Object doInHibernate(Session session) throws HibernateException, SQLException {
+					Query q = session.getNamedQuery(QUERY_GET_ATTENDANCE_GRADES_FOR_SITE);
+					q.setParameter(ATTENDANCE_SITE, aS, new ManyToOneType("org.sakaiproject.attendance.model.AttendanceSite"));
+					return q.list();
+				}
+			};
+
+			return (List<AttendanceGrade>) getHibernateTemplate().executeFind(hcb);
+		} catch (DataAccessException e) {
+			log.error("DataAccessException getting AttendanceGrades for " + aS.getSiteID() + ". E:", e);
+			return null;
+		}
 	}
 
 	/**
