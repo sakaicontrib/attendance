@@ -168,7 +168,13 @@ public interface AttendanceDao {
 	 * @return
      */
 	List<AttendanceGrade> getAttendanceGrades(AttendanceSite aS);
-
+	
+	/**
+	 * Add an AttendanceGrade to DB
+	 * @param aG
+	 * @return
+     */
+	boolean addAttendanceGrade(AttendanceGrade aG);
 
 	// Hibernate Query Constants
 	String QUERY_GET_ATTENDANCE_EVENT = "getAttendanceEvent";

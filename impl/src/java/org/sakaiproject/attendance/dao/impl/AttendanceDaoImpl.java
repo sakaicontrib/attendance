@@ -385,6 +385,23 @@ public class AttendanceDaoImpl extends HibernateDaoSupport implements Attendance
 	}
 
 	/**
+	 * {@inheritDoc}
+	 */
+	public boolean addAttendanceGrade(AttendanceGrade aG) {
+		if(log.isDebugEnabled()){
+			log.debug("addAttendanceGrade for User '" + aG.getUserID() + "' grade " + aG.getGrade() + " for site  " + aG.getAttendanceSite().getSiteID());
+		}
+
+		try {
+			getHibernateTemplate().save(aG);
+			return true;
+		} catch (DataAccessException de) {
+			log.error("addAttendanceGrade failed.", de);
+			return false;
+		}
+	}
+
+	/**
 	 * init
 	 */
 	public void init() {
