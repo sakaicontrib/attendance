@@ -31,7 +31,7 @@
         </id>
 
         <property name="grade"      column="GRADE"      type="java.lang.Double" />
-        <property name="userId"     column="USER_ID"    type="java.lang.String" />
+        <property name="userID"     column="USER_ID"    type="java.lang.String" />
 
         <many-to-one name="attendanceSite" column="A_SITE_ID" unique="false" not-null="true" class="org.sakaiproject.attendance.model.AttendanceSite" lazy="false"/>
 

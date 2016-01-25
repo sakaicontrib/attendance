@@ -34,11 +34,12 @@ public class AttendanceGrade implements Serializable {
 
 	private 				Long 			id;
 	private					Double			grade;
-	private					String			userId;
+	private					String			userID;
 
 	private 				AttendanceSite 	attendanceSite;
 
-	public AttendanceGrade(AttendanceSite aS){
+	public AttendanceGrade(AttendanceSite aS, String userId){
 		this.attendanceSite = aS;
+		this.userID = userId;
 	}
 }
