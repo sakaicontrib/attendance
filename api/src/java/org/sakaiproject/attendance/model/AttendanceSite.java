@@ -28,11 +28,12 @@ import java.util.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class AttendanceSite implements Serializable {
-	private static final 	long 		serialVersionUID = 1L;
+	private static final 					long 					serialVersionUID = 1L;
 
 	@Getter	@Setter	private 				Long 					id;
 	@Getter	@Setter	private 				String 					siteID;
 	@Getter	@Setter	private 				Status 					defaultStatus;
+	@Getter @Setter private					Double					maximumGrade;
 	@Getter	@Setter	private 				Set<AttendanceStatus>	attendanceStatuses		= new HashSet<AttendanceStatus>(0);
 
 	public AttendanceSite(String siteID){
@@ -48,6 +49,7 @@ public class AttendanceSite implements Serializable {
 		return Objects.equals(getId(), that.getId()) &&
 				Objects.equals(getSiteID(), that.getSiteID()) &&
 				getDefaultStatus() == that.getDefaultStatus() &&
+				Objects.equals(getMaximumGrade(), that.getMaximumGrade()) &&
 				Objects.equals(getAttendanceStatuses(), that.getAttendanceStatuses());
 	}
 
