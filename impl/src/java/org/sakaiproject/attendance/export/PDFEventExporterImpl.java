@@ -132,7 +132,7 @@ public class PDFEventExporterImpl implements PDFEventExporter {
 
         for(User user : userList) {
 
-            PdfPCell userCell = new PdfPCell(new Paragraph(user.getSortName() + " (" + user.getDisplayId() + ")", body));
+            PdfPCell userCell = new PdfPCell(new Paragraph(user.getSortName(), body));
             userCell.setPadding(10);
 
             PdfPCell blankCell = new PdfPCell(new Paragraph());
