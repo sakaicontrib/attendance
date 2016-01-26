@@ -18,6 +18,7 @@ package org.sakaiproject.attendance.tool.pages.panels;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
+import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.NumberTextField;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
@@ -64,9 +65,12 @@ public class AttendanceGradeSettingsPanel extends BasePanel {
 
         NumberTextField<Double> maximum = new NumberTextField<Double>("maximumGrade");
         maximum.setRequired(true);
-        maximum.setMinimum(0.01);
-        maximum.setStep(0.01);
+        maximum.setMinimum(0.1);
+        maximum.setStep(0.1);
         aSForm.add(maximum);
+
+        CheckBox isGradeShown = new CheckBox("isGradeShown");
+        aSForm.add(isGradeShown);
 
         AjaxSubmitLink submit = new AjaxSubmitLink("submit") {
             @Override

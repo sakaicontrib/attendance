@@ -67,6 +67,7 @@ public class StudentView extends BasePage {
             hideNavigationLink(this.firstLink);
             hideNavigationLink(this.addEventLink);
             hideNavigationLink(this.studentOverviewLink);
+            hideNavigationLink(this.settingsLink);
         }
 
         add(createHeader());
@@ -139,7 +140,13 @@ public class StudentView extends BasePage {
     }
 
     private WebMarkupContainer createGrade() {
-        WebMarkupContainer grade = new WebMarkupContainer("grade");
+        WebMarkupContainer grade = new WebMarkupContainer("grade") {
+            @Override
+            public boolean isVisible() {
+                Boolean isGradeShown = attendanceLogic.getCurrentAttendanceSite().getIsGradeShown();
+                return (isGradeShown == null ? false : isGradeShown) || !isStudent;
+            }
+        };
 
         AttendanceGradePanel attendanceGrade = new AttendanceGradePanel("attendance-grade", attendanceLogic.getAttendanceGrade(this.studentId), feedbackPanel) {
             @Override
