@@ -473,3 +473,7 @@ p.printAction {
     text-align: center;
 }
 
+input.grade {
+    width: 4.5em;
+}
+

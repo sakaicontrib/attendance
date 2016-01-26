@@ -33,6 +33,7 @@ import org.sakaiproject.attendance.model.AttendanceGrade;
 import org.sakaiproject.attendance.model.Status;
 import org.sakaiproject.attendance.tool.dataproviders.AttendanceStatusProvider;
 import org.sakaiproject.attendance.tool.dataproviders.StudentDataProvider;
+import org.sakaiproject.attendance.tool.pages.panels.AttendanceGradePanel;
 import org.sakaiproject.user.api.User;
 
 import java.util.Map;
@@ -120,7 +121,7 @@ public class StudentOverview extends BasePage {
                     }
                 };
                 item.add(activeStatusStats);
-                item.add(createGradeForm(new CompoundPropertyModel<AttendanceGrade>(gradeMap.get(id))));
+                item.add(new AttendanceGradePanel("attendance-grade", gradeMap.get(id), feedbackPanel));
             }
         };
 
@@ -140,44 +141,5 @@ public class StudentOverview extends BasePage {
         t.add(uDataView);
         t.add(noStudents);
         t.add(noStudents2);
-    }
-
-    private Form<AttendanceGrade> createGradeForm(IModel<AttendanceGrade> aGModel) {
-        Form<AttendanceGrade> gForm = new Form<AttendanceGrade>("attendance-grade", aGModel) {
-            @Override
-            public void onSubmit() {
-                AttendanceGrade aG = (AttendanceGrade) getDefaultModelObject();
-                if(aG.getGrade() != null) {
-                    boolean result = attendanceLogic.updateAttendanceGrade(aG);
-
-                    String displayName = sakaiProxy.getUserSortName(aG.getUserID());
-
-                    StringResourceModel temp;
-
-                    if (result) {
-                        temp = new StringResourceModel("attendance.grade.update.success", null, new String[]{aG.getGrade().toString(), displayName});
-                        getSession().info(temp.getString());
-                    } else {
-                        temp = new StringResourceModel("attendance.grade.update.failure", null, new String[]{displayName});
-                        getSession().error(temp.getString());
-                    }
-                }
-            }
-        };
-
-        NumberTextField<Double> points = new NumberTextField<Double>("grade");
-        points.setMinimum(0.0);
-        points.setMaximum(aGModel.getObject().getAttendanceSite().getMaximumGrade());
-        points.add(new AjaxFormSubmitBehavior(gForm, "input") {
-            protected void onSubmit(AjaxRequestTarget target) {
-                if(target != null) {
-                    target.add(feedbackPanel);
-                }
-            }
-        });
-
-        gForm.add(points);
-
-        return gForm;
     }
 }
