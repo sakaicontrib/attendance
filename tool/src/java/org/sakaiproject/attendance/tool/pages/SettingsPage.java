@@ -20,7 +20,7 @@ import org.apache.wicket.RestartResponseException;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.ResourceModel;
-import org.sakaiproject.attendance.tool.pages.panels.AttendanceGradeSettingsPanel;
+import org.sakaiproject.attendance.tool.pages.panels.AttendanceGradeFormPanel;
 import org.sakaiproject.attendance.tool.pages.panels.AttendanceStatusFormPanel;
 
 public class SettingsPage extends BasePage {
@@ -47,9 +47,7 @@ public class SettingsPage extends BasePage {
 		add(allStatusesContainer);
 	}
 
-	private AttendanceGradeSettingsPanel createEditGradePanel() {
-		return new AttendanceGradeSettingsPanel("grade-settings-panel", feedbackPanel);
-
-
+	private AttendanceGradeFormPanel createEditGradePanel() {
+		return new AttendanceGradeFormPanel("grade-settings-panel", feedbackPanel);
 	}
 }

@@ -30,12 +30,12 @@ import org.sakaiproject.attendance.model.AttendanceSite;
 /**
  * Created by Leonardo Canessa [lcanessa1 (at) udayton (dot) edu]
  */
-public class AttendanceGradeSettingsPanel extends BasePanel {
+public class AttendanceGradeFormPanel extends BasePanel {
     private static final    long            serialVersionUID = 1L;
 
     private                 FeedbackPanel   pageFeedbackPanel;
 
-    public AttendanceGradeSettingsPanel(String id, FeedbackPanel pg) {
+    public AttendanceGradeFormPanel(String id, FeedbackPanel pg) {
         super(id);
         this.pageFeedbackPanel = pg;
 

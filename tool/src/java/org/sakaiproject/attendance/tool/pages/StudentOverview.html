@@ -40,11 +40,6 @@
             <tr wicket:id="students">
                 <td class="studentNameCol"><a wicket:id="student-link" class="studentLink"><span wicket:id="student-name" /><span class="studentEid" wicket:id="student-eid"/></a></td>
                 <td wicket:id="active-status-stats" class="overviewStatusCol"><span wicket:id="student-stats" /></td>
-                <td>
-                    <form wicket:id="attendance-grade">
-                        <input wicket:id="grade" type="number" />
-                    </form>
-                </td>
                 <td><wicket:container wicket:id="attendance-grade" /></td>
             </tr>
             <wicket:enclosure child="no-students">
