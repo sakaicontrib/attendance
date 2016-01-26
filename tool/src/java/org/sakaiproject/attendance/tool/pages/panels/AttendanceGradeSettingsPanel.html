@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  ~  Copyright (c) 2015, The Apereo Foundation
+  ~  Copyright (c) 2016, The Apereo Foundation
   ~
   ~  Licensed under the Educational Community License, Version 2.0 (the "License");
   ~  you may not use this file except in compliance with the License.
@@ -16,33 +16,12 @@
   -->
 
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:wicket="http://wicket.apache.org">
-
 <body>
-<wicket:extend>
-
-	<h1 class="settingsHeader indnt1">
-		<span wicket:id="header-settings" class="settingsHeaderSpan" />
-	</h1>
-
-	<div class="activeStatusContainer">
-		<div class="activeStatusHeader">
-			<h3 class="activeStatusHeader"><wicket:message key="attendance.settings.active.status.header" /></h3>
-		</div>
-
-		<div wicket:id="all-statuses-container">
-			<span wicket:id="edit-status-panel" />
-		</div>
-	</div>
-
-	<div class="container">
-		<div class="containerHeader">
-			<h3 class="containerHeading"><wicket:message key="attendance.settings.grading.header" /></h3>
-		</div>
-
-		<div wicket:id="grade-settings-panel">
-
-		</div>
-	</div>
-</wicket:extend>
+<wicket:panel>
+    <form wicket:id="settings">
+        <input type="number" wicket:id="maximumGrade" /> <wicket:message key="attendance.settings.grading.max.points.possible" />  <br />
+        <input type="submit" wicket:id="submit"/>
+    </form>
+</wicket:panel>
 </body>
 </html>

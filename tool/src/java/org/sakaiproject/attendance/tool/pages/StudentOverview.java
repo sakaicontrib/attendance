@@ -167,6 +167,7 @@ public class StudentOverview extends BasePage {
 
         NumberTextField<Double> points = new NumberTextField<Double>("grade");
         points.setMinimum(0.0);
+        points.setMaximum(aGModel.getObject().getAttendanceSite().getMaximumGrade());
         points.add(new AjaxFormSubmitBehavior(gForm, "input") {
             protected void onSubmit(AjaxRequestTarget target) {
                 if(target != null) {

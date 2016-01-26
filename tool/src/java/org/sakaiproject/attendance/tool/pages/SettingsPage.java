@@ -16,9 +16,11 @@
 package org.sakaiproject.attendance.tool.pages;
 
 
+import org.apache.wicket.RestartResponseException;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.ResourceModel;
+import org.sakaiproject.attendance.tool.pages.panels.AttendanceGradeSettingsPanel;
 import org.sakaiproject.attendance.tool.pages.panels.AttendanceStatusFormPanel;
 
 public class SettingsPage extends BasePage {
@@ -27,10 +29,15 @@ public class SettingsPage extends BasePage {
 	public SettingsPage() {
 		disableLink(settingsLink);
 
+		if(this.role != null && this.role.equals("Student")) {
+			throw new RestartResponseException(StudentView.class);
+		}
+
 		Label headerSettings = new Label("header-settings",	new ResourceModel("attendance.settings.header"));
 		add(headerSettings);
 
 		createEditStatusesPanel();
+		add(createEditGradePanel());
 	}
 
 	private void createEditStatusesPanel() {
@@ -38,5 +45,11 @@ public class SettingsPage extends BasePage {
 		WebMarkupContainer allStatusesContainer = new WebMarkupContainer("all-statuses-container");
 		allStatusesContainer.add(new AttendanceStatusFormPanel("edit-status-panel", feedbackPanel));
 		add(allStatusesContainer);
+	}
+
+	private AttendanceGradeSettingsPanel createEditGradePanel() {
+		return new AttendanceGradeSettingsPanel("grade-settings-panel", feedbackPanel);
+
+
 	}
 }
