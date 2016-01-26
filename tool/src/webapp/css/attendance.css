@@ -477,3 +477,8 @@ input.grade {
     width: 4.5em;
 }
 
+img.settings {
+    vertical-align: middle;
+    width: 24px;
+    margin-left: 4px;
+}

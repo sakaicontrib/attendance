@@ -18,12 +18,8 @@ package org.sakaiproject.attendance.tool.pages;
 
 
 import org.apache.wicket.RestartResponseException;
-import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.form.AjaxFormSubmitBehavior;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.markup.html.form.NumberTextField;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.data.DataView;
@@ -91,9 +87,18 @@ public class StudentOverview extends BasePage {
             }
         };
 
+        Link<Void>          settings        = new Link<Void>("settings-link") {
+            private static final long serialVersionUID = 1L;
+
+            public void onClick() {
+                setResponsePage(new SettingsPage());
+            }
+        };
+
         t.add(studentName);
         t.add(grade);
         t.add(statusHeaders);
+        t.add(settings);
     }
 
     private void createStatsTableData(WebMarkupContainer t) {
