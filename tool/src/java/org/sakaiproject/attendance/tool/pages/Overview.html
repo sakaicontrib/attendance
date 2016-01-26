@@ -35,11 +35,7 @@
 			<tr>
 				<th><span wicket:id="header-event-name" /></th>
 				<th class="overviewDateCol"><span wicket:id="header-event-date" /></th>
-				<th class="overviewStatusCol"><span wicket:id="header-status-present" /></th>
-				<th class="overviewStatusCol"><span wicket:id="header-status-unexcused" /></th>
-				<th class="overviewStatusCol"><span wicket:id="header-status-excused" /></th>
-				<th class="overviewStatusCol"><span wicket:id="header-status-late" /></th>
-				<th class="overviewStatusCol"><span wicket:id="header-status-left-early" /></th>
+				<th wicket:id="status-headers" class="overviewStatusCol"><span wicket:id="header-status-name" /></th>
 				<th class="overviewEditCol"><span wicket:id="header-event-edit" /></th>
 				<th class="overviewPrintCol"><span wicket:id="header-print-links" /></th>
 			</tr>
@@ -48,11 +44,7 @@
 			<tr wicket:id="events">
 				<td class="itemNameCol"><a wicket:id="event-link"><span wicket:id="event-name" /></a></td>
 				<td class="overviewDateCol"><span wicket:id="event-date" /></td>
-				<td class="overviewStatusCol"><span wicket:id="event-stats-present" /></td>
-				<td class="overviewStatusCol"><span wicket:id="event-stats-absent" /></td>
-				<td class="overviewStatusCol"><span wicket:id="event-stats-excused" /></td>
-				<td class="overviewStatusCol"><span wicket:id="event-stats-late" /></td>
-				<td class="overviewStatusCol"><span wicket:id="event-stats-left-early" /></td>
+				<td wicket:id="active-status-stats" class="overviewStatusCol"><span wicket:id="event-stats" /></td>
 				<td class="overviewEditCol"><a wicket:id="event-edit-link"><img src="/library/image/ud_custom/settings.png" alt="Edit" width="24px"/></a></td>
 				<td class="overviewPrintCol">
 					<a class="printLink" wicket:id="print-link"><img src="images/print.png" alt="Print"/></a>

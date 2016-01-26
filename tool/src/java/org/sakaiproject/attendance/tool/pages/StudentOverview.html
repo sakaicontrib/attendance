@@ -20,7 +20,7 @@
 <wicket:extend>
     <div wicket:id="student-overview-header" id="header">
         <h1 class="overviewHeader indnt1">
-            <span wicket:id="student-overview-title"/>
+            <span wicket:id="student-overview-title" class="overHeaderSpan" />
         </h1>
         <p class="overviewInstructions">
             <span wicket:id="student-overview-subtitle" />
@@ -31,21 +31,13 @@
         <thead>
         <tr>
             <th><span wicket:id="header-student-name" /></th>
-            <th class="overviewStatusCol"><span wicket:id="header-status-present" /></th>
-            <th class="overviewStatusCol"><span wicket:id="header-status-unexcused" /></th>
-            <th class="overviewStatusCol"><span wicket:id="header-status-excused" /></th>
-            <th class="overviewStatusCol"><span wicket:id="header-status-late" /></th>
-            <th class="overviewStatusCol"><span wicket:id="header-status-left-early" /></th>
+            <th wicket:id="status-headers" class="overviewStatusCol"><span wicket:id="header-status-name" /></th>
         </tr>
         </thead>
         <tbody>
             <tr wicket:id="students">
                 <td class="studentNameCol"><a wicket:id="student-link" class="studentLink"><span wicket:id="student-name" /><span class="studentEid" wicket:id="student-eid"/></a></td>
-                <td class="overviewStatusCol"><span wicket:id="student-stats-present" /></td>
-                <td class="overviewStatusCol"><span wicket:id="student-stats-absent" /></td>
-                <td class="overviewStatusCol"><span wicket:id="student-stats-excused" /></td>
-                <td class="overviewStatusCol"><span wicket:id="student-stats-late" /></td>
-                <td class="overviewStatusCol"><span wicket:id="student-stats-left-early" /></td>
+                <td wicket:id="active-status-stats" class="overviewStatusCol"><span wicket:id="student-stats" /></td>
             </tr>
             <wicket:enclosure child="no-students">
                 <tr>

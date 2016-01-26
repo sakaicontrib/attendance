@@ -18,7 +18,11 @@ package org.sakaiproject.attendance.tool.pages.panels;
 
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.repeater.Item;
+import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.model.ResourceModel;
+import org.sakaiproject.attendance.model.AttendanceStatus;
+import org.sakaiproject.attendance.tool.dataproviders.AttendanceStatusProvider;
 
 /**
  * Created by Leonardo Canessa [lcanessa1 (at) udayton (dot) edu]
@@ -34,11 +38,14 @@ public class AttendanceRecordFormHeaderPanel extends BasePanel {
     private WebMarkupContainer createStatusHeader() {
         WebMarkupContainer status = new WebMarkupContainer("status");
 
-        status.add(new Label("status-present", 		new ResourceModel("attendance.overview.header.status.present")));
-        status.add(new Label("status-late", 		    new ResourceModel("attendance.overview.header.status.late")));
-        status.add(new Label("status-left-early", 	new ResourceModel("attendance.overview.header.status.left.early")));
-        status.add(new Label("status-excused", 		new ResourceModel("attendance.overview.header.status.excused")));
-        status.add(new Label("status-unexcused", 	    new ResourceModel("attendance.overview.header.status.unexcused")));
+        AttendanceStatusProvider attendanceStatusProvider = new AttendanceStatusProvider(attendanceLogic.getCurrentAttendanceSite(), AttendanceStatusProvider.ACTIVE);
+        DataView<AttendanceStatus> statusHeaders = new DataView<AttendanceStatus>("status-headers", attendanceStatusProvider) {
+            @Override
+            protected void populateItem(Item<AttendanceStatus> item) {
+                item.add(new Label("header-status-name", getStatusString(item.getModelObject().getStatus())));
+            }
+        };
+        status.add(statusHeaders);
 
         return status;
     }

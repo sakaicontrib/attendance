@@ -235,11 +235,4 @@ public interface AttendanceLogic {
      * @return
      */
 	Map<Status, Integer> getStatsForUser(String userId, AttendanceSite aS);
-
-	/**
-	 * Get the display string for a Status
-	 * @param s
-	 * @return
-     */
-	String getStatusString(Status s);
 }

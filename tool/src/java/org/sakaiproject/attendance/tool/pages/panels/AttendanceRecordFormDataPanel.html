@@ -20,20 +20,8 @@
 <wicket:panel>
     <form wicket:id="attendanceRecord">
         <wicket:container wicket:id="attendance-record-status-group">
-            <div class="div-table-col">
-                <input type="radio" wicket:id="record-status-present" />
-            </div>
-            <div class="div-table-col">
-                <input type="radio" wicket:id="record-status-unexcused" />
-            </div>
-            <div class="div-table-col">
-                <input type="radio" wicket:id="record-status-excused" />
-            </div>
-            <div class="div-table-col">
-                <input type="radio" wicket:id="record-status-late" />
-            </div>
-            <div class="div-table-col">
-                <input type="radio" wicket:id="record-status-left-early" />
+            <div wicket:id="status-radios" class="div-table-col">
+                <input type="radio" wicket:id="record-status" />
             </div>
         </wicket:container>
         <div class="div-table-col" style="position:relative"  wicket:id="comment-container">

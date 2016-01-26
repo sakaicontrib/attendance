@@ -23,6 +23,7 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.sakaiproject.attendance.export.PDFEventExporter;
 import org.sakaiproject.attendance.logic.AttendanceLogic;
 import org.sakaiproject.attendance.logic.SakaiProxy;
+import org.sakaiproject.attendance.model.Status;
 
 /**
  * Created by Leonardo Canessa [lcanessa1 (at) udayton (dot) edu]
@@ -49,6 +50,19 @@ public class BasePanel extends Panel {
     public BasePanel(String id, IModel<?> i){
         super(id, i);
         init();
+    }
+
+    protected String getStatusString(Status s) {
+        switch (s)
+        {
+            case UNKNOWN: return getString("attendance.status.unknown");
+            case PRESENT: return getString("attendance.status.present");
+            case EXCUSED_ABSENCE: return getString("attendance.status.excused");
+            case UNEXCUSED_ABSENCE: return getString("attendance.status.absent");
+            case LATE: return getString("attendance.status.late");
+            case LEFT_EARLY: return getString("attendance.status.left.early");
+            default: return getString("attendance.status.unknown");
+        }
     }
 
     private void init(){

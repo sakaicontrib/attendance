@@ -18,12 +18,9 @@ package org.sakaiproject.attendance.tool.pages;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormSubmitBehavior;
-import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.DropDownChoice;
-import org.apache.wicket.markup.html.form.EnumChoiceRenderer;
-import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.*;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.data.DataView;
@@ -31,6 +28,7 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.model.ResourceModel;
 import org.sakaiproject.attendance.model.AttendanceEvent;
 import org.sakaiproject.attendance.model.AttendanceRecord;
+import org.sakaiproject.attendance.model.AttendanceStatus;
 import org.sakaiproject.attendance.model.Status;
 import org.sakaiproject.attendance.tool.dataproviders.AttendanceRecordProvider;
 import org.sakaiproject.attendance.tool.pages.panels.AttendanceRecordFormDataPanel;
@@ -38,10 +36,7 @@ import org.sakaiproject.attendance.tool.pages.panels.AttendanceRecordFormHeaderP
 import org.sakaiproject.attendance.tool.pages.panels.PrintPanel;
 import org.sakaiproject.attendance.tool.pages.panels.StatisticsPanel;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Created by Leonardo Canessa [lcanessa1 (at) udayton (dot) edu]
@@ -54,7 +49,6 @@ public class EventView extends BasePage {
 
     private                 String                  returnPage;
 
-    private                 StatisticsPanel         infoContainer;
     private                 DropDownChoice<Status>  setAllStatus;
 
                             PrintPanel              printPanel;
@@ -98,7 +92,20 @@ public class EventView extends BasePage {
                 }
             }
         };
-        setAllForm.add(setAllStatus = new DropDownChoice<Status>("set-all-status", new Model<Status>(), Arrays.asList(Status.values()), new EnumChoiceRenderer<Status>(this)));
+
+        List<AttendanceStatus> activeAttendanceStatuses = attendanceLogic.getActiveStatusesForCurrentSite();
+        Collections.sort(activeAttendanceStatuses, new Comparator<AttendanceStatus>() {
+            @Override
+            public int compare(AttendanceStatus o1, AttendanceStatus o2) {
+                return o1.getSortOrder() - o2.getSortOrder();
+            }
+        });
+        List<Status> activeStatuses = new ArrayList<Status>();
+        for(AttendanceStatus attendanceStatus : activeAttendanceStatuses) {
+            activeStatuses.add(attendanceStatus.getStatus());
+        }
+
+        setAllForm.add(setAllStatus = new DropDownChoice<Status>("set-all-status", new Model<Status>(), activeStatuses, new EnumChoiceRenderer<Status>(this)));
         setAllStatus.add(new AjaxFormSubmitBehavior("onchange") {
             @Override
             protected void onSubmit(AjaxRequestTarget target) {
@@ -118,7 +125,7 @@ public class EventView extends BasePage {
     }
 
     private void createStatsTable() {
-        infoContainer = new StatisticsPanel("statistics", returnPage, attendanceEvent);
+        StatisticsPanel infoContainer = new StatisticsPanel("statistics", returnPage, attendanceEvent);
 
         add(infoContainer);
     }

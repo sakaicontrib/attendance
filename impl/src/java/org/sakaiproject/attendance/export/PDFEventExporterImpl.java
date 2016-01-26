@@ -33,6 +33,7 @@ import org.sakaiproject.attendance.export.util.SortNameUserComparator;
 import org.sakaiproject.attendance.logic.AttendanceLogic;
 import org.sakaiproject.attendance.logic.SakaiProxy;
 import org.sakaiproject.attendance.model.AttendanceEvent;
+import org.sakaiproject.attendance.model.AttendanceStatus;
 import org.sakaiproject.attendance.model.Status;
 import org.sakaiproject.user.api.User;
 
@@ -151,33 +152,17 @@ public class PDFEventExporterImpl implements PDFEventExporter {
         table.setWidthPercentage(100);
         table.setSpacingBefore(12);
 
+        List<AttendanceStatus> activeStatuses = attendanceLogic.getActiveStatusesForSite(event.getAttendanceSite());
+
         PdfPCell nameHeader = new PdfPCell(new Paragraph("Student Name", tableHeader));
         nameHeader.setPadding(10);
-        nameHeader.setColspan(5);
+        nameHeader.setColspan(activeStatuses.size());
 
-        // TODO: Status headers are hard coded now but can be changed once SAKAI-2236 is resolved
-
-        PdfPCell presentHeader = new PdfPCell(new Paragraph("Pres", tableHeader));
-        presentHeader.setPadding(10);
-
-        PdfPCell unexcusedHeader = new PdfPCell(new Paragraph("Abse", tableHeader));
-        unexcusedHeader.setPadding(10);
-
-        PdfPCell excusedHeader = new PdfPCell(new Paragraph("Excu", tableHeader));
-        excusedHeader.setPadding(10);
-
-        PdfPCell lateHeader = new PdfPCell(new Paragraph("Late", tableHeader));
-        lateHeader.setPadding(10);
-
-        PdfPCell leftEarlyHeader = new PdfPCell(new Paragraph("Left", tableHeader));
-        leftEarlyHeader.setPadding(10);
-
-        table.addCell(nameHeader);
-        table.addCell(presentHeader);
-        table.addCell(unexcusedHeader);
-        table.addCell(excusedHeader);
-        table.addCell(lateHeader);
-        table.addCell(leftEarlyHeader);
+        for(AttendanceStatus status : activeStatuses) {
+            PdfPCell statusHeader = new PdfPCell(new Paragraph(getStatusString(status.getStatus()), tableHeader));
+            statusHeader.setPadding(10);
+            table.addCell(statusHeader);
+        }
 
         List<User> userList = sakaiProxy.getCurrentSiteMembership();
         Collections.sort(userList, new SortNameUserComparator());
@@ -205,6 +190,20 @@ public class PDFEventExporterImpl implements PDFEventExporter {
      */
     public void init() {
         log.info("init");
+    }
+
+    // TODO: Internationalize status header abbreviations
+    private String getStatusString(Status s) {
+        switch (s)
+        {
+            case UNKNOWN: return "None";
+            case PRESENT: return "Pres";
+            case EXCUSED_ABSENCE: return "Excu";
+            case UNEXCUSED_ABSENCE: return "Abse";
+            case LATE: return "Late";
+            case LEFT_EARLY: return "Left";
+            default: return "None";
+        }
     }
 
     @Setter

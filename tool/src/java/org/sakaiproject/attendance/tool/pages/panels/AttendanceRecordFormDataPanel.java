@@ -25,9 +25,13 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.*;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
+import org.apache.wicket.markup.repeater.Item;
+import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.model.*;
 import org.sakaiproject.attendance.model.AttendanceRecord;
+import org.sakaiproject.attendance.model.AttendanceStatus;
 import org.sakaiproject.attendance.model.Status;
+import org.sakaiproject.attendance.tool.dataproviders.AttendanceStatusProvider;
 import org.sakaiproject.attendance.tool.pages.StudentView;
 
 import java.util.ArrayList;
@@ -131,62 +135,28 @@ public class AttendanceRecordFormDataPanel extends BasePanel {
     }
 
     private void createStatusRadio(final Form<AttendanceRecord> rF) {
-        // probably a programmatic way to do this...
-        Radio present       = new Radio<Status>("record-status-present",    new Model<Status>(Status.PRESENT));
-        Radio late          = new Radio<Status>("record-status-late",       new Model<Status>(Status.LATE));
-        Radio left_early    = new Radio<Status>("record-status-left-early", new Model<Status>(Status.LEFT_EARLY));
-        Radio excused       = new Radio<Status>("record-status-excused",    new Model<Status>(Status.EXCUSED_ABSENCE));
-        Radio unexcused        = new Radio<Status>("record-status-unexcused",     new Model<Status>(Status.UNEXCUSED_ABSENCE));
-        ajaxTargets.add(present);
-        ajaxTargets.add(late);
-        ajaxTargets.add(left_early);
-        ajaxTargets.add(excused);
-        ajaxTargets.add(unexcused);
 
-        present.add(new AjaxFormSubmitBehavior(rF, "onclick") {
-            protected void onSubmit(AjaxRequestTarget target) {
-                for (Component c : ajaxTargets) {
-                    target.add(c);
-                }
+        AttendanceStatusProvider attendanceStatusProvider = new AttendanceStatusProvider(attendanceLogic.getCurrentAttendanceSite(), AttendanceStatusProvider.ACTIVE);
+        DataView<AttendanceStatus> attendanceStatusRadios = new DataView<AttendanceStatus>("status-radios", attendanceStatusProvider) {
+            @Override
+            protected void populateItem(Item<AttendanceStatus> item) {
+                Radio statusRadio = new Radio<Status>("record-status", new Model<Status>(item.getModelObject().getStatus()));
+                item.add(statusRadio);
+                statusRadio.add(new AjaxFormSubmitBehavior(rF, "onclick") {
+                    protected void onSubmit(AjaxRequestTarget target) {
+                        for (Component c : ajaxTargets) {
+                            target.add(c);
+                        }
+                    }
+                });
+                ajaxTargets.add(statusRadio);
             }
-        });
-        late.add(new AjaxFormSubmitBehavior(rF, "onclick") {
-            protected void onSubmit(AjaxRequestTarget target) {
-                for (Component c : ajaxTargets) {
-                    target.add(c);
-                }
-            }
-        });
-        left_early.add(new AjaxFormSubmitBehavior(rF, "onclick") {
-            protected void onSubmit(AjaxRequestTarget target) {
-                for (Component c : ajaxTargets) {
-                    target.add(c);
-                }
-            }
-        });
-        excused.add(new AjaxFormSubmitBehavior(rF, "onclick") {
-            protected void onSubmit(AjaxRequestTarget target) {
-                for (Component c : ajaxTargets) {
-                    target.add(c);
-                }
-            }
-        });
-        unexcused.add(new AjaxFormSubmitBehavior(rF, "onclick") {
-            protected void onSubmit(AjaxRequestTarget target) {
-                for (Component c : ajaxTargets) {
-                    target.add(c);
-                }
-            }
-        });
+        };
 
         RadioGroup group = new RadioGroup<Status>("attendance-record-status-group", new PropertyModel<Status>(this.recordIModel,"status"));
         group.setOutputMarkupPlaceholderTag(true);
         group.setRenderBodyOnly(false);
-        group.add(present);
-        group.add(late);
-        group.add(left_early);
-        group.add(excused);
-        group.add(unexcused);
+        group.add(attendanceStatusRadios);
         group.setEnabled(!this.restricted);
 
         rF.add(group);
@@ -243,25 +213,5 @@ public class AttendanceRecordFormDataPanel extends BasePanel {
         }
 
         rF.add(commentContainer);
-    }
-
-    private String getStatusString(Status s) {
-        ResourceModel rModel = new ResourceModel(null);
-
-        if(s == Status.PRESENT){
-            rModel = new ResourceModel("attendance.overview.header.status.present");
-        } else if (s == Status.LATE) {
-            rModel = new ResourceModel("attendance.overview.header.status.late");
-        } else if (s == Status.LEFT_EARLY) {
-            rModel = new ResourceModel("attendance.overview.header.status.left.early");
-        } else if (s == Status.EXCUSED_ABSENCE) {
-            rModel = new ResourceModel("attendance.overview.header.status.excused");
-        } else if (s == Status.UNEXCUSED_ABSENCE) {
-            rModel = new ResourceModel("attendance.overview.header.status.unexcused");
-        } else {
-            rModel = new ResourceModel("attendance.overview.header.status.unknown");
-        }
-
-        return rModel.getObject();
     }
 }

@@ -24,6 +24,7 @@ import org.sakaiproject.attendance.tool.models.DetachableAttendanceStatusModel;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class AttendanceStatusProvider extends BaseProvider<AttendanceStatus> {
@@ -60,8 +61,14 @@ public class AttendanceStatusProvider extends BaseProvider<AttendanceStatus> {
     List<AttendanceStatus> getData() {
         if(this.list == null) {
             this.list = new ArrayList<AttendanceStatus>();
-            Collections.reverse(this.list);
         }
+
+        Collections.sort(this.list, new Comparator<AttendanceStatus>() {
+            @Override
+            public int compare(AttendanceStatus o1, AttendanceStatus o2) {
+                return o1.getSortOrder() - o2.getSortOrder();
+            }
+        });
 
         return this.list;
     }

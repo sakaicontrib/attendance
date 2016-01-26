@@ -86,7 +86,7 @@ public class AttendanceStatusFormPanel extends BasePanel {
         editStatusSettingsForm.add(new ListView<AttendanceStatus>("all-statuses", listModel) {
             @Override
             protected void populateItem(ListItem<AttendanceStatus> item) {
-                String statusName = attendanceLogic.getStatusString(item.getModelObject().getStatus());
+                String statusName = getStatusString(item.getModelObject().getStatus());
                 final CheckBox isActive = new CheckBox("is-active", new PropertyModel<Boolean>(item.getModelObject(), "isActive"));
                 item.add(isActive);
                 item.add(new Label("status", statusName));

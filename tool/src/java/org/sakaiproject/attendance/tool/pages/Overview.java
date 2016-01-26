@@ -30,12 +30,15 @@ import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.request.handler.resource.ResourceStreamRequestHandler;
 import org.apache.wicket.util.resource.AbstractResourceStreamWriter;
 import org.sakaiproject.attendance.model.AttendanceEvent;
+import org.sakaiproject.attendance.model.AttendanceStatus;
 import org.sakaiproject.attendance.model.Status;
+import org.sakaiproject.attendance.tool.dataproviders.AttendanceStatusProvider;
 import org.sakaiproject.attendance.tool.dataproviders.EventDataProvider;
 import org.sakaiproject.attendance.tool.pages.panels.PrintPanel;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -52,12 +55,16 @@ public class Overview extends BasePage {
 	PrintPanel printPanel;
 	WebMarkupContainer printContainer;
 
+	private AttendanceStatusProvider attendanceStatusProvider;
+
 	public Overview() {
 		disableLink(this.firstLink);
 
 		if (this.role != null && this.role.equals("Student")) {
 			throw new RestartResponseException(StudentView.class);
 		}
+
+		this.attendanceStatusProvider = new AttendanceStatusProvider(attendanceLogic.getCurrentAttendanceSite(), AttendanceStatusProvider.ACTIVE);
 
 		add(new Label("overview-info", new ResourceModel("attendance.overview.info")));
 		
@@ -82,22 +89,21 @@ public class Overview extends BasePage {
 		//headers for the table
 		Label headerEventName 		= new Label("header-event-name", 			new ResourceModel("attendance.overview.header.event.name"));
 		Label headerEventDate 		= new Label("header-event-date", 			new ResourceModel("attendance.overview.header.event.date"));
-		Label headerStatusPresent 	= new Label("header-status-present", 		new ResourceModel("attendance.overview.header.status.present"));
-		Label headerStatusLate 		= new Label("header-status-late", 			new ResourceModel("attendance.overview.header.status.late"));
-		Label headerStatusLeftEarly = new Label("header-status-left-early", 	new ResourceModel("attendance.overview.header.status.left.early"));
-		Label headerStatusExcused 	= new Label("header-status-excused", 		new ResourceModel("attendance.overview.header.status.excused"));
-		Label headerStatusUnexcused = new Label("header-status-unexcused", 		new ResourceModel("attendance.overview.header.status.unexcused"));
+
+		DataView<AttendanceStatus> statusHeaders = new DataView<AttendanceStatus>("status-headers", attendanceStatusProvider) {
+			@Override
+			protected void populateItem(Item<AttendanceStatus> item) {
+				item.add(new Label("header-status-name", getStatusString(item.getModelObject().getStatus())));
+			}
+		};
+		add(statusHeaders);
+
 		Label headerEventEdit		= new Label("header-event-edit", 			new ResourceModel("attendance.overview.header.event.edit"));
 		Label headerPrintLinks		= new Label("header-print-links",			new ResourceModel("attendance.overview.header.print"));
 
 		add(headerOverview);
 		add(headerEventName);
 		add(headerEventDate);
-		add(headerStatusPresent);
-		add(headerStatusLate);
-		add(headerStatusLeftEarly);
-		add(headerStatusExcused);
-		add(headerStatusUnexcused);
 		add(headerEventEdit);
 		add(headerPrintLinks);
 
@@ -108,7 +114,7 @@ public class Overview extends BasePage {
 		DataView<AttendanceEvent> attendanceEventDataView = new DataView<AttendanceEvent>("events", eventDataProvider) {
 			@Override
 			protected void populateItem(final Item<AttendanceEvent> item) {
-				Map<Status, Integer> stats = attendanceLogic.getStatsForEvent(item.getModelObject());
+				final Map<Status, Integer> stats = attendanceLogic.getStatsForEvent(item.getModelObject());
 				Link<Void> eventLink = new Link<Void>("event-link") {
 					private static final long serialVersionUID = 1L;
 					public void onClick() {
@@ -119,11 +125,15 @@ public class Overview extends BasePage {
 
 				item.add(eventLink);
 				item.add(new Label("event-date", item.getModelObject().getStartDateTime()));
-				item.add(new Label("event-stats-present", stats.get(Status.PRESENT)));
-				item.add(new Label("event-stats-late", stats.get(Status.LATE)));
-				item.add(new Label("event-stats-left-early", stats.get(Status.LEFT_EARLY)));
-				item.add(new Label("event-stats-excused", stats.get(Status.EXCUSED_ABSENCE)));
-				item.add(new Label("event-stats-absent", stats.get(Status.UNEXCUSED_ABSENCE)));
+
+				DataView<AttendanceStatus> activeStatusStats = new DataView<AttendanceStatus>("active-status-stats", attendanceStatusProvider) {
+					@Override
+					protected void populateItem(Item<AttendanceStatus> item) {
+						item.add(new Label("event-stats", stats.get(item.getModelObject().getStatus())));
+					}
+				};
+				item.add(activeStatusStats);
+
 				item.add(new Link<Void>("event-edit-link") {
 					private static final long serialVersionUID = 1L;
 					public void onClick() {

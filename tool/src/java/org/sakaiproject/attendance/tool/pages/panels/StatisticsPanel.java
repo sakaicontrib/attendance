@@ -19,9 +19,13 @@ package org.sakaiproject.attendance.tool.pages.panels;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
+import org.apache.wicket.markup.repeater.Item;
+import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.model.ResourceModel;
 import org.sakaiproject.attendance.model.AttendanceEvent;
+import org.sakaiproject.attendance.model.AttendanceStatus;
 import org.sakaiproject.attendance.model.Status;
+import org.sakaiproject.attendance.tool.dataproviders.AttendanceStatusProvider;
 import org.sakaiproject.attendance.tool.pages.EventView;
 import org.sakaiproject.attendance.tool.pages.StudentView;
 
@@ -31,12 +35,14 @@ import java.util.Map;
  * Created by Leonardo Canessa [lcanessa1 (at) udayton (dot) edu]
  */
 public class StatisticsPanel extends BasePanel {
-    private static final    long            serialVersionUID = 1L;
+    private static final    long                    serialVersionUID = 1L;
 
-    private                 AttendanceEvent attendanceEvent;
-    private                 String          userId;
-    private                 String          fromPage;
-    private                 Long            previousEventId;
+    private                 AttendanceEvent         attendanceEvent;
+    private                 String                  userId;
+    private                 String                  fromPage;
+    private                 Long                    previousEventId;
+
+    private                 Map<Status, Integer>    stats;
 
     public StatisticsPanel(String id, String fromPage, AttendanceEvent aE) {
         super(id);
@@ -62,8 +68,6 @@ public class StatisticsPanel extends BasePanel {
         infoContainer.add(createRefreshLink());
         infoContainer.setOutputMarkupId(true);
 
-        Map<Status, Integer> stats;
-
         if(attendanceEvent != null) {
             infoContainer.add(new Label("item-info-header", getString("attendance.event.view.item.info")));
             stats = attendanceLogic.getStatsForEvent(attendanceEvent);
@@ -72,17 +76,24 @@ public class StatisticsPanel extends BasePanel {
             stats = attendanceLogic.getStatsForUser(userId);
         }
 
-        infoContainer.add(new Label("header-status-present", 		new ResourceModel("attendance.overview.header.status.present")));
-        infoContainer.add(new Label("header-status-late", 		new ResourceModel("attendance.overview.header.status.late")));
-        infoContainer.add(new Label("header-status-left-early", 	new ResourceModel("attendance.overview.header.status.left.early")));
-        infoContainer.add(new Label("header-status-excused", 		new ResourceModel("attendance.overview.header.status.excused")));
-        infoContainer.add(new Label("header-status-unexcused", 	new ResourceModel("attendance.overview.header.status.unexcused")));
+        AttendanceStatusProvider attendanceStatusProvider = new AttendanceStatusProvider(attendanceLogic.getCurrentAttendanceSite(), AttendanceStatusProvider.ACTIVE);
 
-        infoContainer.add(new Label("event-stats-present",      stats.get(Status.PRESENT)));
-        infoContainer.add(new Label("event-stats-late",         stats.get(Status.LATE)));
-        infoContainer.add(new Label("event-stats-left-early",   stats.get(Status.LEFT_EARLY)));
-        infoContainer.add(new Label("event-stats-excused",      stats.get(Status.EXCUSED_ABSENCE)));
-        infoContainer.add(new Label("event-stats-absent",       stats.get(Status.UNEXCUSED_ABSENCE)));
+        DataView<AttendanceStatus> statusHeaders = new DataView<AttendanceStatus>("status-headers", attendanceStatusProvider) {
+            @Override
+            protected void populateItem(Item<AttendanceStatus> item) {
+                item.add(new Label("header-status-name", getStatusString(item.getModelObject().getStatus())));
+            }
+        };
+        infoContainer.add(statusHeaders);
+
+        DataView<AttendanceStatus> activeStatusStats = new DataView<AttendanceStatus>("active-status-stats", attendanceStatusProvider) {
+            @Override
+            protected void populateItem(Item<AttendanceStatus> item) {
+                item.add(new Label("stats", stats.get(item.getModelObject().getStatus())));
+            }
+        };
+        infoContainer.add(activeStatusStats);
+
 
         infoContainer.add(new Label("info", new ResourceModel("attendance.statistics.info")));
 

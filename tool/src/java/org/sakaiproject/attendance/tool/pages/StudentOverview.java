@@ -24,7 +24,9 @@ import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.model.ResourceModel;
+import org.sakaiproject.attendance.model.AttendanceStatus;
 import org.sakaiproject.attendance.model.Status;
+import org.sakaiproject.attendance.tool.dataproviders.AttendanceStatusProvider;
 import org.sakaiproject.attendance.tool.dataproviders.StudentDataProvider;
 import org.sakaiproject.user.api.User;
 
@@ -36,12 +38,16 @@ import java.util.Map;
 public class StudentOverview extends BasePage {
     private static final long serialVersionUID = 1L;
 
+    private AttendanceStatusProvider attendanceStatusProvider;
+
     public StudentOverview() {
         disableLink(this.studentOverviewLink);
 
         if(this.role != null && this.role.equals("Student")) {
             throw new RestartResponseException(StudentView.class);
         }
+
+        this.attendanceStatusProvider = new AttendanceStatusProvider(attendanceLogic.getCurrentAttendanceSite(), AttendanceStatusProvider.ACTIVE);
 
         add(createHeader());
         add(createStatsTable());
@@ -70,18 +76,16 @@ public class StudentOverview extends BasePage {
     private void createStatsTableHeader(WebMarkupContainer t) {
         //headers for the table
         Label               studentName     = new Label("header-student-name",       new ResourceModel("attendance.header.student"));
-        Label               statusPresent 	= new Label("header-status-present", 		new ResourceModel("attendance.overview.header.status.present"));
-        Label               statusLate      = new Label("header-status-late", 		new ResourceModel("attendance.overview.header.status.late"));
-        Label               statusLeftEarly = new Label("header-status-left-early", 	new ResourceModel("attendance.overview.header.status.left.early"));
-        Label               statusExcused   = new Label("header-status-excused", 		new ResourceModel("attendance.overview.header.status.excused"));
-        Label               statusUnexcused = new Label("header-status-unexcused", 	new ResourceModel("attendance.overview.header.status.unexcused"));
+
+        DataView<AttendanceStatus> statusHeaders = new DataView<AttendanceStatus>("status-headers", attendanceStatusProvider) {
+            @Override
+            protected void populateItem(Item<AttendanceStatus> item) {
+                item.add(new Label("header-status-name", getStatusString(item.getModelObject().getStatus())));
+            }
+        };
+        t.add(statusHeaders);
 
         t.add(studentName);
-        t.add(statusPresent);
-        t.add(statusLate);
-        t.add(statusLeftEarly);
-        t.add(statusExcused);
-        t.add(statusUnexcused);
     }
 
     private void createStatsTableData(WebMarkupContainer t) {
@@ -90,7 +94,7 @@ public class StudentOverview extends BasePage {
             @Override
             protected void populateItem(Item<User> item) {
                 final String id = item.getModelObject().getId();
-                Map<Status, Integer> stats = attendanceLogic.getStatsForUser(id);
+                final Map<Status, Integer> stats = attendanceLogic.getStatsForUser(id);
                 Link<Void> studentLink = new Link<Void>("student-link") {
                     public void onClick() {
                         setResponsePage(new StudentView(id, BasePage.STUDENT_OVERVIEW_PAGE));
@@ -100,11 +104,14 @@ public class StudentOverview extends BasePage {
                 studentLink.add(new Label("student-eid", "(" + item.getModelObject().getEid() + ")"));
 
                 item.add(studentLink);
-                item.add(new Label("student-stats-present", stats.get(Status.PRESENT)));
-                item.add(new Label("student-stats-late", stats.get(Status.LATE)));
-                item.add(new Label("student-stats-left-early", stats.get(Status.LEFT_EARLY)));
-                item.add(new Label("student-stats-excused", stats.get(Status.EXCUSED_ABSENCE)));
-                item.add(new Label("student-stats-absent", stats.get(Status.UNEXCUSED_ABSENCE)));
+
+                DataView<AttendanceStatus> activeStatusStats = new DataView<AttendanceStatus>("active-status-stats", attendanceStatusProvider) {
+                    @Override
+                    protected void populateItem(Item<AttendanceStatus> item) {
+                        item.add(new Label("student-stats", stats.get(item.getModelObject().getStatus())));
+                    }
+                };
+                item.add(activeStatusStats);
             }
         };
 
