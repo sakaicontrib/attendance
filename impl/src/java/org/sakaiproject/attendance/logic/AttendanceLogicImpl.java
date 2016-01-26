@@ -55,6 +55,17 @@ public class AttendanceLogicImpl implements AttendanceLogic {
 	/**
 	 * {@inheritDoc}
 	 */
+	public boolean updateAttendanceSite(AttendanceSite aS) throws IllegalArgumentException {
+		if(aS == null) {
+			throw new IllegalArgumentException("AttendanceSite must not be null");
+		}
+
+		return dao.updateAttendanceSite(aS);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
 	public AttendanceSite getCurrentAttendanceSite() {
 		String currentSiteID = sakaiProxy.getCurrentSiteId();
 

@@ -40,6 +40,13 @@ public interface AttendanceLogic {
 	AttendanceSite getAttendanceSite(String siteID);
 
 	/**
+	 * Updates an AttendanceSite
+	 * @param aS
+	 * @return
+     */
+	boolean updateAttendanceSite(AttendanceSite aS);
+
+	/**
 	 *
 	 * @return The Current Attendance Site
      */

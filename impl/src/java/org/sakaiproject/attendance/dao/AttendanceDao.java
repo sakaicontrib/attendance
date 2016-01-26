@@ -46,6 +46,13 @@ public interface AttendanceDao {
 	boolean addAttendanceSite(AttendanceSite as);
 
 	/**
+	 * Updates an attendanceSite
+	 * @param aS
+	 * @return
+     */
+	boolean updateAttendanceSite(AttendanceSite aS);
+
+	/**
 	 * Gets a single Event from the db
 	 * 
 	 * @return an item or null if no result
