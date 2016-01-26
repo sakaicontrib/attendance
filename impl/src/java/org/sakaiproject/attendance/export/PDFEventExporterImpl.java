@@ -16,11 +16,7 @@
 
 package org.sakaiproject.attendance.export;
 
-import com.itextpdf.text.Document;
-import com.itextpdf.text.DocumentException;
-import com.itextpdf.text.Paragraph;
-import com.itextpdf.text.BaseColor;
-import com.itextpdf.text.Font;
+import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
@@ -148,20 +144,26 @@ public class PDFEventExporterImpl implements PDFEventExporter {
 
     private PdfPTable attendanceSheetTable() {
 
-        PdfPTable table = new PdfPTable(10);
+        List<AttendanceStatus> activeStatuses = attendanceLogic.getActiveStatusesForSite(event.getAttendanceSite());
+        int colSpan = activeStatuses.size() - 1;
+
+        PdfPTable table = new PdfPTable(colSpan * 2);
         table.setWidthPercentage(100);
         table.setSpacingBefore(12);
 
-        List<AttendanceStatus> activeStatuses = attendanceLogic.getActiveStatusesForSite(event.getAttendanceSite());
-
         PdfPCell nameHeader = new PdfPCell(new Paragraph("Student Name", tableHeader));
         nameHeader.setPadding(10);
-        nameHeader.setColspan(activeStatuses.size());
+        nameHeader.setColspan(colSpan);
+        table.addCell(nameHeader);
 
         for(AttendanceStatus status : activeStatuses) {
-            PdfPCell statusHeader = new PdfPCell(new Paragraph(getStatusString(status.getStatus()), tableHeader));
-            statusHeader.setPadding(10);
-            table.addCell(statusHeader);
+            if(status.getStatus() != Status.UNKNOWN) {
+                Paragraph statusHeaderParagraph = new Paragraph(getStatusString(status.getStatus(), colSpan), tableHeader);
+                statusHeaderParagraph.setAlignment(Element.ALIGN_CENTER);
+                PdfPCell statusHeader = new PdfPCell(statusHeaderParagraph);
+                statusHeader.setPadding(10);
+                table.addCell(statusHeader);
+            }
         }
 
         List<User> userList = sakaiProxy.getCurrentSiteMembership();
@@ -171,11 +173,11 @@ public class PDFEventExporterImpl implements PDFEventExporter {
 
             PdfPCell userCell = new PdfPCell(new Paragraph(user.getSortName() + " (" + user.getDisplayId() + ")", body));
             userCell.setPadding(10);
-            userCell.setColspan(5);
+            userCell.setColspan(colSpan);
 
             table.addCell(userCell);
 
-            for(int i=0; i < 5; i++) {
+            for(int i=0; i < colSpan; i++) {
                 // Add blank cell
                 table.addCell(new PdfPCell(new Paragraph()));
             }
@@ -193,16 +195,29 @@ public class PDFEventExporterImpl implements PDFEventExporter {
     }
 
     // TODO: Internationalize status header abbreviations
-    private String getStatusString(Status s) {
-        switch (s)
-        {
-            case UNKNOWN: return "None";
-            case PRESENT: return "Pres";
-            case EXCUSED_ABSENCE: return "Excu";
-            case UNEXCUSED_ABSENCE: return "Abse";
-            case LATE: return "Late";
-            case LEFT_EARLY: return "Left";
-            default: return "None";
+    private String getStatusString(Status s, int numStatuses) {
+        if(numStatuses < 4) {
+            switch (s)
+            {
+                case UNKNOWN: return "None";
+                case PRESENT: return "Present";
+                case EXCUSED_ABSENCE: return "Excused";
+                case UNEXCUSED_ABSENCE: return "Absent";
+                case LATE: return "Late";
+                case LEFT_EARLY: return "Left Early";
+                default: return "None";
+            }
+        } else {
+            switch (s)
+            {
+                case UNKNOWN: return "None";
+                case PRESENT: return "Pres";
+                case EXCUSED_ABSENCE: return "Excu";
+                case UNEXCUSED_ABSENCE: return "Abse";
+                case LATE: return "Late";
+                case LEFT_EARLY: return "Left";
+                default: return "None";
+            }
         }
     }
 
