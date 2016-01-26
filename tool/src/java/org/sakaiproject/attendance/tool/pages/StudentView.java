@@ -25,6 +25,7 @@ import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.model.ResourceModel;
 import org.sakaiproject.attendance.model.AttendanceRecord;
 import org.sakaiproject.attendance.tool.dataproviders.AttendanceRecordProvider;
+import org.sakaiproject.attendance.tool.pages.panels.AttendanceGradePanel;
 import org.sakaiproject.attendance.tool.pages.panels.AttendanceRecordFormDataPanel;
 import org.sakaiproject.attendance.tool.pages.panels.AttendanceRecordFormHeaderPanel;
 import org.sakaiproject.attendance.tool.pages.panels.StatisticsPanel;
@@ -69,6 +70,7 @@ public class StudentView extends BasePage {
         }
 
         add(createHeader());
+        add(createGrade());
         add(createStatistics());
         add(createStudentViewHeader());
         add(createTable());
@@ -134,6 +136,21 @@ public class StudentView extends BasePage {
         header.add(studentName);
 
         return header;
+    }
+
+    private WebMarkupContainer createGrade() {
+        WebMarkupContainer grade = new WebMarkupContainer("grade");
+
+        AttendanceGradePanel attendanceGrade = new AttendanceGradePanel("attendance-grade", attendanceLogic.getAttendanceGrade(this.studentId), feedbackPanel) {
+            @Override
+            public boolean isEnabled() {
+                return !isStudent;
+            }
+        };
+
+        grade.add(attendanceGrade);
+
+        return grade;
     }
 
     private StatisticsPanel createStatistics() {

@@ -34,6 +34,14 @@
             <span wicket:id="student-name" />
         </h2>
     </div>
+    <div wicket:id="grade" class="gradeContainer">
+        <div class="containerHeader">
+            <h3 class="containerHeading">
+                <wicket:message key="attendance.header.grade" />
+            </h3>
+        </div>
+        <wicket:container wicket:id="attendance-grade" />
+    </div>
     <wicket:container wicket:id="statistics"></wicket:container>
     <div wicket:id="student-view-data" class="takeAttendanceContainer">
         <div class="takeAttendanceHeader">

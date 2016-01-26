@@ -218,7 +218,7 @@ th.takeAttendanceDateHeader {
     vertical-align: middle;
 }
 
-div.addEditContainer, div.itemListContainer, div.takeAttendanceContainer, div.itemInfoContainer, div.activeStatusContainer, div.container {
+div.addEditContainer, div.itemListContainer, div.takeAttendanceContainer, div.itemInfoContainer, div.activeStatusContainer, div.container, div.gradeContainer {
     border:1px solid #ccc;
     padding: 2.5em 2em 2em;
     vertical-align: top;
@@ -227,7 +227,7 @@ div.addEditContainer, div.itemListContainer, div.takeAttendanceContainer, div.it
     margin: 2em 2em 2em 70px;
 }
 
-div.takeAttendanceContainer, div.itemInfoContainer {
+div.takeAttendanceContainer, div.itemInfoContainer, div.gradeContainer {
     margin: 2em;
 }
 
