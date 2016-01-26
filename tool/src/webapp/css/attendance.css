@@ -473,3 +473,43 @@ p.printAction {
     text-align: center;
 }
 
+ul.statusList {
+    list-style: none;
+    margin: 1.5em;
+    padding: 0;
+}
+
+li.statusItem, li.statusItemPlaceholder {
+    background: url("../images/drag-handle.png") no-repeat right center #e0f7e0;
+    border: 1px solid #ccc;
+    font-size: 1.2em;
+    line-height: 1.7em;
+    margin: .5em 0;
+    padding: .5em;
+    width: 240px;
+}
+
+li.statusItemPlaceholder {
+    background: #fff;
+    border: 1px dashed #ccc;
+    height: 1.2em;
+}
+
+li.statusItem:hover {
+    cursor: move;
+}
+
+li.statusItem span {
+    padding-left: 2em;
+}
+
+p.editStatusInfo {
+    width: 60%;
+    font-size: 1.2em;
+    line-height: 1.5em;
+    margin: 0;
+}
+
+li.statusItemDisabled {
+    background-color: #eee;
+}
