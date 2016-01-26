@@ -19,13 +19,33 @@
 <body>
 <wicket:panel>
     <form wicket:id="edit-status-settings-form">
-        <ul>
-            <li wicket:id="all-statuses">
-                <input type="checkbox" wicket:id="is-active"> <input type="text" wicket:id="sort-order"> <span wicket:id="status" />
+        <p class="editStatusInfo">
+            <wicket:message key="attendance.settings.edit.status.info" />
+        </p>
+        <ul class="statusList">
+            <li wicket:id="all-statuses" class="statusItem">
+                <input type="checkbox" wicket:id="is-active"> <input type="text" wicket:id="sort-order" size="2" class="position"> <span wicket:id="status" />
             </li>
         </ul>
-        <input type="submit" wicket:id="submit-link" />
+        <input type="submit" wicket:id="submit-link" value="Save" />
     </form>
+    <script type="text/javascript" src="javascript/jquery-ui.min.js"></script>
+    <script type="text/javascript">
+        $(".statusList").sortable({
+            placeholder: "statusItemPlaceholder",
+            stop: function( event, ui) {
+                var inputs = $('input.position');
+                inputs.each(function(idx) {
+                    $(this).val(idx + 1);
+                });
+            }
+        });
+        $("li:has(input:checkbox:not(:checked))").addClass("statusItemDisabled");
+        $("input:checkbox").on("change", function(){
+            $("li:has(input:checkbox:not(:checked))").addClass("statusItemDisabled");
+            $("li:has(input:checkbox:checked)").removeClass("statusItemDisabled");
+        });
+    </script>
 </wicket:panel>
 </body>
 </html>
