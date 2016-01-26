@@ -75,7 +75,14 @@ public class AttendanceGradePanel extends BasePanel {
             }
         };
 
-        NumberTextField<Double> points = new NumberTextField<Double>("grade");
+        final Double maximumGrade = this.attendanceSite.getMaximumGrade();
+
+        NumberTextField<Double> points = new NumberTextField<Double>("grade") {
+            @Override
+            public boolean isEnabled(){
+                return maximumGrade != null;
+            }
+        };
         points.setMinimum(0.0);
 
         points.add(new AjaxFormSubmitBehavior(gForm, "input") {
@@ -87,10 +94,9 @@ public class AttendanceGradePanel extends BasePanel {
         });
 
         Label maximum;
-        Double maximumGrade = this.attendanceSite.getMaximumGrade();
+
         if(maximumGrade == null) {
             maximum = new Label("maximum", "-");
-            points.setEnabled(false);
             points.add(new AttributeModifier("title", new ResourceModel("attendance.grade.tooltip.disabled")));
         } else {
             maximum = new Label("maximum", maximumGrade.toString());
