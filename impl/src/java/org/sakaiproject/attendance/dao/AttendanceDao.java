@@ -170,6 +170,14 @@ public interface AttendanceDao {
 	AttendanceStatus getAttendanceStatusById(Long id);
 
 	/**
+	 * Get an AttendanceGrade
+	 * @param userID, the userID of owner of Grade
+	 * @param aS, the site the Grade is present in
+     * @return
+     */
+	AttendanceGrade getAttendanceGrade(String userID, AttendanceSite aS);
+
+	/**
 	 * Get a list of AttendanceGrades
 	 * @param aS, the AttendanceSite to get the AGs for.
 	 * @return
@@ -206,9 +214,11 @@ public interface AttendanceDao {
 	String QUERY_GET_ALL_ATTENDANCE_STATUSES_FOR_SITE = "getAllAttendanceStatusesForSite";
 
 	String QUERY_GET_ATTENDANCE_GRADES_FOR_SITE = "getAttendanceGradesForSite";
+	String QUERY_GET_ATTENDANCE_GRADE = "getAttendanceGrade";
 
 	// Hibernate Object Fields
 	String ID = "id";
+	String USER_ID = "userID";
 	String SITE_ID = "siteID";
 	String ATTENDANCE_SITE = "attendanceSite";
 	String ATTENDANCE_EVENT = "attendanceEvent";

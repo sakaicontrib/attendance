@@ -42,6 +42,8 @@ import org.sakaiproject.attendance.model.AttendanceEvent;
 import org.springframework.orm.hibernate3.HibernateCallback;
 import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 
+import javax.xml.crypto.Data;
+
 
 /**
  * Implementation of AttendanceDao
@@ -369,6 +371,32 @@ public class AttendanceDaoImpl extends HibernateDaoSupport implements Attendance
 		}
 
 		return (AttendanceStatus) getByIDHelper(id, QUERY_GET_ATTENDANCE_STATUS);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public AttendanceGrade getAttendanceGrade(final String userID, final AttendanceSite aS) {
+		if(log.isDebugEnabled()) {
+			log.debug("getAttendanceGrades for user " + userID + " in site " + aS.getSiteID());
+		}
+
+		try{
+			HibernateCallback hcb = new HibernateCallback() {
+				@Override
+				public Object doInHibernate(Session session) throws HibernateException, SQLException {
+					Query q = session.getNamedQuery(QUERY_GET_ATTENDANCE_GRADE);
+					q.setParameter(ATTENDANCE_SITE, aS, new ManyToOneType("org.sakaiproject.attendance.model.AttendanceSite"));
+					q.setParameter(USER_ID, userID, new StringType());
+					return q.uniqueResult();
+				}
+			};
+
+			return (AttendanceGrade) getHibernateTemplate().execute(hcb);
+		} catch (DataAccessException e) {
+			log.error("Failed to get AttendanceGrade for " + userID + " in " + aS.getSiteID());
+			return null;
+		}
 	}
 
 	/**

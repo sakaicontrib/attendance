@@ -402,6 +402,17 @@ public class AttendanceLogicImpl implements AttendanceLogic {
 	/**
 	 * {@inheritDoc}
 	 */
+	public AttendanceGrade getAttendanceGrade(String uID) throws IllegalArgumentException {
+		if(uID == null || uID.isEmpty()) {
+			throw new IllegalArgumentException("uID must not be null or empty.");
+		}
+
+		return dao.getAttendanceGrade(uID, getCurrentAttendanceSite());
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
 	public Map<String, AttendanceGrade> getAttendanceGrades() {
 		Map<String, AttendanceGrade> aGHashMap = new HashMap<String, AttendanceGrade>();
 		AttendanceSite aS = getCurrentAttendanceSite();
