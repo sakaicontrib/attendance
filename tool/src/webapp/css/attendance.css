@@ -267,7 +267,7 @@ form.addEditForm {
     margin: 0;
 }
 
-td.noEventsCol {
+td.noEventsCol, td.noStudentsCol {
     text-align: center;
     font-style: italic;
     font-size: 1.4em;
@@ -515,4 +515,8 @@ p.editStatusInfo {
 
 li.statusItemDisabled {
     background-color: #eee;
+}
+
+form.studentOverviewFilterForm {
+    margin-left: 70px;
 }

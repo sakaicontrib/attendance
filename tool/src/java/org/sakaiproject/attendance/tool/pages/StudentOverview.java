@@ -18,8 +18,13 @@ package org.sakaiproject.attendance.tool.pages;
 
 
 import org.apache.wicket.RestartResponseException;
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.form.AjaxFormSubmitBehavior;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.form.DropDownChoice;
+import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.data.DataView;
@@ -32,6 +37,9 @@ import org.sakaiproject.attendance.tool.dataproviders.StudentDataProvider;
 import org.sakaiproject.attendance.tool.pages.panels.AttendanceGradePanel;
 import org.sakaiproject.user.api.User;
 
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -42,12 +50,30 @@ public class StudentOverview extends BasePage {
 
     private AttendanceStatusProvider attendanceStatusProvider;
 
+    private DropDownChoice<String> groupChoice;
+    private String selectedGroup;
+
     public StudentOverview() {
         disableLink(this.studentOverviewLink);
 
         if(this.role != null && this.role.equals("Student")) {
             throw new RestartResponseException(StudentView.class);
         }
+
+        this.attendanceStatusProvider = new AttendanceStatusProvider(attendanceLogic.getCurrentAttendanceSite(), AttendanceStatusProvider.ACTIVE);
+
+        add(createHeader());
+        add(createStatsTable());
+    }
+
+    public StudentOverview(String selectedGroup) {
+        disableLink(this.studentOverviewLink);
+
+        if(this.role != null && this.role.equals("Student")) {
+            throw new RestartResponseException(StudentView.class);
+        }
+
+        this.selectedGroup = selectedGroup;
 
         this.attendanceStatusProvider = new AttendanceStatusProvider(attendanceLogic.getCurrentAttendanceSite(), AttendanceStatusProvider.ACTIVE);
 
@@ -103,7 +129,47 @@ public class StudentOverview extends BasePage {
 
     private void createStatsTableData(WebMarkupContainer t) {
         final Map<String, AttendanceGrade> gradeMap = attendanceLogic.getAttendanceGrades();
-        StudentDataProvider     sDP         = new StudentDataProvider();
+
+        // Add form to filter table
+        final Form<?> filterForm = new Form<Void>("filter-table-form"){
+            @Override
+            protected void onSubmit() {
+                setResponsePage(new StudentOverview(groupChoice.getModelObject()));
+            }
+        };
+
+        add(filterForm);
+
+        List<String> groupIds = sakaiProxy.getAvailableGroupsForCurrentSite();
+        Collections.sort(groupIds, new Comparator<String>() {
+            @Override
+            public int compare(String o1, String o2) {
+                return sakaiProxy.getGroupTitleForCurrentSite(o1).compareTo(sakaiProxy.getGroupTitleForCurrentSite(o2));
+            }
+        });
+        groupChoice = new DropDownChoice<String>("group-choice", new PropertyModel<String>(this, "selectedGroup"), groupIds, new IChoiceRenderer<String>() {
+            @Override
+            public Object getDisplayValue(String s) {
+                return sakaiProxy.getGroupTitleForCurrentSite(s);
+            }
+
+            @Override
+            public String getIdValue(String s, int i) {
+                return s;
+            }
+        });
+        groupChoice.setNullValid(true);
+
+        groupChoice.add(new AjaxFormSubmitBehavior("onchange") {
+            @Override
+            protected void onSubmit(AjaxRequestTarget target) {
+                super.onSubmit(target);
+            }
+        });
+        filterForm.add(groupChoice);
+        filterForm.add(new Label("group-choice-label", new ResourceModel("attendance.event.view.filter")));
+
+        StudentDataProvider     sDP         = new StudentDataProvider(selectedGroup);
         final DataView<User>    uDataView   = new DataView<User>("students", sDP) {
             @Override
             protected void populateItem(Item<User> item) {

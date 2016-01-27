@@ -28,6 +28,8 @@ import java.util.List;
  * @author Leonardo Canessa [lcanessa1 (at) udayton (dot) edu]
  */
 public class StudentDataProvider extends BaseProvider<User> {
+    private String groupId;
+
     public StudentDataProvider() {
         super();
     }
@@ -40,9 +42,19 @@ public class StudentDataProvider extends BaseProvider<User> {
         }
     }
 
+    public StudentDataProvider(String groupId) {
+        super();
+
+        this.groupId = groupId;
+    }
+
     protected List<User> getData() {
         if(this.list == null) {
-            this.list = sakaiProxy.getCurrentSiteMembership();
+            if(groupId == null) {
+                this.list = sakaiProxy.getCurrentSiteMembership();
+            } else {
+                this.list = sakaiProxy.getGroupMembershipForCurrentSite(groupId);
+            }
             Collections.reverse(this.list);
         }
         return this.list;
