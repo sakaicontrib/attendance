@@ -57,6 +57,25 @@ public class AttendanceRecordProvider extends BaseProvider<AttendanceRecord> {
         }
     }
 
+    public AttendanceRecordProvider(AttendanceEvent aE, String groupId) {
+        super();
+        if(aE != null) {
+            aE = attendanceLogic.getAttendanceEvent(aE.getId());
+            List<String> currentStudentIds;
+            if(groupId == null) {
+                currentStudentIds = sakaiProxy.getCurrentSiteMembershipIds();
+            } else {
+                currentStudentIds = sakaiProxy.getGroupMembershipIdsForCurrentSite(groupId);
+            }
+            this.list = new ArrayList<AttendanceRecord>();
+            for(AttendanceRecord record: aE.getRecords()) {
+                if(currentStudentIds.contains(record.getUserID())) {
+                    this.list.add(record);
+                }
+            }
+        }
+    }
+
     public AttendanceRecordProvider(Set<AttendanceRecord> data) {
         super();
         if(data != null && !data.isEmpty()) {

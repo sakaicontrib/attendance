@@ -212,6 +212,15 @@ public interface AttendanceLogic {
      */
 	boolean updateAttendanceRecordsForEvent(AttendanceEvent aE, Status s);
 
+	/**
+	 * Update all AttendanceRecords where the user belongs to the supplied group for an AttendanceEvent
+	 * @param aE
+	 * @param s
+	 * @param groupId
+     * @return
+     */
+	boolean updateAttendanceRecordsForEvent(AttendanceEvent aE, Status s, String groupId);
+
     /**
      *
      * @param attendanceEvent

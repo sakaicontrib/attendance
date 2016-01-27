@@ -264,6 +264,39 @@ public class AttendanceLogicImpl implements AttendanceLogic {
 	/**
 	 * {@inheritDoc}
 	 */
+	public boolean updateAttendanceRecordsForEvent(AttendanceEvent aE, Status s, String groupId) {
+		if(groupId == null) {
+			return updateAttendanceRecordsForEvent(aE, s);
+		} else {
+			aE = getAttendanceEvent(aE.getId());
+			List<AttendanceRecord> allRecords = new ArrayList<AttendanceRecord>(aE.getRecords());
+			List<AttendanceRecord> recordsToUpdate = new ArrayList<AttendanceRecord>();
+
+			if(allRecords.isEmpty()) {
+				allRecords = generateAttendanceRecords(aE, s);
+			}
+
+			// We only want to update records where the user is in the group
+			List<String> groupMemberIds = sakaiProxy.getGroupMembershipIds(aE.getAttendanceSite().getSiteID(), groupId);
+			for(String userId : groupMemberIds) {
+				for(AttendanceRecord record: allRecords) {
+					if(record.getUserID().equals(userId)) {
+						recordsToUpdate.add(record);
+					}
+				}
+			}
+
+			for(AttendanceRecord aR : recordsToUpdate) {
+				aR.setStatus(s);
+			}
+
+			return dao.updateAttendanceRecords(recordsToUpdate);
+		}
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
 	public boolean updateAttendanceRecordsForEvent(AttendanceEvent aE, Status s) {
 		aE = getAttendanceEvent(aE.getId());
 		List<AttendanceRecord> records = new ArrayList<AttendanceRecord>(aE.getRecords());

@@ -38,14 +38,14 @@ import java.util.*;
 
 /**
  * Implementation of our SakaiProxy API
- * 
+ *
  * @author Leonardo Canessa [lcanessa1 (at) udayton (dot) edu]
  *
  */
 public class SakaiProxyImpl implements SakaiProxy {
 
 	private static final Logger log = Logger.getLogger(SakaiProxyImpl.class);
-    
+
 	/**
  	* {@inheritDoc}
  	*/
@@ -79,7 +79,7 @@ public class SakaiProxyImpl implements SakaiProxy {
 	public String getCurrentUserId() {
 		return sessionManager.getCurrentSessionUserId();
 	}
-	
+
 	/**
  	* {@inheritDoc}
  	*/
@@ -142,21 +142,21 @@ public class SakaiProxyImpl implements SakaiProxy {
 	public boolean isSuperUser() {
 		return securityService.isSuperUser();
 	}
-	
+
 	/**
  	* {@inheritDoc}
  	*/
 	public void postEvent(String event,String reference,boolean modify) {
 		eventTrackingService.post(eventTrackingService.newEvent(event,reference,modify));
 	}
-	
+
 	/**
  	* {@inheritDoc}
  	*/
 	public boolean getConfigParam(String param, boolean dflt) {
 		return serverConfigurationService.getBoolean(param, dflt);
 	}
-	
+
 	/**
  	* {@inheritDoc}
  	*/
@@ -265,11 +265,14 @@ public class SakaiProxyImpl implements SakaiProxy {
 	 */
 	public String getGroupTitle(String siteId, String groupId) {
 		try {
-			return siteService.getSite(siteId).getGroup(groupId).getTitle();
+			if(siteId != null && groupId != null) {
+				return siteService.getSite(siteId).getGroup(groupId).getTitle();
+			}
 		} catch (IdUnusedException e) {
+			log.error("Unable to get group title", e);
 			e.printStackTrace();
-			return "";
 		}
+		return "";
 	}
 
 	/**
@@ -347,25 +350,25 @@ public class SakaiProxyImpl implements SakaiProxy {
 		}
 		return userList;
 	}
-	
+
 	@Getter @Setter
 	private ToolManager toolManager;
-	
+
 	@Getter @Setter
 	private SessionManager sessionManager;
-	
+
 	@Getter @Setter
 	private UserDirectoryService userDirectoryService;
-	
+
 	@Getter @Setter
 	private SecurityService securityService;
-	
+
 	@Getter @Setter
 	private EventTrackingService eventTrackingService;
-	
+
 	@Getter @Setter
 	private ServerConfigurationService serverConfigurationService;
-	
+
 	@Getter @Setter
 	private SiteService siteService;
 

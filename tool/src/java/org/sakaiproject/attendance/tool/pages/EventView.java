@@ -25,6 +25,7 @@ import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.ResourceModel;
 import org.sakaiproject.attendance.model.AttendanceEvent;
 import org.sakaiproject.attendance.model.AttendanceRecord;
@@ -50,6 +51,9 @@ public class EventView extends BasePage {
     private                 String                  returnPage;
 
     private                 DropDownChoice<Status>  setAllStatus;
+    private                 DropDownChoice<String>  groupChoice;
+
+    private                 String                  selectedGroup;
 
                             PrintPanel              printPanel;
                             WebMarkupContainer      printContainer;
@@ -73,6 +77,17 @@ public class EventView extends BasePage {
         init();
     }
 
+    public EventView(AttendanceEvent aE, String fromPage, String selectedGroup) {
+        super();
+        this.attendanceEvent = aE;
+
+        this.returnPage = fromPage;
+
+        this.selectedGroup = selectedGroup;
+
+        init();
+    }
+
     private void init() {
         createHeader();
         createTable();
@@ -86,9 +101,10 @@ public class EventView extends BasePage {
         final Form<?> setAllForm = new Form<Void>("set-all-form"){
             @Override
             protected void onSubmit() {
-                if(attendanceLogic.updateAttendanceRecordsForEvent(attendanceEvent, setAllStatus.getModelObject())){
-                    getSession().info("All attendance records for " + attendanceEvent.getName() + " set to " + setAllStatus.getModelObject());
-                    setResponsePage(new EventView(attendanceEvent, returnPage));
+                if(attendanceLogic.updateAttendanceRecordsForEvent(attendanceEvent, setAllStatus.getModelObject(), selectedGroup)){
+                    String who = selectedGroup == null?"":" for " + sakaiProxy.getGroupTitleForCurrentSite(selectedGroup);
+                    getSession().info("All attendance records " + who + " for " + attendanceEvent.getName() + " set to " + setAllStatus.getModelObject());
+                    setResponsePage(new EventView(attendanceEvent, returnPage, selectedGroup));
                 }
             }
         };
@@ -180,7 +196,46 @@ public class EventView extends BasePage {
             this.attendanceEvent = attendanceLogic.getAttendanceEvent(this.attendanceEvent.getId());
         }
 
-        add(new DataView<AttendanceRecord>("records", new AttendanceRecordProvider(this.attendanceEvent)) {
+        // Add form to filter table
+        final Form<?> filterForm = new Form<Void>("filter-table-form"){
+            @Override
+            protected void onSubmit() {
+                setResponsePage(new EventView(attendanceEvent, returnPage, groupChoice.getModelObject()));
+            }
+        };
+
+        add(filterForm);
+
+        List<String> groupIds = sakaiProxy.getAvailableGroupsForCurrentSite();
+        Collections.sort(groupIds, new Comparator<String>() {
+            @Override
+            public int compare(String o1, String o2) {
+                return sakaiProxy.getGroupTitleForCurrentSite(o1).compareTo(sakaiProxy.getGroupTitleForCurrentSite(o2));
+            }
+        });
+        groupChoice = new DropDownChoice<String>("group-choice", new PropertyModel<String>(this, "selectedGroup"), groupIds, new IChoiceRenderer<String>() {
+            @Override
+            public Object getDisplayValue(String s) {
+                return sakaiProxy.getGroupTitleForCurrentSite(s);
+            }
+
+            @Override
+            public String getIdValue(String s, int i) {
+                return s;
+            }
+        });
+        groupChoice.setNullValid(true);
+
+        groupChoice.add(new AjaxFormSubmitBehavior("onchange") {
+            @Override
+            protected void onSubmit(AjaxRequestTarget target) {
+                super.onSubmit(target);
+            }
+        });
+        filterForm.add(groupChoice);
+        filterForm.add(new Label("group-choice-label", new ResourceModel("attendance.event.view.filter")));
+
+        add(new DataView<AttendanceRecord>("records", new AttendanceRecordProvider(this.attendanceEvent, selectedGroup)) {
             @Override
             protected void populateItem(final Item<AttendanceRecord> item) {
                 final String stuId = item.getModelObject().getUserID();
