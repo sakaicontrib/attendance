@@ -57,7 +57,7 @@ p.overviewInstructions {
     margin-left: 70px;
 }
 
-img.overviewInfo {
+img.overviewInfo, div.attendanceBreadcrumbs img, th.takeAttendanceDateHeader, .vertAlignMiddle {
     vertical-align: middle;
 }
 
@@ -214,10 +214,6 @@ th.takeAttendanceNameHeader {
     vertical-align: middle;
 }
 
-th.takeAttendanceDateHeader {
-    vertical-align: middle;
-}
-
 div.addEditContainer, div.itemListContainer, div.takeAttendanceContainer, div.itemInfoContainer, div.activeStatusContainer, div.container, div.gradeContainer {
     border:1px solid #ccc;
     padding: 2.5em 2em 2em;
@@ -271,7 +267,7 @@ td.noEventsCol {
     color: #555;
 }
 
-table.addEditFormTable {
+table.addEditFormTable, div.info, .addComment textarea {
     margin-bottom: 1em;
 }
 
@@ -293,10 +289,6 @@ div.addEditDeleteLinkDiv {
 
 div.attendanceBreadcrumbs h2 {
     margin-left: 70px;
-}
-
-div.attendanceBreadcrumbs img {
-    vertical-align: middle;
 }
 
 div.attendanceBreadcrumbs span {
@@ -400,14 +392,6 @@ tr td a.studentLink {
     margin: 0;
 }
 
-.addComment textarea {
-    margin-bottom: 1em;
-}
-
-.commentToggle:hover {
-    cursor: pointer;
-}
-
 div.printContainer {
     position: absolute;
     min-width: 300px;
@@ -451,7 +435,7 @@ div.printMask {
     opacity: 0.75;
 }
 
-div.printMask:hover {
+div.printMask:hover, img.printImage:hover, .commentToggle:hover {
     cursor: pointer;
 }
 
@@ -462,10 +446,6 @@ span.cancelPrint, span.cancelAddComment {
 
 span.cancelPrint:hover, span.cancelAddComment:hover {
     text-decoration: underline;
-    cursor: pointer;
-}
-
-img.printImage:hover {
     cursor: pointer;
 }
 
