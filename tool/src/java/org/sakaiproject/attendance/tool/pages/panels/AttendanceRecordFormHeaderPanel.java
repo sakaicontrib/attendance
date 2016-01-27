@@ -28,6 +28,7 @@ import org.sakaiproject.attendance.tool.dataproviders.AttendanceStatusProvider;
  * Created by Leonardo Canessa [lcanessa1 (at) udayton (dot) edu]
  */
 public class AttendanceRecordFormHeaderPanel extends BasePanel {
+    private static final long serialVersionUID = 1L;
 
     public AttendanceRecordFormHeaderPanel(String id) {
         super(id);

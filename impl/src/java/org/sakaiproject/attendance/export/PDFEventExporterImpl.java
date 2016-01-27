@@ -51,19 +51,25 @@ public class PDFEventExporterImpl implements PDFEventExporter {
 
     private AttendanceEvent event;
     private Document document;
+    private List<User> users;
+    private String groupOrSiteTitle;
 
-    public void createSignInPdf(AttendanceEvent event, OutputStream outputStream) {
+    public void createSignInPdf(AttendanceEvent event, OutputStream outputStream, List<User> usersToPrint, String groupOrSiteTitle) {
 
         this.event = event;
         this.document = new Document();
+        this.users = usersToPrint;
+        this.groupOrSiteTitle = groupOrSiteTitle;
 
         buildDocumentShell(outputStream, true);
     }
 
-    public void createAttendanceSheetPdf(AttendanceEvent event, OutputStream outputStream) {
+    public void createAttendanceSheetPdf(AttendanceEvent event, OutputStream outputStream, List<User> usersToPrint, String groupOrSiteTitle) {
 
         this.event = event;
         this.document = new Document();
+        this.users = usersToPrint;
+        this.groupOrSiteTitle = groupOrSiteTitle;
 
         buildDocumentShell(outputStream, false);
     }
@@ -72,8 +78,6 @@ public class PDFEventExporterImpl implements PDFEventExporter {
         String eventName = event.getName();
         Date eventDate = event.getStartDateTime();
 
-        // TODO: This will be the roster title/name once SAKAI-2370 is resolved
-        String siteTitle = sakaiProxy.getSiteTitle(sakaiProxy.getCurrentSiteId());
 
         SimpleDateFormat dateFormat = new SimpleDateFormat("EEE, MMM d, YYYY h:mm a");
 
@@ -84,7 +88,7 @@ public class PDFEventExporterImpl implements PDFEventExporter {
 
             String pageTitle = isSignInSheet?"Sign-In Sheet":"Attendance Sheet";
 
-            Paragraph title = new Paragraph(pageTitle + " - " + siteTitle, h1);
+            Paragraph title = new Paragraph(pageTitle + " - " + groupOrSiteTitle, h1);
 
 
             document.add(title);
@@ -123,10 +127,9 @@ public class PDFEventExporterImpl implements PDFEventExporter {
         table.addCell(nameHeader);
         table.addCell(signatureHeader);
 
-        List<User> userList = sakaiProxy.getCurrentSiteMembership();
-        Collections.sort(userList, new SortNameUserComparator());
+        Collections.sort(users, new SortNameUserComparator());
 
-        for(User user : userList) {
+        for(User user : users) {
 
             PdfPCell userCell = new PdfPCell(new Paragraph(user.getSortName(), body));
             userCell.setPadding(10);
@@ -166,10 +169,9 @@ public class PDFEventExporterImpl implements PDFEventExporter {
             }
         }
 
-        List<User> userList = sakaiProxy.getCurrentSiteMembership();
-        Collections.sort(userList, new SortNameUserComparator());
+        Collections.sort(users, new SortNameUserComparator());
 
-        for(User user : userList) {
+        for(User user : users) {
 
             PdfPCell userCell = new PdfPCell(new Paragraph(user.getSortName() + " (" + user.getDisplayId() + ")", body));
             userCell.setPadding(10);

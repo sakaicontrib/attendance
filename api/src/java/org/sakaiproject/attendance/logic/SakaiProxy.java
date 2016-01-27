@@ -16,6 +16,8 @@
 
 package org.sakaiproject.attendance.logic;
 
+import org.sakaiproject.site.api.Group;
+import org.sakaiproject.site.api.Site;
 import org.sakaiproject.user.api.User;
 import org.sakaiproject.user.api.UserNotDefinedException;
 
@@ -35,6 +37,12 @@ public interface SakaiProxy {
 	 * @return
 	 */
 	String getCurrentSiteId();
+
+	/**
+	 * Get the current site
+	 * @return
+     */
+	Site getCurrentSite();
 
 	/**
 	 * Get the title of a particular site
@@ -122,6 +130,33 @@ public interface SakaiProxy {
 	 * @return List of Users in the current site
 	 */
 	List<User> getCurrentSiteMembership();
+
+	/**
+	 *
+	 * @param group
+	 * @return
+     */
+	List<String> getGroupMembershipIds(Group group);
+
+	/**
+	 *
+	 * @param group
+	 * @return
+     */
+	List<User> getGroupMembership(Group group);
+
+	/**
+	 *
+	 * @param siteId
+	 * @return
+     */
+	List<Group> getAvailableGroupsForSite(String siteId);
+
+	/**
+	 *
+	 * @return
+     */
+	List<Group> getAvailableGroupsForCurrentSite();
 
 	/**
 	 * get user

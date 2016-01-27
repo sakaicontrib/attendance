@@ -17,8 +17,10 @@
 package org.sakaiproject.attendance.export;
 
 import org.sakaiproject.attendance.model.AttendanceEvent;
+import org.sakaiproject.user.api.User;
 
 import java.io.OutputStream;
+import java.util.List;
 
 public interface PDFEventExporter {
 
@@ -28,7 +30,7 @@ public interface PDFEventExporter {
      * @param attendanceEvent
      * @param outputStream
      */
-    void createSignInPdf(AttendanceEvent attendanceEvent, OutputStream outputStream);
+    void createSignInPdf(AttendanceEvent attendanceEvent, OutputStream outputStream, List<User> usersToPrint, String groupOrSiteTitle);
 
     /**
      * Generates a PDF for an AttendanceEvent and places it in the output stream so it
@@ -36,5 +38,5 @@ public interface PDFEventExporter {
      * @param attendanceEvent
      * @param outputStream
      */
-    void createAttendanceSheetPdf(AttendanceEvent attendanceEvent, OutputStream outputStream);
+    void createAttendanceSheetPdf(AttendanceEvent attendanceEvent, OutputStream outputStream, List<User> usersToPrint, String groupOrSiteTitle);
 }

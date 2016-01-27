@@ -40,6 +40,8 @@ import java.util.Date;
  *
  */
 public class AddEventPage extends BasePage {
+	private static final long serialVersionUID = 1L;
+
 	protected AttendanceEvent attendanceEvent;
 
 	EventDataProvider eventDataProvider;

@@ -25,6 +25,8 @@ import org.sakaiproject.component.api.ServerConfigurationService;
 import org.sakaiproject.entity.api.ResourceProperties;
 import org.sakaiproject.event.api.EventTrackingService;
 import org.sakaiproject.exception.IdUnusedException;
+import org.sakaiproject.site.api.Group;
+import org.sakaiproject.site.api.Site;
 import org.sakaiproject.site.api.SiteService;
 import org.sakaiproject.tool.api.Session;
 import org.sakaiproject.tool.api.SessionManager;
@@ -49,6 +51,16 @@ public class SakaiProxyImpl implements SakaiProxy {
  	*/
 	public String getCurrentSiteId(){
 		return toolManager.getCurrentPlacement().getContext();
+	}
+
+	public Site getCurrentSite() {
+		try {
+			return siteService.getSite(toolManager.getCurrentPlacement().getContext());
+		} catch (IdUnusedException e) {
+			log.error("getCurrentSite: id unused exception.");
+			e.printStackTrace();
+			return null;
+		}
 	}
 
 	/**
@@ -183,23 +195,56 @@ public class SakaiProxyImpl implements SakaiProxy {
 			AuthzGroup membership = authzGroupService.getAuthzGroup("/site/" + getCurrentSiteId());
 			Set<Member> memberSet = membership.getMembers();
 			String maintainRole = membership.getMaintainRole();
-
-			for(Member member : memberSet) {
-				if(!maintainRole.equals(member.getRole().getId()) && member.isActive()) {
-					try {
-						User student = userDirectoryService.getUser(member.getUserId());
-						returnList.add(student);
-					} catch (UserNotDefinedException e) {
-						log.error("Unable to get user " + member.getUserId() + " " + e);
-						e.printStackTrace();
-					}
-				}
-			}
+			returnList = getUserListForMemberSetHelper(memberSet, maintainRole);
 		} catch (GroupNotDefinedException e) {
 			log.error("Unable to get site membership " + e);
 			e.printStackTrace();
 		}
 		return returnList;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public List<String> getGroupMembershipIds(Group group) {
+		List<String> returnList = new ArrayList<String>();
+		for(User user : getGroupMembership(group)) {
+			returnList.add(user.getId());
+		}
+		return returnList;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public List<User> getGroupMembership(Group group) {
+		List<User> returnList = new ArrayList<User>();
+		if(group != null) {
+			String maintainRole = group.getMaintainRole();
+			returnList = getUserListForMemberSetHelper(group.getMembers(), maintainRole);
+		}
+		return returnList;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public List<Group> getAvailableGroupsForSite(String siteId) {
+		try {
+			Site site = siteService.getSite(siteId);
+			return new ArrayList<Group>(site.getGroups());
+		} catch (IdUnusedException e) {
+			log.error("getAvailableGroupIdsForSite " + siteId + " IdUnusedException");
+			e.printStackTrace();
+			return new ArrayList<Group>();
+		}
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public List<Group> getAvailableGroupsForCurrentSite() {
+		return getAvailableGroupsForSite(getCurrentSiteId());
 	}
 
 	/**
@@ -253,6 +298,22 @@ public class SakaiProxyImpl implements SakaiProxy {
 
 	private Session getCurrentSession() {
 		return sessionManager.getCurrentSession();
+	}
+
+	private List<User> getUserListForMemberSetHelper(Set<Member> memberSet, String maintainRole) {
+		List<User> userList = new ArrayList<User>();
+		for(Member member : memberSet) {
+			if(!maintainRole.equals(member.getRole().getId()) && member.isActive()) {
+				try {
+					User student = userDirectoryService.getUser(member.getUserId());
+					userList.add(student);
+				} catch (UserNotDefinedException e) {
+					log.error("Unable to get user " + member.getUserId() + " " + e);
+					e.printStackTrace();
+				}
+			}
+		}
+		return userList;
 	}
 	
 	@Getter @Setter

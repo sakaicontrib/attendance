@@ -24,22 +24,24 @@ import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.handler.resource.ResourceStreamRequestHandler;
 import org.apache.wicket.util.resource.AbstractResourceStreamWriter;
 import org.sakaiproject.attendance.model.AttendanceEvent;
+import org.sakaiproject.site.api.Group;
+import org.sakaiproject.user.api.User;
 
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 public class PrintPanel extends BasePanel {
     private static final long serialVersionUID = 1L;
 
-    private IModel<AttendanceEvent> eventModel;
-
     private static final List<String> PRINT_OPTIONS = Arrays.asList("Sign-In Sheet", "Attendance Sheet");
 
-    private String selected = "Sign-In Sheet";
+    private IModel<AttendanceEvent> eventModel;
+    private DropDownChoice<Group> groupChoice;
+    private List<User> userList;
+    private String groupOrSiteTitle;
 
-    private RadioGroup<String> printFormatGroup;
+    private String selected = "Sign-In Sheet";
 
     public PrintPanel(String id, IModel<AttendanceEvent> event) {
         super(id, event);
@@ -55,6 +57,14 @@ public class PrintPanel extends BasePanel {
             @Override
             protected void onSubmit() {
 
+                if(groupChoice.getModelObject() == null) {
+                    userList = sakaiProxy.getCurrentSiteMembership();
+                    groupOrSiteTitle = sakaiProxy.getCurrentSite().getTitle();
+                } else {
+                    userList = sakaiProxy.getGroupMembership(groupChoice.getModelObject());
+                    groupOrSiteTitle = groupChoice.getModelObject().getTitle();
+                }
+
                 final boolean isSignIn = selected.equals("Sign-In Sheet");
                 String filename = eventModel.getObject().getName().trim().replaceAll("\\s+", "") + (isSignIn?"-signin.pdf":"-attendance.pdf");
 
@@ -62,9 +72,9 @@ public class PrintPanel extends BasePanel {
                         @Override
                         public void write(OutputStream outputStream) throws IOException {
                             if(isSignIn){
-                                pdfExporter.createSignInPdf(eventModel.getObject(), outputStream);
+                                pdfExporter.createSignInPdf(eventModel.getObject(), outputStream, userList, groupOrSiteTitle);
                             } else {
-                                pdfExporter.createAttendanceSheetPdf(eventModel.getObject(), outputStream);
+                                pdfExporter.createAttendanceSheetPdf(eventModel.getObject(), outputStream, userList, groupOrSiteTitle);
                             }
                         }
                     };
@@ -82,8 +92,26 @@ public class PrintPanel extends BasePanel {
             printForm.add(new Label("event-date", ""));
         }
 
-        DropDownChoice<String> groupIdChoice = new DropDownChoice<String>("group-id-choice", new Model<String>(), Arrays.asList(new String[]{sakaiProxy.getCurrentSiteId()}));
-        printForm.add(groupIdChoice);
+        List<Group> groups = sakaiProxy.getAvailableGroupsForCurrentSite();
+        Collections.sort(groups, new Comparator<Group>() {
+            @Override
+            public int compare(Group o1, Group o2) {
+                return o1.getTitle().compareTo(o2.getTitle());
+            }
+        });
+        groupChoice = new DropDownChoice<Group>("group-choice", new Model<Group>(), groups, new IChoiceRenderer<Group>() {
+            @Override
+            public Object getDisplayValue(Group group) {
+                return group.getTitle();
+            }
+
+            @Override
+            public String getIdValue(Group group, int i) {
+                return group.getId();
+            }
+        });
+        groupChoice.setNullValid(true);
+        printForm.add(groupChoice);
 
         RadioChoice<String> printFormat = new RadioChoice<String>("print-format", new PropertyModel<String>(this, "selected"), PRINT_OPTIONS);
 
