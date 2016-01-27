@@ -37,7 +37,7 @@ public class PrintPanel extends BasePanel {
 
     private IModel<AttendanceEvent> eventModel;
     private DropDownChoice<String> groupChoice;
-    private List<User> userList;
+    private transient List<User> userList;
     private String groupOrSiteTitle;
 
     private String selected = "Sign-In Sheet";
