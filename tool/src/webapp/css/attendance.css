@@ -214,9 +214,18 @@ th.takeAttendanceNameHeader {
     vertical-align: middle;
 }
 
-div.addEditContainer, div.itemListContainer, div.takeAttendanceContainer, div.itemInfoContainer, div.activeStatusContainer, div.container, div.gradeContainer {
+div.addEditContainer, div.itemListContainer, div.takeAttendanceContainer, div.itemInfoContainer, div.activeStatusContainer, div.container {
     border:1px solid #ccc;
     padding: 2.5em 2em 2em;
+    vertical-align: top;
+    position:relative;
+    display: block;
+    margin: 2em 2em 2em 70px;
+}
+
+div.gradeContainer {
+    border:1px solid #ccc;
+    padding: 1.5em 2em 0.5em;
     vertical-align: top;
     position:relative;
     display: block;

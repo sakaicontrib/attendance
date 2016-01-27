@@ -21,10 +21,10 @@
     <form wicket:id="settings">
         <ul>
             <li class="circleBullet">
-                <input type="number" class="grade" wicket:id="maximumGrade" /> <wicket:message key="attendance.settings.grading.max.points.possible" />
+                <input type="number" id="maximumGrade" class="grade" wicket:id="maximumGrade" /> <label for="maximumGrade" wicket:id="maximum-grade-label" />
             </li>
             <li class="circleBullet">
-                <input class="vertAlignMiddle" type="checkbox" wicket:id="isGradeShown" /> <wicket:message key="attendance.settings.grading.is.grade.shown" />
+                <input type="checkbox" id="isGradeShown" class="vertAlignMiddle" wicket:id="isGradeShown" /> <label for="isGradeShown" wicket:id="is-grade-shown-label"/>
             </li>
         </ul>
         <input type="submit" wicket:id="submit"/>
