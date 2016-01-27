@@ -19,8 +19,14 @@
 <body>
 <wicket:panel>
     <form wicket:id="settings">
-        <input type="number" wicket:id="maximumGrade" /> <wicket:message key="attendance.settings.grading.max.points.possible" />  <br />
-        <input type="checkbox" wicket:id="isGradeShown" /> <wicket:message key="attendance.settings.grading.is.grade.shown" /> <br />
+        <ul>
+            <li class="circleBullet">
+                <input type="number" class="grade" wicket:id="maximumGrade" /> <wicket:message key="attendance.settings.grading.max.points.possible" />
+            </li>
+            <li class="circleBullet">
+                <input class="vertAlignMiddle" type="checkbox" wicket:id="isGradeShown" /> <wicket:message key="attendance.settings.grading.is.grade.shown" />
+            </li>
+        </ul>
         <input type="submit" wicket:id="submit"/>
     </form>
 </wicket:panel>
