@@ -191,13 +191,13 @@ public class BasePage extends WebPage implements IHeaderContributor {
 	protected String getStatusString(Status s) {
 		switch (s)
 		{
-			case UNKNOWN: return getString("attendance.status.unknown");
-			case PRESENT: return getString("attendance.status.present");
-			case EXCUSED_ABSENCE: return getString("attendance.status.excused");
-			case UNEXCUSED_ABSENCE: return getString("attendance.status.absent");
-			case LATE: return getString("attendance.status.late");
-			case LEFT_EARLY: return getString("attendance.status.left.early");
-			default: return getString("attendance.status.unknown");
+			case UNKNOWN: return new ResourceModel("attendance.status.unknown").getObject();
+			case PRESENT: return new ResourceModel("attendance.status.present").getObject();
+			case EXCUSED_ABSENCE: return new ResourceModel("attendance.status.excused").getObject();
+			case UNEXCUSED_ABSENCE: return new ResourceModel("attendance.status.absent").getObject();
+			case LATE: return new ResourceModel("attendance.status.late").getObject();
+			case LEFT_EARLY: return new ResourceModel("attendance.status.left.early").getObject();
+			default: return new ResourceModel("attendance.status.unknown").getObject();
 		}
 	}
 

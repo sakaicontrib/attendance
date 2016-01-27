@@ -69,10 +69,10 @@ public class StatisticsPanel extends BasePanel {
         infoContainer.setOutputMarkupId(true);
 
         if(attendanceEvent != null) {
-            infoContainer.add(new Label("item-info-header", getString("attendance.event.view.item.info")));
+            infoContainer.add(new Label("item-info-header", new ResourceModel("attendance.event.view.item.info")));
             stats = attendanceLogic.getStatsForEvent(attendanceEvent);
         } else {
-            infoContainer.add(new Label("item-info-header", getString("attendance.student.view.item.info")));
+            infoContainer.add(new Label("item-info-header", new ResourceModel("attendance.student.view.item.info")));
             stats = attendanceLogic.getStatsForUser(userId);
         }
 

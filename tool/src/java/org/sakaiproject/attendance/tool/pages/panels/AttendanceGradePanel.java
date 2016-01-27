@@ -62,15 +62,11 @@ public class AttendanceGradePanel extends BasePanel {
 
                 String displayName = sakaiProxy.getUserSortName(aG.getUserID());
 
-                StringResourceModel temp;
-
                 if (result) {
                     String grade = aG.getGrade() == null ? "null" : aG.getGrade().toString();
-                    temp = new StringResourceModel("attendance.grade.update.success", null, new String[]{grade, displayName});
-                    getSession().info(temp.getString());
+                    getSession().info(new StringResourceModel("attendance.grade.update.success", null, new String[]{grade, displayName}));
                 } else {
-                    temp = new StringResourceModel("attendance.grade.update.failure", null, new String[]{displayName});
-                    getSession().error(temp.getString());
+                    getSession().error(new StringResourceModel("attendance.grade.update.failure", null, new String[]{displayName}));
                 }
 
             }
@@ -105,7 +101,7 @@ public class AttendanceGradePanel extends BasePanel {
 
         if(maximumGrade == null) {
             maximum = new Label("maximum", "-");
-            points.add(new AttributeModifier("title", new StringResourceModel("attendance.grade.tooltip.disabled", null, new String[]{getString("settings.link.label")})));
+            points.add(new AttributeModifier("title", new StringResourceModel("attendance.grade.tooltip.disabled", null, new String[]{new ResourceModel("settings.link.label").getObject()})));
         } else {
             maximum = new Label("maximum", maximumGrade.toString());
             points.setMaximum(maximumGrade);
