@@ -31,6 +31,7 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.sakaiproject.attendance.model.AttendanceSite;
 import org.sakaiproject.attendance.model.AttendanceStatus;
+import org.sakaiproject.attendance.model.Status;
 
 import java.util.*;
 
@@ -62,9 +63,9 @@ public class AttendanceStatusFormPanel extends BasePanel {
                 List<AttendanceStatus> attendanceStatuses = new ArrayList<AttendanceStatus>(aS.getAttendanceStatuses());
                 boolean result = attendanceLogic.updateAttendanceStatuses(attendanceStatuses);
                 if(result){
-                    getSession().info("Success");
+                    getSession().info(getString("attendance.settings.edit.status.save.success"));
                 } else {
-                    getSession().error("Failure");
+                    getSession().error(getString("attendance.settings.edit.status.save.error"));
                 }
             }
         };
@@ -91,6 +92,9 @@ public class AttendanceStatusFormPanel extends BasePanel {
                 item.add(isActive);
                 item.add(new Label("status", statusName));
                 item.add(new TextField<Integer>("sort-order", new PropertyModel<Integer>(item.getModelObject(), "sortOrder")));
+                if(item.getModelObject().getStatus() == Status.UNKNOWN) {
+                    item.setVisible(false);
+                }
             }
         });
 
