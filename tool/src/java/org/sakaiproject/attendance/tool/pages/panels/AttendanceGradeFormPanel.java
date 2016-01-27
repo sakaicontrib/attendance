@@ -16,8 +16,10 @@
 
 package org.sakaiproject.attendance.tool.pages.panels;
 
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.NumberTextField;
@@ -63,14 +65,17 @@ public class AttendanceGradeFormPanel extends BasePanel {
             }
         };
 
+        Label maxGradeLabel = new Label("maximum-grade-label", new ResourceModel("attendance.settings.grading.max.points.possible"));
         NumberTextField<Double> maximum = new NumberTextField<Double>("maximumGrade");
-        maximum.setRequired(true);
         maximum.setMinimum(0.1);
         maximum.setStep(0.1);
         aSForm.add(maximum);
+        aSForm.add(maxGradeLabel);
 
+        Label isGradeShownLabel = new Label("is-grade-shown-label", new ResourceModel("attendance.settings.grading.is.grade.shown"));
         CheckBox isGradeShown = new CheckBox("isGradeShown");
         aSForm.add(isGradeShown);
+        aSForm.add(isGradeShownLabel);
 
         AjaxSubmitLink submit = new AjaxSubmitLink("submit") {
             @Override
@@ -84,6 +89,7 @@ public class AttendanceGradeFormPanel extends BasePanel {
                 target.add(pageFeedbackPanel);
             }
         };
+        submit.add(new AttributeModifier("value", new ResourceModel("attendance.settings.grading.save")));
         aSForm.add(submit);
 
         return aSForm;

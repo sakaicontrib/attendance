@@ -57,21 +57,22 @@ public class AttendanceGradePanel extends BasePanel {
             @Override
             public void onSubmit() {
                 AttendanceGrade aG = (AttendanceGrade) getDefaultModelObject();
-                if(aG.getGrade() != null) { // this is hacky
-                    boolean result = attendanceLogic.updateAttendanceGrade(aG);
 
-                    String displayName = sakaiProxy.getUserSortName(aG.getUserID());
+                boolean result = attendanceLogic.updateAttendanceGrade(aG);
 
-                    StringResourceModel temp;
+                String displayName = sakaiProxy.getUserSortName(aG.getUserID());
 
-                    if (result) {
-                        temp = new StringResourceModel("attendance.grade.update.success", null, new String[]{aG.getGrade().toString(), displayName});
-                        getSession().info(temp.getString());
-                    } else {
-                        temp = new StringResourceModel("attendance.grade.update.failure", null, new String[]{displayName});
-                        getSession().error(temp.getString());
-                    }
+                StringResourceModel temp;
+
+                if (result) {
+                    String grade = aG.getGrade() == null ? "null" : aG.getGrade().toString();
+                    temp = new StringResourceModel("attendance.grade.update.success", null, new String[]{grade, displayName});
+                    getSession().info(temp.getString());
+                } else {
+                    temp = new StringResourceModel("attendance.grade.update.failure", null, new String[]{displayName});
+                    getSession().error(temp.getString());
                 }
+
             }
         };
 
@@ -84,8 +85,15 @@ public class AttendanceGradePanel extends BasePanel {
             }
         };
         points.setMinimum(0.0);
+        points.setStep(0.1);
 
         points.add(new AjaxFormSubmitBehavior(gForm, "input") {
+            @Override
+            protected void onError(AjaxRequestTarget target) {
+                target.add(pageFeedbackPanel);
+            }
+
+            @Override
             protected void onSubmit(AjaxRequestTarget target) {
                 if(target != null) {
                     target.add(pageFeedbackPanel);
@@ -97,7 +105,7 @@ public class AttendanceGradePanel extends BasePanel {
 
         if(maximumGrade == null) {
             maximum = new Label("maximum", "-");
-            points.add(new AttributeModifier("title", new ResourceModel("attendance.grade.tooltip.disabled")));
+            points.add(new AttributeModifier("title", new StringResourceModel("attendance.grade.tooltip.disabled", null, new String[]{getString("settings.link.label")})));
         } else {
             maximum = new Label("maximum", maximumGrade.toString());
             points.setMaximum(maximumGrade);

@@ -20,5 +20,5 @@ package org.sakaiproject.attendance.model;
  * Created by Leonardo Canessa [lcanessa1 (at) udayton (dot) edu]
  */
 public enum Status {
-    UNKNOWN, PRESENT, LATE, EXCUSED_ABSENCE, UNEXCUSED_ABSENCE, LEFT_EARLY
+    UNKNOWN, PRESENT, UNEXCUSED_ABSENCE, EXCUSED_ABSENCE, LATE, LEFT_EARLY
 }
