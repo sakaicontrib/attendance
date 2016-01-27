@@ -53,24 +53,14 @@ public class SakaiProxyImpl implements SakaiProxy {
 		return toolManager.getCurrentPlacement().getContext();
 	}
 
-	public Site getCurrentSite() {
-		try {
-			return siteService.getSite(toolManager.getCurrentPlacement().getContext());
-		} catch (IdUnusedException e) {
-			log.error("getCurrentSite: id unused exception.");
-			e.printStackTrace();
-			return null;
-		}
-	}
-
 	/**
 	 * {@inheritDoc}
 	 */
-	public String getSiteTitle(String siteId) {
+	public String getCurrentSiteTitle() {
 		try {
-			return siteService.getSite(siteId).getTitle();
+			return siteService.getSite(getCurrentSiteId()).getTitle();
 		} catch (IdUnusedException e) {
-			log.error("getSiteTitle " + siteId + ": id unused exception.");
+			log.error("getCurrentSiteTitle()", e);
 			e.printStackTrace();
 			return "";
 		}
@@ -206,9 +196,16 @@ public class SakaiProxyImpl implements SakaiProxy {
 	/**
 	 * {@inheritDoc}
 	 */
-	public List<String> getGroupMembershipIds(Group group) {
+	public List<String> getGroupMembershipIdsForCurrentSite(String groupId) {
+		return getGroupMembershipIds(getCurrentSiteId(), groupId);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public List<String> getGroupMembershipIds(String siteId, String groupId) {
 		List<String> returnList = new ArrayList<String>();
-		for(User user : getGroupMembership(group)) {
+		for(User user : getGroupMembership(siteId, groupId)) {
 			returnList.add(user.getId());
 		}
 		return returnList;
@@ -217,11 +214,23 @@ public class SakaiProxyImpl implements SakaiProxy {
 	/**
 	 * {@inheritDoc}
 	 */
-	public List<User> getGroupMembership(Group group) {
+	public List<User> getGroupMembershipForCurrentSite(String groupId) {
+		return getGroupMembership(getCurrentSiteId(), groupId);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public List<User> getGroupMembership(String siteId, String groupId) {
 		List<User> returnList = new ArrayList<User>();
-		if(group != null) {
+		try {
+			Group group = siteService.getSite(siteId).getGroup(groupId);
+			Set<Member> memberSet = group.getMembers();
 			String maintainRole = group.getMaintainRole();
-			returnList = getUserListForMemberSetHelper(group.getMembers(), maintainRole);
+			returnList = getUserListForMemberSetHelper(memberSet, maintainRole);
+		} catch (IdUnusedException e) {
+			log.error("Unable to get group membership " + e);
+			e.printStackTrace();
 		}
 		return returnList;
 	}
@@ -229,21 +238,44 @@ public class SakaiProxyImpl implements SakaiProxy {
 	/**
 	 * {@inheritDoc}
 	 */
-	public List<Group> getAvailableGroupsForSite(String siteId) {
+	public List<String> getAvailableGroupsForSite(String siteId) {
 		try {
+			List<String> returnList = new ArrayList<String>();
 			Site site = siteService.getSite(siteId);
-			return new ArrayList<Group>(site.getGroups());
+			for(Group group : site.getGroups()) {
+				returnList.add(group.getId());
+			}
+			return returnList;
 		} catch (IdUnusedException e) {
 			log.error("getAvailableGroupIdsForSite " + siteId + " IdUnusedException");
 			e.printStackTrace();
-			return new ArrayList<Group>();
+			return new ArrayList<String>();
 		}
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
-	public List<Group> getAvailableGroupsForCurrentSite() {
+	public String getGroupTitleForCurrentSite(String groupId) {
+		return getGroupTitle(getCurrentSiteId(), groupId);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public String getGroupTitle(String siteId, String groupId) {
+		try {
+			return siteService.getSite(siteId).getGroup(groupId).getTitle();
+		} catch (IdUnusedException e) {
+			e.printStackTrace();
+			return "";
+		}
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public List<String> getAvailableGroupsForCurrentSite() {
 		return getAvailableGroupsForSite(getCurrentSiteId());
 	}
 

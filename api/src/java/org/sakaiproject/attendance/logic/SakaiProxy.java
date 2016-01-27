@@ -16,10 +16,7 @@
 
 package org.sakaiproject.attendance.logic;
 
-import org.sakaiproject.site.api.Group;
-import org.sakaiproject.site.api.Site;
 import org.sakaiproject.user.api.User;
-import org.sakaiproject.user.api.UserNotDefinedException;
 
 import java.util.List;
 import java.util.Locale;
@@ -42,14 +39,7 @@ public interface SakaiProxy {
 	 * Get the current site
 	 * @return
      */
-	Site getCurrentSite();
-
-	/**
-	 * Get the title of a particular site
-	 * @param siteId
-	 * @return
-	 */
-	String getSiteTitle(String siteId);
+	String getCurrentSiteTitle();
 
 	/**
 	 * Get current User
@@ -133,30 +123,46 @@ public interface SakaiProxy {
 
 	/**
 	 *
-	 * @param group
+	 * @param groupId
 	 * @return
      */
-	List<String> getGroupMembershipIds(Group group);
+	List<String> getGroupMembershipIdsForCurrentSite(String groupId);
 
 	/**
 	 *
-	 * @param group
+	 * @param siteId
+	 * @param groupId
+     * @return
+     */
+	List<String> getGroupMembershipIds(String siteId, String groupId);
+
+	/**
+	 *
+	 * @param groupId
 	 * @return
      */
-	List<User> getGroupMembership(Group group);
+	List<User> getGroupMembershipForCurrentSite(String groupId);
+
+	/**
+	 *
+	 * @param siteId
+	 * @param groupId
+     * @return
+     */
+	List<User> getGroupMembership(String siteId, String groupId);
 
 	/**
 	 *
 	 * @param siteId
 	 * @return
      */
-	List<Group> getAvailableGroupsForSite(String siteId);
+	List<String> getAvailableGroupsForSite(String siteId);
 
 	/**
 	 *
 	 * @return
      */
-	List<Group> getAvailableGroupsForCurrentSite();
+	List<String> getAvailableGroupsForCurrentSite();
 
 	/**
 	 * get user
@@ -178,4 +184,19 @@ public interface SakaiProxy {
 	 * @return
      */
 	String getUserDisplayId(String userId);
+
+	/**
+	 *
+	 * @param groupId
+	 * @return
+     */
+	String getGroupTitleForCurrentSite(String groupId);
+
+	/**
+	 *
+	 * @param siteId
+	 * @param groupId
+     * @return
+     */
+	String getGroupTitle(String siteId, String groupId);
 }

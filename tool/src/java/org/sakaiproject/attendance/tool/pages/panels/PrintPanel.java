@@ -24,7 +24,6 @@ import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.handler.resource.ResourceStreamRequestHandler;
 import org.apache.wicket.util.resource.AbstractResourceStreamWriter;
 import org.sakaiproject.attendance.model.AttendanceEvent;
-import org.sakaiproject.site.api.Group;
 import org.sakaiproject.user.api.User;
 
 import java.io.IOException;
@@ -37,7 +36,7 @@ public class PrintPanel extends BasePanel {
     private static final List<String> PRINT_OPTIONS = Arrays.asList("Sign-In Sheet", "Attendance Sheet");
 
     private IModel<AttendanceEvent> eventModel;
-    private DropDownChoice<Group> groupChoice;
+    private DropDownChoice<String> groupChoice;
     private List<User> userList;
     private String groupOrSiteTitle;
 
@@ -59,25 +58,25 @@ public class PrintPanel extends BasePanel {
 
                 if(groupChoice.getModelObject() == null) {
                     userList = sakaiProxy.getCurrentSiteMembership();
-                    groupOrSiteTitle = sakaiProxy.getCurrentSite().getTitle();
+                    groupOrSiteTitle = sakaiProxy.getCurrentSiteTitle();
                 } else {
-                    userList = sakaiProxy.getGroupMembership(groupChoice.getModelObject());
-                    groupOrSiteTitle = groupChoice.getModelObject().getTitle();
+                    userList = sakaiProxy.getGroupMembershipForCurrentSite(groupChoice.getModelObject());
+                    groupOrSiteTitle = sakaiProxy.getGroupTitleForCurrentSite(groupChoice.getModelObject());
                 }
 
                 final boolean isSignIn = selected.equals("Sign-In Sheet");
                 String filename = eventModel.getObject().getName().trim().replaceAll("\\s+", "") + (isSignIn?"-signin.pdf":"-attendance.pdf");
 
-                    AbstractResourceStreamWriter rstream = new AbstractResourceStreamWriter() {
-                        @Override
-                        public void write(OutputStream outputStream) throws IOException {
-                            if(isSignIn){
-                                pdfExporter.createSignInPdf(eventModel.getObject(), outputStream, userList, groupOrSiteTitle);
-                            } else {
-                                pdfExporter.createAttendanceSheetPdf(eventModel.getObject(), outputStream, userList, groupOrSiteTitle);
-                            }
+                AbstractResourceStreamWriter rstream = new AbstractResourceStreamWriter() {
+                    @Override
+                    public void write(OutputStream outputStream) throws IOException {
+                        if(isSignIn){
+                            pdfExporter.createSignInPdf(eventModel.getObject(), outputStream, userList, groupOrSiteTitle);
+                        } else {
+                            pdfExporter.createAttendanceSheetPdf(eventModel.getObject(), outputStream, userList, groupOrSiteTitle);
                         }
-                    };
+                    }
+                };
 
                 ResourceStreamRequestHandler handler = new ResourceStreamRequestHandler(rstream, filename);
                 getRequestCycle().scheduleRequestHandlerAfterCurrent(handler);
@@ -92,22 +91,22 @@ public class PrintPanel extends BasePanel {
             printForm.add(new Label("event-date", ""));
         }
 
-        List<Group> groups = sakaiProxy.getAvailableGroupsForCurrentSite();
-        Collections.sort(groups, new Comparator<Group>() {
+        List<String> groupIds = sakaiProxy.getAvailableGroupsForCurrentSite();
+        Collections.sort(groupIds, new Comparator<String>() {
             @Override
-            public int compare(Group o1, Group o2) {
-                return o1.getTitle().compareTo(o2.getTitle());
+            public int compare(String o1, String o2) {
+                return sakaiProxy.getGroupTitleForCurrentSite(o1).compareTo(sakaiProxy.getGroupTitleForCurrentSite(o2));
             }
         });
-        groupChoice = new DropDownChoice<Group>("group-choice", new Model<Group>(), groups, new IChoiceRenderer<Group>() {
+        groupChoice = new DropDownChoice<String>("group-choice", new Model<String>(), groupIds, new IChoiceRenderer<String>() {
             @Override
-            public Object getDisplayValue(Group group) {
-                return group.getTitle();
+            public Object getDisplayValue(String s) {
+                return sakaiProxy.getGroupTitleForCurrentSite(s);
             }
 
             @Override
-            public String getIdValue(Group group, int i) {
-                return group.getId();
+            public String getIdValue(String s, int i) {
+                return s;
             }
         });
         groupChoice.setNullValid(true);
