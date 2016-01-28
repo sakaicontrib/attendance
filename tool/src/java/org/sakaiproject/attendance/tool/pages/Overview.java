@@ -74,7 +74,7 @@ public class Overview extends BasePage {
 		this.printContainer = new WebMarkupContainer("print-container");
 		printContainer.setOutputMarkupId(true);
 
-		this.printPanel = new PrintPanel("print-panel", new Model<AttendanceEvent>(attendanceLogic.getAttendanceEventsForCurrentSite().get(0)));
+		this.printPanel = new PrintPanel("print-panel", new Model<AttendanceEvent>());
 
 		printContainer.add(printPanel);
 
