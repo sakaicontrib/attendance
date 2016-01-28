@@ -36,8 +36,8 @@
 				<th><span wicket:id="header-event-name" /></th>
 				<th class="overviewDateCol"><span wicket:id="header-event-date" /></th>
 				<th wicket:id="status-headers" class="overviewStatusCol"><span wicket:id="header-status-name" /></th>
-				<th class="overviewEditCol"><span wicket:id="header-event-edit" /></th>
-				<th class="overviewPrintCol"><span wicket:id="header-print-links" /></th>
+				<th class="overviewEditCol {sorter: false}"><span wicket:id="header-event-edit" /></th>
+				<th class="overviewPrintCol {sorter: false}"><span wicket:id="header-print-links" /></th>
 			</tr>
 		</thead>
 		<tbody>
@@ -69,6 +69,7 @@
 	<div id="printMask" class="printMask" style="display:none;"></div>
 
 	<script type="text/javascript" src="javascript/jquery.tablesorter.min.js"></script>
+	<script type="text/javascript" src="javascript/jquery.metadata.js"></script>
 	<script type="text/javascript">
 		$("p.overviewInstructions").width($("#overviewTable").outerWidth());
 		$("#overviewTable").tablesorter({
@@ -76,12 +77,6 @@
 			headers: {
 				1: {
 					sorter: "attendanceDate"
-				},
-				7: {
-					sorter: false
-				},
-				8: {
-					sorter: false
 				}
 			}
 		});

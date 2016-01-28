@@ -36,7 +36,7 @@
         <tr>
             <th><span wicket:id="header-student-name" /></th>
             <th wicket:id="status-headers" class="overviewStatusCol"><span wicket:id="header-status-name" /></th>
-            <th><span wicket:id="header-grade" /><a wicket:id="settings-link"><img src="/library/image/ud_custom/settings.png" alt="Settings" class="settings"/></a></th>
+            <th class="{sorter: false}"><span wicket:id="header-grade" /><a wicket:id="settings-link"><img src="/library/image/ud_custom/settings.png" alt="Settings" class="settings"/></a></th>
 
         </tr>
         </thead>
@@ -59,15 +59,11 @@
     </table>
 
     <script type="text/javascript" src="javascript/jquery.tablesorter.min.js"></script>
+    <script type="text/javascript" src="javascript/jquery.metadata.js"></script>
     <script type="text/javascript">
         $("p.overviewInstructions").width($("#overviewTable").outerWidth());
         $("#overviewTable").tablesorter({
-            sortList: [[0,0]],
-            headers: {
-                6: {
-                    sorter: false
-                }
-            }
+            sortList: [[0,0]]
         });
     </script>
 
