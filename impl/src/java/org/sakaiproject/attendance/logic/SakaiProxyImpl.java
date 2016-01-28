@@ -225,9 +225,11 @@ public class SakaiProxyImpl implements SakaiProxy {
 		List<User> returnList = new ArrayList<User>();
 		try {
 			Group group = siteService.getSite(siteId).getGroup(groupId);
-			Set<Member> memberSet = group.getMembers();
-			String maintainRole = group.getMaintainRole();
-			returnList = getUserListForMemberSetHelper(memberSet, maintainRole);
+			if(group != null) {
+				Set<Member> memberSet = group.getMembers();
+				String maintainRole = group.getMaintainRole();
+				returnList = getUserListForMemberSetHelper(memberSet, maintainRole);
+			}
 		} catch (IdUnusedException e) {
 			log.error("Unable to get group membership " + e);
 			e.printStackTrace();
@@ -265,7 +267,7 @@ public class SakaiProxyImpl implements SakaiProxy {
 	 */
 	public String getGroupTitle(String siteId, String groupId) {
 		try {
-			if(siteId != null && groupId != null) {
+			if(siteId != null && !siteId.isEmpty() && groupId != null && !groupId.isEmpty()) {
 				return siteService.getSite(siteId).getGroup(groupId).getTitle();
 			}
 		} catch (IdUnusedException e) {
@@ -337,14 +339,16 @@ public class SakaiProxyImpl implements SakaiProxy {
 
 	private List<User> getUserListForMemberSetHelper(Set<Member> memberSet, String maintainRole) {
 		List<User> userList = new ArrayList<User>();
-		for(Member member : memberSet) {
-			if(!maintainRole.equals(member.getRole().getId()) && member.isActive()) {
-				try {
-					User student = userDirectoryService.getUser(member.getUserId());
-					userList.add(student);
-				} catch (UserNotDefinedException e) {
-					log.error("Unable to get user " + member.getUserId() + " " + e);
-					e.printStackTrace();
+		if(memberSet != null) {
+			for(Member member : memberSet) {
+				if(maintainRole != null && !maintainRole.equals(member.getRole().getId()) && member.isActive()) {
+					try {
+						User student = userDirectoryService.getUser(member.getUserId());
+						userList.add(student);
+					} catch (UserNotDefinedException e) {
+						log.error("Unable to get user " + member.getUserId() + " " + e);
+						e.printStackTrace();
+					}
 				}
 			}
 		}

@@ -265,7 +265,7 @@ public class AttendanceLogicImpl implements AttendanceLogic {
 	 * {@inheritDoc}
 	 */
 	public boolean updateAttendanceRecordsForEvent(AttendanceEvent aE, Status s, String groupId) {
-		if(groupId == null) {
+		if(groupId == null || groupId.isEmpty()) {
 			return updateAttendanceRecordsForEvent(aE, s);
 		} else {
 			aE = getAttendanceEvent(aE.getId());
