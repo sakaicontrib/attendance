@@ -189,6 +189,9 @@ public class BasePage extends WebPage implements IHeaderContributor {
 	}
 
 	protected String getStatusString(Status s) {
+		if(s == null) {
+			return new ResourceModel("attendance.status.unknown").getObject();
+		}
 		switch (s)
 		{
 			case UNKNOWN: return new ResourceModel("attendance.status.unknown").getObject();

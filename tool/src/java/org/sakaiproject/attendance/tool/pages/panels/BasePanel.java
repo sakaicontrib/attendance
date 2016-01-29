@@ -58,6 +58,9 @@ public class BasePanel extends Panel {
     }
 
     protected String getStatusString(Status s) {
+        if(s == null) {
+            return new ResourceModel("attendance.status.unknown").getObject();
+        }
         switch (s)
         {
             case UNKNOWN: return new ResourceModel("attendance.status.unknown").getObject();
