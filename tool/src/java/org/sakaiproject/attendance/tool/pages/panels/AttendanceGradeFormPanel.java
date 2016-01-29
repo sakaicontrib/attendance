@@ -92,17 +92,33 @@ public class AttendanceGradeFormPanel extends BasePanel {
             }
         };
 
+        final WebMarkupContainer grading = new WebMarkupContainer("grading") {
+            @Override
+            public boolean isVisible() {
+                return !(aS.getMaximumGrade() == null);
+            }
+        };
+        grading.setOutputMarkupPlaceholderTag(true);
+
         Label maxGradeLabel = new Label("maximum-grade-label", new ResourceModel("attendance.settings.grading.max.points.possible"));
         NumberTextField<Double> maximum = new NumberTextField<Double>("maximumGrade");
         maximum.setMinimum(0.1);
         maximum.setStep(0.1);
+        maximum.add(new AjaxFormComponentUpdatingBehavior("onchange") {
+            @Override
+            protected void onUpdate(AjaxRequestTarget target) {
+                target.add(grading);
+            }
+        });
         aSForm.add(maximum);
         aSForm.add(maxGradeLabel);
 
+
+
         Label isGradeShownLabel = new Label("is-grade-shown-label", new ResourceModel("attendance.settings.grading.is.grade.shown"));
         CheckBox isGradeShown = new CheckBox("isGradeShown");
-        aSForm.add(isGradeShown);
-        aSForm.add(isGradeShownLabel);
+        grading.add(isGradeShown);
+        grading.add(isGradeShownLabel);
 
         final WebMarkupContainer gradebook = new WebMarkupContainer("gradebook") {
             @Override
@@ -116,7 +132,7 @@ public class AttendanceGradeFormPanel extends BasePanel {
         gradebookItemName.add(new GradebookItemNameValidator(aS.getSiteID()));
         gradebook.add(gbItemName);
         gradebook.add(gradebookItemName);
-        aSForm.add(gradebook);
+        grading.add(gradebook);
 
         Label sendToGBLabel = new Label("send-to-gradebook", new ResourceModel("attendance.settings.grading.send.to.gradebook"));
         final AjaxCheckBox sendToGradebook = new AjaxCheckBox("sendToGradebook") {
@@ -126,8 +142,9 @@ public class AttendanceGradeFormPanel extends BasePanel {
                 target.add(gradebook);
             }
         };
-        aSForm.add(sendToGradebook);
-        aSForm.add(sendToGBLabel);
+        grading.add(sendToGradebook);
+        grading.add(sendToGBLabel);
+        aSForm.add(grading);
 
         AjaxSubmitLink submit = new AjaxSubmitLink("submit") {
             @Override
