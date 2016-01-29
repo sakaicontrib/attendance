@@ -150,6 +150,10 @@ public class PDFEventExporterImpl implements PDFEventExporter {
         List<AttendanceStatus> activeStatuses = attendanceLogic.getActiveStatusesForSite(event.getAttendanceSite());
         int colSpan = activeStatuses.size() - 1;
 
+        if(colSpan <= 0) {
+            colSpan = 1;
+        }
+
         PdfPTable table = new PdfPTable(colSpan * 2);
         table.setWidthPercentage(100);
         table.setSpacingBefore(12);
@@ -159,6 +163,7 @@ public class PDFEventExporterImpl implements PDFEventExporter {
         nameHeader.setColspan(colSpan);
         table.addCell(nameHeader);
 
+        int numStatusHeaders = 0;
         for(AttendanceStatus status : activeStatuses) {
             if(status.getStatus() != Status.UNKNOWN) {
                 Paragraph statusHeaderParagraph = new Paragraph(getStatusString(status.getStatus(), colSpan), tableHeader);
@@ -166,7 +171,15 @@ public class PDFEventExporterImpl implements PDFEventExporter {
                 PdfPCell statusHeader = new PdfPCell(statusHeaderParagraph);
                 statusHeader.setPadding(10);
                 table.addCell(statusHeader);
+                numStatusHeaders++;
             }
+        }
+        if(numStatusHeaders == 0) {
+            Paragraph statusHeaderParagraph = new Paragraph("Status", tableHeader);
+            statusHeaderParagraph.setAlignment(Element.ALIGN_CENTER);
+            PdfPCell statusHeader = new PdfPCell(statusHeaderParagraph);
+            statusHeader.setPadding(10);
+            table.addCell(statusHeader);
         }
 
         Collections.sort(users, new SortNameUserComparator());

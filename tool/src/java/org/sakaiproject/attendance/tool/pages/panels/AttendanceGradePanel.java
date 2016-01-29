@@ -41,8 +41,14 @@ public class AttendanceGradePanel extends BasePanel {
 
     public AttendanceGradePanel(String id, AttendanceGrade aG, FeedbackPanel fP) {
         super(id);
-        this.agIModel = new CompoundPropertyModel<AttendanceGrade>(aG);
-        this.attendanceSite = agIModel.getObject().getAttendanceSite();
+
+        if(aG == null) {
+            this.agIModel = new CompoundPropertyModel<AttendanceGrade>(new AttendanceGrade());
+            this.attendanceSite = attendanceLogic.getCurrentAttendanceSite();
+        } else {
+            this.agIModel = new CompoundPropertyModel<AttendanceGrade>(aG);
+            this.attendanceSite = agIModel.getObject().getAttendanceSite();
+        }
         this.pageFeedbackPanel = fP;
 
         init();
