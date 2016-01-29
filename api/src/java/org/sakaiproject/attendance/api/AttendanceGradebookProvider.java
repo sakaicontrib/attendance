@@ -39,6 +39,12 @@ public interface AttendanceGradebookProvider {
     void remove(AttendanceSite aS);
 
     /**
+     * Updates the external Assessment in the Gradebook
+     * @param aS
+     */
+    boolean update(AttendanceSite aS);
+
+    /**
      * Sends an AttendanceGrade, by ID, to the Gradebook
      * @param id
      */

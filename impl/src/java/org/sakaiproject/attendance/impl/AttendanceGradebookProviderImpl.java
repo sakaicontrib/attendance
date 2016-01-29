@@ -102,6 +102,26 @@ public class AttendanceGradebookProviderImpl implements AttendanceGradebookProvi
     /**
      * {@inheritDoc}
      */
+    public boolean update(AttendanceSite aS) {
+        if(log.isDebugEnabled()) {
+            log.debug("Updating GB for AS " + aS.getSiteID());
+        }
+
+        String siteID = aS.getSiteID();
+        if(isGradebookDefined(siteID)) {
+            String aUID = getAttendanceUID(aS);
+            if(isAssessmentDefined(siteID, aUID)){
+                gbExtAssesService.updateExternalAssessment(siteID, aUID, null, aS.getGradebookItemName(), aS.getMaximumGrade(), null, false);
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public void sendToGradebook(Long id) {
         if(log.isDebugEnabled()) {
             log.debug("sendToGradebook");
@@ -110,6 +130,7 @@ public class AttendanceGradebookProviderImpl implements AttendanceGradebookProvi
         if(id == null) {
             return;
         }
+
         AttendanceGrade aG = attendanceLogic.getAttendanceGrade(id);
         AttendanceSite aS = aG.getAttendanceSite();
         String siteID = aS.getSiteID();
@@ -120,8 +141,6 @@ public class AttendanceGradebookProviderImpl implements AttendanceGradebookProvi
 
             Boolean sendToGradebook = aG.getAttendanceSite().getSendToGradebook();
             if(sendToGradebook != null && sendToGradebook) {
-
-
                 if(isAssessmentDefined(siteID, aSID)) {
                     // exists, update current grade
                     gbExtAssesService.updateExternalAssessmentScore(siteID, aSID, aG.getUserID(), aG.getGrade().toString());

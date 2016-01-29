@@ -42,6 +42,8 @@ public class AttendanceGradeFormPanel extends BasePanel {
 
     private                 FeedbackPanel   pageFeedbackPanel;
     private                 boolean         previousSendToGradebook;
+    private                 String          previousName;
+    private                 Double          previousMaxGrade;
 
     public AttendanceGradeFormPanel(String id, FeedbackPanel pg) {
         super(id);
@@ -57,13 +59,22 @@ public class AttendanceGradeFormPanel extends BasePanel {
     private Form<AttendanceSite> createSettingsForm() {
         final AttendanceSite aS = attendanceLogic.getCurrentAttendanceSite();
         this.previousSendToGradebook = aS.getSendToGradebook() == null ? false : aS.getSendToGradebook();
+        this.previousName = aS.getGradebookItemName();
+        this.previousMaxGrade = aS.getMaximumGrade();
+
         Form<AttendanceSite> aSForm = new Form<AttendanceSite>("settings", new CompoundPropertyModel<AttendanceSite>(aS)) {
             @Override
             public void onSubmit() {
                 AttendanceSite aS = (AttendanceSite) getDefaultModelObject();
 
                 if(aS.getSendToGradebook()){
-                    attendanceGradebookProvider.create(aS);
+                    if(previousSendToGradebook) { // if previously true, see if any relevant values have changed
+                        if(!previousName.equals(aS.getGradebookItemName()) || !previousMaxGrade.equals(aS.getMaximumGrade())){
+                            attendanceGradebookProvider.update(aS);
+                        }
+                    } else {
+                        attendanceGradebookProvider.create(aS);
+                    }
                 } else {
                     if(previousSendToGradebook) {
                         attendanceGradebookProvider.remove(aS);
@@ -92,7 +103,6 @@ public class AttendanceGradeFormPanel extends BasePanel {
         CheckBox isGradeShown = new CheckBox("isGradeShown");
         aSForm.add(isGradeShown);
         aSForm.add(isGradeShownLabel);
-
 
         final WebMarkupContainer gradebook = new WebMarkupContainer("gradebook") {
             @Override
