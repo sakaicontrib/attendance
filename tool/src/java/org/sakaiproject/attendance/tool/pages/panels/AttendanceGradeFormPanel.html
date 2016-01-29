@@ -28,12 +28,14 @@
             </li>
             <li>
                 <input type="checkbox" id="sendToGradebook" class="vertAlignMiddle" wicket:id="sendToGradebook" /> <label class="gradeSettingsLabel" for="sendToGradebook" wicket:id="send-to-gradebook" />
+                <div wicket:container wicket:id="gradebook" >
+                    <ul class="gradeSettings">
+                        <li>
+                            <input type="text" id="gradebookItemName" wicket:id="gradebookItemName" /> <label class="gradeSettingsLabel" for="gradebookItemName" wicket:id="gradebook-item-name" />
+                        </li>
+                    </ul>
+                </div>
             </li>
-            <div wicket:container wicket:id="gradebook" >
-                <li class="hideBullet">
-                    <input type="text" id="gradebookItemName" wicket:id="gradebookItemName" /> <label for="gradebookItemName" wicket:id="gradebook-item-name" />
-                </li>
-            </div>
         </ul>
         <input type="submit" wicket:id="submit"/>
     </form>
