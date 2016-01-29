@@ -51,10 +51,14 @@ span.overHeaderSpan, span.itemsHeaderSpan, span.settingsHeaderSpan {
     margin: 0 .5em;
 }
 
-p.overviewInstructions {
+p.overviewInstructions, p.addEditInstructions {
     font-size: 1.2em;
     line-height: 1.5em;
     margin-left: 70px;
+}
+
+p.addEditInstructions {
+    width: 70%;
 }
 
 img.overviewInfo, div.attendanceBreadcrumbs img, th.takeAttendanceDateHeader, .vertAlignMiddle {
@@ -95,7 +99,7 @@ img.statisticsInfo:hover {
     cursor: help;
 }
 
-img.statisticsInfo:hover + div.statisticsInfo {
+img.statisticsInfo:hover + div.statisticsInfo, a.statisticsInfo:hover + div.statisticsInfo {
     display: block;
     position: absolute;
     padding: .5em;
@@ -110,6 +114,15 @@ img.statisticsInfo:hover + div.statisticsInfo {
     -webkit-box-shadow: 0 8px 6px -6px black;
     -moz-box-shadow: 0 8px 6px -6px black;
     box-shadow: 0 8px 6px -6px black;
+}
+
+a.statisticsInfo:hover + div.statisticsInfo {
+    left: 300px;
+}
+
+img.refreshImage {
+    vertical-align: text-top;
+    height: 1.4em;
 }
 
 div.statisticsInfo {
@@ -162,7 +175,7 @@ table.itemListTable, table.eventViewTable, table.takeAttendanceTable {
     background-color: #deeeff;
 }
 
-th.overviewDateCol, td.overviewDateCol, td.takeAttendanceDateHeader, th.takeAttendanceDateHeader {
+th.overviewDateCol, td.overviewDateCol, td.takeAttendanceDateHeader, th.takeAttendanceDateHeader, td.studentNameCol, th.studentOverviewNameHeader {
     border-right-width: 3px;
 }
 
@@ -179,10 +192,18 @@ table.eventViewTable {
     float: left;
 }
 
-th.overviewEditCol, td.overviewEditCol, th.itemListEditCol, td.itemListEditCol {
+th.overviewEditCol, td.overviewEditCol, th.itemListEditCol, td.itemListEditCol, td.overviewGradeCol, th.overviewGradeCol {
     border-left-width: 3px;
     text-align: center;
     width: 42px;
+}
+
+td.overviewGradeCol, th.overviewGradeCol {
+    width: 104px;
+}
+
+td.overviewGradeCol {
+    vertical-align: middle;
 }
 
 th.overviewStatusCol, td.overviewStatusCol {
@@ -201,7 +222,7 @@ td.itemListRemoveCol {
     text-align: center;
 }
 
-td.itemNameCol {
+td.itemNameCol, td.studentNameCol {
     font-size: 1.2em;
 }
 
@@ -371,17 +392,6 @@ p.setAll {
     margin-top: 0;
 }
 
-.studentEid {
-    float: right;
-    margin-left: .5em;
-}
-
-tr td a.studentLink {
-    display: block;
-    text-decoration: none;
-    border-bottom: thin solid #004b8d;
-}
-
 .addComment {
     position:absolute;
     top:-130px;
@@ -472,10 +482,6 @@ img.settings {
     margin-left: 4px;
 }
 
-li.circleBullet {
-    list-style-type: circle;
-}
-
 ul.statusList {
     list-style: none;
     margin: 1.5em;
@@ -506,7 +512,7 @@ li.statusItem span {
     padding-left: 2em;
 }
 
-p.editStatusInfo {
+p.editStatusInfo, p.editGradeInfo {
     width: 60%;
     font-size: 1.2em;
     line-height: 1.5em;
@@ -519,4 +525,27 @@ li.statusItemDisabled {
 
 form.studentOverviewFilterForm {
     margin-left: 70px;
+}
+
+td.overviewGradeCol form {
+    margin: 0;
+}
+
+th.overviewGradeCol img.settings {
+    vertical-align: text-bottom;
+}
+
+ul.gradeSettings {
+    list-style: none;
+    margin: 1em 0 1em 1em;
+    padding: 0;
+}
+
+ul.gradeSettings li {
+    margin: .5em 0;
+}
+
+label.gradeSettingsLabel {
+    font-size: 1.2em;
+    line-height: 1.7em;
 }

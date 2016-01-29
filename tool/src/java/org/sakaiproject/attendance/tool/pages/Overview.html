@@ -27,7 +27,7 @@
 	</h1>
 
 	<p class="overviewInstructions">
-		Select an attendance item to take attendance for that item. Click on <strong>Attendance Items</strong> in the menu bar above to add additional items.
+		<wicket:message key="attendance.overview.header.info" escape="false"/>
 	</p>
 
 	<table id="overviewTable" class="overviewTable">
@@ -52,7 +52,7 @@
 			</tr>
 			<wicket:enclosure child="no-events">
 				<tr>
-					<td colspan="8" class="noEventsCol">
+					<td colspan="100" class="noEventsCol">
 						<span wicket:id="no-events" />
 						<br />
 						<span wicket:id="no-events2" />

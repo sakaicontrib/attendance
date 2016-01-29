@@ -180,8 +180,7 @@ public class StudentOverview extends BasePage {
                         setResponsePage(new StudentView(id, BasePage.STUDENT_OVERVIEW_PAGE));
                     }
                 };
-                studentLink.add(new Label("student-name", item.getModelObject().getSortName()));
-                studentLink.add(new Label("student-eid", "(" + item.getModelObject().getEid() + ")"));
+                studentLink.add(new Label("student-name", item.getModelObject().getSortName() + " (" + item.getModelObject().getDisplayId() + ")"));
 
                 item.add(studentLink);
 
