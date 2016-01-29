@@ -491,6 +491,22 @@ public class AttendanceLogicImpl implements AttendanceLogic {
 	/**
 	 * {@inheritDoc}
 	 */
+	public Map<String, String> getAttendanceGradeScores() {
+		Map<String, AttendanceGrade> gradeMap = getAttendanceGrades();
+
+		Map<String, String> returnMap = new HashMap<String, String>(gradeMap.size());
+
+		for(Map.Entry<String, AttendanceGrade> entry : gradeMap.entrySet())
+		{
+			returnMap.put(entry.getKey(), entry.getValue().getGrade().toString());
+		}
+
+		return returnMap;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
 	public boolean updateAttendanceGrade(AttendanceGrade aG) throws IllegalArgumentException {
 		if(aG == null) {
 			throw new IllegalArgumentException("AttendanceGrade cannot be null");

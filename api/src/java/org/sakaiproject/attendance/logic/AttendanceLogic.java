@@ -276,6 +276,12 @@ public interface AttendanceLogic {
 	Map<String, AttendanceGrade> getAttendanceGrades();
 
 	/**
+	 * Returns a Map of AttendanceGrades Scores for current site with userId being the key
+	 * @return Map, key: String of useriD. value: String of score earned>
+     */
+	Map<String, String> getAttendanceGradeScores();
+
+	/**
 	 * Updates an AttendanceGrade
 	 * @param aG, the AG to update
 	 * @return

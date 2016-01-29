@@ -29,6 +29,7 @@ import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.model.StringResourceModel;
 import org.sakaiproject.attendance.model.AttendanceGrade;
 import org.sakaiproject.attendance.model.AttendanceSite;
+import org.sakaiproject.attendance.util.AttendanceConstants;
 
 /**
  * Created by Leonardo Canessa [lcanessa1 (at) udayton (dot) edu]
@@ -69,6 +70,8 @@ public class AttendanceGradePanel extends BasePanel {
                 String displayName = sakaiProxy.getUserSortName(aG.getUserID());
 
                 if (result) {
+                    sakaiProxy.postEvent(AttendanceConstants.EVENT_GRADE_SAVED, aG.getId().toString(), true);
+
                     String grade = aG.getGrade() == null ? "null" : aG.getGrade().toString();
                     getSession().info(new StringResourceModel("attendance.grade.update.success", null, new String[]{grade, displayName}).getString());
                 } else {

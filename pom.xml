@@ -135,10 +135,17 @@
 				<artifactId>generic-dao</artifactId>
 				<version>0.9.18</version>
 			</dependency>
+
 			
 
 		</dependencies>
 	</dependencyManagement>
+	<dependencies>
+		<dependency>
+			<groupId>org.sakaiproject.kernel</groupId>
+			<artifactId>sakai-kernel-api</artifactId>
+		</dependency>
+	</dependencies>
 	
 	
   <modules>

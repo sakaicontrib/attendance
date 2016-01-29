@@ -74,6 +74,27 @@
 
 	</bean>
 
+	<!-- AttendanceGradebookProvider -->
+	<bean id="org.sakaiproject.attendance.api.AttendanceGradebookProvider"
+		  class="org.sakaiproject.attendance.impl.AttendanceGradebookProviderImpl"
+		  init-method="init"
+		  singleton="true">
+
+		<property name="attendanceLogic" ref="org.sakaiproject.attendance.logic.AttendanceLogic" />
+		<property name="sakaiProxy" ref="org.sakaiproject.attendance.logic.SakaiProxy" />
+		<property name="toolManager" ref="org.sakaiproject.tool.api.ToolManager" />
+		<property name="gbExtAssesService" ref="org.sakaiproject.service.gradebook.GradebookExternalAssessmentService" />
+	</bean>
+
+	<!-- AttendanceObserver -->
+	<bean id="org.sakaiproject.attendance.impl.AttendanceObserver"
+		  class="org.sakaiproject.attendance.impl.AttendanceObserver"
+		  init-method="init">
+
+		<property name="eventTrackingService" ref="org.sakaiproject.event.api.EventTrackingService" />
+		<property name="attendanceGradebookProvider" ref="org.sakaiproject.attendance.api.AttendanceGradebookProvider" />
+	</bean>
+
 	<!-- Add our HBM files to the Sakai global session factory -->
 	<bean id="org.sakaiproject.attendance.hbm.HBMMappingList"
 		  class="org.sakaiproject.springframework.orm.hibernate.impl.AdditionalHibernateMappingsImpl">
