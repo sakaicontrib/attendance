@@ -22,6 +22,7 @@ import org.apache.wicket.validation.IValidatable;
 import org.apache.wicket.validation.IValidator;
 import org.apache.wicket.validation.ValidationError;
 import org.sakaiproject.attendance.api.AttendanceGradebookProvider;
+import org.sakaiproject.attendance.model.AttendanceSite;
 
 /**
  * Created by Leonardo Canessa [lcanessa1 (at) udayton (dot) edu]
@@ -31,9 +32,13 @@ public class GradebookItemNameValidator implements IValidator<String> {
     private AttendanceGradebookProvider attendanceGradebookProvider;
 
     private String siteID;
+    private Long aSID;
+    private String oldValue;
 
-    public GradebookItemNameValidator(String siteID) {
-        this.siteID = siteID;
+    public GradebookItemNameValidator(AttendanceSite aS, String oldValue) {
+        this.siteID = aS.getSiteID();
+        this.aSID = aS.getId();
+        this.oldValue = oldValue;
     }
 
     @Override
@@ -41,8 +46,16 @@ public class GradebookItemNameValidator implements IValidator<String> {
         Injector.get().inject(this);
         final String name = validatable.getValue();
 
-        if(attendanceGradebookProvider.isGradebookAssignmentDefined(siteID, name)) {
-            error(validatable, "gradebook.name.defined");
+        if(attendanceGradebookProvider.isAssessmentDefined(siteID, aSID)) {
+            if(!oldValue.equals(name)) {
+                if(attendanceGradebookProvider.isGradebookAssignmentDefined(siteID, name)){
+                    error(validatable, "gradebook.name.defined");
+                }
+            }
+        } else {
+            if(attendanceGradebookProvider.isGradebookAssignmentDefined(siteID, name)){
+                error(validatable, "gradebook.name.defined");
+            }
         }
     }
 
