@@ -50,4 +50,12 @@ public interface AttendanceGradebookProvider {
      * @return
      */
     boolean isGradebookDefined(String gbUID);
+
+    /**
+     * Returns if gradebook has an internal assignment defined with the provided title
+     * @param gbUID
+     * @param title
+     * @return
+     */
+    boolean isGradebookAssignmentDefined(String gbUID, String title);
 }

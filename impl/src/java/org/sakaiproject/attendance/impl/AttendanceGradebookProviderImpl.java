@@ -69,7 +69,7 @@ public class AttendanceGradebookProviderImpl implements AttendanceGradebookProvi
 
             String aSID = getAttendanceUID(aS);
             try {
-                gbExtAssesService.addExternalAssessment(siteID, aSID, null, "Attendance", aS.getMaximumGrade(), null, appName, false, null);// add it to the gradebook
+                gbExtAssesService.addExternalAssessment(siteID, aSID, null, aS.getGradebookItemName(), aS.getMaximumGrade(), null, appName, false, null);// add it to the gradebook
                 Map<String, String> scores = attendanceLogic.getAttendanceGradeScores();
 
                 gbExtAssesService.updateExternalAssessmentScoresString(siteID, aSID, scores);
@@ -133,9 +133,19 @@ public class AttendanceGradebookProviderImpl implements AttendanceGradebookProvi
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public boolean isGradebookDefined(String gbUID) {
         // siteID should be equivalent to GradebookUID
         return gbExtAssesService.isGradebookDefined(gbUID);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public boolean isGradebookAssignmentDefined(String gbUID, String title) {
+        return gbExtAssesService.isAssignmentDefined(gbUID, title);
     }
 
     private boolean isAssessmentDefined(String gbUID, String id) {

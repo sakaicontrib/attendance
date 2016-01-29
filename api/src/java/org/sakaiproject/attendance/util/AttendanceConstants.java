@@ -28,6 +28,7 @@ public class AttendanceConstants {
      * general
      */
     public static final String TOOL_NAME = "sakai.attendance";
+    public static final String GRADEBOOK_ITEM_NAME = "Attendance";
 
     /*
      * Events
