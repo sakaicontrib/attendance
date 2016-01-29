@@ -440,6 +440,17 @@ public class AttendanceLogicImpl implements AttendanceLogic {
 	/**
 	 * {@inheritDoc}
 	 */
+	public AttendanceGrade getAttendanceGrade(Long id) throws IllegalArgumentException {
+		if(id == null) {
+			throw new IllegalArgumentException("ID must not be null");
+		}
+
+		return dao.getAttendanceGrade(id);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
 	public AttendanceGrade getAttendanceGrade(String uID) throws IllegalArgumentException {
 		if(uID == null || uID.isEmpty()) {
 			throw new IllegalArgumentException("uID must not be null or empty.");

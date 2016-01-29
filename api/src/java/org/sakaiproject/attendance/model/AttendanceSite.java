@@ -28,19 +28,21 @@ import java.util.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class AttendanceSite implements Serializable {
-	private static final 					long 					serialVersionUID = 1L;
+	private static final 					long 					serialVersionUID 	= 1L;
 
 	@Getter	@Setter	private 				Long 					id;
 	@Getter	@Setter	private 				String 					siteID;
 	@Getter	@Setter	private 				Status 					defaultStatus;
 	@Getter @Setter private					Double					maximumGrade;
 	@Getter @Setter private					Boolean					isGradeShown;
-	@Getter	@Setter	private 				Set<AttendanceStatus>	attendanceStatuses		= new HashSet<AttendanceStatus>(0);
+	@Getter @Setter private					Boolean					sendToGradebook;
+	@Getter	@Setter	private 				Set<AttendanceStatus>	attendanceStatuses	= new HashSet<AttendanceStatus>(0);
 
 	public AttendanceSite(String siteID){
 		this.siteID = siteID;
 		this.defaultStatus = Status.UNKNOWN;
 		this.isGradeShown = false;
+		this.sendToGradebook = false;
 	}
 
 	@Override
