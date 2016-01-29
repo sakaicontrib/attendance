@@ -64,9 +64,9 @@ public class AttendanceGradePanel extends BasePanel {
 
                 if (result) {
                     String grade = aG.getGrade() == null ? "null" : aG.getGrade().toString();
-                    getSession().info(new StringResourceModel("attendance.grade.update.success", null, new String[]{grade, displayName}));
+                    getSession().info(new StringResourceModel("attendance.grade.update.success", null, new String[]{grade, displayName}).getString());
                 } else {
-                    getSession().error(new StringResourceModel("attendance.grade.update.failure", null, new String[]{displayName}));
+                    getSession().error(new StringResourceModel("attendance.grade.update.failure", null, new String[]{displayName}).getString());
                 }
 
             }
