@@ -476,6 +476,15 @@ input.grade {
     width: 4.5em;
 }
 
+form.takeAttendanceNowForm {
+    margin: 0;
+}
+
+img.loadingGif {
+    width: 24px;
+    position:absolute;
+}
+
 img.settings {
     vertical-align: middle;
     width: 24px;

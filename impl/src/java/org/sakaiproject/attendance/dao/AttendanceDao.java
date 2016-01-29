@@ -16,6 +16,7 @@
 
 package org.sakaiproject.attendance.dao;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -84,6 +85,8 @@ public interface AttendanceDao {
 	 * @return	true if success, false if not
 	 */
 	boolean addAttendanceEvent(AttendanceEvent t);
+
+	Serializable addAttendanceEventNow(AttendanceEvent e);
 
 	/**
 	 * Update an AttendanceEvent

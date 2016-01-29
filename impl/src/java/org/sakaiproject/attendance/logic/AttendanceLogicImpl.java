@@ -16,6 +16,7 @@
 
 package org.sakaiproject.attendance.logic;
 
+import java.io.Serializable;
 import java.util.*;
 
 /*import com.google.ical.compat.jodatime.DateTimeIterator;
@@ -137,6 +138,10 @@ public class AttendanceLogicImpl implements AttendanceLogic {
 		e.setAttendanceSite(currentAttendanceSite);
 
 		return dao.addAttendanceEvent(e);
+	}
+
+	public Serializable addAttendanceEventNow(AttendanceEvent e) {
+		return dao.addAttendanceEventNow(e);
 	}
 
 	/**

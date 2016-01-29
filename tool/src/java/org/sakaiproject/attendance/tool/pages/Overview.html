@@ -60,6 +60,16 @@
 				</tr>
 			</wicket:enclosure>
 		</tbody>
+		<tfoot>
+		<tr>
+			<td colspan="100" style="background-color:#eee;">
+				<form wicket:id="take-attendance-now-form" class="takeAttendanceNowForm">
+					<input type="submit" wicket:id="take-attendance-now" wicket:message="value:attendance.now.button" class="active"/>
+					<img id="loadingGif" class="loadingGif" src="images/loading.gif" alt="Loading" style="display: none"/>
+				</form>
+			</td>
+		</tr>
+		</tfoot>
 	</table>
 
 	<div id="printContainer" class="printContainer" wicket:id="print-container">
@@ -67,6 +77,7 @@
 	</div>
 
 	<div id="printMask" class="printMask" style="display:none;"></div>
+	<div id="takeNowMask" class="takeNowMask" style="display:none;"></div>
 
 	<script type="text/javascript" src="javascript/jquery.tablesorter.min.js"></script>
 	<script type="text/javascript" src="javascript/jquery.metadata.js"></script>
@@ -79,6 +90,9 @@
 					sorter: "attendanceDate"
 				}
 			}
+		});
+		$("input.active").on("click", function(){
+			$("#loadingGif").show();
 		});
 	</script>
 	<script type="text/javascript" src="javascript/print.js"></script>

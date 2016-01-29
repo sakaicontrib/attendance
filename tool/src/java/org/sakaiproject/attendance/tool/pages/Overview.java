@@ -22,6 +22,8 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.SubmitLink;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.data.DataView;
@@ -38,6 +40,7 @@ import org.sakaiproject.attendance.tool.pages.panels.PrintPanel;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -80,6 +83,7 @@ public class Overview extends BasePage {
 
 		add(printContainer);
 
+		createTakeAttendanceNow();
 	}
 
 	private void createHeaders() {
@@ -166,5 +170,26 @@ public class Overview extends BasePage {
 
 		add(noEvents);
 		add(noEvents2);
+	}
+
+	private void createTakeAttendanceNow() {
+		final Form<?> takeAttendanceNowForm = new Form<Void>("take-attendance-now-form") {
+			@Override
+			protected void onSubmit() {
+				AttendanceEvent newEvent = new AttendanceEvent();
+				newEvent.setAttendanceSite(attendanceLogic.getCurrentAttendanceSite());
+				newEvent.setName(new ResourceModel("attendance.now.name").getObject());
+				newEvent.setStartDateTime(new Date());
+				Long newEventId = (Long) attendanceLogic.addAttendanceEventNow(newEvent);
+				if(newEventId != null) {
+					newEvent = attendanceLogic.getAttendanceEvent(newEventId);
+					setResponsePage(new EventView(newEvent, BasePage.OVERVIEW_PAGE));
+				} else {
+					error(new ResourceModel("attendance.now.error").getObject());
+				}
+			}
+		};
+		takeAttendanceNowForm.add(new SubmitLink("take-attendance-now"));
+		add(takeAttendanceNowForm);
 	}
 }

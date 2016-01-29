@@ -16,6 +16,7 @@
 
 package org.sakaiproject.attendance.dao.impl;
 
+import java.io.Serializable;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -184,6 +185,20 @@ public class AttendanceDaoImpl extends HibernateDaoSupport implements Attendance
 		} catch (DataAccessException de) {
 			log.error("addAttendanceEvent failed.", de);
 			return false;
+		}
+	}
+
+	public Serializable addAttendanceEventNow(AttendanceEvent attendanceEvent) {
+
+		if(log.isDebugEnabled()) {
+			log.debug("addAttendanceEventNow( " + attendanceEvent.toString() + ")");
+		}
+
+		try{
+			return getHibernateTemplate().save(attendanceEvent);
+		} catch (DataAccessException de) {
+			log.error("addAttendanceEventNow failed.", de);
+			return null;
 		}
 	}
 

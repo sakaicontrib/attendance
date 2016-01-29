@@ -16,6 +16,7 @@
 
 package org.sakaiproject.attendance.logic;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 
@@ -90,6 +91,8 @@ public interface AttendanceLogic {
 	 * @return true if success, false if not
 	 */
 	boolean addAttendanceEvent(AttendanceEvent e);
+
+	Serializable addAttendanceEventNow(AttendanceEvent e);
 
 	/**
 	 * Updates an AttendanceEvent
