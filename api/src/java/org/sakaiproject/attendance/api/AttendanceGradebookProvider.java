@@ -64,4 +64,12 @@ public interface AttendanceGradebookProvider {
      * @return
      */
     boolean isGradebookAssignmentDefined(String gbUID, String title);
+
+    /**
+     * Returns if External Assessment is defined in gradebook
+     * @param gbUID, the gradebookUID (typically siteID)
+     * @param aSID, AttendanceSite ID
+     * @return
+     */
+    boolean isAssessmentDefined(String gbUID, Long aSID);
 }

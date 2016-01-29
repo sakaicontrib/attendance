@@ -25,6 +25,7 @@ import org.sakaiproject.attendance.model.AttendanceGrade;
 import org.sakaiproject.attendance.model.AttendanceSite;
 import org.sakaiproject.attendance.util.AttendanceConstants;
 import org.sakaiproject.service.gradebook.shared.AssessmentNotFoundException;
+import org.sakaiproject.service.gradebook.shared.ConflictingAssignmentNameException;
 import org.sakaiproject.service.gradebook.shared.GradebookExternalAssessmentService;
 import org.sakaiproject.tool.api.Tool;
 import org.sakaiproject.tool.api.ToolManager;
@@ -67,12 +68,12 @@ public class AttendanceGradebookProviderImpl implements AttendanceGradebookProvi
 
             }
 
-            String aSID = getAttendanceUID(aS);
+            String aSUID = getAttendanceUID(aS);
             try {
-                gbExtAssesService.addExternalAssessment(siteID, aSID, null, aS.getGradebookItemName(), aS.getMaximumGrade(), null, appName, false, null);// add it to the gradebook
+                gbExtAssesService.addExternalAssessment(siteID, aSUID, null, aS.getGradebookItemName(), aS.getMaximumGrade(), null, appName, false, null);// add it to the gradebook
                 Map<String, String> scores = attendanceLogic.getAttendanceGradeScores();
 
-                gbExtAssesService.updateExternalAssessmentScoresString(siteID, aSID, scores);
+                gbExtAssesService.updateExternalAssessmentScoresString(siteID, aSUID, scores);
                 returnVal = true;
             } catch (Exception e) {
                 log.warn("Error creating external GB");
@@ -111,8 +112,12 @@ public class AttendanceGradebookProviderImpl implements AttendanceGradebookProvi
         if(isGradebookDefined(siteID)) {
             String aUID = getAttendanceUID(aS);
             if(isAssessmentDefined(siteID, aUID)){
-                gbExtAssesService.updateExternalAssessment(siteID, aUID, null, aS.getGradebookItemName(), aS.getMaximumGrade(), null, false);
-                return true;
+                try {
+                    gbExtAssesService.updateExternalAssessment(siteID, aUID, null, aS.getGradebookItemName(), aS.getMaximumGrade(), null, false);
+                    return true;
+                } catch (ConflictingAssignmentNameException e) {
+                    return false;
+                }
             }
         }
 
@@ -137,13 +142,13 @@ public class AttendanceGradebookProviderImpl implements AttendanceGradebookProvi
 
         // check if there is a gradebook. siteID ~= gradebookUID
         if (isGradebookDefined(siteID)) {
-            String aSID = getAttendanceUID(aS);
+            String aSUID = getAttendanceUID(aS);
 
             Boolean sendToGradebook = aG.getAttendanceSite().getSendToGradebook();
             if(sendToGradebook != null && sendToGradebook) {
-                if(isAssessmentDefined(siteID, aSID)) {
+                if(isAssessmentDefined(siteID, aSUID)) {
                     // exists, update current grade
-                    gbExtAssesService.updateExternalAssessmentScore(siteID, aSID, aG.getUserID(), aG.getGrade().toString());
+                    gbExtAssesService.updateExternalAssessmentScore(siteID, aSUID, aG.getUserID(), aG.getGrade().toString());
                 } else {
                     //does not exist, add to GB and add all grades
                    create(aS);
@@ -167,12 +172,23 @@ public class AttendanceGradebookProviderImpl implements AttendanceGradebookProvi
         return gbExtAssesService.isAssignmentDefined(gbUID, title);
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    public boolean isAssessmentDefined(String gbUID, Long aSID) {
+        return isAssessmentDefined(gbUID, getAttendanceUID(aSID));
+    }
+
     private boolean isAssessmentDefined(String gbUID, String id) {
         return gbExtAssesService.isExternalAssignmentDefined(gbUID, id);
     }
 
     //this is hacky
     private String getAttendanceUID(AttendanceSite aS) {
-        return AttendanceConstants.TOOL_NAME + "." + aS.getId().toString();
+        return getAttendanceUID(aS.getId());
+    }
+
+    private String getAttendanceUID(Long id) {
+        return AttendanceConstants.TOOL_NAME + "." + id.toString();
     }
 }

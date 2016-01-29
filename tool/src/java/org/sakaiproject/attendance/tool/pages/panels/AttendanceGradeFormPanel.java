@@ -129,7 +129,7 @@ public class AttendanceGradeFormPanel extends BasePanel {
         gradebook.setOutputMarkupPlaceholderTag(true);
         Label gbItemName = new Label("gradebook-item-name", new ResourceModel("attendance.settings.grading.gradebook.item.name"));
         TextField<String> gradebookItemName = new TextField<String>("gradebookItemName");
-        gradebookItemName.add(new GradebookItemNameValidator(aS.getSiteID()));
+        gradebookItemName.add(new GradebookItemNameValidator(aS, aS.getGradebookItemName()));
         gradebook.add(gbItemName);
         gradebook.add(gradebookItemName);
         grading.add(gradebook);
