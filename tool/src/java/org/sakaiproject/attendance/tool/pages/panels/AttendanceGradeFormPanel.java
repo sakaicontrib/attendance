@@ -18,16 +18,21 @@ package org.sakaiproject.attendance.tool.pages.panels;
 
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
+import org.apache.wicket.ajax.markup.html.form.AjaxCheckBox;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.NumberTextField;
+import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.model.StringResourceModel;
 import org.sakaiproject.attendance.model.AttendanceSite;
+import org.sakaiproject.attendance.tool.pages.panels.util.GradebookItemNameValidator;
 
 /**
  * Created by Leonardo Canessa [lcanessa1 (at) udayton (dot) edu]
@@ -36,6 +41,9 @@ public class AttendanceGradeFormPanel extends BasePanel {
     private static final    long            serialVersionUID = 1L;
 
     private                 FeedbackPanel   pageFeedbackPanel;
+    private                 boolean         previousSendToGradebook;
+    private                 String          previousName;
+    private                 Double          previousMaxGrade;
 
     public AttendanceGradeFormPanel(String id, FeedbackPanel pg) {
         super(id);
@@ -49,10 +57,29 @@ public class AttendanceGradeFormPanel extends BasePanel {
     }
 
     private Form<AttendanceSite> createSettingsForm() {
-        Form<AttendanceSite> aSForm = new Form<AttendanceSite>("settings", new CompoundPropertyModel<AttendanceSite>(attendanceLogic.getCurrentAttendanceSite())) {
+        final AttendanceSite aS = attendanceLogic.getCurrentAttendanceSite();
+        this.previousSendToGradebook = aS.getSendToGradebook() == null ? false : aS.getSendToGradebook();
+        this.previousName = aS.getGradebookItemName();
+        this.previousMaxGrade = aS.getMaximumGrade();
+
+        Form<AttendanceSite> aSForm = new Form<AttendanceSite>("settings", new CompoundPropertyModel<AttendanceSite>(aS)) {
             @Override
             public void onSubmit() {
                 AttendanceSite aS = (AttendanceSite) getDefaultModelObject();
+
+                if(aS.getSendToGradebook()){
+                    if(previousSendToGradebook) { // if previously true, see if any relevant values have changed
+                        if(!previousName.equals(aS.getGradebookItemName()) || !previousMaxGrade.equals(aS.getMaximumGrade())){
+                            attendanceGradebookProvider.update(aS);
+                        }
+                    } else {
+                        attendanceGradebookProvider.create(aS);
+                    }
+                } else {
+                    if(previousSendToGradebook) {
+                        attendanceGradebookProvider.remove(aS);
+                    }
+                }
 
                 boolean result = attendanceLogic.updateAttendanceSite(aS);
 
@@ -76,6 +103,31 @@ public class AttendanceGradeFormPanel extends BasePanel {
         CheckBox isGradeShown = new CheckBox("isGradeShown");
         aSForm.add(isGradeShown);
         aSForm.add(isGradeShownLabel);
+
+        final WebMarkupContainer gradebook = new WebMarkupContainer("gradebook") {
+            @Override
+            public boolean isVisible() {
+                return aS.getSendToGradebook();
+            }
+        };
+        gradebook.setOutputMarkupPlaceholderTag(true);
+        Label gbItemName = new Label("gradebook-item-name", new ResourceModel("attendance.settings.grading.gradebook.item.name"));
+        TextField<String> gradebookItemName = new TextField<String>("gradebookItemName");
+        gradebookItemName.add(new GradebookItemNameValidator(aS.getSiteID()));
+        gradebook.add(gbItemName);
+        gradebook.add(gradebookItemName);
+        aSForm.add(gradebook);
+
+        Label sendToGBLabel = new Label("send-to-gradebook", new ResourceModel("attendance.settings.grading.send.to.gradebook"));
+        final AjaxCheckBox sendToGradebook = new AjaxCheckBox("sendToGradebook") {
+            @Override
+            protected void onUpdate(AjaxRequestTarget target) {
+                //if checkbox is checked, then our component is shown
+                target.add(gradebook);
+            }
+        };
+        aSForm.add(sendToGradebook);
+        aSForm.add(sendToGBLabel);
 
         AjaxSubmitLink submit = new AjaxSubmitLink("submit") {
             @Override

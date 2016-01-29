@@ -17,6 +17,7 @@
 package org.sakaiproject.attendance.model;
 
 import lombok.*;
+import org.sakaiproject.attendance.util.AttendanceConstants;
 
 import java.io.Serializable;
 import java.util.*;
@@ -28,19 +29,23 @@ import java.util.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class AttendanceSite implements Serializable {
-	private static final 					long 					serialVersionUID = 1L;
+	private static final 					long 					serialVersionUID 	= 1L;
 
 	@Getter	@Setter	private 				Long 					id;
 	@Getter	@Setter	private 				String 					siteID;
 	@Getter	@Setter	private 				Status 					defaultStatus;
 	@Getter @Setter private					Double					maximumGrade;
 	@Getter @Setter private					Boolean					isGradeShown;
-	@Getter	@Setter	private 				Set<AttendanceStatus>	attendanceStatuses		= new HashSet<AttendanceStatus>(0);
+	@Getter @Setter private					Boolean					sendToGradebook;
+	@Getter @Setter private					String					gradebookItemName;
+	@Getter	@Setter	private 				Set<AttendanceStatus>	attendanceStatuses	= new HashSet<AttendanceStatus>(0);
 
 	public AttendanceSite(String siteID){
 		this.siteID = siteID;
 		this.defaultStatus = Status.UNKNOWN;
 		this.isGradeShown = false;
+		this.sendToGradebook = false;
+		this.gradebookItemName = AttendanceConstants.GRADEBOOK_ITEM_NAME;
 	}
 
 	@Override
@@ -52,6 +57,8 @@ public class AttendanceSite implements Serializable {
 				Objects.equals(getSiteID(), that.getSiteID()) &&
 				getDefaultStatus() == that.getDefaultStatus() &&
 				Objects.equals(getMaximumGrade(), that.getMaximumGrade()) &&
+				Objects.equals(getIsGradeShown(), that.getIsGradeShown()) &&
+				Objects.equals(getGradebookItemName(), that.getGradebookItemName()) &&
 				Objects.equals(getAttendanceStatuses(), that.getAttendanceStatuses());
 	}
 

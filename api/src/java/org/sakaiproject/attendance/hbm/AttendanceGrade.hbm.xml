@@ -41,6 +41,10 @@
         <![CDATA[from AttendanceGrade aGrade JOIN FETCH aGrade.attendanceSite WHERE aGrade.attendanceSite = :attendanceSite]]>
     </query>
 
+    <query name="getAttendanceGradeByID">
+        <![CDATA[from AttendanceGrade aGrade WHERE aGrade.id = :id]]>
+    </query>
+
     <query name="getAttendanceGrade">
         <![CDATA[from AttendanceGrade aGrade JOIN FETCH aGrade.attendanceSite WHERE aGrade.attendanceSite = :attendanceSite AND aGrade.userID = :userID]]>
     </query>

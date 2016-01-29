@@ -440,6 +440,17 @@ public class AttendanceLogicImpl implements AttendanceLogic {
 	/**
 	 * {@inheritDoc}
 	 */
+	public AttendanceGrade getAttendanceGrade(Long id) throws IllegalArgumentException {
+		if(id == null) {
+			throw new IllegalArgumentException("ID must not be null");
+		}
+
+		return dao.getAttendanceGrade(id);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
 	public AttendanceGrade getAttendanceGrade(String uID) throws IllegalArgumentException {
 		if(uID == null || uID.isEmpty()) {
 			throw new IllegalArgumentException("uID must not be null or empty.");
@@ -475,6 +486,22 @@ public class AttendanceLogicImpl implements AttendanceLogic {
 		}
 
 		return aGHashMap;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public Map<String, String> getAttendanceGradeScores() {
+		Map<String, AttendanceGrade> gradeMap = getAttendanceGrades();
+
+		Map<String, String> returnMap = new HashMap<String, String>(gradeMap.size());
+
+		for(Map.Entry<String, AttendanceGrade> entry : gradeMap.entrySet())
+		{
+			returnMap.put(entry.getKey(), entry.getValue().getGrade().toString());
+		}
+
+		return returnMap;
 	}
 
 	/**

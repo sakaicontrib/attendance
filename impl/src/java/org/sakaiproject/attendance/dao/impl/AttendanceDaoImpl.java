@@ -391,6 +391,17 @@ public class AttendanceDaoImpl extends HibernateDaoSupport implements Attendance
 	/**
 	 * {@inheritDoc}
 	 */
+	public AttendanceGrade getAttendanceGrade(final Long id) {
+		if(log.isDebugEnabled()) {
+			log.debug("getAttendanceGrade, id: " + id.toString());
+		}
+
+		return (AttendanceGrade) getByIDHelper(id, QUERY_GET_ATTENDANCE_GRADE_BY_ID);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
 	public AttendanceGrade getAttendanceGrade(final String userID, final AttendanceSite aS) {
 		if(log.isDebugEnabled()) {
 			log.debug("getAttendanceGrades for user " + userID + " in site " + aS.getSiteID());

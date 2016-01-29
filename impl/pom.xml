@@ -99,8 +99,11 @@
 			<groupId>org.sakaiproject</groupId>
 			<artifactId>generic-dao</artifactId>
 		</dependency>
-		
-  	</dependencies>
+		<dependency>
+			<groupId>org.sakaiproject.edu-services.gradebook</groupId>
+			<artifactId>gradebook-service-api</artifactId>
+		</dependency>
+	</dependencies>
 	<build>
 		<resources>
             <resource>
