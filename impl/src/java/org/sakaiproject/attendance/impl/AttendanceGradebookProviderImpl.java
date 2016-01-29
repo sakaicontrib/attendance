@@ -62,9 +62,9 @@ public class AttendanceGradebookProviderImpl implements AttendanceGradebookProvi
 
         if(isGradebookDefined(siteID)) {
             Tool tool = toolManager.getCurrentTool();
-            String appName = "sakai.attendance";
+            String appName = AttendanceConstants.TOOL_NAME;
             if(tool != null ) {
-                appName = tool.getId();
+                appName = tool.getTitle();
 
             }
 
@@ -76,7 +76,7 @@ public class AttendanceGradebookProviderImpl implements AttendanceGradebookProvi
                 gbExtAssesService.updateExternalAssessmentScoresString(siteID, aSUID, scores);
                 returnVal = true;
             } catch (Exception e) {
-                log.warn("Error creating external GB");
+                log.warn("Error creating external GB", e);
             }
         }
 
@@ -189,6 +189,6 @@ public class AttendanceGradebookProviderImpl implements AttendanceGradebookProvi
     }
 
     private String getAttendanceUID(Long id) {
-        return AttendanceConstants.TOOL_NAME + "." + id.toString();
+        return AttendanceConstants.SAKAI_TOOL_NAME + "." + id.toString();
     }
 }
