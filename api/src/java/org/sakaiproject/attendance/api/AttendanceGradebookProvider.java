@@ -16,6 +16,8 @@
 
 package org.sakaiproject.attendance.api;
 
+import org.sakaiproject.attendance.model.AttendanceSite;
+
 /**
  * A Provider which sends grades to the Gradebook
  *
@@ -24,5 +26,28 @@ package org.sakaiproject.attendance.api;
 public interface AttendanceGradebookProvider {
     void init();
 
+    /**
+     * Create a new External Assessment in the Gradebook
+     * @param aS, the AttendanceSite
+     */
+    boolean create(AttendanceSite aS);
+
+    /**
+     * Remove an External Assessment from the Gradebook
+     * @param aS, the AttendanceSite to remove
+     */
+    void remove(AttendanceSite aS);
+
+    /**
+     * Sends an AttendanceGrade, by ID, to the Gradebook
+     * @param id
+     */
     void sendToGradebook(Long id);
+
+    /**
+     * Is Gradebook Defined
+     * @param gbUID
+     * @return
+     */
+    boolean isGradebookDefined(String gbUID);
 }

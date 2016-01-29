@@ -36,6 +36,7 @@ public class AttendanceGradeFormPanel extends BasePanel {
     private static final    long            serialVersionUID = 1L;
 
     private                 FeedbackPanel   pageFeedbackPanel;
+    private                 boolean         previousSendToGradebook;
 
     public AttendanceGradeFormPanel(String id, FeedbackPanel pg) {
         super(id);
@@ -49,10 +50,20 @@ public class AttendanceGradeFormPanel extends BasePanel {
     }
 
     private Form<AttendanceSite> createSettingsForm() {
-        Form<AttendanceSite> aSForm = new Form<AttendanceSite>("settings", new CompoundPropertyModel<AttendanceSite>(attendanceLogic.getCurrentAttendanceSite())) {
+        AttendanceSite aS = attendanceLogic.getCurrentAttendanceSite();
+        this.previousSendToGradebook = aS.getSendToGradebook() == null ? false : aS.getSendToGradebook();
+        Form<AttendanceSite> aSForm = new Form<AttendanceSite>("settings", new CompoundPropertyModel<AttendanceSite>(aS)) {
             @Override
             public void onSubmit() {
                 AttendanceSite aS = (AttendanceSite) getDefaultModelObject();
+
+                if(aS.getSendToGradebook()){
+                    attendanceGradebookProvider.create(aS);
+                } else {
+                    if(previousSendToGradebook) {
+                        attendanceGradebookProvider.remove(aS);
+                    }
+                }
 
                 boolean result = attendanceLogic.updateAttendanceSite(aS);
 
@@ -76,6 +87,11 @@ public class AttendanceGradeFormPanel extends BasePanel {
         CheckBox isGradeShown = new CheckBox("isGradeShown");
         aSForm.add(isGradeShown);
         aSForm.add(isGradeShownLabel);
+
+        Label sendToGBLabel = new Label("send-to-gradebook", new ResourceModel("attendance.settings.grading.send.to.gradebook"));
+        CheckBox sendToGradebook = new CheckBox("sendToGradebook");
+        aSForm.add(sendToGradebook);
+        aSForm.add(sendToGBLabel);
 
         AjaxSubmitLink submit = new AjaxSubmitLink("submit") {
             @Override
