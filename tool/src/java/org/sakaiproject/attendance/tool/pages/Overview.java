@@ -68,8 +68,6 @@ public class Overview extends BasePage {
 		}
 
 		this.attendanceStatusProvider = new AttendanceStatusProvider(attendanceLogic.getCurrentAttendanceSite(), AttendanceStatusProvider.ACTIVE);
-
-		add(new Label("overview-info", new ResourceModel("attendance.overview.info")));
 		
 		createHeaders();
 		createTable();
@@ -160,16 +158,12 @@ public class Overview extends BasePage {
 		// Create empty table placeholder and make visible based on empty data provider
 		Label noEvents = new Label("no-events", getString("attendance.overview.no.items"));
 		noEvents.setEscapeModelStrings(false);
-		Label noEvents2 = new Label("no-events2", getString("attendance.overview.no.items2"));
-		noEvents2.setEscapeModelStrings(false);
 
 		if(eventDataProvider.size() > 0) {
 			noEvents.setVisible(false);
-			noEvents2.setVisible(false);
 		}
 
 		add(noEvents);
-		add(noEvents2);
 	}
 
 	private void createTakeAttendanceNow() {
