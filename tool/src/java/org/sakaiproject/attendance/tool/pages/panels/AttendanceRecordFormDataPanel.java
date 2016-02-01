@@ -215,9 +215,9 @@ public class AttendanceRecordFormDataPanel extends BasePanel {
 
         if(restricted) {
             commentContainer.setVisible(showCommentsToStudents);
-            saveComment.setVisible(showCommentsToStudents);
-            commentBox.setEnabled(showCommentsToStudents);
-            noComment.setVisible(showCommentsToStudents);
+            saveComment.setVisible(!showCommentsToStudents);
+            commentBox.setEnabled(!showCommentsToStudents);
+            noComment.setVisible(!showCommentsToStudents);
             commentContainer.add(new Label("add-header", new ResourceModel("attendance.record.form.view.comment")));
         } else {
             commentContainer.add(new Label("add-header", new ResourceModel("attendance.record.form.add.comment")));
