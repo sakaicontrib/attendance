@@ -67,23 +67,28 @@ public class AttendanceGradeFormPanel extends BasePanel {
             public void onSubmit() {
                 AttendanceSite aS = (AttendanceSite) getDefaultModelObject();
 
-                if(aS.getSendToGradebook()){
-                    if(previousSendToGradebook) { // if previously true, see if any relevant values have changed
-                        if(!previousName.equals(aS.getGradebookItemName()) || !previousMaxGrade.equals(aS.getMaximumGrade())){
-                            attendanceGradebookProvider.update(aS);
-                        }
-                    } else {
-                        attendanceGradebookProvider.create(aS);
-                    }
-                } else {
-                    if(previousSendToGradebook) {
-                        attendanceGradebookProvider.remove(aS);
-                    }
-                }
-
                 boolean result = attendanceLogic.updateAttendanceSite(aS);
 
                 if (result) {
+                    if(aS.getSendToGradebook()){
+                        if(previousSendToGradebook) { // if previously true, see if any relevant values have changed
+                            if(!previousName.equals(aS.getGradebookItemName()) || !previousMaxGrade.equals(aS.getMaximumGrade())){
+                                attendanceGradebookProvider.update(aS);
+                            }
+
+                            previousName = aS.getGradebookItemName();
+                            previousMaxGrade = aS.getMaximumGrade();
+                        } else {
+                            attendanceGradebookProvider.create(aS);
+                        }
+                    } else {
+                        if(previousSendToGradebook) {
+                            attendanceGradebookProvider.remove(aS);
+                        }
+                    }
+
+                    previousSendToGradebook = aS.getSendToGradebook();
+
                     getSession().info(getString("attendance.settings.grading.success"));
                 } else {
                     getSession().error(getString("attendance.settings.grading.failure"));
@@ -138,7 +143,6 @@ public class AttendanceGradeFormPanel extends BasePanel {
         final AjaxCheckBox sendToGradebook = new AjaxCheckBox("sendToGradebook") {
             @Override
             protected void onUpdate(AjaxRequestTarget target) {
-                //if checkbox is checked, then our component is shown
                 target.add(gradebook);
             }
         };
