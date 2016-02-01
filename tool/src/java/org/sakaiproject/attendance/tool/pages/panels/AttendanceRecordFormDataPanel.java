@@ -45,6 +45,7 @@ public class AttendanceRecordFormDataPanel extends BasePanel {
     private                 IModel<AttendanceRecord>    recordIModel;
     private                 boolean                     isStudentView;
     private                 boolean                     restricted ;
+    private                 boolean                     showCommentsToStudents;
     private                 List<Component>             ajaxTargets = new ArrayList<Component>();
     private                 String                      returnPage;
     private                 FeedbackPanel               pageFeedbackPanel;
@@ -56,6 +57,7 @@ public class AttendanceRecordFormDataPanel extends BasePanel {
     public AttendanceRecordFormDataPanel(String id, IModel<AttendanceRecord> aR, boolean iS, String rP, FeedbackPanel fP) {
         super(id, aR);
         this.recordIModel = aR;
+        this.showCommentsToStudents = recordIModel.getObject().getAttendanceEvent().getAttendanceSite().getShowCommentsToStudents();
         this.isStudentView = iS;
         this.restricted = this.role != null && this.role.equals("Student");
         this.returnPage = rP;
@@ -212,7 +214,13 @@ public class AttendanceRecordFormDataPanel extends BasePanel {
         ajaxTargets.add(commentContainer);
 
         if(restricted) {
-            commentContainer.setVisible(false);
+            commentContainer.setVisible(showCommentsToStudents);
+            saveComment.setVisible(showCommentsToStudents);
+            commentBox.setEnabled(showCommentsToStudents);
+            noComment.setVisible(showCommentsToStudents);
+            commentContainer.add(new Label("add-header", new ResourceModel("attendance.record.form.view.comment")));
+        } else {
+            commentContainer.add(new Label("add-header", new ResourceModel("attendance.record.form.add.comment")));
         }
 
         rF.add(commentContainer);

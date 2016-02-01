@@ -27,6 +27,9 @@
                 <input type="checkbox" wicket:id="is-active"> <input type="text" wicket:id="sort-order" size="2" class="position"> <span wicket:id="status" />
             </li>
         </ul>
+        <p class="editStatusInfo" style="margin-bottom:1em;">
+            <input type="checkbox" wicket:id="show-comments-to-students" id="show-comments-to-students" /><label for="show-comments-to-students"><wicket:message key="attendance.settings.show.comments.label"/></label>
+        </p>
         <input type="submit" wicket:id="submit-link" value="Save" />
     </form>
     <script type="text/javascript" src="javascript/jquery-ui.min.js"></script>

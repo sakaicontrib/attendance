@@ -60,8 +60,7 @@ public class AttendanceStatusFormPanel extends BasePanel {
             @Override
             protected void onSubmit() {
                 AttendanceSite aS = (AttendanceSite) getDefaultModelObject();
-                List<AttendanceStatus> attendanceStatuses = new ArrayList<AttendanceStatus>(aS.getAttendanceStatuses());
-                boolean result = attendanceLogic.updateAttendanceStatuses(attendanceStatuses);
+                boolean result = attendanceLogic.updateAttendanceSite(aS);
                 if(result){
                     getSession().info(getString("attendance.settings.edit.status.save.success"));
                 } else {
@@ -107,6 +106,8 @@ public class AttendanceStatusFormPanel extends BasePanel {
         };
 
         editStatusSettingsForm.add(submit);
+
+        editStatusSettingsForm.add(new CheckBox("show-comments-to-students", new PropertyModel<Boolean>(this.attendanceSiteIModel, "showCommentsToStudents")));
 
     }
 }

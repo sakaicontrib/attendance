@@ -38,6 +38,7 @@ public class AttendanceSite implements Serializable {
 	@Getter @Setter private					Boolean					isGradeShown;
 	@Getter @Setter private					Boolean					sendToGradebook;
 	@Getter @Setter private					String					gradebookItemName;
+	@Getter @Setter private					Boolean					showCommentsToStudents;
 	@Getter	@Setter	private 				Set<AttendanceStatus>	attendanceStatuses	= new HashSet<AttendanceStatus>(0);
 
 	public AttendanceSite(String siteID){
@@ -58,7 +59,9 @@ public class AttendanceSite implements Serializable {
 				getDefaultStatus() == that.getDefaultStatus() &&
 				Objects.equals(getMaximumGrade(), that.getMaximumGrade()) &&
 				Objects.equals(getIsGradeShown(), that.getIsGradeShown()) &&
+				Objects.equals(getSendToGradebook(), that.getSendToGradebook()) &&
 				Objects.equals(getGradebookItemName(), that.getGradebookItemName()) &&
+				Objects.equals(getShowCommentsToStudents(), that.getShowCommentsToStudents()) &&
 				Objects.equals(getAttendanceStatuses(), that.getAttendanceStatuses());
 	}
 
