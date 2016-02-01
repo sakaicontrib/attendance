@@ -68,6 +68,9 @@ public class AttendanceRecordFormDataPanel extends BasePanel {
         Form<AttendanceRecord> recordForm = new Form<AttendanceRecord>("attendanceRecord", this.recordIModel) {
             protected void onSubmit() {
                 AttendanceRecord aR = (AttendanceRecord) getDefaultModelObject();
+                if(aR.getStatus() == null) {
+                    aR.setStatus(Status.UNKNOWN);
+                }
                 boolean result = attendanceLogic.updateAttendanceRecord(aR);
                 String[] resultMsgVars = new String[]{sakaiProxy.getUserSortName(aR.getUserID()), aR.getAttendanceEvent().getName(), getStatusString(aR.getStatus())};
                 StringResourceModel temp;
