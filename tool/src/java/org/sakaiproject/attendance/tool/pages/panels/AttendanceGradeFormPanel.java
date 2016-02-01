@@ -109,7 +109,7 @@ public class AttendanceGradeFormPanel extends BasePanel {
         NumberTextField<Double> maximum = new NumberTextField<Double>("maximumGrade");
         maximum.setMinimum(0.1);
         maximum.setStep(0.1);
-        maximum.add(new AjaxFormComponentUpdatingBehavior("onchange") {
+        maximum.add(new AjaxFormComponentUpdatingBehavior("onkeyup") {
             @Override
             protected void onUpdate(AjaxRequestTarget target) {
                 target.add(grading);
