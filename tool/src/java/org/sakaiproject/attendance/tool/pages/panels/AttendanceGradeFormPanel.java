@@ -67,6 +67,10 @@ public class AttendanceGradeFormPanel extends BasePanel {
             public void onSubmit() {
                 AttendanceSite aS = (AttendanceSite) getDefaultModelObject();
 
+                if(aS.getMaximumGrade() == null && previousMaxGrade != null) {
+                    aS.setSendToGradebook(false);
+                }
+
                 boolean result = attendanceLogic.updateAttendanceSite(aS);
 
                 if (result) {
@@ -77,7 +81,6 @@ public class AttendanceGradeFormPanel extends BasePanel {
                             }
 
                             previousName = aS.getGradebookItemName();
-                            previousMaxGrade = aS.getMaximumGrade();
                         } else {
                             attendanceGradebookProvider.create(aS);
                         }
@@ -87,6 +90,7 @@ public class AttendanceGradeFormPanel extends BasePanel {
                         }
                     }
 
+                    previousMaxGrade = aS.getMaximumGrade();
                     previousSendToGradebook = aS.getSendToGradebook();
 
                     getSession().info(getString("attendance.settings.grading.success"));
@@ -135,6 +139,7 @@ public class AttendanceGradeFormPanel extends BasePanel {
         Label gbItemName = new Label("gradebook-item-name", new ResourceModel("attendance.settings.grading.gradebook.item.name"));
         TextField<String> gradebookItemName = new TextField<String>("gradebookItemName");
         gradebookItemName.add(new GradebookItemNameValidator(aS, aS.getGradebookItemName()));
+        gradebookItemName.setRequired(true);
         gradebook.add(gbItemName);
         gradebook.add(gradebookItemName);
         grading.add(gradebook);
