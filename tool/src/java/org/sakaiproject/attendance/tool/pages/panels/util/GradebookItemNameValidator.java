@@ -47,7 +47,7 @@ public class GradebookItemNameValidator implements IValidator<String> {
         final String name = validatable.getValue();
 
         if(attendanceGradebookProvider.isAssessmentDefined(siteID, aSID)) {
-            if(!oldValue.equals(name)) {
+            if(oldValue == null || !oldValue.equals(name)) {
                 if(attendanceGradebookProvider.isGradebookAssignmentDefined(siteID, name)){
                     error(validatable, "gradebook.name.defined");
                 }
