@@ -47,6 +47,7 @@ public class AttendanceSite implements Serializable {
 		this.isGradeShown = false;
 		this.sendToGradebook = false;
 		this.gradebookItemName = AttendanceConstants.GRADEBOOK_ITEM_NAME;
+		this.showCommentsToStudents = false;
 	}
 
 	@Override
