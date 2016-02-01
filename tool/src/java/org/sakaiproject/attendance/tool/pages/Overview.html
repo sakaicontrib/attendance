@@ -64,8 +64,8 @@
 		<tr>
 			<td colspan="100" style="background-color:#eee;">
 				<form wicket:id="take-attendance-now-form" class="takeAttendanceNowForm">
-					<input type="submit" wicket:id="take-attendance-now" wicket:message="value:attendance.now.button" class="active"/>
 					<img id="loadingGif" class="loadingGif" src="images/loading.gif" alt="Loading" style="display: none"/>
+					<input type="submit" wicket:id="take-attendance-now" wicket:message="value:attendance.now.button" class="active"/>
 				</form>
 			</td>
 		</tr>
@@ -92,6 +92,7 @@
 		});
 		$("input.active").on("click", function(){
 			$("#loadingGif").show();
+			$("input.active").css('visibility', 'hidden');
 		});
 	</script>
 	<script type="text/javascript" src="javascript/print.js"></script>
