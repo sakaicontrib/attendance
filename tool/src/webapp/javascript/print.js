@@ -14,8 +14,6 @@
  *  limitations under the License.
  */
 
-$("#printContainer").hide();
-
 $(".printLink").on("click", function(){
     parent.window.scrollTo(0,0);
     $("#printMask").show();

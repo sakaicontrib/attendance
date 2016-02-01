@@ -16,6 +16,7 @@
 
 package org.sakaiproject.attendance.tool.pages;
 
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormSubmitBehavior;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -136,6 +137,8 @@ public class EventView extends BasePage {
         this.printPanel = new PrintPanel("print-panel", new Model<AttendanceEvent>(attendanceEvent));
 
         printContainer.add(printPanel);
+
+        printContainer.add(AttributeModifier.append("class", "printHidden"));
 
         add(printContainer);
     }

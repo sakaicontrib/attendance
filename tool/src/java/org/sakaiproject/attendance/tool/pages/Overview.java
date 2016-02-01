@@ -16,6 +16,7 @@
 
 package org.sakaiproject.attendance.tool.pages;
 
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.RestartResponseException;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -60,6 +61,8 @@ public class Overview extends BasePage {
 
 	private AttendanceStatusProvider attendanceStatusProvider;
 
+	private Model<String> printHiddenClass = new Model<String>("printHidden");
+
 	public Overview() {
 		disableLink(this.firstLink);
 
@@ -78,6 +81,8 @@ public class Overview extends BasePage {
 		this.printPanel = new PrintPanel("print-panel", new Model<AttendanceEvent>());
 
 		printContainer.add(printPanel);
+
+		printContainer.add(AttributeModifier.append("class", printHiddenClass));
 
 		add(printContainer);
 
@@ -148,6 +153,7 @@ public class Overview extends BasePage {
 						printPanel = new PrintPanel("print-panel", item.getModel());
 						printContainer.setOutputMarkupId(true);
 						printContainer.addOrReplace(printPanel);
+						printHiddenClass.setObject("printVisible");
 						ajaxRequestTarget.add(printContainer);
 					}
 				});
