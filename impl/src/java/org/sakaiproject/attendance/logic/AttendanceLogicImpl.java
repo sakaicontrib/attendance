@@ -498,7 +498,9 @@ public class AttendanceLogicImpl implements AttendanceLogic {
 
 		for(Map.Entry<String, AttendanceGrade> entry : gradeMap.entrySet())
 		{
-			returnMap.put(entry.getKey(), entry.getValue().getGrade().toString());
+			Double doubleValue = entry.getValue().getGrade();
+			String value = doubleValue == null ? null : doubleValue.toString();
+			returnMap.put(entry.getKey(), value);
 		}
 
 		return returnMap;
