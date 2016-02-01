@@ -188,10 +188,6 @@ th.overviewDateCol, td.overviewDateCol, td.takeAttendanceDateHeader, th.takeAtte
     min-width: 84px;
 }
 
-table.eventViewTable {
-    float: left;
-}
-
 th.overviewEditCol, td.overviewEditCol, th.itemListEditCol, td.itemListEditCol, td.overviewGradeCol, th.overviewGradeCol {
     border-left-width: 3px;
     text-align: center;
