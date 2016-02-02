@@ -99,13 +99,6 @@ public class AttendanceLogicImpl implements AttendanceLogic {
 	public AttendanceEvent getAttendanceEvent(long id) {
 		return dao.getAttendanceEvent(id);
 	}
-	
-	/**
-	 * {@inheritDoc}
-	 */
-	public List<AttendanceEvent> getAttendanceEvents() {
-		return dao.getAttendanceEvents();
-	}
 
 	/**
 	 * {@inheritDoc}
@@ -119,7 +112,7 @@ public class AttendanceLogicImpl implements AttendanceLogic {
 	 * {@inheritDoc}
 	 */
 	public List<AttendanceEvent> getAttendanceEventsForSite(AttendanceSite aS) {
-		return dao.getAttendanceEventsForSite(aS);
+		return safeAttendanceEventListReturn(dao.getAttendanceEventsForSite(aS));
 	}
 
 	/**
@@ -406,21 +399,21 @@ public class AttendanceLogicImpl implements AttendanceLogic {
 	 * {@inheritDoc}
 	 */
 	public List<AttendanceStatus> getActiveStatusesForSite(String siteId) {
-		return dao.getActiveStatusesForSite(getAttendanceSite(siteId));
+		return safeAttendanceStatusListReturn(dao.getActiveStatusesForSite(getAttendanceSite(siteId)));
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	public List<AttendanceStatus> getActiveStatusesForSite(AttendanceSite attendanceSite) {
-		return dao.getActiveStatusesForSite(attendanceSite);
+		return safeAttendanceStatusListReturn(dao.getActiveStatusesForSite(attendanceSite));
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	public List<AttendanceStatus> getAllStatusesForSite(AttendanceSite attendanceSite) {
-		return dao.getAllStatusesForSite(attendanceSite);
+		return safeAttendanceStatusListReturn(dao.getAllStatusesForSite(attendanceSite));
 	}
 
 	/**
@@ -611,7 +604,6 @@ public class AttendanceLogicImpl implements AttendanceLogic {
 	}
 
 	private boolean generateMissingAttendanceStatusesForSite(AttendanceSite attendanceSite) {
-
 		Set<AttendanceStatus> currentAttendanceStatuses = attendanceSite.getAttendanceStatuses();
 		List<Status> previouslyCreatedStatuses = new ArrayList<Status>();
 		List<AttendanceStatus> statusesToBeAdded = new ArrayList<AttendanceStatus>();
@@ -651,6 +643,22 @@ public class AttendanceLogicImpl implements AttendanceLogic {
 		}
 
 		return maxSortOrder + 1;
+	}
+
+	private List<AttendanceEvent> safeAttendanceEventListReturn(List<AttendanceEvent> l) {
+		if(l == null) {
+			return new ArrayList<AttendanceEvent>();
+		}
+
+		return l;
+	}
+
+	private List<AttendanceStatus> safeAttendanceStatusListReturn(List<AttendanceStatus> l) {
+		if(l == null) {
+			return new ArrayList<AttendanceStatus>();
+		}
+
+		return l;
 	}
 	
 	@Setter

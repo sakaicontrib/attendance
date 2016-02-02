@@ -59,12 +59,6 @@ public interface AttendanceDao {
 	 * @return an item or null if no result
 	 */
 	AttendanceEvent getAttendanceEvent(long id);
-	
-	/**
-	 * Get all Events
-	 * @return a list of items, an empty list if no items
-	 */
-	List<AttendanceEvent> getAttendanceEvents();
 
 	/**
 	 * Get all Events for A site

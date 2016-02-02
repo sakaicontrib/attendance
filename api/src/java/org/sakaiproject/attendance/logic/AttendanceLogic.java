@@ -58,12 +58,6 @@ public interface AttendanceLogic {
 	 * @return
 	 */
 	AttendanceEvent getAttendanceEvent(long id);
-	
-	/**
-	 * Get all events (should probably never be used)
-	 * @return
-	 */
-	List<AttendanceEvent> getAttendanceEvents();
 
 	/**
 	 * Gets all the evetns by Sakai Site ID

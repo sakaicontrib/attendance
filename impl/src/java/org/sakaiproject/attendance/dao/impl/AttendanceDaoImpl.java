@@ -121,26 +121,6 @@ public class AttendanceDaoImpl extends HibernateDaoSupport implements Attendance
 
 		return (AttendanceEvent) getByIDHelper(id, QUERY_GET_ATTENDANCE_EVENT);
 	}
-	
-	/**
-	 * {@inheritDoc}
-	 */
-	@SuppressWarnings("unchecked")
-	public List<AttendanceEvent> getAttendanceEvents() {
-		if(log.isDebugEnabled()) {
-			log.debug("getAttendanceEvents()");
-		}
-
-		HibernateCallback hcb = new HibernateCallback() {
-			@Override
-			public Object doInHibernate(Session session) throws HibernateException, SQLException {
-				Query q = session.getNamedQuery(QUERY_GET_ATTENDANCE_EVENTS);
-				return q.list();
-			}
-		};
-
-		return (List<AttendanceEvent>) getHibernateTemplate().execute(hcb);
-	}
 
 	/**
 	 * {@inheritDoc}
@@ -348,8 +328,6 @@ public class AttendanceDaoImpl extends HibernateDaoSupport implements Attendance
 		}
 
 		try {
-
-
 			HibernateCallback hcb = new HibernateCallback() {
 				@Override
 				public Object doInHibernate(Session session) throws HibernateException, SQLException {
@@ -510,7 +488,7 @@ public class AttendanceDaoImpl extends HibernateDaoSupport implements Attendance
 	@SuppressWarnings("unchecked")
 	private List<AttendanceEvent> getEventsForAttendanceSiteHelper(final AttendanceSite aS){
 		if(log.isDebugEnabled()){
-			log.debug("getAttendanceEventsForSite()");
+			log.debug("getAttendanceEventsForSiteHelper()");
 		}
 
 		try {
