@@ -36,7 +36,7 @@ public interface AttendanceGradebookProvider {
      * Remove an External Assessment from the Gradebook
      * @param aS, the AttendanceSite to remove
      */
-    void remove(AttendanceSite aS);
+    boolean remove(AttendanceSite aS);
 
     /**
      * Updates the external Assessment in the Gradebook
@@ -48,17 +48,17 @@ public interface AttendanceGradebookProvider {
      * Sends an AttendanceGrade, by ID, to the Gradebook
      * @param id
      */
-    void sendToGradebook(Long id);
+    boolean sendToGradebook(Long id);
 
     /**
-     * Is Gradebook Defined
+     * Returns if a Gradebook has been Defined in a site
      * @param gbUID
      * @return
      */
     boolean isGradebookDefined(String gbUID);
 
     /**
-     * Returns if gradebook has an internal assignment defined with the provided title
+     * Returns if gradebook has an assignment defined with the provided title
      * @param gbUID
      * @param title
      * @return

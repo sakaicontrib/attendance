@@ -86,6 +86,11 @@ public interface AttendanceDao {
 	 */
 	boolean addAttendanceEvent(AttendanceEvent t);
 
+	/**
+	 * Serializable function used to save an AttendanceEvent as part of the "Take Attendance Now" feature
+	 * @param e
+	 * @return
+     */
 	Serializable addAttendanceEventNow(AttendanceEvent e);
 
 	/**

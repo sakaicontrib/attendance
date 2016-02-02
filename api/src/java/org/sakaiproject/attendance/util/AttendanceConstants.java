@@ -25,14 +25,9 @@ package org.sakaiproject.attendance.util;
  */
 public class AttendanceConstants {
     /*
-     * general
+     * General
      */
-    public static final String TOOL_NAME = "Attendance";
-    public static final String SAKAI_TOOL_NAME = "sakai.attendance";
-    public static final String GRADEBOOK_ITEM_NAME = "Attendance";
-
-    /*
-     * Events
-     */
-    public static final String EVENT_GRADE_SAVED = "attend.grade.save";
+    public static final String TOOL_NAME            = "Attendance";
+    public static final String SAKAI_TOOL_NAME      = "sakai.attendance";
+    public static final String GRADEBOOK_ITEM_NAME  = "Attendance";
 }

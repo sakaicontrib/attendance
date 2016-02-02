@@ -86,7 +86,7 @@ public class AttendanceGradebookProviderImpl implements AttendanceGradebookProvi
     /**
      * {@inheritDoc}
      */
-    public void remove(AttendanceSite aS) {
+    public boolean remove(AttendanceSite aS) {
         if(log.isDebugEnabled()) {
             log.debug("remove GB for AS " + aS.getSiteID());
         }
@@ -94,10 +94,13 @@ public class AttendanceGradebookProviderImpl implements AttendanceGradebookProvi
         if(isGradebookDefined(aS.getSiteID())) {
             try {
                 gbExtAssesService.removeExternalAssessment(aS.getSiteID(), getAttendanceUID(aS));
+                return true;
             } catch (AssessmentNotFoundException e) {
-                log.info("Attempted to remove AttendanceSite " + aS.getSiteID() + " from GB failed. Assessment not found", e);
+                log.warn("Attempted to remove AttendanceSite " + aS.getSiteID() + " from GB failed. Assessment not found", e);
+                return false;
             }
         }
+        return false;
     }
 
     /**
@@ -128,13 +131,13 @@ public class AttendanceGradebookProviderImpl implements AttendanceGradebookProvi
     /**
      * {@inheritDoc}
      */
-    public void sendToGradebook(Long id) {
+    public boolean sendToGradebook(Long id) {
         if(log.isDebugEnabled()) {
             log.debug("sendToGradebook");
         }
 
         if(id == null) {
-            return;
+            return false;
         }
 
         AttendanceGrade aG = attendanceLogic.getAttendanceGrade(id);
@@ -151,12 +154,15 @@ public class AttendanceGradebookProviderImpl implements AttendanceGradebookProvi
                     // exists, update current grade
                     String grade = aG.getGrade() == null ? null : aG.getGrade().toString();
                     gbExtAssesService.updateExternalAssessmentScore(siteID, aSUID, aG.getUserID(), grade);
+                    return true;
                 } else {
                     //does not exist, add to GB and add all grades
-                   create(aS);
+                   return create(aS);
                 }
             }
         }
+
+        return false;
     }
 
     /**

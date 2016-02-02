@@ -188,6 +188,9 @@ public class AttendanceDaoImpl extends HibernateDaoSupport implements Attendance
 		}
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public Serializable addAttendanceEventNow(AttendanceEvent attendanceEvent) {
 
 		if(log.isDebugEnabled()) {
@@ -341,19 +344,26 @@ public class AttendanceDaoImpl extends HibernateDaoSupport implements Attendance
 	@SuppressWarnings("unchecked")
 	public List<AttendanceStatus> getActiveStatusesForSite(final AttendanceSite attendanceSite) {
 		if(log.isDebugEnabled()){
-			log.debug("getActiveStatusesForSite(AttendanceSite attendanceSite)");
+			log.debug("getActiveStatusesForSite(AttendanceSite " + attendanceSite.getSiteID() + " )");
 		}
 
-		HibernateCallback hcb = new HibernateCallback() {
-			@Override
-			public Object doInHibernate(Session session) throws HibernateException, SQLException {
-				Query q = session.getNamedQuery(QUERY_GET_ACTIVE_ATTENDANCE_STATUSES_FOR_SITE);
-				q.setParameter(ATTENDANCE_SITE, attendanceSite, new ManyToOneType("org.sakaiproject.attendance.model.AttendanceSite"));
-				return q.list();
-			}
-		};
+		try {
 
-		return (List<AttendanceStatus>) getHibernateTemplate().executeFind(hcb);
+
+			HibernateCallback hcb = new HibernateCallback() {
+				@Override
+				public Object doInHibernate(Session session) throws HibernateException, SQLException {
+					Query q = session.getNamedQuery(QUERY_GET_ACTIVE_ATTENDANCE_STATUSES_FOR_SITE);
+					q.setParameter(ATTENDANCE_SITE, attendanceSite, new ManyToOneType("org.sakaiproject.attendance.model.AttendanceSite"));
+					return q.list();
+				}
+			};
+
+			return (List<AttendanceStatus>) getHibernateTemplate().executeFind(hcb);
+		} catch (DataAccessException e) {
+			log.error("getActiveStatusesForSite failed", e);
+			return null;
+		}
 	}
 
 	/**
@@ -365,16 +375,21 @@ public class AttendanceDaoImpl extends HibernateDaoSupport implements Attendance
 			log.debug("getAllStatusesForSite(AttendanceSite attendanceSite)");
 		}
 
-		HibernateCallback hcb = new HibernateCallback() {
-			@Override
-			public Object doInHibernate(Session session) throws HibernateException, SQLException {
-				Query q = session.getNamedQuery(QUERY_GET_ALL_ATTENDANCE_STATUSES_FOR_SITE);
-				q.setParameter(ATTENDANCE_SITE, attendanceSite, new ManyToOneType("org.sakaiproject.attendance.model.AttendanceSite"));
-				return q.list();
-			}
-		};
+		try {
+			HibernateCallback hcb = new HibernateCallback() {
+                @Override
+                public Object doInHibernate(Session session) throws HibernateException, SQLException {
+                    Query q = session.getNamedQuery(QUERY_GET_ALL_ATTENDANCE_STATUSES_FOR_SITE);
+                    q.setParameter(ATTENDANCE_SITE, attendanceSite, new ManyToOneType("org.sakaiproject.attendance.model.AttendanceSite"));
+                    return q.list();
+                }
+            };
 
-		return (List<AttendanceStatus>) getHibernateTemplate().executeFind(hcb);
+			return (List<AttendanceStatus>) getHibernateTemplate().executeFind(hcb);
+		} catch (DataAccessException e) {
+			log.error("getAllStatusesForSite failed", e);
+			return null;
+		}
 	}
 
 	/**
@@ -498,16 +513,21 @@ public class AttendanceDaoImpl extends HibernateDaoSupport implements Attendance
 			log.debug("getAttendanceEventsForSite()");
 		}
 
-		HibernateCallback hcb = new HibernateCallback() {
-			@Override
-			public Object doInHibernate(Session session) throws HibernateException, SQLException {
-				Query q = session.getNamedQuery(QUERY_GET_ATTENDANCE_EVENTS_FOR_SITE);
-				q.setParameter(ATTENDANCE_SITE, aS, new ManyToOneType("org.sakaiproject.attendance.model.AttendanceSite"));
-				return q.list();
-			}
-		};
+		try {
+			HibernateCallback hcb = new HibernateCallback() {
+                @Override
+                public Object doInHibernate(Session session) throws HibernateException, SQLException {
+                    Query q = session.getNamedQuery(QUERY_GET_ATTENDANCE_EVENTS_FOR_SITE);
+                    q.setParameter(ATTENDANCE_SITE, aS, new ManyToOneType("org.sakaiproject.attendance.model.AttendanceSite"));
+                    return q.list();
+                }
+            };
 
-		return (List<AttendanceEvent>) getHibernateTemplate().executeFind(hcb);
+			return (List<AttendanceEvent>) getHibernateTemplate().executeFind(hcb);
+		} catch (DataAccessException e) {
+			log.error("getEventsForAttendanceSiteHelper failed", e);
+			return null;
+		}
 	}
 
 	// Generic Function to get something by it's ID.
@@ -516,16 +536,21 @@ public class AttendanceDaoImpl extends HibernateDaoSupport implements Attendance
 			log.debug("getByIDHelper() id: '" + String.valueOf(id) + "' String: " + queryString);
 		}
 
-		HibernateCallback hcb = new HibernateCallback() {
-			@Override
-			public Object doInHibernate(Session session) throws HibernateException, SQLException {
-				Query q = session.getNamedQuery(queryString);
-				q.setParameter(ID, id, new LongType());
-				q.setMaxResults(1);
-				return q.uniqueResult();
-			}
-		};
+		try {
+			HibernateCallback hcb = new HibernateCallback() {
+                @Override
+                public Object doInHibernate(Session session) throws HibernateException, SQLException {
+                    Query q = session.getNamedQuery(queryString);
+                    q.setParameter(ID, id, new LongType());
+                    q.setMaxResults(1);
+                    return q.uniqueResult();
+                }
+            };
 
-		return getHibernateTemplate().execute(hcb);
+			return getHibernateTemplate().execute(hcb);
+		} catch (DataAccessException e) {
+			log.error("getByIDHelper for " + queryString + " failed", e);
+			return null;
+		}
 	}
 }
