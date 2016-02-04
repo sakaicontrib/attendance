@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2016, The Apereo Foundation
+ *  Copyright (c) 2016, University of Dayton
  *
  *  Licensed under the Educational Community License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -28,11 +28,19 @@ import org.sakaiproject.user.api.User;
 
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
+/**
+ * PrintPanel is a panel which allows users to pring an Attendance Sheet or Sign-in Sheet
+ *
+ * @author David Bauer [dbauer1 (at) udayton (dot) edu]
+ */
 public class PrintPanel extends BasePanel {
     private static final long serialVersionUID = 1L;
-
+    //TODO: Internationalize
     private static final List<String> PRINT_OPTIONS = Arrays.asList("Sign-In Sheet", "Attendance Sheet");
 
     private IModel<AttendanceEvent> eventModel;

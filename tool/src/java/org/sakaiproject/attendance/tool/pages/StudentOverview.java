@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2016, The Apereo Foundation
+ *  Copyright (c) 2016, University of Dayton
  *
  *  Licensed under the Educational Community License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -28,9 +28,10 @@ import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.data.DataView;
-import org.sakaiproject.attendance.model.AttendanceStatus;
-import org.apache.wicket.model.*;
+import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.model.ResourceModel;
 import org.sakaiproject.attendance.model.AttendanceGrade;
+import org.sakaiproject.attendance.model.AttendanceStatus;
 import org.sakaiproject.attendance.model.Status;
 import org.sakaiproject.attendance.tool.dataproviders.AttendanceStatusProvider;
 import org.sakaiproject.attendance.tool.dataproviders.StudentDataProvider;
@@ -43,7 +44,10 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Created by Leonardo Canessa [lcanessa1 (at) udayton (dot) edu]
+ * StudentOverview is an overview of all the students and their statistics in the AttendanceSite
+ *
+ * @author Leonardo Canessa [lcanessa1 (at) udayton (dot) edu]
+ * @author David Bauer [dbauer1 (at) udayton (dot) edu]
  */
 public class StudentOverview extends BasePage {
     private static final long serialVersionUID = 1L;

@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2016, The Apereo Foundation
+ *  Copyright (c) 2016, University of Dayton
  *
  *  Licensed under the Educational Community License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -20,11 +20,8 @@ import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
-
 import lombok.Setter;
-
 import org.apache.log4j.Logger;
-
 import org.sakaiproject.attendance.export.util.SortNameUserComparator;
 import org.sakaiproject.attendance.logic.AttendanceLogic;
 import org.sakaiproject.attendance.logic.SakaiProxy;
@@ -39,6 +36,11 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * Implementation of PDFEventExporter, {@link org.sakaiproject.attendance.export.PDFEventExporter}
+ *
+ * @author David Bauer [dbauer1 (at) udayton (dot) edu]
+ */
 public class PDFEventExporterImpl implements PDFEventExporter {
 
     private static final Logger log = Logger.getLogger(PDFEventExporterImpl.class);
@@ -54,6 +56,9 @@ public class PDFEventExporterImpl implements PDFEventExporter {
     private List<User> users;
     private String groupOrSiteTitle;
 
+    /**
+     * {@inheritDoc}
+     */
     public void createSignInPdf(AttendanceEvent event, OutputStream outputStream, List<User> usersToPrint, String groupOrSiteTitle) {
 
         this.event = event;
@@ -64,6 +69,9 @@ public class PDFEventExporterImpl implements PDFEventExporter {
         buildDocumentShell(outputStream, true);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void createAttendanceSheetPdf(AttendanceEvent event, OutputStream outputStream, List<User> usersToPrint, String groupOrSiteTitle) {
 
         this.event = event;

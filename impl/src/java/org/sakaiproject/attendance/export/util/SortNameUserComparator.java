@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2016, The Apereo Foundation
+ *  Copyright (c) 2016, University of Dayton
  *
  *  Licensed under the Educational Community License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -17,9 +17,13 @@
 package org.sakaiproject.attendance.export.util;
 
 import org.sakaiproject.user.api.User;
-
 import java.util.Comparator;
 
+/**
+ * Compares User Sort Names
+ *
+ * @author David Bauer [dbauer1 (at) udayton (dot) edu]
+ */
 public class SortNameUserComparator implements Comparator<User>{
     @Override
     public int compare(User o1, User o2) {

@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2016, The Apereo Foundation
+ *  Copyright (c) 2016, University of Dayton
  *
  *  Licensed under the Educational Community License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -32,7 +32,10 @@ import org.sakaiproject.attendance.model.AttendanceSite;
 import org.sakaiproject.attendance.util.AttendanceConstants;
 
 /**
- * Created by Leonardo Canessa [lcanessa1 (at) udayton (dot) edu]
+ * AttendanceGradePanel allows for inputting of AttendanceGrades
+ *
+ * @author Leonardo Canessa [lcanessa1 (at) udayton (dot) edu]
+ * @author David Bauer [dbauer1 (at) udayton (dot) edu]
  */
 public class AttendanceGradePanel extends BasePanel {
     private static final    long                    serialVersionUID = 1L;

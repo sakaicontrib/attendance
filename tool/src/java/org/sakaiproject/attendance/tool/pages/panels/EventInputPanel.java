@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2015, The Apereo Foundation
+ *  Copyright (c) 2016, University of Dayton
  *
  *  Licensed under the Educational Community License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -16,31 +16,27 @@
 
 package org.sakaiproject.attendance.tool.pages.panels;
 
-import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.markup.html.form.AjaxCheckBox;
 import org.apache.wicket.extensions.yui.calendar.DateTimeField;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
-import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.model.StringResourceModel;
 import org.sakaiproject.attendance.model.AttendanceEvent;
-import org.sakaiproject.attendance.tool.pages.panels.models.RRuleInputModel;
-import org.sakaiproject.attendance.tool.pages.panels.util.SequentialDateTimeFieldValidator;
 import org.sakaiproject.attendance.tool.util.PlaceholderBehavior;
 
 
 /**
- * Created by Leonardo Canessa [lcanessa1 (at) udayton (dot) edu]
+ * EventInputPanel is used to get AttendanceEvent settings for a new or existing AttendanceEvent
+ *
+ * @author Leonardo Canessa [lcanessa1 (at) udayton (dot) edu]
+ * @author David Bauer [dbauer1 (at) udayton (dot) edu]
  */
 public class EventInputPanel extends BasePanel {
     private static final long serialVersionUID = 1L;
     private IModel<AttendanceEvent> eventModel;
-    private IModel<RRuleInputModel> rrule;
-    private ReoccurrenceInputPanel rPanel;
 
     public EventInputPanel(String id, IModel<AttendanceEvent> event) {
         super(id, event);
@@ -66,8 +62,6 @@ public class EventInputPanel extends BasePanel {
         };
         createLabels(event);
         createValues(event);
-        createSubForm(event);
-        createAjax(event);
 
         return event;
     }
@@ -129,29 +123,6 @@ public class EventInputPanel extends BasePanel {
         event.add(isRequired);
         event.add(location);
         event.add(releasedTo);
-
-        // validators
-        //event.add(new SequentialDateTimeFieldValidator(startDateTime, endDateTime));
-    }
-
-    private void createSubForm(Form<AttendanceEvent> event) {
-        this.rrule  = new CompoundPropertyModel<RRuleInputModel>(new RRuleInputModel());
-        this.rPanel = new ReoccurrenceInputPanel("reoccurrencePanel", this.eventModel, this.rrule);
-        this.rPanel.setVisible(false);
-        event.add(this.rPanel);
-    }
-
-    private void createAjax(Form<AttendanceEvent> event) {
-        AjaxCheckBox isReoccurringAjaxCheckBox = new AjaxCheckBox("isReoccurring") {
-            @Override
-            protected void onUpdate(AjaxRequestTarget ajaxRequestTarget) {
-                rPanel.setVisible(eventModel.getObject().getIsReoccurring());
-                ajaxRequestTarget.add(rPanel);
-            }
-
-        };
-        isReoccurringAjaxCheckBox.setVisible(false);
-        event.add(isReoccurringAjaxCheckBox);
     }
 }
 

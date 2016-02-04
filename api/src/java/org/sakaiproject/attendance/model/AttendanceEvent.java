@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2015, The Apereo Foundation
+ *  Copyright (c) 2016, University of Dayton
  *
  *  Licensed under the Educational Community License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -22,8 +22,10 @@ import java.io.Serializable;
 import java.util.*;
 
 /**
- * Created by Leonardo Canessa [lcanessa1 (at) udayton (dot) edu]au)
+ * Represents an AttendanceEvent, such as a class meeting or seminar
  *
+ * @author Leonardo Canessa [lcanessa1 (at) udayton (dot) edu])
+ * @author David Bauer [dbauer1 (at) udayton (dot) edu]
  */
 @NoArgsConstructor
 @AllArgsConstructor
@@ -42,7 +44,7 @@ public class AttendanceEvent implements Serializable {
 	@Getter @Setter private 				String 					location;
 	@Getter @Setter private 				Set<AttendanceRecord> 	records = new HashSet<AttendanceRecord>(0);
 
-	// Create a copy constructor
+	// Copy constructor
 	public AttendanceEvent(AttendanceEvent attendanceEvent){
 		this.name 			= attendanceEvent.name;
 		this.startDateTime 	= attendanceEvent.startDateTime;

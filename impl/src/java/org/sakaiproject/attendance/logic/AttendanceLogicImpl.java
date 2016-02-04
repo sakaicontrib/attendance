@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2015, The Apereo Foundation
+ *  Copyright (c) 2016, University of Dayton
  *
  *  Licensed under the Educational Community License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -19,23 +19,13 @@ package org.sakaiproject.attendance.logic;
 import java.io.Serializable;
 import java.util.*;
 
-/*import com.google.ical.compat.jodatime.DateTimeIterator;
-import com.google.ical.compat.jodatime.DateTimeIteratorFactory;
-import com.google.ical.iter.RecurrenceIterator;
-import com.google.ical.iter.RecurrenceIteratorFactory;
-import com.google.ical.values.DateValueImpl;
-import com.google.ical.values.RRule;
-import de.scravy.pair.Pair;
-import de.scravy.pair.Pairs;*/
 import lombok.Setter;
 
 import org.apache.log4j.Logger;
 
-//import org.joda.time.DateTime;
 import org.sakaiproject.attendance.dao.AttendanceDao;
 import org.sakaiproject.attendance.model.*;
 import org.sakaiproject.user.api.User;
-//import org.sakaiproject.attendance.model.Reoccurrence;
 
 /**
  * Implementation of {@link AttendanceLogic}
@@ -89,23 +79,8 @@ public class AttendanceLogicImpl implements AttendanceLogic {
 	/**
 	 * {@inheritDoc}
 	 */
-	public boolean addSite(AttendanceSite s) {
-		return dao.addAttendanceSite(s);
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
 	public AttendanceEvent getAttendanceEvent(long id) {
 		return dao.getAttendanceEvent(id);
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public List<AttendanceEvent> getAttendanceEventsForSite(String siteID) {
-		AttendanceSite aS = getAttendanceSite(siteID);
-		return getAttendanceEventsForSite(aS);
 	}
 
 	/**
@@ -125,14 +100,6 @@ public class AttendanceLogicImpl implements AttendanceLogic {
 	/**
 	 * {@inheritDoc}
 	 */
-	public boolean addAttendanceEvent(AttendanceEvent e) {
-		AttendanceSite currentAttendanceSite = getCurrentAttendanceSite();
-
-		e.setAttendanceSite(currentAttendanceSite);
-
-		return dao.addAttendanceEvent(e);
-	}
-
 	public Serializable addAttendanceEventNow(AttendanceEvent e) {
 		return dao.addAttendanceEventNow(e);
 	}
@@ -158,55 +125,6 @@ public class AttendanceLogicImpl implements AttendanceLogic {
 
 		return dao.deleteAttendanceEvent(aE);
 	}
-
-/*	/**
-	 * {@inheritDoc}
-	 *//*
-	public boolean addAttendanceEvents(AttendanceEvent t, RRule r){
-		if(!t.getIsReoccurring()){ // Only for reoccurring events
-			throw new IllegalArgumentException("Event must be reoccurring.");
-		}
-
-		Pair<Boolean, Long> rResult = addReoccurrence(r);
-		if(!rResult.getFirst()) {
-			return false;
-		}
-
-		ArrayList<AttendanceEvent> events = new ArrayList<AttendanceEvent>();
-		Calendar c = Calendar.getInstance();
-		c.setTime(t.getStartDateTime());
-		DateValueImpl startDateValue = new DateValueImpl(c.get(Calendar.DATE), c.get(Calendar.MONTH) + 1, c.get(Calendar.YEAR));
-		RecurrenceIterator reocurrenceIterator = RecurrenceIteratorFactory.createRecurrenceIterator(r, startDateValue, TimeZone.getDefault());
-		DateTimeIterator di = DateTimeIteratorFactory.createDateTimeIterator(reocurrenceIterator);
-		for(;di.hasNext();){
-			DateTime dt = di.next();
-			AttendanceEvent copy = new Event(t);
-			copy.setStartDateTime(dt.toDate());
-
-			events.add(copy);
-		}
-
-		return dao.addAttendanceEvents(events);
-	}
-
-	/**
-	 * {@inheritDoc}
-	 *//*
-	public Pair<Boolean, Long> addReoccurrence(RRule r){
-		Reoccurrence reoccurrence = new Reoccurrence(null, r.toIcal());
-
-		boolean rResult = addReoccurrence(reoccurrence);
-		Pair<Boolean, Long> result = Pairs.from(rResult, reoccurrence.getId());
-
-		return result;
-	}*/
-
-	/**
-	 * {@inheritDoc}
-	 */
-	/*public boolean addReoccurrence(Reoccurrence r) {
-		return dao.addReoccurrence(r);
-	}*/
 
 	/**
 	 * {@inheritDoc}
@@ -236,7 +154,35 @@ public class AttendanceLogicImpl implements AttendanceLogic {
 	/**
 	 * {@inheritDoc}
 	 */
-	public boolean updateAttendanceRecord(AttendanceRecord aR) {
+	public List<AttendanceStatus> getActiveStatusesForCurrentSite() {
+		return getActiveStatusesForSite(getCurrentAttendanceSite());
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public List<AttendanceStatus> getActiveStatusesForSite(AttendanceSite attendanceSite) {
+		return safeAttendanceStatusListReturn(dao.getActiveStatusesForSite(attendanceSite));
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public List<AttendanceStatus> getAllStatusesForSite(AttendanceSite attendanceSite) {
+		return safeAttendanceStatusListReturn(dao.getAllStatusesForSite(attendanceSite));
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public AttendanceStatus getAttendanceStatusById(Long id) {
+		return dao.getAttendanceStatusById(id);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public boolean updateAttendanceRecord(AttendanceRecord aR) throws IllegalArgumentException {
 		if(aR == null) {
 			throw new IllegalArgumentException("AttendanceRecord cannot be null");
 		}
@@ -247,16 +193,19 @@ public class AttendanceLogicImpl implements AttendanceLogic {
 	/**
 	 * {@inheritDoc}
 	 */
-	public boolean updateAttendanceRecords(List<AttendanceRecord> aRs) {
-		if(aRs == null) {
-			throw new IllegalArgumentException("AttendanceRecordList must not be null");
+	public boolean updateAttendanceRecordsForEvent(AttendanceEvent aE, Status s) {
+		aE = getAttendanceEvent(aE.getId());
+		List<AttendanceRecord> records = new ArrayList<AttendanceRecord>(aE.getRecords());
+
+		if(records.isEmpty()) {
+			records = generateAttendanceRecords(aE, s);
 		}
 
-		if(aRs.isEmpty()) {
-			throw new IllegalArgumentException("AttendanceRecordList must not be empty");
+		for(AttendanceRecord aR : records) {
+			aR.setStatus(s);
 		}
 
-		return dao.updateAttendanceRecords(aRs);
+		return dao.updateAttendanceRecords(records);
 	}
 
 	/**
@@ -290,24 +239,6 @@ public class AttendanceLogicImpl implements AttendanceLogic {
 
 			return dao.updateAttendanceRecords(recordsToUpdate);
 		}
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public boolean updateAttendanceRecordsForEvent(AttendanceEvent aE, Status s) {
-		aE = getAttendanceEvent(aE.getId());
-		List<AttendanceRecord> records = new ArrayList<AttendanceRecord>(aE.getRecords());
-
-		if(records.isEmpty()) {
-			records = generateAttendanceRecords(aE, s);
-		}
-
-		for(AttendanceRecord aR : records) {
-			aR.setStatus(s);
-		}
-
-		return dao.updateAttendanceRecords(records);
 	}
 
 	/**
@@ -386,48 +317,6 @@ public class AttendanceLogicImpl implements AttendanceLogic {
 		}
 
 		return results;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public List<AttendanceStatus> getActiveStatusesForCurrentSite() {
-		return getActiveStatusesForSite(getCurrentAttendanceSite());
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public List<AttendanceStatus> getActiveStatusesForSite(String siteId) {
-		return safeAttendanceStatusListReturn(dao.getActiveStatusesForSite(getAttendanceSite(siteId)));
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public List<AttendanceStatus> getActiveStatusesForSite(AttendanceSite attendanceSite) {
-		return safeAttendanceStatusListReturn(dao.getActiveStatusesForSite(attendanceSite));
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public List<AttendanceStatus> getAllStatusesForSite(AttendanceSite attendanceSite) {
-		return safeAttendanceStatusListReturn(dao.getAllStatusesForSite(attendanceSite));
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public AttendanceStatus getAttendanceStatusById(Long id) {
-		return dao.getAttendanceStatusById(id);
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public boolean updateAttendanceStatuses(List<AttendanceStatus> attendanceStatuses) {
-		return attendanceStatuses != null && dao.updateAttendanceStatuses(attendanceStatuses);
 	}
 
 	/**
@@ -515,6 +404,10 @@ public class AttendanceLogicImpl implements AttendanceLogic {
 	 */
 	public void init() {
 		log.info("init");
+	}
+
+	private boolean addSite(AttendanceSite s) {
+		return dao.addAttendanceSite(s);
 	}
 
 	private List<AttendanceGrade> generateAttendanceGrades(AttendanceSite aS) {

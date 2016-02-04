@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  ~  Copyright (c) 2015, The Apereo Foundation
+  ~  Copyright (c) 2016, University of Dayton
   ~
   ~  Licensed under the Educational Community License, Version 2.0 (the "License");
   ~  you may not use this file except in compliance with the License.
@@ -71,16 +71,6 @@
 			<artifactId>itextpdf</artifactId>
 			<version>5.5.8</version>
 		</dependency>
-		<!--
-		<dependency>
-			<groupId>org.scala-saddle</groupId>
-			<artifactId>google-rfc-2445</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>de.scravy</groupId>
-			<artifactId>pair</artifactId>
-		</dependency>
-		-->
 		
 		<!-- Sakai dependencies -->
         <dependency>

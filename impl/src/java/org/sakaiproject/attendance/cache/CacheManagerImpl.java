@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2015, The Apereo Foundation
+ *  Copyright (c) 2016, University of Dayton
  *
  *  Licensed under the Educational Community License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -21,7 +21,9 @@ import org.sakaiproject.memory.api.Cache;
 import org.sakaiproject.memory.api.MemoryService;
 
 /**
- * Created by Leonardo Canessa [lcanessa1 (at) udayton (dot) edu]
+ * A shell to eventually implement caching
+ *
+ * @author Leonardo Canessa [lcanessa1 (at) udayton (dot) edu]
  */
 public class CacheManagerImpl implements CacheManager {
 

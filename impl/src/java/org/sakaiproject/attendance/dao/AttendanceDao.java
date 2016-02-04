@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2015, The Apereo Foundation
+ *  Copyright (c) 2016, University of Dayton
  *
  *  Licensed under the Educational Community License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -16,114 +16,93 @@
 
 package org.sakaiproject.attendance.dao;
 
+import org.sakaiproject.attendance.model.*;
+
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
-import org.sakaiproject.attendance.model.AttendanceGrade;
-import org.sakaiproject.attendance.model.AttendanceSite;
-import org.sakaiproject.attendance.model.AttendanceEvent;
-import org.sakaiproject.attendance.model.AttendanceRecord;
-import org.sakaiproject.attendance.model.AttendanceStatus;
-//import org.sakaiproject.attendance.model.Reoccurrence;
-
 /**
- * DAO interface for our project
- * 
+ * DAO interface for the Attendance Tool
+ *
  * @author Leonardo Canessa [lcanessa1 (at) udayton (dot) edu]
+ * @author David Bauer [dbauer1 (at) udayton (dot) edu]
  *
  */
 public interface AttendanceDao {
 	/**
-	 * Get an attendance site from the DB
-	 */
+	 * Get an AttendanceSite
+	 *
+	 * @param siteId, the Sakai SiteID
+	 * @return the AttendanceSite
+     */
 	AttendanceSite getAttendanceSite(String siteId);
 
 	/**
 	 * Add a new AttendanceSite record to the database
-	 * @param as
-	 * @return
+	 *
+	 * @param as, the AttendanceSite to add
+	 * @return success of the operation
      */
 	boolean addAttendanceSite(AttendanceSite as);
 
 	/**
 	 * Updates an attendanceSite
-	 * @param aS
-	 * @return
+	 *
+	 * @param aS, the AttendanceSite with updated values
+	 * @return success of the operation
      */
 	boolean updateAttendanceSite(AttendanceSite aS);
 
 	/**
-	 * Gets a single Event from the db
+	 * Gets a single AttendanceEvent from the db
 	 * 
-	 * @return an item or null if no result
+	 * @return the AttendanceEvent, may be null
 	 */
 	AttendanceEvent getAttendanceEvent(long id);
 
 	/**
-	 * Get all Events for A site
-	 * @return a list of items, an empty list if no items
-	 */
-	List<AttendanceEvent> getAttendanceEventsForSite(String siteID);
-
-	/**
 	 * get all the events by attendanceSite
+	 *
 	 * @param aS, the AttendanceSite
 	 * @return a list of events or empty if no items.
      */
 	List<AttendanceEvent> getAttendanceEventsForSite(AttendanceSite aS);
-		
-	/**
-	 * Add a new Event record to the database. Only the name property is actually used.
-	 * @param t	, Event
-	 * @return	true if success, false if not
-	 */
-	boolean addAttendanceEvent(AttendanceEvent t);
 
 	/**
 	 * Serializable function used to save an AttendanceEvent as part of the "Take Attendance Now" feature
-	 * @param e
-	 * @return
+	 *
+	 * @param e, the AttendanceEvent
+	 * @return the Long ID of the newly added AttendanceEvent
      */
 	Serializable addAttendanceEventNow(AttendanceEvent e);
 
 	/**
 	 * Update an AttendanceEvent
+	 *
 	 * @param aE, the AttendanceEvent
-	 * @return
+	 * @return success of the operation
      */
 	boolean updateAttendanceEvent(AttendanceEvent aE);
 
 	/**
 	 * Deletes an AttendanceEvent
+	 *
 	 * @param aE, the AttendanceEvent
-	 * @return
+	 * @return success of the operation
      */
 	boolean deleteAttendanceEvent(AttendanceEvent aE);
 
 	/**
-	 * Add a list of events to the Database
-	 * @param es, the ArrayList of events
-	 * @return true if success, false if not
-	 */
-	boolean addAttendanceEvents(ArrayList<AttendanceEvent> es);
-
-	/**
-	 * Add a Reoccurrence rule
-	 * @param r, the object
-	 * @return true if success, false if not
-	 */
-//	boolean addReoccurrence(Reoccurrence r);
-
-	/**
 	 * Get Status Record by ID
+	 *
 	 * @param id, the id of the status record
-	 * @return the status record
+	 * @return the status record (may be null if DB operation fails)
      */
 	AttendanceRecord getStatusRecord(long id);
 
 	/**
 	 * Add an AttendanceRecord
+	 *
 	 * @param aR, the AttendanceRecord to add
 	 * @return true if success, false if not
      */
@@ -131,79 +110,90 @@ public interface AttendanceDao {
 
 	/**
 	 * Updates an AttendanceRecord
+	 *
 	 * @param aR, the AttendanceRecord to update with new values
-	 * @return
+	 * @return success of the operation
      */
 	boolean updateAttendanceRecord(AttendanceRecord aR);
 
 	/**
 	 * Update a set of AttendanceRecords
+	 *
 	 * @param aRs, a List of AttendanceRecords
-	 * @return
+	 * @return success of the operation
      */
 	boolean updateAttendanceRecords(List<AttendanceRecord> aRs);
 
 	/**
 	 * Update a set of AttendanceStatuses
+	 *
 	 * @param attendanceStatusList, a List of AttendanceStatuses
-	 * @return
+	 * @return success of the operation
      */
 	boolean updateAttendanceStatuses(List<AttendanceStatus> attendanceStatusList);
 
 	/**
 	 * Get a list of the active statuses in an Attendance Site
-	 * @param attendanceSite
-	 * @return
+	 *
+	 * @param attendanceSite, the AttendanceSite
+	 * @return List of Active AttendanceStatuses, null if DB issues
      */
 	List<AttendanceStatus> getActiveStatusesForSite(AttendanceSite attendanceSite);
 
 	/**
 	 * Get a lit of all of the attendance statuses for a site
-	 * @param attendanceSite
-	 * @return
+	 *
+	 * @param attendanceSite, the AttendanceSite
+	 * @return list of all AttendanceStatuses, null if DB issues
      */
 	List<AttendanceStatus> getAllStatusesForSite(AttendanceSite attendanceSite);
 
 	/**
 	 * Get an attendance status record by its id
-	 * @param id
-	 * @return
+	 *
+	 * @param id, the ID of the AttendanceStatus
+	 * @return the AttendanceStatus (null if DB issues)
      */
 	AttendanceStatus getAttendanceStatusById(Long id);
 
 	/**
 	 * Get AttendanceGrade by ID
-	 * @param id
-	 * @return
+	 *
+	 * @param id, the AttendanceGrade ID
+	 * @return the AttendanceGrade (null if DB issues)
      */
 	AttendanceGrade getAttendanceGrade(Long id);
 
 	/**
 	 * Get an AttendanceGrade
+	 *
 	 * @param userID, the userID of owner of Grade
 	 * @param aS, the site the Grade is present in
-     * @return
+     * @return the AttendanceGrade, null if DB issues
      */
 	AttendanceGrade getAttendanceGrade(String userID, AttendanceSite aS);
 
 	/**
 	 * Get a list of AttendanceGrades
+	 *
 	 * @param aS, the AttendanceSite to get the AGs for.
-	 * @return
+	 * @return List of AttendanceGrades, null if DB issues
      */
 	List<AttendanceGrade> getAttendanceGrades(AttendanceSite aS);
 	
 	/**
 	 * Add an AttendanceGrade to DB
-	 * @param aG
-	 * @return
+	 *
+	 * @param aG, AttendanceGrade to add
+	 * @return success of operation
      */
 	boolean addAttendanceGrade(AttendanceGrade aG);
 
 	/**
 	 * Updates an AttendanceGrade
+	 *
 	 * @param aG, the AG to update
-	 * @return
+	 * @return success of operation
      */
 	boolean updateAttendanceGrade(AttendanceGrade aG);
 

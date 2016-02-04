@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2015, The Apereo Foundation
+ *  Copyright (c) 2016, University of Dayton
  *
  *  Licensed under the Educational Community License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -23,23 +23,26 @@ import java.util.Objects;
 
 
 /**
- * Created by Leonardo Canessa [lcanessa1 (at) udayton (dot) edu]
+ * An AttendanceRecord for a specific user for a specific AttendanceEvent
+ *
+ * @author Leonardo Canessa [lcanessa1 (at) udayton (dot) edu]
+ * @author David Bauer [dbauer1 (at) udayton (dot) edu]
  */
 @NoArgsConstructor
 @AllArgsConstructor
 public class AttendanceRecord implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    @Getter @Setter private Long    id;
+    @Getter @Setter private Long            id;
     @Getter @Setter private AttendanceEvent attendanceEvent;
-    @Getter @Setter private String  userID;
-    @Getter @Setter private Status  status;
-    @Getter @Setter private String  comment;
+    @Getter @Setter private String          userID;
+    @Getter @Setter private Status          status;
+    @Getter @Setter private String          comment;
 
     public AttendanceRecord(AttendanceEvent e, String uId, Status s) {
-        this.attendanceEvent = e;
-        this.userID = uId;
-        this.status = s;
+        this.attendanceEvent    = e;
+        this.userID             = uId;
+        this.status             = s;
     }
 
     @Override

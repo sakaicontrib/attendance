@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2015, The Apereo Foundation
+ *  Copyright (c) 2016, University of Dayton
  *
  *  Licensed under the Educational Community License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -18,27 +18,28 @@ package org.sakaiproject.attendance.tool;
 
 import org.apache.wicket.protocol.http.WebApplication;
 import org.apache.wicket.request.IRequestHandler;
+import org.apache.wicket.request.Url;
 import org.apache.wicket.request.cycle.IRequestCycleListener;
 import org.apache.wicket.request.cycle.RequestCycle;
-import org.apache.wicket.request.Url;
 import org.apache.wicket.spring.injection.annot.SpringComponentInjector;
-
 import org.sakaiproject.attendance.tool.pages.Overview;
 
 /**
- * Main application class for our app
+ * Main application class for the Attendance Tool. The sakai-wicket-maven-archetype was used to generate the basies for
+ * this tool.
  * 
  * @author Steve Swinsburg (steve.swinsburg@gmail.com)
  * @author David F. Torres
  * @author Michael Mertins (mertins@zedat.fu-berlin.de)
  * @author Leonardo Canessa [lcanessa1 (at) udayton (dot) edu]
+ * @author David Bauer [dbauer1 (at) udayton (dot) edu]
  *
  * Cf. https://confluence.sakaiproject.org/pages/viewpage.action?pageId=83034325
  */
 public class Attendance extends WebApplication {
    
 	/**
-	 * Configure your app here
+	 * Configuration
 	 */
 	@Override
 	protected void init() {
@@ -161,7 +162,4 @@ public class Attendance extends WebApplication {
 	public Attendance()
 	{
 	}
-	
-	
-
 }

@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2016, The Apereo Foundation
+ *  Copyright (c) 2016, University of Dayton
  *
  *  Licensed under the Educational Community License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -23,8 +23,9 @@ import lombok.NoArgsConstructor;
 import java.io.Serializable;
 
 /**
- * Created by Leonardo Canessa [lcanessa1 (at) udayton (dot) edu]au)
+ * The AttendanceGrade earned for the all AttendanceItems
  *
+ * @author Leonardo Canessa [lcanessa1 (at) udayton (dot) edu]au)
  */
 @Data
 @NoArgsConstructor
@@ -40,6 +41,6 @@ public class AttendanceGrade implements Serializable {
 
 	public AttendanceGrade(AttendanceSite aS, String userId){
 		this.attendanceSite = aS;
-		this.userID = userId;
+		this.userID 		= userId;
 	}
 }

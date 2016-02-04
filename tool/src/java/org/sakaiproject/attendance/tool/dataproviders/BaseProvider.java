@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2016, The Apereo Foundation
+ *  Copyright (c) 2016, University of Dayton
  *
  *  Licensed under the Educational Community License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -26,6 +26,8 @@ import java.util.Iterator;
 import java.util.List;
 
 /**
+ * A BaseProvider to consolidate common features
+ *
  * @author Leonardo Canessa [lcanessa1 (at) udayton (dot) edu]
  */
 public abstract class BaseProvider<T> implements IDataProvider<T> {

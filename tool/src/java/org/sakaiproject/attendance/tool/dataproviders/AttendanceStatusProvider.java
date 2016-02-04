@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2016, The Apereo Foundation
+ *  Copyright (c) 2016, University of Dayton
  *
  *  Licensed under the Educational Community License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -27,8 +27,13 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+/**
+ * An AttendanceStatus Provider
+ *
+ * @author David Bauer [dbauer1 (at) udayton (dot) edu]
+ */
 public class AttendanceStatusProvider extends BaseProvider<AttendanceStatus> {
-
+    // AttendanceStatus Filters
     public static final String ALL = "allStatuses"; // Provides all statuses including "UNKNOWN"
     public static final String ALL_ACTIVE = "allActiveStatuses"; // Provides only the active statuses including "UNKNOWN"
     public static final String ACTIVE = "activeStatuses"; // Provides only the active statuses but doesn't include "UNKOWN"
@@ -38,6 +43,12 @@ public class AttendanceStatusProvider extends BaseProvider<AttendanceStatus> {
         super();
     }
 
+    /**
+     * Constructor for AttendanceStatuses for a Site with a specific Filter
+     *
+     * @param siteId, the Sakai SiteID
+     * @param filter, the AttendanceStatusProvider filter (public strings of this class: ALL, ALL_ACTIVE, ACTIVE, and DISPLAY)
+     */
     public AttendanceStatusProvider(String siteId, String filter) {
         super();
         AttendanceSite attendanceSite = attendanceLogic.getAttendanceSite(siteId);
@@ -48,6 +59,12 @@ public class AttendanceStatusProvider extends BaseProvider<AttendanceStatus> {
         }
     }
 
+    /**
+     * Constructor for AttendanceStatuses for the provided AttendanceSite with a specific Filter
+     *
+     * @param attendanceSite, the AttendanceSite
+     * @param filter, the AttendanceStatusProvider filter (public strings of this class: ALL, ALL_ACTIVE, ACTIVE, and DISPLAY)
+     */
     public AttendanceStatusProvider(AttendanceSite attendanceSite, String filter) {
         super();
         if(attendanceSite != null) {

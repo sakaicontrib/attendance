@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <!--
-  ~  Copyright (c) 2016, The Apereo Foundation
+  ~  Copyright (c) 2016, University of Dayton
   ~
   ~  Licensed under the Educational Community License, Version 2.0 (the "License");
   ~  you may not use this file except in compliance with the License.
@@ -31,7 +31,7 @@
         </id>
 
         <property name="userID"     column="USER_ID"            type="java.lang.String" />
-        <property name="status"     column="STATUS"             type="org.sakaiproject.attendance.hbm.StatusUserType"/>
+        <property name="status"     column="STATUS"             type="org.sakaiproject.attendance.types.StatusUserType"/>
         <property name="comment"    column="RECORD_COMMENT"     type="text" length="4000"/>
 
         <many-to-one name="attendanceEvent" column="A_EVENT_ID" unique="false" not-null="true" class="AttendanceEvent" lazy="false"/>

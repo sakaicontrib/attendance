@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2015, The Apereo Foundation
+ *  Copyright (c) 2016, University of Dayton
  *
  *  Licensed under the Educational Community License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -19,28 +19,34 @@ package org.sakaiproject.attendance.tool.models;
 import org.apache.wicket.injection.Injector;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
-import org.sakaiproject.attendance.logic.AttendanceLogic;
 import org.sakaiproject.attendance.logic.SakaiProxy;
-import org.sakaiproject.attendance.model.AttendanceEvent;
 import org.sakaiproject.user.api.User;
-import org.sakaiproject.user.api.UserNotDefinedException;
 
+/**
+ * A DetachableUSerModel
+ *
+ * @author David Bauer [dbauer1 (at) udayton (dot) edu]
+ */
 public class DetachableUserModel extends LoadableDetachableModel<User> {
-
     @SpringBean(name="org.sakaiproject.attendance.logic.SakaiProxy")
     protected SakaiProxy sakaiProxy;
 
+    private static final long serialVersionUID = 1L;
     private final String id;
 
     /**
-     * @param user
+     * Constructor with the User provided
+     *
+     * @param user, a Sakai User
      */
     public DetachableUserModel(User user){
         this.id = user.getId();
     }
 
     /**
-     * @param id
+     * Constructor with user id provided, used by wicket to serialize stuff
+     *
+     * @param id, the user ID as a string
      */
     public DetachableUserModel(String id){
         this.id = id;

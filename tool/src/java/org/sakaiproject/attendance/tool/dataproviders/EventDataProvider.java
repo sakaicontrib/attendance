@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2015, The Apereo Foundation
+ *  Copyright (c) 2016, University of Dayton
  *
  *  Licensed under the Educational Community License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -24,14 +24,20 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * @author David Bauer ( dbauer1 at udayton dot edu)
+ * An EventDataProvider
+ *
  * @author Leonardo Canessa [lcanessa1 (at) udayton (dot) edu]
+ * @author David Bauer [dbauer1 (at) udayton (dot) edu]
  */
 public class EventDataProvider extends BaseProvider<AttendanceEvent> {
     public EventDataProvider() {
         super();
     }
 
+    /**
+     * Constructor with the data provided
+     * @param data, a List of AttendanceEvents
+     */
     public EventDataProvider(List<AttendanceEvent> data) {
         super();
         if(data != null && !data.isEmpty()) {

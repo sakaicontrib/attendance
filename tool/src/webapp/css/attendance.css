@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2016, The Apereo Foundation
+ *  Copyright (c) 2016, University of Dayton
  *
  *  Licensed under the Educational Community License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -65,7 +65,7 @@ img.overviewInfo, div.attendanceBreadcrumbs img, th.takeAttendanceDateHeader, .v
     vertical-align: middle;
 }
 
-img.overviewInfo:hover {
+img.overviewInfo:hover, img.statisticsInfo:hover {
     cursor: help;
 }
 
@@ -86,17 +86,13 @@ img.overviewInfo:hover + div.overviewInfo {
     box-shadow: 0 8px 6px -6px black;
 }
 
-div.overviewInfo {
+div.overviewInfo, div.statisticsInfo, .printHidden {
     display: none;
 }
 
 img.statisticsInfo {
     vertical-align: middle;
     height: 16px;
-}
-
-img.statisticsInfo:hover {
-    cursor: help;
 }
 
 img.statisticsInfo:hover + div.statisticsInfo, a.statisticsInfo:hover + div.statisticsInfo {
@@ -125,11 +121,6 @@ img.refreshImage {
     height: 1.4em;
 }
 
-div.statisticsInfo {
-    display: none;
-}
-
-
 table.overviewTable, table.itemListTable, table.eventViewTable, table.takeAttendanceTable {
     border: 2px solid #ccc;
     border-collapse: collapse;
@@ -150,7 +141,7 @@ table.overviewTable thead tr .headerSortDown, table.itemListTable thead tr .head
     background-image: url(../images/desc.gif);
 }
 
-table.itemListTable, table.eventViewTable, table.takeAttendanceTable {
+table.itemListTable, table.eventViewTable, table.takeAttendanceTable, div.eventFormContainer, form.addEditForm, .addComment h3, form.takeAttendanceNowForm, td.overviewGradeCol form {
     margin: 0;
 }
 
@@ -167,11 +158,11 @@ table.itemListTable, table.eventViewTable, table.takeAttendanceTable {
     vertical-align: bottom;
 }
 
-.overviewTable thead tr, .itemListTable thead tr, .eventViewTable thead tr, .takeAttendanceTable thead tr  {
+.overviewTable thead tr, .itemListTable thead tr, .eventViewTable thead tr, .takeAttendanceTable thead tr, .div-table-row-header, li.statusItemDisabled  {
     background-color: #eee;
 }
 
-.overviewTable tbody tr:hover, .itemListTable tbody tr:hover, .eventViewTable tbody tr:hover, .takeAttendanceTable tbody tr:hover {
+.overviewTable tbody tr:hover, .itemListTable tbody tr:hover, .eventViewTable tbody tr:hover, .takeAttendanceTable tbody tr:hover, .div-table-row:hover {
     background-color: #deeeff;
 }
 
@@ -214,16 +205,12 @@ th.overviewStatusCol, th.takeAttendanceStatusCol {
     background-color: #e0f7e0 !important;
 }
 
-td.itemListRemoveCol {
+td.itemListRemoveCol, td.overviewPrintCol, p.printAction {
     text-align: center;
 }
 
 td.itemNameCol, td.studentNameCol {
     font-size: 1.2em;
-}
-
-td.overviewPrintCol {
-    text-align: center;
 }
 
 th.takeAttendanceNameHeader {
@@ -271,17 +258,9 @@ h3.addEditHeader, h3.itemListHeader, h3.takeAttendanceHeader, h3.itemInfoHeader,
     font-weight: normal;
 }
 
-div.eventFormContainer {
-    margin: 0;
-}
-
 span.addEditReq {
     color: red;
     font-size: 1.2em;
-}
-
-form.addEditForm {
-    margin: 0;
 }
 
 td.noEventsCol, td.noStudentsCol {
@@ -333,10 +312,6 @@ div.attendanceBreadcrumbs span {
     padding: 0 .5em;
 }
 
-.div-table-col input:hover {
-    cursor: pointer;
-}
-
 .div-table{
     display:table;
     width:auto;
@@ -352,24 +327,12 @@ div.attendanceBreadcrumbs span {
     clear:both;
 }
 
-.div-table-row-header {
-    background-color: #eee;
-}
-
 .div-table-col {
     float:left;/*fix for  buggy browsers*/
     display:table-cell;
     width:80px;
     text-align: center;
     padding: .5em;
-}
-
-.div-table-row:hover {
-    background-color: #deeeff;
-}
-
-.div-table-col input:hover {
-    cursor: pointer;
 }
 
 .divHeader {
@@ -401,10 +364,6 @@ p.setAll {
     -webkit-box-shadow: 0 8px 6px -6px black;
     -moz-box-shadow: 0 8px 6px -6px black;
     box-shadow: 0 8px 6px -6px black;
-}
-
-.addComment h3 {
-    margin: 0;
 }
 
 div.printContainer {
@@ -450,7 +409,7 @@ div.printMask {
     opacity: 0.75;
 }
 
-div.printMask:hover, img.printImage:hover, .commentToggle:hover {
+div.printMask:hover, img.printImage:hover, .commentToggle:hover, .div-table-col input:hover {
     cursor: pointer;
 }
 
@@ -464,16 +423,8 @@ span.cancelPrint:hover, span.cancelAddComment:hover {
     cursor: pointer;
 }
 
-p.printAction {
-    text-align: center;
-}
-
 input.grade {
     width: 4.5em;
-}
-
-form.takeAttendanceNowForm {
-    margin: 0;
 }
 
 img.loadingGif {
@@ -524,16 +475,8 @@ p.editStatusInfo, p.editGradeInfo {
     margin: 0;
 }
 
-li.statusItemDisabled {
-    background-color: #eee;
-}
-
 form.studentOverviewFilterForm {
     margin-left: 70px;
-}
-
-td.overviewGradeCol form {
-    margin: 0;
 }
 
 th.overviewGradeCol img.settings {
@@ -553,10 +496,6 @@ ul.gradeSettings li {
 label.gradeSettingsLabel {
     font-size: 1.2em;
     line-height: 1.7em;
-}
-
-.printHidden {
-    display: none;
 }
 
 .printVisible {

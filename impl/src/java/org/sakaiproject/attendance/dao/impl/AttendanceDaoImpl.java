@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2015, The Apereo Foundation
+ *  Copyright (c) 2016, University of Dayton
  *
  *  Licensed under the Educational Community License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -16,47 +16,33 @@
 
 package org.sakaiproject.attendance.dao.impl;
 
-import java.io.Serializable;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
-
-import org.apache.commons.configuration.PropertiesConfiguration;
 import org.apache.log4j.Logger;
-
+import org.hibernate.HibernateException;
+import org.hibernate.Query;
+import org.hibernate.Session;
 import org.hibernate.type.LongType;
 import org.hibernate.type.ManyToOneType;
 import org.hibernate.type.StringType;
-import org.hibernate.Query;
-import org.hibernate.Session;
-import org.hibernate.HibernateException;
 import org.sakaiproject.attendance.dao.AttendanceDao;
-
-import org.sakaiproject.attendance.model.AttendanceGrade;
-import org.sakaiproject.attendance.model.AttendanceRecord;
-import org.sakaiproject.attendance.model.AttendanceSite;
-//import org.sakaiproject.attendance.model.Reoccurrence;
-import org.sakaiproject.attendance.model.AttendanceStatus;
+import org.sakaiproject.attendance.model.*;
 import org.springframework.dao.DataAccessException;
-
-import org.sakaiproject.attendance.model.AttendanceEvent;
 import org.springframework.orm.hibernate3.HibernateCallback;
 import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 
-import javax.xml.crypto.Data;
+import java.io.Serializable;
+import java.sql.SQLException;
+import java.util.List;
 
 
 /**
  * Implementation of AttendanceDao
- * 
- * @author Leonardo Canessa [lcanessa1 (at) udayton (dot) edu]
  *
+ * @author Leonardo Canessa [lcanessa1 (at) udayton (dot) edu]
+ * @author David Bauer [dbauer1 (at) udayton (dot) edu]
  */
 public class AttendanceDaoImpl extends HibernateDaoSupport implements AttendanceDao {
 
 	private static final Logger log = Logger.getLogger(AttendanceDaoImpl.class);
-	
-	private PropertiesConfiguration statements;
 
 	/**
 	 * {@inheritDoc}
@@ -126,46 +112,12 @@ public class AttendanceDaoImpl extends HibernateDaoSupport implements Attendance
 	 * {@inheritDoc}
 	 */
 	@SuppressWarnings("unchecked")
-	public List<AttendanceEvent> getAttendanceEventsForSite(final String siteID) {
-		if(log.isDebugEnabled()) {
-			log.debug("getAttendanceEventsForSite(String siteID)");
-		}
-
-		final AttendanceSite attendanceSite = getAttendanceSite(siteID);
-
-		return getEventsForAttendanceSiteHelper(attendanceSite);
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@SuppressWarnings("unchecked")
 	public List<AttendanceEvent> getAttendanceEventsForSite(final AttendanceSite aS) {
 		if(log.isDebugEnabled()) {
 			log.debug("getAttendanceEventsForSite(AttendanceSite id)");
 		}
 
 		return getEventsForAttendanceSiteHelper(aS);
-	}
-
-
-	
-	/**
-	 * {@inheritDoc}
-	 */
-	public boolean addAttendanceEvent(AttendanceEvent attendanceEvent) {
-		
-		if(log.isDebugEnabled()) {
-			log.debug("addAttendanceEvent( " + attendanceEvent.toString() + ")");
-		}
-
-		try{
-			getHibernateTemplate().save(attendanceEvent);
-			return true;
-		} catch (DataAccessException de) {
-			log.error("addAttendanceEvent failed.", de);
-			return false;
-		}
 	}
 
 	/**
@@ -183,22 +135,6 @@ public class AttendanceDaoImpl extends HibernateDaoSupport implements Attendance
 			log.error("addAttendanceEventNow failed.", de);
 			return null;
 		}
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public boolean addAttendanceEvents(ArrayList<AttendanceEvent> es){
-		boolean isSuccess = false;
-
-		for(AttendanceEvent e: es){
-			isSuccess = addAttendanceEvent(e);
-			if(!isSuccess){
-				return isSuccess;
-			}
-		}
-
-		return isSuccess;
 	}
 
 	/**
@@ -235,22 +171,6 @@ public class AttendanceDaoImpl extends HibernateDaoSupport implements Attendance
 		}
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
-/*	public boolean addReoccurrence(Reoccurrence r){
-		if(log.isDebugEnabled()) {
-			log.debug("addReoccurrence( " + r.toString() + ")");
-		}
-
-		try{
-			getHibernateTemplate().save(r);
-			return true;
-		} catch (DataAccessException de) {
-			log.error("addReoccurence failed.", de);
-			return false;
-		}
-	}*/
 	/**
 	 * {@inheritDoc}
 	 */

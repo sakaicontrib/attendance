@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2016, The Apereo Foundation
+ *  Copyright (c) 2016, University of Dayton
  *
  *  Licensed under the Educational Community License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -22,6 +22,11 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.sakaiproject.attendance.logic.AttendanceLogic;
 import org.sakaiproject.attendance.model.AttendanceStatus;
 
+/**
+ * DetachableAttendanceStatusModel
+ *
+ * @author David Bauer [dbauer1 (at) udayton (dot) edu]
+ */
 public class DetachableAttendanceStatusModel extends LoadableDetachableModel<AttendanceStatus>{
     @SpringBean(name="org.sakaiproject.attendance.logic.AttendanceLogic")
     protected AttendanceLogic attendanceLogic;
@@ -30,14 +35,18 @@ public class DetachableAttendanceStatusModel extends LoadableDetachableModel<Att
     private final long id;
 
     /**
-     * @param t
+     * Constructor with provided AttendanceStatus
+     *
+     * @param t, the AttendanceStatus
      */
     public DetachableAttendanceStatusModel(AttendanceStatus t){
         this.id = t.getId();
     }
 
     /**
-     * @param id
+     * Constructor with an AttendanceStatus id provided
+     *
+     * @param id, an AttendanceStatus id
      */
     public DetachableAttendanceStatusModel(long id){
         this.id = id;

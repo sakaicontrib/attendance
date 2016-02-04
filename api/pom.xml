@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  ~  Copyright (c) 2015, The Apereo Foundation
+  ~  Copyright (c) 2016, University of Dayton
   ~
   ~  Licensed under the Educational Community License, Version 2.0 (the "License");
   ~  you may not use this file except in compliance with the License.
@@ -25,7 +25,7 @@
 	
 	<name>attendance - API</name>
 	<groupId>org.sakaiproject.attendance</groupId>
-		<artifactId>attendance-api</artifactId>
+	<artifactId>attendance-api</artifactId>
 
 	<packaging>jar</packaging>
 
@@ -34,7 +34,6 @@
   	</properties>
   	
   	<dependencies>
-
     	<!-- project dependencies -->
 		
     	<!-- third party dependencies -->
@@ -46,25 +45,14 @@
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate</artifactId>
 		</dependency>
-		<!--
-		<dependency>
-			<groupId>org.scala-saddle</groupId>
-			<artifactId>google-rfc-2445</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>de.scravy</groupId>
-			<artifactId>pair</artifactId>
-		</dependency>
-		-->
 
 		<!-- Sakai dependencies -->
         <dependency>
             <groupId>org.sakaiproject.kernel</groupId>
             <artifactId>sakai-kernel-api</artifactId>
         </dependency>
-	    
 	</dependencies>
 	
 	<build />
-	 
+
 </project>

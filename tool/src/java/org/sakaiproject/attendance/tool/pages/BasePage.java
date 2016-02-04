@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2015, The Apereo Foundation
+ *  Copyright (c) 2016, University of Dayton
  *
  *  Licensed under the Educational Community License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -15,8 +15,6 @@
  */
 
 package org.sakaiproject.attendance.tool.pages;
-
-import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
 import org.apache.wicket.AttributeModifier;
@@ -34,12 +32,11 @@ import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
-
-import org.apache.wicket.validation.validator.RangeValidator;
-import org.sakaiproject.attendance.export.PDFEventExporter;
 import org.sakaiproject.attendance.logic.AttendanceLogic;
 import org.sakaiproject.attendance.logic.SakaiProxy;
 import org.sakaiproject.attendance.model.Status;
+
+import javax.servlet.http.HttpServletRequest;
 
 
 /**
@@ -48,9 +45,9 @@ import org.sakaiproject.attendance.model.Status;
  * be rendered in the main area below the top nav.
  * 
  * <p>It also allows us to setup the API injection and any other common methods, which are then made available in the other pages.
- * 
- * @author Steve Swinsburg (steve.swinsburg@gmail.com)
  *
+ * @author Leonardo Canessa [lcanessa1 (at) udayton (dot) edu]
+ * @author David Bauer [dbauer1 (at) udayton (dot) edu]
  */
 public class BasePage extends WebPage implements IHeaderContributor {
 	protected static final Logger log = Logger.getLogger(BasePage.class);

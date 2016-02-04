@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2015, The Apereo Foundation
+ *  Copyright (c) 2016, University of Dayton
  *
  *  Licensed under the Educational Community License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -25,61 +25,70 @@ import java.util.Locale;
  * An interface to abstract all Sakai related API calls in a central method that can be injected into our app.
  * 
  * @author Leonardo Canessa [lcanessa1 (at) udayton (dot) edu]
- *
+ * @author David Bauer [dbauer1 (at) udayton (dot) edu]
  */
 public interface SakaiProxy {
 
 	/**
 	 * Get current siteid
-	 * @return
+	 *
+	 * @return the SiteID
 	 */
 	String getCurrentSiteId();
 
 	/**
 	 * Get the current site
-	 * @return
+	 *
+	 * @return the Site Title
      */
 	String getCurrentSiteTitle();
 
 	/**
 	 * Get current User
-	 * @return
+	 *
+	 * @return the current User
      */
 	User getCurrentUser();
 
 	/**
 	 * Get current user id
-	 * @return
+	 *
+	 * @return the current User ID
 	 */
 	String getCurrentUserId();
 	
 	/**
 	 * Get current user display name
-	 * @return
+	 *
+	 * @return the current User DisplayName
 	 */
 	String getCurrentUserDisplayName();
 
 	/**
 	 * Get Current User's Locale
-	 * @return
+	 *
+	 * @return the current User Locale
 	 */
 	Locale getCurrentUserLocale();
 
 	/**
 	 * Get's the current user's role in the current site
-	 * @return
+	 *
+	 * @return the current User's role in the current site
      */
 	String getCurrentUserRoleInCurrentSite();
 
 	/**
 	 * Get current user's role in site.
-	 * @return
+	 *
+	 * @return the Current User's role in a Site
      */
 	String getCurrentUserRole(String siteId);
 
 	/**
 	 * Is the current user a superUser? (anyone in admin realm)
-	 * @return
+	 *
+	 * @return whether the current user is a superuser
 	 */
 	boolean isSuperUser();
 	
@@ -89,7 +98,6 @@ public interface SakaiProxy {
 	 * @param event			name of event
 	 * @param reference		reference
 	 * @param modify		true if something changed, false if just access
-	 * 
 	 */
 	void postEvent(String event, String reference, boolean modify);
 		
@@ -97,7 +105,7 @@ public interface SakaiProxy {
 	 * Get a configuration parameter as a boolean
 	 * 
 	 * @param	dflt the default value if the param is not set
-	 * @return
+	 * @return the Boolean Config parameter
 	 */
 	boolean getConfigParam(String param, boolean dflt);
 	
@@ -105,98 +113,111 @@ public interface SakaiProxy {
 	 * Get a configuration parameter as a String
 	 * 
 	 * @param	dflt the default value if the param is not set
-	 * @return
+	 * @return the Config Parameter
 	 */
 	String getConfigParam(String param, String dflt);
 
 	/**
+	 * Get the Current Site Membership IDs
 	 *
 	 * @return List of userIds in the current site
 	 */
 	List<String> getCurrentSiteMembershipIds();
 
 	/**
+	 * Get the Users in the current Site
 	 *
 	 * @return List of Users in the current site
 	 */
 	List<User> getCurrentSiteMembership();
 
 	/**
+	 * Get the Users in a group of the current Site
 	 *
-	 * @param groupId
-	 * @return
+	 * @param groupId, the Group ID
+	 * @return List of the User IDs
      */
 	List<String> getGroupMembershipIdsForCurrentSite(String groupId);
 
 	/**
+	 * Get a Group's User IDs as Strings for a Site
 	 *
-	 * @param siteId
-	 * @param groupId
-     * @return
+	 * @param siteId, the SiteID
+	 * @param groupId, the groupID
+     * @return a List of Users in SiteId who are a part of GroupId
      */
 	List<String> getGroupMembershipIds(String siteId, String groupId);
 
 	/**
+	 * Get Users of Group for Current Site
 	 *
-	 * @param groupId
-	 * @return
+	 * @param groupId, the groupId
+	 * @return a List of the Users
      */
 	List<User> getGroupMembershipForCurrentSite(String groupId);
 
 	/**
+	 * Get Users in a Group of a Site
 	 *
-	 * @param siteId
-	 * @param groupId
-     * @return
+	 * @param siteId, the SiteID
+	 * @param groupId, the Group ID
+     * @return a List of Users in GroupId of SiteId
      */
 	List<User> getGroupMembership(String siteId, String groupId);
 
 	/**
+	 * Get all available Groups for Site
 	 *
-	 * @param siteId
-	 * @return
+	 * @param siteId, the SiteId
+	 * @return a List of the Group IDs as Strings
      */
 	List<String> getAvailableGroupsForSite(String siteId);
 
 	/**
+	 * Get available groups for current site
 	 *
-	 * @return
+	 * @return a List of the available groups for the current site
      */
 	List<String> getAvailableGroupsForCurrentSite();
 
 	/**
 	 * get user
-	 * @param userId
-	 * @return
+	 *
+	 * @param userId, the userId
+	 * @return the user
      */
 	User getUser(String userId);
 
 	/**
 	 * get's a user sort name
-	 * @param userId
-	 * @return
+	 *
+	 * @param userId, the userID
+	 * @return their sort name
      */
 	String getUserSortName(String userId);
 
 	/**
 	 * Get a user's display id (username) ex. jdoe1
-	 * @param userId
-	 * @return
+	 *
+	 * @param userId, the UserId
+	 * @return their display name
      */
 	String getUserDisplayId(String userId);
 
 	/**
+	 * Get's a Group's Title in Current Site
 	 *
-	 * @param groupId
-	 * @return
+	 * @param groupId, the GroupID
+	 * @return the title of the group
      */
 	String getGroupTitleForCurrentSite(String groupId);
 
 	/**
+	 * Get the title for a group in a Site
 	 *
-	 * @param siteId
-	 * @param groupId
-     * @return
+	 * @param siteId, the siteID
+	 * @param groupId, the GroupID
+     * @return the title of the group
      */
 	String getGroupTitle(String siteId, String groupId);
 }

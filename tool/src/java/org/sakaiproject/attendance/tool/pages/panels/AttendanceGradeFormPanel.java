@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2016, The Apereo Foundation
+ *  Copyright (c) 2016, University of Dayton
  *
  *  Licensed under the Educational Community License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -30,12 +30,16 @@ import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.ResourceModel;
-import org.apache.wicket.model.StringResourceModel;
 import org.sakaiproject.attendance.model.AttendanceSite;
 import org.sakaiproject.attendance.tool.pages.panels.util.GradebookItemNameValidator;
 
 /**
- * Created by Leonardo Canessa [lcanessa1 (at) udayton (dot) edu]
+ * AttendanceGradeFormPanel is a Panel is used to get AttendanceSite settings for Grades.
+ * Such as to send it to the Gradebook, show grades to students, and the maximum points allowed.
+ * A non-null value for Maximum points turns on grading.
+ *
+ * @author Leonardo Canessa [lcanessa1 (at) udayton (dot) edu]
+ * @author David Bauer [dbauer1 (at) udayton (dot) edu]
  */
 public class AttendanceGradeFormPanel extends BasePanel {
     private static final    long            serialVersionUID = 1L;

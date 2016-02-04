@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2016, The Apereo Foundation
+ *  Copyright (c) 2016, University of Dayton
  *
  *  Licensed under the Educational Community License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -25,7 +25,10 @@ import org.sakaiproject.attendance.model.AttendanceStatus;
 import org.sakaiproject.attendance.tool.dataproviders.AttendanceStatusProvider;
 
 /**
- * Created by Leonardo Canessa [lcanessa1 (at) udayton (dot) edu]
+ * AttendanceRecordFormHeaderPanel is a panel which is used to display the header for a table of AttendanceRecords
+ *
+ * @author Leonardo Canessa [lcanessa1 (at) udayton (dot) edu]
+ * @author David Bauer [dbauer1 (at) udayton (dot) edu]
  */
 public class AttendanceRecordFormHeaderPanel extends BasePanel {
     private static final long serialVersionUID = 1L;

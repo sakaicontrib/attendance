@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2015, The Apereo Foundation
+ *  Copyright (c) 2016, University of Dayton
  *
  *  Licensed under the Educational Community License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -34,10 +34,10 @@ import org.sakaiproject.attendance.tool.util.ConfirmationLink;
 import java.util.Date;
 
 /**
- * A simple page which allows for events to be added.
- * 
- * @author Leonardo Canessa [lcanessa1 (at) udayton (dot) edu]
+ * AddEventPage allows for AttendanceEvents to be added and edited.
  *
+ * @author Leonardo Canessa [lcanessa1 (at) udayton (dot) edu]
+ * @author David Bauer [dbauer1 (at) udayton (dot) edu]
  */
 public class AddEventPage extends BasePage {
 	private static final long serialVersionUID = 1L;

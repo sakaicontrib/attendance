@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2016, The Apereo Foundation
+ *  Copyright (c) 2016, University of Dayton
  *
  *  Licensed under the Educational Community License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -14,13 +14,13 @@
  *  limitations under the License.
  */
 
-package org.sakaiproject.attendance.hbm;
+package org.sakaiproject.attendance.types;
 
 import org.sakaiproject.attendance.model.Status;
 import org.sakaiproject.springframework.orm.hibernate.EnumUserType;
 
 /**
- * Created by Leonardo Canessa [lcanessa1 (at) udayton (dot) edu]
+ * @author Leonardo Canessa [lcanessa1 (at) udayton (dot) edu]
  * Modeled after org.sakaiproject.scheduler.events.hibernate.TriggerEventEnumUserType.java
  */
 public class StatusUserType extends EnumUserType<Status> {

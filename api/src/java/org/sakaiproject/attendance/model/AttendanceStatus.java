@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2015, The Apereo Foundation
+ *  Copyright (c) 2016, University of Dayton
  *
  *  Licensed under the Educational Community License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -24,6 +24,12 @@ import lombok.Setter;
 import java.io.Serializable;
 import java.util.Objects;
 
+
+/**
+ * An AttendanceStatus is a wrapper around the Status enum type defining meta information on individual Statuses.
+ *
+ * @author David Bauer [dbauer1 (at) udayton (dot) edu]
+ */
 @NoArgsConstructor
 @AllArgsConstructor
 public class AttendanceStatus implements Serializable {
@@ -37,9 +43,9 @@ public class AttendanceStatus implements Serializable {
 
     // Create a copy constructor
     public AttendanceStatus(AttendanceStatus attendanceStatus) {
-        this.isActive = attendanceStatus.getIsActive();
-        this.status = attendanceStatus.getStatus();
-        this.sortOrder = attendanceStatus.getSortOrder();
+        this.isActive       = attendanceStatus.getIsActive();
+        this.status         = attendanceStatus.getStatus();
+        this.sortOrder      = attendanceStatus.getSortOrder();
         this.attendanceSite = attendanceStatus.getAttendanceSite();
     }
 

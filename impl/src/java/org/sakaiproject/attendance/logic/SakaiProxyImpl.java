@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2015, The Apereo Foundation
+ *  Copyright (c) 2016, University of Dayton
  *
  *  Licensed under the Educational Community License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -258,28 +258,6 @@ public class SakaiProxyImpl implements SakaiProxy {
 	/**
 	 * {@inheritDoc}
 	 */
-	public String getGroupTitleForCurrentSite(String groupId) {
-		return getGroupTitle(getCurrentSiteId(), groupId);
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public String getGroupTitle(String siteId, String groupId) {
-		try {
-			if(siteId != null && !siteId.isEmpty() && groupId != null && !groupId.isEmpty()) {
-				return siteService.getSite(siteId).getGroup(groupId).getTitle();
-			}
-		} catch (IdUnusedException e) {
-			log.error("Unable to get group title", e);
-			e.printStackTrace();
-		}
-		return "";
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
 	public List<String> getAvailableGroupsForCurrentSite() {
 		return getAvailableGroupsForSite(getCurrentSiteId());
 	}
@@ -319,6 +297,28 @@ public class SakaiProxyImpl implements SakaiProxy {
 			return u.getDisplayId();
 		}
 
+		return "";
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public String getGroupTitleForCurrentSite(String groupId) {
+		return getGroupTitle(getCurrentSiteId(), groupId);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public String getGroupTitle(String siteId, String groupId) {
+		try {
+			if(siteId != null && !siteId.isEmpty() && groupId != null && !groupId.isEmpty()) {
+				return siteService.getSite(siteId).getGroup(groupId).getTitle();
+			}
+		} catch (IdUnusedException e) {
+			log.error("Unable to get group title", e);
+			e.printStackTrace();
+		}
 		return "";
 	}
 

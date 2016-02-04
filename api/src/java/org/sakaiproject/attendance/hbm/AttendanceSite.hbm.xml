@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <!--
-  ~  Copyright (c) 2015, The Apereo Foundation
+  ~  Copyright (c) 2016, University of Dayton
   ~
   ~  Licensed under the Educational Community License, Version 2.0 (the "License");
   ~  you may not use this file except in compliance with the License.
@@ -31,7 +31,7 @@
         </id>
 
         <property name="siteID"                 column="SITE_ID"                type="java.lang.String" />
-        <property name="defaultStatus"          column="DEFAULT_STATUS"         type="org.sakaiproject.attendance.hbm.StatusUserType" />
+        <property name="defaultStatus"          column="DEFAULT_STATUS"         type="org.sakaiproject.attendance.types.StatusUserType" />
         <property name="maximumGrade"           column="MAXIMUM_GRADE"          type="java.lang.Double" />
         <property name="isGradeShown"           column="IS_GRADE_SHOWN"         type="java.lang.Boolean" />
         <property name="sendToGradebook"        column="SEND_TO_GRADEBOOK"      type="java.lang.Boolean" />

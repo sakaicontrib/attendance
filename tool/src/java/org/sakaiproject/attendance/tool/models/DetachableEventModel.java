@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2015, The Apereo Foundation
+ *  Copyright (c) 2016, University of Dayton
  *
  *  Licensed under the Educational Community License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -22,6 +22,11 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.sakaiproject.attendance.logic.AttendanceLogic;
 import org.sakaiproject.attendance.model.AttendanceEvent;
 
+/**
+ * DetachableAttendanceEventModel
+ *
+ * @author David Bauer [dbauer1 (at) udayton (dot) edu]
+ */
 public class DetachableEventModel extends LoadableDetachableModel<AttendanceEvent> {
 
     @SpringBean(name="org.sakaiproject.attendance.logic.AttendanceLogic")
@@ -31,14 +36,18 @@ public class DetachableEventModel extends LoadableDetachableModel<AttendanceEven
     private final long id;
 
     /**
-     * @param t
+     * Constructor with AttendanceEvent provided
+     *
+     * @param t, the AttendanceEvent
      */
     public DetachableEventModel(AttendanceEvent t){
         this.id = t.getId();
     }
 
     /**
-     * @param id
+     * Constructor with AttendanceEvent id provided
+     *
+     * @param id, the AttendanceEvent id
      */
     public DetachableEventModel(long id){
         this.id = id;

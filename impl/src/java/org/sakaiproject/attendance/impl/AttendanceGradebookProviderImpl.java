@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2016, The Apereo Foundation
+ *  Copyright (c) 2016, University of Dayton
  *
  *  Licensed under the Educational Community License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -33,7 +33,9 @@ import org.sakaiproject.tool.api.ToolManager;
 import java.util.Map;
 
 /**
- * Created by Leonardo Canessa [lcanessa1 (at) udayton (dot) edu]
+ * Implementation of AttendanceGradebookProvider, {@link org.sakaiproject.attendance.api.AttendanceGradebookProvider}
+ *
+ * @author Leonardo Canessa [lcanessa1 (at) udayton (dot) edu]
  */
 public class AttendanceGradebookProviderImpl implements AttendanceGradebookProvider {
     private static Logger log = Logger.getLogger(AttendanceGradebookProviderImpl.class);
@@ -43,7 +45,9 @@ public class AttendanceGradebookProviderImpl implements AttendanceGradebookProvi
     @Setter private ToolManager                         toolManager;
     @Setter private GradebookExternalAssessmentService  gbExtAssesService;
 
-
+    /**
+     * {@inheritDoc}
+     */
     public void init() {
         log.info("init()");
     }

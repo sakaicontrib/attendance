@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2016, The Apereo Foundation
+ *  Copyright (c) 2016, University of Dayton
  *
  *  Licensed under the Educational Community License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -27,7 +27,10 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * Created by Leonardo Canessa [lcanessa1 (at) udayton (dot) edu]
+ * An AttendanceRecord Provider
+ *
+ * @author Leonardo Canessa [lcanessa1 (at) udayton (dot) edu]
+ * @author David Bauer [dbauer1 (at) udayton (dot) edu]
  */
 public class AttendanceRecordProvider extends BaseProvider<AttendanceRecord> {
 
@@ -35,6 +38,11 @@ public class AttendanceRecordProvider extends BaseProvider<AttendanceRecord> {
         super();
     }
 
+    /**
+     * A Constructor for a User's AttendanceRecords in the Current Site
+     *
+     * @param id, the User ID
+     */
     public AttendanceRecordProvider(String id) {
         List<AttendanceRecord> records = attendanceLogic.getAttendanceRecordsForUser(id);
         if(!records.isEmpty()) {
@@ -43,6 +51,11 @@ public class AttendanceRecordProvider extends BaseProvider<AttendanceRecord> {
         }
     }
 
+    /**
+     * A Construct for AttendanceRecords from the provided AttendanceEvent
+     *
+     * @param aE, the AttendanceEvent
+     */
     public AttendanceRecordProvider(AttendanceEvent aE) {
         super();
         if(aE != null) {
@@ -57,6 +70,12 @@ public class AttendanceRecordProvider extends BaseProvider<AttendanceRecord> {
         }
     }
 
+    /**
+     * Constructor for AttendanceRecords for an AttendanceEvent for a specific group
+     *
+     * @param aE, the Attendance Event
+     * @param groupId, the Group ID
+     */
     public AttendanceRecordProvider(AttendanceEvent aE, String groupId) {
         super();
         if(aE != null) {
@@ -76,6 +95,11 @@ public class AttendanceRecordProvider extends BaseProvider<AttendanceRecord> {
         }
     }
 
+    /**
+     * Constructor with provided AttendanceRecord data
+     *
+     * @param data, set of AttendanceRecords
+     */
     public AttendanceRecordProvider(Set<AttendanceRecord> data) {
         super();
         if(data != null && !data.isEmpty()) {

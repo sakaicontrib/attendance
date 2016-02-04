@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  ~  Copyright (c) 2015, The Apereo Foundation
+  ~  Copyright (c) 2016, University of Dayton
   ~
   ~  Licensed under the Educational Community License, Version 2.0 (the "License");
   ~  you may not use this file except in compliance with the License.
@@ -44,6 +44,7 @@
 		<property name="sessionFactory" ref="org.sakaiproject.springframework.orm.hibernate.GlobalSessionFactory" />
 	</bean>
 
+	<!-- Attendance Data Access Object -->
 	<bean id="org.sakaiproject.attendance.dao.AttendanceDao"
 		  class="org.sakaiproject.genericdao.springutil.CurrentClassLoaderTxProxyFactoryBean">
 		<property name="transactionManager" ref="org.sakaiproject.springframework.orm.hibernate.GlobalTransactionManager" />

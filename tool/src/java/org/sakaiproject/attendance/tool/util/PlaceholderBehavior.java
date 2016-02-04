@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2015, The Apereo Foundation
+ *  Copyright (c) 2016, University of Dayton
  *
  *  Licensed under the Educational Community License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -25,7 +25,7 @@ import org.apache.wicket.markup.ComponentTag;
  *
  * Initially created by Tom
  * from http://wickedsource.org/2011/12/19/wicket-html5-required-and-placeholder-attributes/
- * Made by Leonardo Canessa [lcanessa1 (at) udayton (dot) edu]
+ * @author Leonardo Canessa [lcanessa1 (at) udayton (dot) edu]
  */
 public class PlaceholderBehavior extends Behavior {
     private final String placeholder;

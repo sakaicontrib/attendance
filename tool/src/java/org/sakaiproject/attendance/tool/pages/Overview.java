@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2015, The Apereo Foundation
+ *  Copyright (c) 2016, University of Dayton
  *
  *  Licensed under the Educational Community License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -18,7 +18,6 @@ package org.sakaiproject.attendance.tool.pages;
 
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.RestartResponseException;
-import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -30,8 +29,6 @@ import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.ResourceModel;
-import org.apache.wicket.request.handler.resource.ResourceStreamRequestHandler;
-import org.apache.wicket.util.resource.AbstractResourceStreamWriter;
 import org.sakaiproject.attendance.model.AttendanceEvent;
 import org.sakaiproject.attendance.model.AttendanceStatus;
 import org.sakaiproject.attendance.model.Status;
@@ -39,10 +36,7 @@ import org.sakaiproject.attendance.tool.dataproviders.AttendanceStatusProvider;
 import org.sakaiproject.attendance.tool.dataproviders.EventDataProvider;
 import org.sakaiproject.attendance.tool.pages.panels.PrintPanel;
 
-import java.io.IOException;
-import java.io.OutputStream;
 import java.util.Date;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -51,7 +45,6 @@ import java.util.Map;
  * 
  * @author David Bauer [dbauer1 (at) udayton (dot) edu]
  * @author Leonardo Canessa [lcanessa1 (at) udayton (dot) edu]
- *
  */
 public class Overview extends BasePage {
 	private static final long serialVersionUID = 1L;
