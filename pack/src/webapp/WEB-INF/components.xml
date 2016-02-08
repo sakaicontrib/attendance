@@ -14,10 +14,9 @@
   ~  See the License for the specific language governing permissions and
   ~  limitations under the License.
   -->
-
-<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
-
-<beans>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
 	<!--  SakaiProxy -->
  	<bean id="org.sakaiproject.attendance.logic.SakaiProxy"
@@ -78,8 +77,7 @@
 	<!-- AttendanceGradebookProvider -->
 	<bean id="org.sakaiproject.attendance.api.AttendanceGradebookProvider"
 		  class="org.sakaiproject.attendance.impl.AttendanceGradebookProviderImpl"
-		  init-method="init"
-		  singleton="true">
+		  init-method="init">
 
 		<property name="attendanceLogic" ref="org.sakaiproject.attendance.logic.AttendanceLogic" />
 		<property name="sakaiProxy" ref="org.sakaiproject.attendance.logic.SakaiProxy" />

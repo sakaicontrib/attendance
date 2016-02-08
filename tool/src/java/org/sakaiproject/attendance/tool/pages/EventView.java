@@ -108,11 +108,10 @@ public class EventView extends BasePage {
         final Form<?> setAllForm = new Form<Void>("set-all-form"){
             @Override
             protected void onSubmit() {
-                if(attendanceLogic.updateAttendanceRecordsForEvent(attendanceEvent, setAllStatus.getModelObject(), selectedGroup)){
-                    String who = selectedGroup == null?"":" for " + sakaiProxy.getGroupTitleForCurrentSite(selectedGroup);
-                    getSession().info("All attendance records " + who + " for " + attendanceEvent.getName() + " set to " + setAllStatus.getModelObject());
-                    setResponsePage(new EventView(attendanceEvent, returnPage, selectedGroup));
-                }
+                attendanceLogic.updateAttendanceRecordsForEvent(attendanceEvent, setAllStatus.getModelObject(), selectedGroup);
+                String who = selectedGroup == null?"":" for " + sakaiProxy.getGroupTitleForCurrentSite(selectedGroup);
+                getSession().info("All attendance records " + who + " for " + attendanceEvent.getName() + " set to " + setAllStatus.getModelObject());
+                setResponsePage(new EventView(attendanceEvent, returnPage, selectedGroup));
             }
         };
 
