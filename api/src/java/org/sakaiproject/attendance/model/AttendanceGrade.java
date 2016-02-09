@@ -26,7 +26,7 @@ import java.io.Serializable;
  * The AttendanceGrade earned for the all AttendanceItems
  *
  * @author Leonardo Canessa [lcanessa1 (at) udayton (dot) edu]au)
- * @author Steve Swinsburg (steve.swinsburg@anu.edu.au)
+ * @author Steve Swinsburg (steve.swinsburg@gmail.com)
  */
 @Data
 @NoArgsConstructor

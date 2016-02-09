@@ -39,7 +39,7 @@ import java.util.List;
  *
  * @author Leonardo Canessa [lcanessa1 (at) udayton (dot) edu]
  * @author David Bauer [dbauer1 (at) udayton (dot) edu]
- * @author Steve Swinsburg (steve.swinsburg@anu.edu.au)
+ * @author Steve Swinsburg (steve.swinsburg@gmail.com)
  */
 public class AttendanceDaoImpl extends HibernateDaoSupport implements AttendanceDao {
 
