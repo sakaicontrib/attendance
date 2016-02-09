@@ -31,7 +31,19 @@
     <!-- MAIN CONTENT -->
     <div id="main_content_wrap" class="outer">
       <section id="main_content" class="inner">
-        <p>Please click on the links below to learn more about the latest improvements and new features that have been added, or view our <a href="https://youtu.be/DSwpp6NTPQM">video demo</a> of Phase II of the Attendance tool.</p>
+        <h1>
+<a id="sakai-attendance-tool" class="anchor" href="#sakai-attendance-tool" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Sakai Attendance Tool</h1>
+
+<p>The Attendance tool is a Sakai {2.9.3, 10.x, and 11} tool which allows for taking of attendance for a specific site.
+Please see below to learn more about the features of this tool.</p>
+
+<h2>
+<a id="features" class="anchor" href="#features" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Features</h2>
+
+<h3>
+<a id="demo-video" class="anchor" href="#demo-video" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Demo Video</h3>
+
+<p><a href="https://youtu.be/DSwpp6NTPQM">video demo</a></p>
 
 <h3>
 <a id="from-the-take-attendance-page" class="anchor" href="#from-the-take-attendance-page" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>From the Take Attendance Page:</h3>
@@ -64,6 +76,37 @@
 <li><a href="https://isidore.udayton.edu/access/content/public/Attendance%20Tool/Printable%20Sheets-6.html">Reorder attendance status columns</a></li>
 <li><a href="https://isidore.udayton.edu/access/content/public/Attendance%20Tool/Printable%20Sheets-6.html">Choose whether to show your attendance comments to students</a></li>
 </ul>
+
+<h2>
+<a id="compatibility" class="anchor" href="#compatibility" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Compatibility</h2>
+
+<p>Version 1.0 of Attendance is compatible with Sakai 11. Though, there are some UI changes which are still necessary. </p>
+
+<p>There are branches for Sakai 2.9.3 and for Sakai 10.x. The 2.9.3 has been fully tested against Sakai 2.9.3. The 10.x branch has been spot tested against Sakai 10.6.</p>
+
+<h2>
+<a id="installation" class="anchor" href="#installation" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Installation</h2>
+
+<p>This is a typical Sakai tool. Use 'maven clean install' to build and 'maven sakai:deploy' to install to tomcat.</p>
+
+<h3>
+<a id="set-up" class="anchor" href="#set-up" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Set up</h3>
+
+<p>The Sakai property auto.ddl should be set to true when first starting this tool with Sakai.
+If not, queries for MySQL and Oracle can be found in <a href="docs/sql">docs/sql/</a>.</p>
+
+<h3>
+<a id="10x" class="anchor" href="#10x" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>10.x</h3>
+
+<p>The 10.x branch's root pom.xml parent version should be changed to the version of 10 that is being used from 10-SNAPSHOT.</p>
+
+<pre><code>&lt;parent&gt;
+        &lt;groupId&gt;org.sakaiproject&lt;/groupId&gt;
+        &lt;artifactId&gt;master&lt;/artifactId&gt;
+        &lt;version&gt;10.6&lt;/version&gt;
+        &lt;relativePath&gt;../master/pom.xml&lt;/relativePath&gt;
+&lt;/parent&gt;
+</code></pre>
       </section>
     </div>
 
