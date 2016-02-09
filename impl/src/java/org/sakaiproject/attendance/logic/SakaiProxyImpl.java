@@ -40,7 +40,8 @@ import java.util.*;
  * Implementation of our SakaiProxy API
  *
  * @author Leonardo Canessa [lcanessa1 (at) udayton (dot) edu]
- *
+ * @author David Bauer [dbauer1 (at) udayton (dot) edu]
+ * @author Steve Swinsburg (steve.swinsburg@anu.edu.au)
  */
 public class SakaiProxyImpl implements SakaiProxy {
 

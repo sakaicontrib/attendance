@@ -21,6 +21,7 @@ import org.sakaiproject.springframework.orm.hibernate.EnumUserType;
 
 /**
  * @author Leonardo Canessa [lcanessa1 (at) udayton (dot) edu]
+ * @author Duffy Gillman
  * Modeled after org.sakaiproject.scheduler.events.hibernate.TriggerEventEnumUserType.java
  */
 public class StatusUserType extends EnumUserType<Status> {
