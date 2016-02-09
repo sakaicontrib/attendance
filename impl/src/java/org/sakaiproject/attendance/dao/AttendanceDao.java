@@ -122,7 +122,7 @@ public interface AttendanceDao {
 	 * @param aRs, a List of AttendanceRecords
 	 * @return success of the operation
      */
-	void updateAttendanceRecords(List<AttendanceRecord> aRs);
+	boolean updateAttendanceRecords(List<AttendanceRecord> aRs);
 
 	/**
 	 * Update a set of AttendanceStatuses
@@ -130,7 +130,7 @@ public interface AttendanceDao {
 	 * @param attendanceStatusList, a List of AttendanceStatuses
 	 * @return success of the operation
      */
-	void updateAttendanceStatuses(List<AttendanceStatus> attendanceStatusList);
+	boolean updateAttendanceStatuses(List<AttendanceStatus> attendanceStatusList);
 
 	/**
 	 * Get a list of the active statuses in an Attendance Site
