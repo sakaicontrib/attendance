@@ -31,7 +31,8 @@ import org.sakaiproject.user.api.User;
  * Implementation of {@link AttendanceLogic}
  * 
  * @author Leonardo Canessa [lcanessa1 (at) udayton (dot) edu]
- *
+ * @author David Bauer [dbauer1 (at) udayton (dot) edu]
+ * @author Steve Swinsburg (steve.swinsburg@anu.edu.au)
  */
 public class AttendanceLogicImpl implements AttendanceLogic {
 	private static final Logger log = Logger.getLogger(AttendanceLogicImpl.class);

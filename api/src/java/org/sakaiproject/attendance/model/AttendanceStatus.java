@@ -29,6 +29,7 @@ import java.util.Objects;
  * An AttendanceStatus is a wrapper around the Status enum type defining meta information on individual Statuses.
  *
  * @author David Bauer [dbauer1 (at) udayton (dot) edu]
+ * @author Steve Swinsburg (steve.swinsburg@anu.edu.au)
  */
 @NoArgsConstructor
 @AllArgsConstructor

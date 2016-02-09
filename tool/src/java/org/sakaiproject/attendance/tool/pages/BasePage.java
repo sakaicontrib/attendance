@@ -48,6 +48,7 @@ import javax.servlet.http.HttpServletRequest;
  *
  * @author Leonardo Canessa [lcanessa1 (at) udayton (dot) edu]
  * @author David Bauer [dbauer1 (at) udayton (dot) edu]
+ * @author Steve Swinsburg (steve.swinsburg@anu.edu.au)
  */
 public class BasePage extends WebPage implements IHeaderContributor {
 	protected static final Logger log = Logger.getLogger(BasePage.class);
