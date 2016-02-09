@@ -70,8 +70,9 @@ public class AttendanceLogicImpl implements AttendanceLogic {
 			}
 		}
 
-		generateMissingAttendanceStatusesForSite(currentAttendanceSite);
-		currentAttendanceSite = getAttendanceSite(currentSiteID);
+		if(generateMissingAttendanceStatusesForSite(currentAttendanceSite)) {
+			currentAttendanceSite = getAttendanceSite(currentSiteID);
+		}
 
 		return currentAttendanceSite;
 	}
@@ -193,7 +194,7 @@ public class AttendanceLogicImpl implements AttendanceLogic {
 	/**
 	 * {@inheritDoc}
 	 */
-	public void updateAttendanceRecordsForEvent(AttendanceEvent aE, Status s) {
+	public boolean updateAttendanceRecordsForEvent(AttendanceEvent aE, Status s) {
 		aE = getAttendanceEvent(aE.getId());
 		List<AttendanceRecord> records = new ArrayList<AttendanceRecord>(aE.getRecords());
 
@@ -205,15 +206,15 @@ public class AttendanceLogicImpl implements AttendanceLogic {
 			aR.setStatus(s);
 		}
 
-		dao.updateAttendanceRecords(records);
+		return dao.updateAttendanceRecords(records);
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
-	public void updateAttendanceRecordsForEvent(AttendanceEvent aE, Status s, String groupId) {
+	public boolean updateAttendanceRecordsForEvent(AttendanceEvent aE, Status s, String groupId) {
 		if(groupId == null || groupId.isEmpty()) {
-			updateAttendanceRecordsForEvent(aE, s);
+			return updateAttendanceRecordsForEvent(aE, s);
 		} else {
 			aE = getAttendanceEvent(aE.getId());
 			List<AttendanceRecord> allRecords = new ArrayList<AttendanceRecord>(aE.getRecords());
@@ -237,14 +238,14 @@ public class AttendanceLogicImpl implements AttendanceLogic {
 				aR.setStatus(s);
 			}
 
-			dao.updateAttendanceRecords(recordsToUpdate);
+			return dao.updateAttendanceRecords(recordsToUpdate);
 		}
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
-	public void updateMissingRecordsForEvent(AttendanceEvent attendanceEvent, Status defaultStatus, List<String> missingStudentIds) {
+	public boolean updateMissingRecordsForEvent(AttendanceEvent attendanceEvent, Status defaultStatus, List<String> missingStudentIds) {
 		List<AttendanceRecord> recordList = new ArrayList<AttendanceRecord>();
 
 		if(defaultStatus == null) {
@@ -258,8 +259,9 @@ public class AttendanceLogicImpl implements AttendanceLogic {
 					recordList.add(attendanceRecord);
 				}
 			}
-			dao.updateAttendanceRecords(recordList);
+			return dao.updateAttendanceRecords(recordList);
 		}
+		return false;
 	}
 
 	/**
@@ -495,7 +497,7 @@ public class AttendanceLogicImpl implements AttendanceLogic {
 		}
 	}
 
-	private void generateMissingAttendanceStatusesForSite(AttendanceSite attendanceSite) {
+	private boolean generateMissingAttendanceStatusesForSite(AttendanceSite attendanceSite) {
 		Set<AttendanceStatus> currentAttendanceStatuses = attendanceSite.getAttendanceStatuses();
 		List<Status> previouslyCreatedStatuses = new ArrayList<Status>();
 		List<AttendanceStatus> statusesToBeAdded = new ArrayList<AttendanceStatus>();
@@ -521,7 +523,8 @@ public class AttendanceLogicImpl implements AttendanceLogic {
 			}
 		}
 
-		dao.updateAttendanceStatuses(statusesToBeAdded);
+		return statusesToBeAdded.isEmpty() || dao.updateAttendanceStatuses(statusesToBeAdded);
+
 	}
 
 	private int getNextSortOrder(List<AttendanceStatus> attendanceStatusList) {

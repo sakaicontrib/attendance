@@ -216,28 +216,26 @@ public class AttendanceDaoImpl extends HibernateDaoSupport implements Attendance
 	/**
 	 * {@inheritDoc}
 	 */
-	public void updateAttendanceRecords(List<AttendanceRecord> aRs) {
-		for(AttendanceRecord aR : aRs) {
-			try {
-				getHibernateTemplate().saveOrUpdate(aR);
-				log.info("save attendanceRecord id: " + aR.getId());
-			} catch (Exception e) {
-				log.error("update attendanceRecords failed.", e);
-			}
+	public boolean updateAttendanceRecords(List<AttendanceRecord> aRs) {
+		try{
+			getHibernateTemplate().saveOrUpdateAll(aRs);
+			return true;
+		} catch (Exception e) {
+			log.error("update attendanceRecords failed.", e);
+			return false;
 		}
 	}
 
 	/**
 	 * {@inheritDoc}
      */
-	public void updateAttendanceStatuses(List<AttendanceStatus> attendanceStatusList) {
-		for(AttendanceStatus aS : attendanceStatusList) {
-			try {
-				getHibernateTemplate().saveOrUpdate(aS);
-				log.info("AttendanceStatus saved, id: " + aS.getId());
-			} catch (Exception e) {
-				log.error("update attendanceStatuses failed.", e);
-			}
+	public boolean updateAttendanceStatuses(List<AttendanceStatus> attendanceStatusList) {
+		try{
+			getHibernateTemplate().saveOrUpdateAll(attendanceStatusList);
+			return true;
+		} catch (Exception e) {
+			log.error("update attendanceStatuses failed.", e);
+			return false;
 		}
 	}
 
@@ -255,7 +253,7 @@ public class AttendanceDaoImpl extends HibernateDaoSupport implements Attendance
 				@Override
 				public Object doInHibernate(Session session) throws HibernateException, SQLException {
 					Query q = session.getNamedQuery(QUERY_GET_ACTIVE_ATTENDANCE_STATUSES_FOR_SITE);
-					q.setParameter(ATTENDANCE_SITE, attendanceSite, new ManyToOneType(null, "org.sakaiproject.attendance.model.AttendanceSite"));
+					q.setParameter(ATTENDANCE_SITE, attendanceSite, new ManyToOneType("org.sakaiproject.attendance.model.AttendanceSite"));
 					return q.list();
 				}
 			};
@@ -281,7 +279,7 @@ public class AttendanceDaoImpl extends HibernateDaoSupport implements Attendance
                 @Override
                 public Object doInHibernate(Session session) throws HibernateException, SQLException {
                     Query q = session.getNamedQuery(QUERY_GET_ALL_ATTENDANCE_STATUSES_FOR_SITE);
-                    q.setParameter(ATTENDANCE_SITE, attendanceSite, new ManyToOneType(null, "org.sakaiproject.attendance.model.AttendanceSite"));
+                    q.setParameter(ATTENDANCE_SITE, attendanceSite, new ManyToOneType("org.sakaiproject.attendance.model.AttendanceSite"));
                     return q.list();
                 }
             };
@@ -328,7 +326,7 @@ public class AttendanceDaoImpl extends HibernateDaoSupport implements Attendance
 				@Override
 				public Object doInHibernate(Session session) throws HibernateException, SQLException {
 					Query q = session.getNamedQuery(QUERY_GET_ATTENDANCE_GRADE);
-					q.setParameter(ATTENDANCE_SITE, aS, new ManyToOneType(null, "org.sakaiproject.attendance.model.AttendanceSite"));
+					q.setParameter(ATTENDANCE_SITE, aS, new ManyToOneType("org.sakaiproject.attendance.model.AttendanceSite"));
 					q.setParameter(USER_ID, userID, new StringType());
 					return q.uniqueResult();
 				}
@@ -355,7 +353,7 @@ public class AttendanceDaoImpl extends HibernateDaoSupport implements Attendance
 				@Override
 				public Object doInHibernate(Session session) throws HibernateException, SQLException {
 					Query q = session.getNamedQuery(QUERY_GET_ATTENDANCE_GRADES_FOR_SITE);
-					q.setParameter(ATTENDANCE_SITE, aS, new ManyToOneType(null, "org.sakaiproject.attendance.model.AttendanceSite"));
+					q.setParameter(ATTENDANCE_SITE, aS, new ManyToOneType("org.sakaiproject.attendance.model.AttendanceSite"));
 					return q.list();
 				}
 			};
@@ -419,7 +417,7 @@ public class AttendanceDaoImpl extends HibernateDaoSupport implements Attendance
                 @Override
                 public Object doInHibernate(Session session) throws HibernateException, SQLException {
                     Query q = session.getNamedQuery(QUERY_GET_ATTENDANCE_EVENTS_FOR_SITE);
-                    q.setParameter(ATTENDANCE_SITE, aS, new ManyToOneType(null, "org.sakaiproject.attendance.model.AttendanceSite"));
+                    q.setParameter(ATTENDANCE_SITE, aS, new ManyToOneType("org.sakaiproject.attendance.model.AttendanceSite"));
                     return q.list();
                 }
             };

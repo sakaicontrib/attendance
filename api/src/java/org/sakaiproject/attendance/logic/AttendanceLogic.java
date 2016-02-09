@@ -169,8 +169,9 @@ public interface AttendanceLogic {
 	 *
 	 * @param aE, the AttendanceEvent to update
 	 * @param s, the Status to set the AttendanceRecords (if null, uses the default of the AttendanceSite)
+     * @return the success of the operation
      */
-	void updateAttendanceRecordsForEvent(AttendanceEvent aE, Status s);
+	boolean updateAttendanceRecordsForEvent(AttendanceEvent aE, Status s);
 
 	/**
 	 * Update all AttendanceRecords where the user belongs to the supplied group for an AttendanceEvent
@@ -179,8 +180,9 @@ public interface AttendanceLogic {
 	 * @param s, the Status to use (if null, use the Site's default status)
 	 * @param groupId, only update the AttendanceRecords for members of the groupID (if null or empty calls
 	 *                 {@link org.sakaiproject.attendance.logic.AttendanceLogic#updateAttendanceRecordsForEvent(AttendanceEvent, Status)})
+     * @return success of the operation
      */
-	void updateAttendanceRecordsForEvent(AttendanceEvent aE, Status s, String groupId);
+	boolean updateAttendanceRecordsForEvent(AttendanceEvent aE, Status s, String groupId);
 
     /**
 	 * Creates AttendanceRecords for an AttendanceEvent using a default Status for the provided Student IDs
@@ -188,8 +190,9 @@ public interface AttendanceLogic {
      * @param attendanceEvent, the AttendanceEvent
      * @param defaultStatus, the status to use (if null use the site default)
      * @param missingStudentIds, a List of UserIDs which need records
+     * @return the success of the operation
      */
-	void updateMissingRecordsForEvent(AttendanceEvent attendanceEvent, Status defaultStatus, List<String> missingStudentIds);
+	boolean updateMissingRecordsForEvent(AttendanceEvent attendanceEvent, Status defaultStatus, List<String> missingStudentIds);
 
 	/**
 	 * Get statistics (total counts for each status) for an event
