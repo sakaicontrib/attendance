@@ -10,4 +10,4 @@ The Sakai property auto.ddl should be set to true when first starting this tool 
 If not, queries for MySQL and Oracle can be found in [docs/sql/](docs/sql/)
 
 ## Contact
-If you have any questions please contact the E-Learning Lab at the University of Dayton at lms-devs@udayton.edu.
+If you have any questions please contact the LMS devs at the University of Dayton at lms-devs@udayton.edu.
