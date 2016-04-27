@@ -367,14 +367,17 @@ p.setAll {
 }
 
 div.printContainer {
-    position: absolute;
+    position: fixed;
     min-width: 300px;
     padding: .5em 1em;
     background: #fff;
     border: 1px solid #004b8d;
     line-height: 1.5em;
-    left: 25%;
-    top: 150px;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    -webkit-transform: translate(-50%, -50%);
     font-weight: normal;
     -webkit-box-shadow: 0 8px 6px -6px black;
     -moz-box-shadow: 0 8px 6px -6px black;
