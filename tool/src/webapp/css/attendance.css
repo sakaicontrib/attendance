@@ -19,9 +19,9 @@ body {
 }
 
 /* style the Wicket FeedbackPanel to remove the list */
-.alertMessage ul, .success ul {
+.alertMessage ul, .messageSuccess ul {
     list-style-type: none !important;
-    margin-left: -40px;
+    margin-left: 0px;
     margin-bottom: 0px;
     margin-top: 0px;
 }
