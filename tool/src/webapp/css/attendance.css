@@ -18,6 +18,10 @@ body {
     color: #111;
 }
 
+form {
+    margin-bottom: 1em;
+}
+
 /* style the Wicket FeedbackPanel to remove the list */
 .alertMessage ul, .messageSuccess ul {
     list-style-type: none !important;
