@@ -131,7 +131,7 @@ public class BasePage extends WebPage implements IHeaderContributor {
         			message.getLevel() == FeedbackMessage.WARNING){
         			add(AttributeModifier.replace("class", "alertMessage"));
         		} else if(message.getLevel() == FeedbackMessage.INFO){
-        			add(AttributeModifier.replace("class", "success"));        			
+        			add(AttributeModifier.replace("class", "messageSuccess"));
         		} 
 
         		return newMessageDisplayComponent;
