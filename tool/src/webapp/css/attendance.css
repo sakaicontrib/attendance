@@ -158,7 +158,7 @@ table.itemListTable, table.eventViewTable, table.takeAttendanceTable, div.eventF
     vertical-align: bottom;
 }
 
-.overviewTable thead tr, .itemListTable thead tr, .eventViewTable thead tr, .takeAttendanceTable thead tr, .div-table-row-header, li.statusItemDisabled  {
+.overviewTable thead tr, .itemListTable thead tr, .eventViewTable thead tr, .takeAttendanceTable thead tr, .div-table-row-header  {
     background-color: #eee;
 }
 
@@ -469,6 +469,10 @@ li.statusItem:hover {
 
 li.statusItem span {
     padding-left: 2em;
+}
+
+li.statusItemDisabled  {
+    background-color: #eee;
 }
 
 p.editStatusInfo, p.editGradeInfo {
