@@ -1,7 +1,11 @@
 # Attendance
 A simple [Sakai](https://github.com/sakaiproject/sakai) tool for tracking attendance that integrates with the Gradebook.
 
+## Resources
 Pages: http://udayton.github.io/attendance/
+
+Presentation:
+http://prezi.com/m3dvmxokf8as/ - Delivered at Apereo 16.
 
 ## Compatibility
 Version 1.0 of Attendance is compatible with Sakai 11. Though, there are some UI changes which are still necessary. 
