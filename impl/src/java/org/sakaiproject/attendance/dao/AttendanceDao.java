@@ -197,6 +197,42 @@ public interface AttendanceDao {
      */
 	boolean updateAttendanceGrade(AttendanceGrade aG);
 
+	/**
+	 * Get the AttendanceUserStats for a User and Site
+	 * @param userId
+	 * @param aS
+	 * @return
+	 */
+	AttendanceUserStats getAttendanceUserStats(String userId, AttendanceSite aS);
+
+	/**
+	 * Return the AttendanceUserStats for a Site
+	 * @param aS, the AttendanceSite to get UserStats for
+	 * @return a List of {@link AttendanceUserStats}
+	 */
+	List<AttendanceUserStats> getAttendanceUserStatsForSite(AttendanceSite aS);
+
+	/**
+	 * Update the AttendanceUserStats
+	 * @param aUS, the AttendanceUserStats to update
+	 * @return success or failure of the operation
+	 */
+	boolean updateAttendanceUserStats(AttendanceUserStats aUS);
+
+	/**
+	 * Get the AttendanceItemStats for an AttendanceEvent
+	 * @param aE, the AttendanceEvent to get the stats for
+	 * @return the AttendanceItemStats, null if DB issue
+	 */
+	AttendanceItemStats getAttendanceItemStats(AttendanceEvent aE);
+
+	/**
+	 * Update the AttendanceItemStats
+	 * @param aIS, the AttendanceItemStats to update
+	 * @return success or failure of the operation
+	 */
+	boolean updateAttendanceItemStats(AttendanceItemStats aIS);
+
 	// Hibernate Query Constants
 	String QUERY_GET_ATTENDANCE_EVENT = "getAttendanceEvent";
 	String QUERY_GET_ATTENDANCE_EVENTS_FOR_SITE = "getAttendanceEventsForSite";
@@ -215,6 +251,10 @@ public interface AttendanceDao {
 	String QUERY_GET_ATTENDANCE_GRADES_FOR_SITE = "getAttendanceGradesForSite";
 	String QUERY_GET_ATTENDANCE_GRADE_BY_ID = "getAttendanceGradeByID";
 	String QUERY_GET_ATTENDANCE_GRADE = "getAttendanceGrade";
+
+	String QUERY_GET_ATTENDANCE_USER_STATS = "getAttendanceUserStats";
+	String QUERY_GET_ATTENDANCE_USER_STATS_FOR_SITE = "getAttendanceUserStatsForSite";
+	String QUERY_GET_ATTENDANCE_ITEM_STATS = "getAttendanceItemStats";
 
 	// Hibernate Object Fields
 	String ID = "id";

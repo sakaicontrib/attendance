@@ -30,6 +30,7 @@ import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.ResourceModel;
 import org.sakaiproject.attendance.model.AttendanceEvent;
+import org.sakaiproject.attendance.model.AttendanceItemStats;
 import org.sakaiproject.attendance.model.AttendanceStatus;
 import org.sakaiproject.attendance.model.Status;
 import org.sakaiproject.attendance.tool.dataproviders.AttendanceStatusProvider;
@@ -37,7 +38,6 @@ import org.sakaiproject.attendance.tool.dataproviders.EventDataProvider;
 import org.sakaiproject.attendance.tool.pages.panels.PrintPanel;
 
 import java.util.Date;
-import java.util.Map;
 
 /**
  * The overview page which lists AttendanceEvents and basic statistics of each
@@ -72,7 +72,7 @@ public class Overview extends BasePage {
 		this.printContainer = new WebMarkupContainer("print-container");
 		printContainer.setOutputMarkupId(true);
 
-		this.printPanel = new PrintPanel("print-panel", new Model<AttendanceEvent>());
+		this.printPanel = new PrintPanel("print-panel", new Model<>());
 
 		printContainer.add(printPanel);
 
@@ -115,22 +115,25 @@ public class Overview extends BasePage {
 		DataView<AttendanceEvent> attendanceEventDataView = new DataView<AttendanceEvent>("events", eventDataProvider) {
 			@Override
 			protected void populateItem(final Item<AttendanceEvent> item) {
-				final Map<Status, Integer> stats = attendanceLogic.getStatsForEvent(item.getModelObject());
+				final AttendanceEvent modelObject = item.getModelObject();
+				final AttendanceItemStats itemStats = attendanceLogic.getStatsForEvent(modelObject);
 				Link<Void> eventLink = new Link<Void>("event-link") {
 					private static final long serialVersionUID = 1L;
 					public void onClick() {
-						setResponsePage(new EventView(item.getModelObject(), BasePage.OVERVIEW_PAGE));
+						setResponsePage(new EventView(modelObject, BasePage.OVERVIEW_PAGE));
 					}
 				};
-				eventLink.add(new Label("event-name", item.getModelObject().getName()));
+				eventLink.add(new Label("event-name", modelObject.getName()));
 
 				item.add(eventLink);
-				item.add(new Label("event-date", item.getModelObject().getStartDateTime()));
+				item.add(new Label("event-date", modelObject.getStartDateTime()));
 
 				DataView<AttendanceStatus> activeStatusStats = new DataView<AttendanceStatus>("active-status-stats", attendanceStatusProvider) {
 					@Override
 					protected void populateItem(Item<AttendanceStatus> item) {
-						item.add(new Label("event-stats", stats.get(item.getModelObject().getStatus())));
+						Status status = item.getModelObject().getStatus();
+						int stat = attendanceLogic.getStatsForStatus(itemStats, status);
+						item.add(new Label("event-stats", stat));
 					}
 				};
 				item.add(activeStatusStats);
@@ -138,7 +141,7 @@ public class Overview extends BasePage {
 				item.add(new Link<Void>("event-edit-link") {
 					private static final long serialVersionUID = 1L;
 					public void onClick() {
-						setResponsePage(new AddEventPage(item.getModelObject()));
+						setResponsePage(new AddEventPage(modelObject));
 					}
 				});
 				item.add(new AjaxLink<Void>("print-link"){

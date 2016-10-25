@@ -57,7 +57,7 @@ public class AttendanceSite implements Serializable {
 	public boolean equals(Object o) {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
-		AttendanceSite that = (AttendanceSite) o;
+		final AttendanceSite that = (AttendanceSite) o;
 		return Objects.equals(getId(), that.getId()) &&
 				Objects.equals(getSiteID(), that.getSiteID()) &&
 				getDefaultStatus() == that.getDefaultStatus() &&

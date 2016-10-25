@@ -22,14 +22,11 @@ import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.model.ResourceModel;
-import org.sakaiproject.attendance.model.AttendanceEvent;
-import org.sakaiproject.attendance.model.AttendanceStatus;
-import org.sakaiproject.attendance.model.Status;
+import org.sakaiproject.attendance.model.*;
 import org.sakaiproject.attendance.tool.dataproviders.AttendanceStatusProvider;
 import org.sakaiproject.attendance.tool.pages.EventView;
 import org.sakaiproject.attendance.tool.pages.StudentView;
 
-import java.util.Map;
 
 /**
  * StatisticsPanel shows statistics of AttendanceRecord statuses for an AttendanceEvent or for a User
@@ -45,7 +42,7 @@ public class StatisticsPanel extends BasePanel {
     private                 String                  fromPage;
     private                 Long                    previousEventId;
 
-    private                 Map<Status, Integer>    stats;
+    private                 AttendanceStats         stats;
 
     public StatisticsPanel(String id, String fromPage, AttendanceEvent aE) {
         super(id);
@@ -92,7 +89,9 @@ public class StatisticsPanel extends BasePanel {
         DataView<AttendanceStatus> activeStatusStats = new DataView<AttendanceStatus>("active-status-stats", attendanceStatusProvider) {
             @Override
             protected void populateItem(Item<AttendanceStatus> item) {
-                item.add(new Label("stats", stats.get(item.getModelObject().getStatus())));
+                Status status = item.getModelObject().getStatus();
+                int stat = attendanceLogic.getStatsForStatus(stats, status);
+                item.add(new Label("stats", stat));
             }
         };
         infoContainer.add(activeStatusStats);

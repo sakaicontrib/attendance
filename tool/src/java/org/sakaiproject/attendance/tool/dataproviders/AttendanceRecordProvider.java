@@ -17,6 +17,7 @@
 package org.sakaiproject.attendance.tool.dataproviders;
 
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 import org.sakaiproject.attendance.model.AttendanceEvent;
 import org.sakaiproject.attendance.model.AttendanceRecord;
 import org.sakaiproject.attendance.tool.models.DetachableAttendanceRecordModel;
@@ -79,14 +80,13 @@ public class AttendanceRecordProvider extends BaseProvider<AttendanceRecord> {
     public AttendanceRecordProvider(AttendanceEvent aE, String groupId) {
         super();
         if(aE != null) {
-            aE = attendanceLogic.getAttendanceEvent(aE.getId());
             List<String> currentStudentIds;
             if(groupId == null) {
                 currentStudentIds = sakaiProxy.getCurrentSiteMembershipIds();
             } else {
                 currentStudentIds = sakaiProxy.getGroupMembershipIdsForCurrentSite(groupId);
             }
-            this.list = new ArrayList<AttendanceRecord>();
+            this.list = new ArrayList<>();
             for(AttendanceRecord record: aE.getRecords()) {
                 if(currentStudentIds.contains(record.getUserID())) {
                     this.list.add(record);
@@ -103,13 +103,13 @@ public class AttendanceRecordProvider extends BaseProvider<AttendanceRecord> {
     public AttendanceRecordProvider(Set<AttendanceRecord> data) {
         super();
         if(data != null && !data.isEmpty()) {
-            this.list = new ArrayList<AttendanceRecord>(data);
+            this.list = new ArrayList<>(data);
         }
     }
 
     protected List<AttendanceRecord> getData() {
         if(this.list == null) {
-            this.list = new ArrayList<AttendanceRecord>();
+            this.list = new ArrayList<>();
             Collections.reverse(this.list);
         }
 
@@ -118,6 +118,9 @@ public class AttendanceRecordProvider extends BaseProvider<AttendanceRecord> {
 
     @Override
     public IModel<AttendanceRecord> model(AttendanceRecord object){
+        if(object.getId() == null) {
+            return new Model<>(object);
+        }
         return new DetachableAttendanceRecordModel(object);
     }
 }

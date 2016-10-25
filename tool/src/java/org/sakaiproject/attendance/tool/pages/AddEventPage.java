@@ -106,36 +106,36 @@ public class AddEventPage extends BasePage {
 		DataView<AttendanceEvent> attendanceEventDataView = new DataView<AttendanceEvent>("event-list", eventDataProvider) {
 			@Override
 			protected void populateItem(final Item<AttendanceEvent> item) {
+				final AttendanceEvent modelObject = item.getModelObject();
 				ConfirmationLink<Void> deleteLink = new ConfirmationLink<Void>("delete-link", getString("attendance.delete.confirm")) {
 					@Override
 					public void onClick(AjaxRequestTarget ajaxRequestTarget) {
-						String name = item.getModelObject().getName();
-						if(attendanceLogic.deleteAttendanceEvent(item.getModelObject())) {
+						String name = modelObject.getName();
+						if(attendanceLogic.deleteAttendanceEvent(modelObject)) {
 							getSession().info(name + " deleted successfully.");
-							refreshPageComponents(ajaxRequestTarget);
 						} else {
 							getSession().error("Failed to delete " + name);
-							refreshPageComponents(ajaxRequestTarget);
 						}
+						refreshPageComponents(ajaxRequestTarget);
 					}
 				};
 				item.add(deleteLink);
 				Link<Void> editLink = new Link<Void>("edit-link") {
 					@Override
 					public void onClick() {
-						setResponsePage(new AddEventPage(item.getModelObject()));
+						setResponsePage(new AddEventPage(modelObject));
 					}
 				};
 				item.add(editLink);
 				Link<Void> eventLink = new Link<Void>("event-link") {
 					private static final long serialVersionUID = 1L;
 					public void onClick() {
-						setResponsePage(new EventView(item.getModelObject(), BasePage.ITEMS_PAGE));
+						setResponsePage(new EventView(modelObject, BasePage.ITEMS_PAGE));
 					}
 				};
-				eventLink.add(new Label("event-name", item.getModelObject().getName()));
+				eventLink.add(new Label("event-name", modelObject.getName()));
 				item.add(eventLink);
-				item.add(new Label("item-date", item.getModelObject().getStartDateTime()));
+				item.add(new Label("item-date", modelObject.getStartDateTime()));
 			}
 		};
 

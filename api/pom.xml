@@ -24,7 +24,6 @@
   </parent>
 	
 	<name>attendance - API</name>
-	<groupId>org.sakaiproject.attendance</groupId>
 	<artifactId>attendance-api</artifactId>
 
 	<packaging>jar</packaging>
@@ -44,6 +43,11 @@
 		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-core</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>commons-lang</groupId>
+			<artifactId>commons-lang</artifactId>
+			<scope>provided</scope>
 		</dependency>
 
 		<!-- Sakai dependencies -->

@@ -44,6 +44,7 @@ public class AttendanceEvent implements Serializable {
 	@Getter @Setter private 				AttendanceSite 			attendanceSite;
 	@Getter @Setter private 				String 					location;
 	@Getter @Setter private 				Set<AttendanceRecord> 	records = new HashSet<AttendanceRecord>(0);
+	@Getter @Setter private					AttendanceItemStats 	stats;
 
 	// Copy constructor
 	public AttendanceEvent(AttendanceEvent attendanceEvent){
@@ -62,7 +63,7 @@ public class AttendanceEvent implements Serializable {
 	public boolean equals(Object o) {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
-		AttendanceEvent that = (AttendanceEvent) o;
+		final AttendanceEvent that = (AttendanceEvent) o;
 		return Objects.equals(id, that.id) &&
 				Objects.equals(name, that.name) &&
 				Objects.equals(startDateTime, that.startDateTime) &&
