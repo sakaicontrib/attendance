@@ -55,6 +55,7 @@ public class AttendanceRecordFormDataPanel extends BasePanel {
     private                 List<Component>             ajaxTargets = new ArrayList<Component>();
     private                 String                      returnPage;
     private                 FeedbackPanel               pageFeedbackPanel;
+    private                 Status                      oldStatus;
 
     private                 WebMarkupContainer          commentContainer;
     private                 WebMarkupContainer          noComment;
@@ -63,6 +64,7 @@ public class AttendanceRecordFormDataPanel extends BasePanel {
     public AttendanceRecordFormDataPanel(String id, IModel<AttendanceRecord> aR, boolean iS, String rP, FeedbackPanel fP) {
         super(id, aR);
         this.recordIModel = aR;
+        this.oldStatus = aR.getObject().getStatus();
         this.showCommentsToStudents = recordIModel.getObject().getAttendanceEvent().getAttendanceSite().getShowCommentsToStudents();
         this.isStudentView = iS;
         this.restricted = this.role != null && this.role.equals("Student");
@@ -79,12 +81,13 @@ public class AttendanceRecordFormDataPanel extends BasePanel {
                 if(aR.getStatus() == null) {
                     aR.setStatus(Status.UNKNOWN);
                 }
-                boolean result = attendanceLogic.updateAttendanceRecord(aR);
+                boolean result = attendanceLogic.updateAttendanceRecord(aR, oldStatus);
                 String[] resultMsgVars = new String[]{sakaiProxy.getUserSortName(aR.getUserID()), aR.getAttendanceEvent().getName(), getStatusString(aR.getStatus())};
                 StringResourceModel temp;
                 if(result){
                     temp = new StringResourceModel("attendance.record.save.success", null, resultMsgVars);
                     getSession().info(temp.getString());
+                    oldStatus = aR.getStatus();
                 } else {
                     temp = new StringResourceModel("attendance.record.save.failure", null, resultMsgVars);
                     getSession().error(temp.getString());

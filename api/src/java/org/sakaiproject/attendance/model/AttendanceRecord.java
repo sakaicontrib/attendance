@@ -50,7 +50,7 @@ public class AttendanceRecord implements Serializable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        AttendanceRecord that = (AttendanceRecord) o;
+        final AttendanceRecord that = (AttendanceRecord) o;
         return Objects.equals(id, that.id) &&
                 Objects.equals(attendanceEvent, that.attendanceEvent) &&
                 Objects.equals(userID, that.userID) &&

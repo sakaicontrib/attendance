@@ -402,6 +402,107 @@ public class AttendanceDaoImpl extends HibernateDaoSupport implements Attendance
 	}
 
 	/**
+	 * {@inheritDoc}
+	 */
+	public AttendanceUserStats getAttendanceUserStats(final String userId, final AttendanceSite aS) {
+		log.debug("getAttendanceUserStats for User '" + userId + "' and Site: '" + aS.getSiteID() + "'.");
+
+		try{
+			HibernateCallback hcb = new HibernateCallback() {
+				@Override
+				public Object doInHibernate(Session session) throws HibernateException, SQLException {
+					Query q = session.getNamedQuery(QUERY_GET_ATTENDANCE_USER_STATS);
+					q.setParameter(ATTENDANCE_SITE, aS, new ManyToOneType(null, "org.sakaiproject.attendance.model.AttendanceSite"));
+					q.setParameter(USER_ID, userId);
+					return q.uniqueResult();
+				}
+			};
+
+			return (AttendanceUserStats) getHibernateTemplate().execute(hcb);
+		} catch (DataAccessException e) {
+			log.error("DataAccessException getting AttendanceUserStats for User '" + userId + "' and Site: '" + aS.getSiteID() + "'.", e);
+			return null;
+		}
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@SuppressWarnings("unchecked")
+	public List<AttendanceUserStats> getAttendanceUserStatsForSite(final AttendanceSite aS) {
+		log.debug("getAttendanceUserStatsForSite for site: " + aS.getSiteID());
+
+		try{
+			HibernateCallback hcb = new HibernateCallback() {
+				@Override
+				public Object doInHibernate(Session session) throws HibernateException, SQLException {
+					Query q = session.getNamedQuery(QUERY_GET_ATTENDANCE_USER_STATS_FOR_SITE);
+					q.setParameter(ATTENDANCE_SITE, aS, new ManyToOneType(null, "org.sakaiproject.attendance.model.AttendanceSite"));
+					return q.list();
+				}
+			};
+
+			return (List<AttendanceUserStats>) getHibernateTemplate().executeFind(hcb);
+		} catch (DataAccessException e) {
+			log.error("DataAccessException getting AttendanceUserStats for Site: " + aS.getSiteID() + ".", e);
+			return null;
+		}
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public boolean updateAttendanceUserStats(AttendanceUserStats aUS) {
+		log.debug("updateAttendanceUserStats for User '" + aUS.getUserID() + "' and Site: '" + aUS.getAttendanceSite().getSiteID() + "'.");
+
+		try {
+			getHibernateTemplate().saveOrUpdate(aUS);
+			return true;
+		} catch (DataAccessException e) {
+			log.error("updateAttendanceUserStats, id: '" + aUS.getId() + "' failed.", e);
+			return false;
+		}
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public AttendanceItemStats getAttendanceItemStats(AttendanceEvent aE) {
+		log.debug("getAttendanceUserStats for Event '" + aE.getName() + "' and Site: '" + aE.getAttendanceSite().getSiteID() + "'.");
+
+		try{
+			HibernateCallback hcb = new HibernateCallback() {
+				@Override
+				public Object doInHibernate(Session session) throws HibernateException, SQLException {
+					Query q = session.getNamedQuery(QUERY_GET_ATTENDANCE_ITEM_STATS);
+					q.setParameter(ATTENDANCE_EVENT, aE, new ManyToOneType(null, "org.sakaiproject.attendance.model.AttendanceEvent"));
+					return q.uniqueResult();
+				}
+			};
+
+			return (AttendanceItemStats) getHibernateTemplate().execute(hcb);
+		} catch (DataAccessException e) {
+			log.error("DataAccessException getting AttendanceItemStats for Event '" + aE.getName() + "' and Site: '" + aE.getAttendanceSite().getSiteID() + "'.", e);
+			return null;
+		}
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public boolean updateAttendanceItemStats(AttendanceItemStats aIS) {
+		log.debug("updateAttendanceItemStats, '" + aIS.getId() + "', for Event '" + aIS.getAttendanceEvent().getName() + "' and site: '" + aIS.getAttendanceEvent().getAttendanceSite().getSiteID() + "'.");
+
+		try {
+			getHibernateTemplate().saveOrUpdate(aIS);
+			return true;
+		} catch (DataAccessException e) {
+			log.error("updateAttendanceItemStats, '" + aIS.getId() + "' failed.", e);
+			return false;
+		}
+	}
+
+	/**
 	 * init
 	 */
 	public void init() {

@@ -54,7 +54,7 @@ public class AttendanceStatus implements Serializable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        AttendanceStatus that = (AttendanceStatus) o;
+        final AttendanceStatus that = (AttendanceStatus) o;
         return Objects.equals(getId(), that.getId()) &&
                 Objects.equals(getIsActive(), that.getIsActive()) &&
                 getStatus() == that.getStatus() &&

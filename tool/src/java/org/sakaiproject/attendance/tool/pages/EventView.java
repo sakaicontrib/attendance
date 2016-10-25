@@ -75,6 +75,17 @@ public class EventView extends BasePage {
         init();
     }
 
+    public EventView(Long id, String fromPage, String selectedGroup) {
+        super();
+
+        this.attendanceID = id;
+        this.attendanceEvent = attendanceLogic.getAttendanceEvent(this.attendanceID);
+        this.returnPage = fromPage;
+        this.selectedGroup = selectedGroup;
+
+        init();
+    }
+
     public EventView(AttendanceEvent aE, String fromPage) {
         super();
         this.attendanceEvent = aE;
@@ -111,7 +122,7 @@ public class EventView extends BasePage {
                 attendanceLogic.updateAttendanceRecordsForEvent(attendanceEvent, setAllStatus.getModelObject(), selectedGroup);
                 String who = selectedGroup == null?"":" for " + sakaiProxy.getGroupTitleForCurrentSite(selectedGroup);
                 getSession().info("All attendance records " + who + " for " + attendanceEvent.getName() + " set to " + setAllStatus.getModelObject());
-                setResponsePage(new EventView(attendanceEvent, returnPage, selectedGroup));
+                setResponsePage(new EventView(attendanceEvent.getId(), returnPage, selectedGroup));
             }
         };
 
@@ -192,17 +203,18 @@ public class EventView extends BasePage {
 
         // Generate records if none exist
         if(records == null || records.isEmpty()) {
-            attendanceLogic.updateAttendanceRecordsForEvent(this.attendanceEvent, this.attendanceEvent.getAttendanceSite().getDefaultStatus());
-            this.attendanceEvent = attendanceLogic.getAttendanceEvent(this.attendanceEvent.getId());
+            List<AttendanceRecord> recordList = attendanceLogic.updateAttendanceRecordsForEvent(this.attendanceEvent, this.attendanceEvent.getAttendanceSite().getDefaultStatus());
+            records = new HashSet<>(recordList);
         } else {
             // Generate records for added students
             List<String> currentStudentIds = sakaiProxy.getCurrentSiteMembershipIds();
             for(AttendanceRecord record : records) {
                 currentStudentIds.remove(record.getUserID());
             }
-            attendanceLogic.updateMissingRecordsForEvent(this.attendanceEvent, this.attendanceEvent.getAttendanceSite().getDefaultStatus(), currentStudentIds);
-            this.attendanceEvent = attendanceLogic.getAttendanceEvent(this.attendanceEvent.getId());
+            List<AttendanceRecord> recordList = attendanceLogic.updateMissingRecordsForEvent(this.attendanceEvent, this.attendanceEvent.getAttendanceSite().getDefaultStatus(), currentStudentIds);
+            records.addAll(recordList);
         }
+        this.attendanceEvent.setRecords(records);
 
         // Add form to filter table
         final Form<?> filterForm = new Form<Void>("filter-table-form"){

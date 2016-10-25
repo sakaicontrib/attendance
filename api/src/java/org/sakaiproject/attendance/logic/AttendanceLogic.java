@@ -162,15 +162,16 @@ public interface AttendanceLogic {
 	 * @param aR, the AttendanceRecord to update (must not be null)
 	 * @return the success of the operation
      */
-	boolean updateAttendanceRecord(AttendanceRecord aR) throws IllegalArgumentException;
+	boolean updateAttendanceRecord(AttendanceRecord aR, Status oldStatus) throws IllegalArgumentException;
 
 	/**
 	 * Update all AttendanceRecords for an AttendanceEvent
 	 *
 	 * @param aE, the AttendanceEvent to update
 	 * @param s, the Status to set the AttendanceRecords (if null, uses the default of the AttendanceSite)
+	 * @return List of Attendance Records
      */
-	void updateAttendanceRecordsForEvent(AttendanceEvent aE, Status s);
+	List<AttendanceRecord> updateAttendanceRecordsForEvent(AttendanceEvent aE, Status s);
 
 	/**
 	 * Update all AttendanceRecords where the user belongs to the supplied group for an AttendanceEvent
@@ -188,33 +189,50 @@ public interface AttendanceLogic {
      * @param attendanceEvent, the AttendanceEvent
      * @param defaultStatus, the status to use (if null use the site default)
      * @param missingStudentIds, a List of UserIDs which need records
+	 * @return
      */
-	void updateMissingRecordsForEvent(AttendanceEvent attendanceEvent, Status defaultStatus, List<String> missingStudentIds);
+	List<AttendanceRecord> updateMissingRecordsForEvent(AttendanceEvent attendanceEvent, Status defaultStatus, List<String> missingStudentIds);
 
 	/**
 	 * Get statistics (total counts for each status) for an event
 	 *
 	 * @param event, the AttendanceEvent
-	 * @return A Map with Status as the key and Integer (number of occurrences) as the value
+	 * @return {@link AttendanceItemStats}
 	 */
-	Map<Status, Integer> getStatsForEvent(AttendanceEvent event);
+	AttendanceItemStats getStatsForEvent(AttendanceEvent event);
 
 	/**
 	 * Get statistics for user in current site
 	 *
 	 * @param userId, the user to get stats for
-	 * @return Map, key: Status enum type. Value: number of occurrences
+	 * @return {@link AttendanceUserStats}
      */
-	Map<Status, Integer> getStatsForUser(String userId);
+	AttendanceUserStats getStatsForUser(String userId);
 
 	/**
 	 * get statistics for user in site
 	 *
 	 * @param userId, the user to get stats for
 	 * @param aS, the AttendanceSite to get the stats for
-     * @return Map, key: Status enum type. Value: number of occurrences
+     * @return {@link AttendanceUserStats}
      */
-	Map<Status, Integer> getStatsForUser(String userId, AttendanceSite aS);
+	AttendanceUserStats getStatsForUser(String userId, AttendanceSite aS);
+
+
+	/**
+	 * get user stats for current attendance site
+	 * @param group, a group to filter for (null if no group)
+	 * @return a List of {@link AttendanceUserStats}
+	 */
+	List<AttendanceUserStats> getUserStatsForCurrentSite(String group);
+
+	/**
+	 * get user stats for attendance site
+	 * @param aS, the attendanceSite to get the stats for
+	 * @param group, a group to filter for (null if no group)
+	 * @return a List of {@link AttendanceUserStats}
+	 */
+	List<AttendanceUserStats> getUserStatsForSite(AttendanceSite aS, String group);
 
 	/**
 	 * get an AttendanceGrade by ID
@@ -253,4 +271,12 @@ public interface AttendanceLogic {
 	 * @return the success of the operation
      */
 	boolean updateAttendanceGrade(AttendanceGrade aG) throws IllegalArgumentException;
+
+	/**
+	 * Returns the stats for a specified Status from an AttendanceStats object
+	 * @param stats {@link AttendanceStats}
+	 * @param status {@link Status}
+	 * @return Value of Status in AttendanceStats
+	 */
+	int getStatsForStatus(AttendanceStats stats, Status status);
 }
