@@ -20,19 +20,22 @@
 <body>
 <wicket:extend>
 
-	<h1 class="settingsHeader indnt1">
-		<span wicket:id="header-settings" class="settingsHeaderSpan" />
-	</h1>
+    <h1 class="gradingHeader">
+        <span wicket:id="header-grading" class="gradingHeaderSpan" />
+    </h1>
 
-	<div class="activeStatusContainer">
-		<div class="activeStatusHeader">
-			<h3 class="activeStatusHeader"><wicket:message key="attendance.settings.active.status.header" /></h3>
-		</div>
+    <div class="gradingContainer">
+        <div class="containerHeader">
+            <h3 class="containerHeading"><wicket:message key="attendance.settings.grading.header" /></h3>
+        </div>
+        <p class="editGradeInfo">
+            <wicket:message key="attendance.settings.grading.info" />
+        </p>
 
-		<div wicket:id="all-statuses-container">
-			<span wicket:id="edit-status-panel" />
-		</div>
-	</div>
+        <div wicket:id="grade-settings-panel">
+
+        </div>
+    </div>
 
 </wicket:extend>
 </body>

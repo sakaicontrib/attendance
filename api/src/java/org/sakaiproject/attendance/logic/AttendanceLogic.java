@@ -265,7 +265,8 @@ public interface AttendanceLogic {
 	Map<String, String> getAttendanceGradeScores();
 
 	/**
-	 * Updates an AttendanceGrade
+	 * Updates an AttendanceGrade. Will send to the Gradebook if AttendanceSite is configured
+	 * as such.
 	 *
 	 * @param aG, the AG to update (must not be null)
 	 * @return the success of the operation
@@ -279,4 +280,46 @@ public interface AttendanceLogic {
 	 * @return Value of Status in AttendanceStats
 	 */
 	int getStatsForStatus(AttendanceStats stats, Status status);
+
+	/**
+	 * Adds a grading rule.
+	 *
+	 * @param gradingRule, The GradingRule to be added.
+	 * @return the success of the operation
+	 */
+	boolean addGradingRule(GradingRule gradingRule);
+
+	/**
+	 * Deletes a grading rule.
+	 *
+	 * @param gradingRule, The GradingRule to be deleted.
+	 * @return the success of the operation
+	 */
+	boolean deleteGradingRule(GradingRule gradingRule);
+
+	/**
+	 * Get a list of Grading Rules that have been created for a given
+	 * attendance site.
+	 *
+	 * @param attendanceSite, An existing AttendanceSite.
+	 * @return The list of GradingRules for the AttendanceSite
+	 */
+	List<GradingRule> getGradingRulesForSite(AttendanceSite attendanceSite);
+
+	/**
+	 * Regrade all of the members of a provided AttendanceSite
+	 *
+	 * @param attendanceSite, The AttendanceSite for which the members should be regraded
+	 */
+	void regradeAll(AttendanceSite attendanceSite);
+
+	/**
+	 * Regrade a particular AttendanceGrade record with the option to update the grade saved
+	 * in the database.
+	 *
+	 * @param attendanceGrade, The AttendanceGrade to be regraded.
+	 * @param saveGrade, True if the new grade should be saved to the database
+	 * @return The points a student earned after being regraded.
+	 */
+	Double regrade(AttendanceGrade attendanceGrade, boolean saveGrade);
 }

@@ -62,6 +62,7 @@
 
 		<property name="dao" ref="org.sakaiproject.attendance.dao.AttendanceDao" />
 		<property name="sakaiProxy" ref="org.sakaiproject.attendance.logic.SakaiProxy" />
+		<property name="attendanceGradebookProvider" ref="org.sakaiproject.attendance.api.AttendanceGradebookProvider" />
 	</bean>
 
 	<!-- PDFEventExporter -->
@@ -98,6 +99,7 @@
 				<value>org/sakaiproject/attendance/hbm/AttendanceSite.hbm.xml</value>
 				<value>org/sakaiproject/attendance/hbm/AttendanceStatus.hbm.xml</value>
 				<value>org/sakaiproject/attendance/hbm/AttendanceUserStats.hbm.xml</value>
+				<value>org/sakaiproject/attendance/hbm/GradingRule.hbm.xml</value>
 			</list>
 		</property>
 

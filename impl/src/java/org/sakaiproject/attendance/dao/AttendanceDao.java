@@ -260,6 +260,30 @@ public interface AttendanceDao {
 	 */
 	boolean markAttendanceSiteForSync(List<Long> ids, Date syncTime);
 
+	/**
+	 * Returns a list containing all of the grading rules for a given AttendanceSite.
+	 *
+	 * @param attendanceSite, An existing attendance site.
+	 * @return A list of all of the GradingRules for the provided attendance site.
+	 */
+	List<GradingRule> getGradingRulesForSite(AttendanceSite attendanceSite);
+
+	/**
+	 * Add a new GradingRule.
+	 *
+	 * @param gradingRule, The GradingRule to be added.
+	 * @return The success of the save operation.
+	 */
+	boolean addGradingRule(GradingRule gradingRule);
+
+	/**
+	 * Delete an existing GradingRule.
+	 *
+	 * @param gradingRule, The GradingRule to be deleted.
+	 * @return The success of the delete operation.
+	 */
+	boolean deleteGradingRule(GradingRule gradingRule);
+
 	// Hibernate Query Constants
 	String QUERY_GET_ATTENDANCE_EVENT = "getAttendanceEvent";
 	String QUERY_GET_ATTENDANCE_EVENTS_FOR_SITE = "getAttendanceEventsForSite";
@@ -287,6 +311,8 @@ public interface AttendanceDao {
 	String QUERY_GET_ATTENDANCE_SITE_BATCH = "getAttendanceSiteBatch";
 	String QUERY_GET_ATTENDANCE_SITES_IN_SYNC = "getAttendanceSitesInSync";
 	String QUERY_MARK_ATTENDANCE_SITE_IN_SYNC = "markAttendanceSiteForSync";
+
+	String QUERY_GET_GRADING_RULES_FOR_SITE = "getGradingRulesForSite";
 
 	// Hibernate Object Fields
 	String ID = "id";

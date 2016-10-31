@@ -72,6 +72,7 @@ public class BasePage extends WebPage implements IHeaderContributor {
 	Link<Void> homepageLink;
 	Link<Void> settingsLink;
 	Link<Void> studentOverviewLink;
+	Link<Void> gradingLink;
 	
 	FeedbackPanel feedbackPanel;
 
@@ -107,6 +108,7 @@ public class BasePage extends WebPage implements IHeaderContributor {
 		studentOverviewLink.add(new AttributeModifier("title", new ResourceModel("attendance.link.student.overview.tooltip")));
 		add(studentOverviewLink);
 
+		// Settings Link
 		settingsLink = new Link<Void>("settings-link") {
 			private static final long serialVersionUID = 1L;
 			public void onClick() {
@@ -116,6 +118,18 @@ public class BasePage extends WebPage implements IHeaderContributor {
 		settingsLink.add(new Label("settings-link-label", new ResourceModel("attendance.link.settings.label")).setRenderBodyOnly(true));
 		settingsLink.add(new AttributeModifier("title", new ResourceModel("attendance.link.settings.tooltip")));
 		add(settingsLink);
+
+		// Grading Link
+		gradingLink = new Link<Void>("grading-link") {
+			private static final long serialVersionUID = 1L;
+			@Override
+			public void onClick() {
+				setResponsePage(new GradingPage());
+			}
+		};
+		gradingLink.add(new Label("grading-link-label", new ResourceModel("grading.link.label")).setRenderBodyOnly(true));
+		gradingLink.add(new AttributeModifier("title", new ResourceModel("grading.link.tooltip")));
+		add(gradingLink);
 		
 		// Add a FeedbackPanel for displaying our messages
         feedbackPanel = new AttendanceFeedbackPanel("feedback");

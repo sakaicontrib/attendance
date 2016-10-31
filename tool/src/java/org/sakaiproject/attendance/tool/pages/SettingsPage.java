@@ -44,7 +44,6 @@ public class SettingsPage extends BasePage {
 		add(headerSettings);
 
 		createEditStatusesPanel();
-		add(createEditGradePanel());
 	}
 
 	private void createEditStatusesPanel() {
@@ -52,9 +51,5 @@ public class SettingsPage extends BasePage {
 		WebMarkupContainer allStatusesContainer = new WebMarkupContainer("all-statuses-container");
 		allStatusesContainer.add(new AttendanceStatusFormPanel("edit-status-panel", feedbackPanel));
 		add(allStatusesContainer);
-	}
-
-	private AttendanceGradeFormPanel createEditGradePanel() {
-		return new AttendanceGradeFormPanel("grade-settings-panel", feedbackPanel);
 	}
 }

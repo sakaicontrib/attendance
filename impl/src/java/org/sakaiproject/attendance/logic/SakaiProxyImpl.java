@@ -339,7 +339,7 @@ public class SakaiProxyImpl implements SakaiProxy {
 	 * init - perform any actions required here for when this bean starts up
 	 */
 	public void init() {
-		log.info("init");
+		log.debug("SakaiProxyImpl init()");
 	}
 
 	private Preferences getCurrentUserPreferences() {

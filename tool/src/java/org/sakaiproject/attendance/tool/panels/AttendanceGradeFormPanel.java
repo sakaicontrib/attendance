@@ -23,12 +23,11 @@ import org.apache.wicket.ajax.markup.html.form.AjaxCheckBox;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.CheckBox;
-import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.markup.html.form.NumberTextField;
-import org.apache.wicket.markup.html.form.TextField;
+import org.apache.wicket.markup.html.form.*;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.CompoundPropertyModel;
+import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.model.ResourceModel;
 import org.sakaiproject.attendance.model.AttendanceSite;
 import org.sakaiproject.attendance.tool.panels.util.GradebookItemNameValidator;
@@ -48,6 +47,10 @@ public class AttendanceGradeFormPanel extends BasePanel {
     private                 boolean         previousSendToGradebook;
     private                 String          previousName;
     private                 Double          previousMaxGrade;
+    private        final    IModel<Boolean> useAutoGrading              = new Model<>();
+    private        final    IModel<Boolean> autoGradeBySubtraction      = new Model<>();
+    private                 GradingRulesPanel gradingRulesPanel;
+    private                 WebMarkupContainer autoGradingTypeContainer;
 
     public AttendanceGradeFormPanel(String id, FeedbackPanel pg) {
         super(id);
@@ -58,21 +61,40 @@ public class AttendanceGradeFormPanel extends BasePanel {
 
     private void init() {
         add(createSettingsForm());
+
+        // Grade rules container
+        this.gradingRulesPanel = new GradingRulesPanel("grading-rules") {
+            private static final long serialVersionUID = 1L;
+
+            @Override
+            public boolean isVisible() {
+                Boolean autoGrading = useAutoGrading.getObject();
+                return autoGrading != null && autoGrading;
+            }
+        };
+        this.gradingRulesPanel.setOutputMarkupPlaceholderTag(true);
+        add(this.gradingRulesPanel);
     }
 
     private Form<AttendanceSite> createSettingsForm() {
         final AttendanceSite aS = attendanceLogic.getCurrentAttendanceSite();
-        this.previousSendToGradebook = aS.getSendToGradebook() == null ? false : aS.getSendToGradebook();
+        this.previousSendToGradebook = aS.getSendToGradebook();
         this.previousName = aS.getGradebookItemName();
         this.previousMaxGrade = aS.getMaximumGrade();
+        this.useAutoGrading.setObject(aS.getUseAutoGrading());
+        this.autoGradeBySubtraction.setObject(aS.getAutoGradeBySubtraction());
 
-        Form<AttendanceSite> aSForm = new Form<AttendanceSite>("settings", new CompoundPropertyModel<AttendanceSite>(aS)) {
+        Form<AttendanceSite> aSForm = new Form<AttendanceSite>("settings", new CompoundPropertyModel<>(aS)) {
             @Override
             public void onSubmit() {
                 AttendanceSite aS = (AttendanceSite) getDefaultModelObject();
 
+                aS.setUseAutoGrading(useAutoGrading.getObject());
+                aS.setAutoGradeBySubtraction(autoGradeBySubtraction.getObject());
+
                 if(aS.getMaximumGrade() == null && previousMaxGrade != null) {
                     aS.setSendToGradebook(false);
+                    aS.setUseAutoGrading(false);
                 }
 
                 boolean result = attendanceLogic.updateAttendanceSite(aS);
@@ -97,6 +119,11 @@ public class AttendanceGradeFormPanel extends BasePanel {
                     previousMaxGrade = aS.getMaximumGrade();
                     previousSendToGradebook = aS.getSendToGradebook();
 
+                    // Successful Save - Regrade All if Auto Grade is set to true and maximum points is set
+                    if (aS.getUseAutoGrading() != null && aS.getUseAutoGrading() && aS.getMaximumGrade() > 0) {
+                        attendanceLogic.regradeAll(aS);
+                    }
+
                     getSession().info(getString("attendance.settings.grading.success"));
                 } else {
                     getSession().error(getString("attendance.settings.grading.failure"));
@@ -117,7 +144,7 @@ public class AttendanceGradeFormPanel extends BasePanel {
         NumberTextField<Double> maximum = new NumberTextField<Double>("maximumGrade");
         maximum.setMinimum(0.1);
         maximum.setStep(0.1);
-        maximum.add(new AjaxFormComponentUpdatingBehavior("onkeyup") {
+        maximum.add(new AjaxFormComponentUpdatingBehavior("oninput") {
             @Override
             protected void onUpdate(AjaxRequestTarget target) {
                 target.add(grading);
@@ -169,6 +196,46 @@ public class AttendanceGradeFormPanel extends BasePanel {
         };
         grading.add(sendToGradebook);
         grading.add(sendToGBLabel);
+
+        final RadioGroup<Boolean> useAutoGradingGroup = new RadioGroup<>("use-auto-grading-group", this.useAutoGrading);
+        useAutoGradingGroup.add(new AjaxFormComponentUpdatingBehavior("onchange") {
+            @Override
+            protected void onUpdate(AjaxRequestTarget target) {
+                target.add(gradingRulesPanel);
+                target.add(autoGradingTypeContainer);
+            }
+        });
+        useAutoGradingGroup.setRenderBodyOnly(false);
+        grading.add(useAutoGradingGroup);
+
+        Radio<Boolean> manualGrading = new Radio<>("manual-grading", Model.of(Boolean.FALSE));
+        Radio<Boolean> autoGrading = new Radio<>("auto-grading", Model.of(Boolean.TRUE));
+
+        useAutoGradingGroup.add(manualGrading);
+        useAutoGradingGroup.add(autoGrading);
+
+        this.autoGradingTypeContainer = new WebMarkupContainer("auto-grading-type") {
+            private static final long serialVersionUID = 1L;
+
+            @Override
+            public boolean isVisible() {
+                Boolean autoGrading = useAutoGrading.getObject();
+                return autoGrading != null && autoGrading;
+            }
+        };
+        this.autoGradingTypeContainer.setOutputMarkupPlaceholderTag(true);
+        grading.add(this.autoGradingTypeContainer);
+
+        final RadioGroup<Boolean> autoGradeType = new RadioGroup<>("auto-grading-type-group", this.autoGradeBySubtraction);
+        autoGradeType.setRenderBodyOnly(false);
+        this.autoGradingTypeContainer.add(autoGradeType);
+
+        Radio<Boolean> subtractGrading = new Radio<>("subtract-grading", Model.of(Boolean.TRUE));
+        Radio<Boolean> addGrading = new Radio<>("add-grading", Model.of(Boolean.FALSE));
+
+        autoGradeType.add(subtractGrading);
+        autoGradeType.add(addGrading);
+
         aSForm.add(grading);
 
         AjaxSubmitLink submit = new AjaxSubmitLink("submit") {

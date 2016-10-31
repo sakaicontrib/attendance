@@ -42,7 +42,7 @@ form {
     color: #0064cd;
 }
 
-h1.overviewHeader, h1.itemsHeader, h1.settingsHeader {
+h1.overviewHeader, h1.itemsHeader, h1.settingsHeader, h1.gradingHeader {
     background: url("../images/attendance_icon_32.png") no-repeat left center;
     padding-left: 32px;
     color: #555;
@@ -51,7 +51,11 @@ h1.overviewHeader, h1.itemsHeader, h1.settingsHeader {
     min-height: 32px;
 }
 
-span.overHeaderSpan, span.itemsHeaderSpan, span.settingsHeaderSpan {
+h1.tightHeader, h2.tightHeader, h3.tightHeader, h4.tightHeader, h5.tightHeader, h6.tightHeader {
+    margin-bottom: 0;
+}
+
+span.overHeaderSpan, span.itemsHeaderSpan, span.settingsHeaderSpan, span.gradingHeaderSpan {
     margin: 0 .5em;
 }
 
@@ -195,11 +199,6 @@ th.overviewDateCol, td.overviewDateCol, td.takeAttendanceDateHeader, th.takeAtte
 th.overviewEditCol, td.overviewEditCol, th.itemListEditCol, td.itemListEditCol, td.overviewGradeCol, th.overviewGradeCol {
     border-left-width: 3px;
     text-align: center;
-    width: 42px;
-}
-
-td.overviewGradeCol, th.overviewGradeCol {
-    width: 104px;
 }
 
 td.overviewGradeCol {
@@ -231,13 +230,19 @@ th.takeAttendanceNameHeader {
     vertical-align: middle;
 }
 
-div.addEditContainer, div.itemListContainer, div.takeAttendanceContainer, div.itemInfoContainer, div.activeStatusContainer, div.container {
+div.addEditContainer, div.itemListContainer, div.takeAttendanceContainer, div.itemInfoContainer, div.activeStatusContainer, div.gradingContainer {
     border:1px solid #ccc;
     padding: 2.5em 2em 2em;
     vertical-align: top;
     position:relative;
     display: block;
     margin: 2em 2em 2em 70px;
+}
+
+div.rulesContainer {
+    margin: 0 4em 1em 4em;
+    padding: 0 2em;
+    border: 1px solid #ccc;
 }
 
 div.gradeContainer {
@@ -504,6 +509,49 @@ ul.gradeSettings li {
 label.gradeSettingsLabel {
     font-size: 1.2em;
     line-height: 1.7em;
+}
+
+span.gradingType > div div label {
+    font-size: 1em;
+    margin-left: 4em;
+}
+
+span.totalPointsColHeader {
+    font-size: .75em;
+}
+
+ul.rulesList {
+    list-style: none;
+}
+
+ul.rulesList form {
+    display: inline-block;
+}
+
+div.addRulesContainer {
+    border-bottom:1px solid #ccc;
+}
+
+form.addRuleForm div {
+    display: inline-block;
+    margin-right: 8px;
+}
+
+form.gradeSettingsForm {
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 1em;
+}
+
+#rulesExplanation {
+    max-width: 740px;
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+#rulesHowLink {
+    display:block;
+    margin-top: 1em;
 }
 
 .printVisible {

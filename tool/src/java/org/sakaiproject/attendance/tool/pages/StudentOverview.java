@@ -110,6 +110,7 @@ public class StudentOverview extends BasePage {
         //headers for the table
         Label               studentName     = new Label("header-student-name",       new ResourceModel("attendance.header.student"));
         Label               grade           = new Label("header-grade",               new ResourceModel("attendance.header.grade"));
+        Label               totalPoints     = new Label("total-points", "Total: " + attendanceLogic.getCurrentAttendanceSite().getMaximumGrade());
 
         DataView<AttendanceStatus> statusHeaders = new DataView<AttendanceStatus>("status-headers", attendanceStatusProvider) {
             @Override
@@ -122,12 +123,13 @@ public class StudentOverview extends BasePage {
             private static final long serialVersionUID = 1L;
 
             public void onClick() {
-                setResponsePage(new SettingsPage());
+                setResponsePage(new GradingPage());
             }
         };
 
         t.add(studentName);
         t.add(grade);
+        t.add(totalPoints);
         t.add(statusHeaders);
         t.add(settings);
     }

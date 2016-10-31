@@ -214,7 +214,7 @@ public class PDFEventExporterImpl implements PDFEventExporter {
      * init - perform any actions required here for when this bean starts up
      */
     public void init() {
-        log.info("init");
+        log.debug("PDFEventExporterImpl init()");
     }
 
     // TODO: Internationalize status header abbreviations

@@ -37,6 +37,7 @@ public class AttendanceGrade implements Serializable {
 	private 				Long 			id;
 	private					Double			grade;
 	private					String			userID;
+	private					Boolean			override;
 
 	private 				AttendanceSite 	attendanceSite;
 
