@@ -20,13 +20,12 @@ import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormSubmitBehavior;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.FormComponentLabel;
 import org.apache.wicket.markup.html.form.NumberTextField;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
-import org.apache.wicket.model.CompoundPropertyModel;
-import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.ResourceModel;
-import org.apache.wicket.model.StringResourceModel;
+import org.apache.wicket.model.*;
 import org.sakaiproject.attendance.model.AttendanceGrade;
 import org.sakaiproject.attendance.model.AttendanceSite;
 
@@ -46,10 +45,10 @@ public class AttendanceGradePanel extends BasePanel {
         super(id);
 
         if(aG == null) {
-            this.agIModel = new CompoundPropertyModel<AttendanceGrade>(new AttendanceGrade());
+            this.agIModel = new CompoundPropertyModel<>(new AttendanceGrade());
             this.attendanceSite = attendanceLogic.getCurrentAttendanceSite();
         } else {
-            this.agIModel = new CompoundPropertyModel<AttendanceGrade>(aG);
+            this.agIModel = new CompoundPropertyModel<>(aG);
             this.attendanceSite = agIModel.getObject().getAttendanceSite();
         }
         this.pageFeedbackPanel = fP;
@@ -67,13 +66,17 @@ public class AttendanceGradePanel extends BasePanel {
             public void onSubmit() {
                 AttendanceGrade aG = (AttendanceGrade) getDefaultModelObject();
 
-                boolean result = attendanceLogic.updateAttendanceGrade(aG);
+                boolean result;
+
+                if (Boolean.TRUE.equals(attendanceSite.getUseAutoGrading()) && Boolean.FALSE.equals(aG.getOverride())) {
+                    result = attendanceLogic.regrade(aG, true) != null;
+                } else {
+                    result = attendanceLogic.updateAttendanceGrade(aG);
+                }
 
                 String displayName = sakaiProxy.getUserSortName(aG.getUserID());
 
                 if (result) {
-                    attendanceGradebookProvider.sendToGradebook(aG.getId());
-
                     String grade = aG.getGrade() == null ? "null" : aG.getGrade().toString();
                     getSession().info(new StringResourceModel("attendance.grade.update.success", null, new String[]{grade, displayName}).getString());
                 } else {
@@ -88,7 +91,7 @@ public class AttendanceGradePanel extends BasePanel {
         NumberTextField<Double> points = new NumberTextField<Double>("grade") {
             @Override
             public boolean isEnabled(){
-                return maximumGrade != null;
+                return maximumGrade != null && (Boolean.FALSE.equals(attendanceSite.getUseAutoGrading()) || Boolean.TRUE.equals(agIModel.getObject().getOverride()));
             }
         };
         points.setMinimum(0.0);
@@ -111,12 +114,34 @@ public class AttendanceGradePanel extends BasePanel {
         Label maximum;
 
         if(maximumGrade == null) {
-            maximum = new Label("maximum", "-");
+            maximum = new Label("maximum", "/ -");
             points.add(new AttributeModifier("title", new StringResourceModel("attendance.grade.tooltip.disabled", null, new String[]{new ResourceModel("settings.link.label").getObject()})));
         } else {
-            maximum = new Label("maximum", maximumGrade.toString());
-            points.setMaximum(maximumGrade);
+            maximum = new Label("maximum", "/ "+ maximumGrade.toString());
         }
+        maximum.setVisible(!this.isEnabled());
+
+        final CheckBox override = new CheckBox("override", new PropertyModel<>(gForm.getModelObject(), "override"));
+        override.setVisible(this.attendanceSite.getUseAutoGrading() && this.isEnabled());
+        override.add(new AjaxFormSubmitBehavior(gForm, "change") {
+            @Override
+            protected void onSubmit(AjaxRequestTarget target) {
+                if(target != null) {
+                    target.add(pageFeedbackPanel);
+                    target.add(points);
+                }
+            }
+
+            @Override
+            protected void onError(AjaxRequestTarget target) {
+                target.add(pageFeedbackPanel);
+            }
+        });
+        gForm.add(override);
+
+        final FormComponentLabel overrideLabel = new FormComponentLabel("overrideLabel", override);
+        overrideLabel.setVisible(this.attendanceSite.getUseAutoGrading() && this.isEnabled());
+        gForm.add(overrideLabel);
 
         gForm.add(maximum);
         gForm.add(points);

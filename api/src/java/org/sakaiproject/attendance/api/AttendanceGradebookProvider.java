@@ -16,6 +16,7 @@
 
 package org.sakaiproject.attendance.api;
 
+import org.sakaiproject.attendance.model.AttendanceGrade;
 import org.sakaiproject.attendance.model.AttendanceSite;
 
 /**
@@ -45,10 +46,11 @@ public interface AttendanceGradebookProvider {
     boolean update(AttendanceSite aS);
 
     /**
-     * Sends an AttendanceGrade, by ID, to the Gradebook
-     * @param id
+     * Sends an AttendanceGrade to the Gradebook
+     * @param ag, the AttendanceGrade to update
+     * @return success of operation
      */
-    boolean sendToGradebook(Long id);
+    boolean sendToGradebook(AttendanceGrade ag);
 
     /**
      * Returns if a Gradebook has been Defined in a site

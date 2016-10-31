@@ -16,24 +16,21 @@
   -->
 
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:wicket="http://wicket.apache.org">
-
 <body>
-<wicket:extend>
-
-	<h1 class="settingsHeader indnt1">
-		<span wicket:id="header-settings" class="settingsHeaderSpan" />
-	</h1>
-
-	<div class="activeStatusContainer">
-		<div class="activeStatusHeader">
-			<h3 class="activeStatusHeader"><wicket:message key="attendance.settings.active.status.header" /></h3>
-		</div>
-
-		<div wicket:id="all-statuses-container">
-			<span wicket:id="edit-status-panel" />
-		</div>
-	</div>
-
-</wicket:extend>
+<wicket:panel>
+    <form wicket:id="regrade-form1" class="alert alert-warning">
+        <input type="submit" wicket:id="regrade-submit1" wicket:message="value:attendance.settings.grading.regrade" />
+        <span><wicket:message key="attendance.settings.grading.regrade.info" /></span>
+    </form>
+    <h3><wicket:message key="attendance.settings.grading.rules"/></h3>
+    <ul class="rulesList">
+        <li wicket:id="rules">
+            <span wicket:id="rule" />
+            <form wicket:id="delete-form">
+                <input type="submit" wicket:id="delete-rule-button" wicket:message="value:attendance.settings.grading.delete.rule" />
+            </form>
+        </li>
+    </ul>
+</wicket:panel>
 </body>
 </html>

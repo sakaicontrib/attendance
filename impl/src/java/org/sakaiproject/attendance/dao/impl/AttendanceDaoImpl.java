@@ -231,7 +231,7 @@ public class AttendanceDaoImpl extends HibernateDaoSupport implements Attendance
 		for(AttendanceRecord aR : aRs) {
 			try {
 				getHibernateTemplate().saveOrUpdate(aR);
-				log.info("save attendanceRecord id: " + aR.getId());
+				log.debug("save attendanceRecord id: " + aR.getId());
 			} catch (Exception e) {
 				log.error("update attendanceRecords failed.", e);
 			}
@@ -245,7 +245,7 @@ public class AttendanceDaoImpl extends HibernateDaoSupport implements Attendance
 		for(AttendanceStatus aS : attendanceStatusList) {
 			try {
 				getHibernateTemplate().saveOrUpdate(aS);
-				log.info("AttendanceStatus saved, id: " + aS.getId());
+				log.debug("AttendanceStatus saved, id: " + aS.getId());
 			} catch (Exception e) {
 				log.error("update attendanceStatuses failed.", e);
 			}
@@ -478,6 +478,41 @@ public class AttendanceDaoImpl extends HibernateDaoSupport implements Attendance
 	/**
 	 * {@inheritDoc}
 	 */
+	public boolean addGradingRule(GradingRule gradingRule) {
+		if (log.isDebugEnabled()) {
+			log.debug("add grading rule to site " + gradingRule.getAttendanceSite().getSiteID() +
+					" status: " + gradingRule.getStatus() +
+					" range: " + gradingRule.getStartRange() +
+					" - " + gradingRule.getEndRange() +
+					" points: " + gradingRule.getPoints());
+		}
+		try {
+			getHibernateTemplate().save(gradingRule);
+			return true;
+		} catch (DataAccessException dae) {
+			log.error("addGradingRule failed.", dae);
+			return false;
+		}
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public boolean deleteGradingRule(GradingRule gradingRule) {
+		log.debug("Delete grading rule from site " + gradingRule.getAttendanceSite().getSiteID() + " grading rule: " + gradingRule.getId());
+
+		try {
+			getHibernateTemplate().delete(gradingRule);
+			return true;
+		} catch (DataAccessException e) {
+			log.error("deleteGradingRule, " + gradingRule.getId() + ", failed.", e);
+			return false;
+		}
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
 	public AttendanceItemStats getAttendanceItemStats(AttendanceEvent aE) {
 		log.debug("getAttendanceUserStats for Event '" + aE.getName() + "' and Site: '" + aE.getAttendanceSite().getSiteID() + "'.");
 
@@ -510,6 +545,30 @@ public class AttendanceDaoImpl extends HibernateDaoSupport implements Attendance
 		} catch (DataAccessException e) {
 			log.error("updateAttendanceItemStats, '" + aIS.getId() + "' failed.", e);
 			return false;
+		}
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@SuppressWarnings("unchecked")
+	public List<GradingRule> getGradingRulesForSite(AttendanceSite attendanceSite) {
+		if(log.isDebugEnabled()){
+			log.debug("getGradingRulesForSite(AttendanceSite " + attendanceSite.getSiteID() + " )");
+		}
+
+		try {
+			HibernateCallback hcb = session -> {
+                Query q = session.getNamedQuery(QUERY_GET_GRADING_RULES_FOR_SITE);
+                q.setParameter(ATTENDANCE_SITE, attendanceSite, new ManyToOneType(null, "org.sakaiproject.attendance.model.AttendanceSite"));
+                return q.list();
+            };
+
+			return (List<GradingRule>) getHibernateTemplate().executeFind(hcb);
+
+		} catch (DataAccessException e) {
+			log.error("getGradingRulesForSite failed", e);
+			return null;
 		}
 	}
 
@@ -569,7 +628,7 @@ public class AttendanceDaoImpl extends HibernateDaoSupport implements Attendance
 	 * init
 	 */
 	public void init() {
-		log.info("init()");
+		log.debug("AttendanceDaoImpl init()");
 	}
 
 	@SuppressWarnings("unchecked")

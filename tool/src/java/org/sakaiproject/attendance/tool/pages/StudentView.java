@@ -70,6 +70,7 @@ public class StudentView extends BasePage {
             hideNavigationLink(this.homepageLink);
             hideNavigationLink(this.studentOverviewLink);
             hideNavigationLink(this.settingsLink);
+            hideNavigationLink(this.gradingLink);
         }
 
         add(createHeader());

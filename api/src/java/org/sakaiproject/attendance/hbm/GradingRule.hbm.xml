@@ -21,32 +21,26 @@
 
 <hibernate-mapping package="org.sakaiproject.attendance.model">
 
-    <class name="org.sakaiproject.attendance.model.AttendanceGrade" table="ATTENDANCE_GRADE_T">
+    <class name="org.sakaiproject.attendance.model.GradingRule" table="ATTENDANCE_RULE_T">
 
         <id name="id">
-            <column name="A_GRADE_ID" not-null="true" length="19" />
+            <column name="GRADING_RULE_ID" not-null="true" length="19" />
             <generator class="native">
-                <param name="sequence">ATTENDANCE_GRADE_S</param>
+                <param name="sequence">ATTENDANCE_GRADING_RULE_S</param>
             </generator>
         </id>
 
-        <property name="grade"      column="GRADE"      type="java.lang.Double" />
-        <property name="userID"     column="USER_ID"    type="java.lang.String" />
-        <property name="override"   column="OVERRIDE"   type="java.lang.Boolean" />
-
         <many-to-one name="attendanceSite" column="A_SITE_ID" unique="false" not-null="true" class="org.sakaiproject.attendance.model.AttendanceSite" lazy="false"/>
+
+        <property name="status" column="STATUS" type="org.sakaiproject.attendance.types.StatusUserType" not-null="true"/>
+        <property name="startRange" column="START_RANGE" type="java.lang.Integer" not-null="true"/>
+        <property name="endRange" column="END_RANGE" type="java.lang.Integer" />
+        <property name="points" column="POINTS" type="java.lang.Double" not-null="true"/>
 
     </class>
 
-    <query name="getAttendanceGradesForSite">
-        <![CDATA[from AttendanceGrade aGrade JOIN FETCH aGrade.attendanceSite WHERE aGrade.attendanceSite = :attendanceSite]]>
+    <query name="getGradingRulesForSite">
+        <![CDATA[from GradingRule gradingRule JOIN FETCH gradingRule.attendanceSite WHERE gradingRule.attendanceSite = :attendanceSite]]>
     </query>
 
-    <query name="getAttendanceGradeByID">
-        <![CDATA[from AttendanceGrade aGrade WHERE aGrade.id = :id]]>
-    </query>
-
-    <query name="getAttendanceGrade">
-        <![CDATA[from AttendanceGrade aGrade JOIN FETCH aGrade.attendanceSite WHERE aGrade.attendanceSite = :attendanceSite AND aGrade.userID = :userID]]>
-    </query>
 </hibernate-mapping>

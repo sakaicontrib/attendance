@@ -49,7 +49,7 @@ public class AttendanceGradebookProviderImpl implements AttendanceGradebookProvi
      * {@inheritDoc}
      */
     public void init() {
-        log.info("init()");
+        log.debug("AttendanceGradebookProviderImpl init()");
     }
 
     /**
@@ -135,24 +135,19 @@ public class AttendanceGradebookProviderImpl implements AttendanceGradebookProvi
     /**
      * {@inheritDoc}
      */
-    public boolean sendToGradebook(Long id) {
-        if(log.isDebugEnabled()) {
-            log.debug("sendToGradebook");
-        }
-
-        if(id == null) {
+    public boolean sendToGradebook(final AttendanceGrade aG) {
+        if(aG == null) {
             return false;
         }
 
-        AttendanceGrade aG = attendanceLogic.getAttendanceGrade(id);
-        AttendanceSite aS = aG.getAttendanceSite();
-        String siteID = aS.getSiteID();
+        final AttendanceSite aS = aG.getAttendanceSite();
+        final String siteID = aS.getSiteID();
 
         // check if there is a gradebook. siteID ~= gradebookUID
         if (isGradebookDefined(siteID)) {
             String aSUID = getAttendanceUID(aS);
 
-            Boolean sendToGradebook = aG.getAttendanceSite().getSendToGradebook();
+            final Boolean sendToGradebook = aS.getSendToGradebook();
             if(sendToGradebook != null && sendToGradebook) {
                 if(isAssessmentDefined(siteID, aSUID)) {
                     // exists, update current grade
@@ -161,7 +156,7 @@ public class AttendanceGradebookProviderImpl implements AttendanceGradebookProvi
                     return true;
                 } else {
                     //does not exist, add to GB and add all grades
-                   return create(aS);
+                    return create(aS);
                 }
             }
         }

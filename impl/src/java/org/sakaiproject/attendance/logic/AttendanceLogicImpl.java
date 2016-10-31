@@ -23,6 +23,7 @@ import lombok.Setter;
 
 import org.apache.log4j.Logger;
 
+import org.sakaiproject.attendance.api.AttendanceGradebookProvider;
 import org.sakaiproject.attendance.dao.AttendanceDao;
 import org.sakaiproject.attendance.model.*;
 import org.sakaiproject.user.api.User;
@@ -200,6 +201,7 @@ public class AttendanceLogicImpl implements AttendanceLogic {
 		}
 
 		updateStats(aR, oldStatus);
+		regradeForAttendanceRecord(aR);
 		return dao.updateAttendanceRecord(aR);
 	}
 
@@ -270,6 +272,7 @@ public class AttendanceLogicImpl implements AttendanceLogic {
 			}
 			aR.setStatus(s);
 			updateUserStats(aR, oldStatus);
+			regradeForAttendanceRecord(aR);
 		}
 
 		AttendanceItemStats itemStats = getStatsForEvent(aE);
@@ -476,7 +479,13 @@ public class AttendanceLogicImpl implements AttendanceLogic {
 			throw new IllegalArgumentException("AttendanceGrade cannot be null");
 		}
 
-		return dao.updateAttendanceGrade(aG);
+		boolean saved = dao.updateAttendanceGrade(aG);
+
+		if(saved && aG.getAttendanceSite().getSendToGradebook()) {
+			return attendanceGradebookProvider.sendToGradebook(aG);
+		}
+
+		return saved;
 	}
 
 	/**
@@ -501,10 +510,62 @@ public class AttendanceLogicImpl implements AttendanceLogic {
 	}
 
 	/**
+	 * {@inheritDoc}
+	 */
+	public boolean addGradingRule(GradingRule gradingRule) {
+		return gradingRule != null && dao.addGradingRule(gradingRule);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public boolean deleteGradingRule(GradingRule gradingRule) {
+		return gradingRule != null && dao.deleteGradingRule(gradingRule);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public List<GradingRule> getGradingRulesForSite(AttendanceSite attendanceSite) {
+		return dao.getGradingRulesForSite(attendanceSite);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public void regradeAll(AttendanceSite attendanceSite) {
+		List<String> users = sakaiProxy.getSiteMembershipIds(attendanceSite.getSiteID());
+		if (users != null) {
+			for (String userId : users) {
+				AttendanceGrade grade = getAttendanceGrade(userId);
+				if (grade == null) {
+					grade = new AttendanceGrade(attendanceSite, userId);
+				}
+				if (grade.getOverride() == null || !grade.getOverride()) {
+					grade.setGrade(grade(userId, attendanceSite));
+					updateAttendanceGrade(grade);
+				}
+			}
+		}
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public Double regrade(AttendanceGrade attendanceGrade, boolean saveGrade) {
+		Double grade = grade(attendanceGrade.getUserID(), attendanceGrade.getAttendanceSite());
+		if (saveGrade) {
+			attendanceGrade.setGrade(grade);
+			updateAttendanceGrade(attendanceGrade);
+		}
+		return grade;
+	}
+
+	/**
 	 * init - perform any actions required here for when this bean starts up
 	 */
 	public void init() {
-		log.info("init");
+		log.debug("AttendanceLogicImpl init()");
 	}
 
 	private boolean addSite(AttendanceSite s) {
@@ -711,9 +772,75 @@ public class AttendanceLogicImpl implements AttendanceLogic {
 		}
 	}
 
+	private void regradeForAttendanceRecord(AttendanceRecord attendanceRecord) {
+		final AttendanceSite currentSite = getCurrentAttendanceSite();
+		// Auto grade if valid record, maximum points is set, and auto grade is enabled
+		if (attendanceRecord != null && currentSite.getMaximumGrade() != null && currentSite.getMaximumGrade() > 0 && currentSite.getUseAutoGrading()) {
+			final String userId = attendanceRecord.getUserID();
+			AttendanceGrade attendanceGrade = getAttendanceGrade(userId);
+			if (attendanceGrade == null) {
+				attendanceGrade = new AttendanceGrade(currentSite, userId);
+			}
+			// Only update if not overridden
+			if (attendanceGrade.getOverride()== null || !attendanceGrade.getOverride()) {
+				attendanceGrade.setGrade(grade(userId, currentSite));
+				updateAttendanceGrade(attendanceGrade);
+			}
+		}
+	}
+
+	// Must be non-null user and site
+	private Double grade(String userId, AttendanceSite attendanceSite) {
+		final List<GradingRule> rules = getGradingRulesForSite(attendanceSite);
+		final AttendanceUserStats userStats = getStatsForUser(userId);
+
+		Double totalPoints;
+		if (!attendanceSite.getAutoGradeBySubtraction()) {
+			totalPoints = 0D;
+		} else {
+			totalPoints = attendanceSite.getMaximumGrade();
+		}
+
+		if (rules != null) {
+			for (GradingRule rule : rules) {
+				Integer statusTotal = null;
+				switch (rule.getStatus()) {
+					case PRESENT:
+						statusTotal = userStats.getPresent();
+						break;
+					case UNEXCUSED_ABSENCE:
+						statusTotal = userStats.getUnexcused();
+						break;
+					case EXCUSED_ABSENCE:
+						statusTotal = userStats.getExcused();
+						break;
+					case LATE:
+						statusTotal = userStats.getLate();
+						break;
+					case LEFT_EARLY:
+						statusTotal = userStats.getLeftEarly();
+						break;
+				}
+				if (statusTotal != null && (statusTotal >= rule.getStartRange() && (rule.getEndRange() == null || statusTotal <= rule.getEndRange()))) {
+					totalPoints = Double.sum(totalPoints, rule.getPoints());
+				}
+			}
+		}
+
+		// Don't allow negative total points
+		if (totalPoints < 0D) {
+			return 0D;
+		} else {
+			return totalPoints;
+		}
+	}
+
 	@Setter
 	private AttendanceDao dao;
 
 	@Setter
 	private SakaiProxy sakaiProxy;
+
+	@Setter
+	private AttendanceGradebookProvider attendanceGradebookProvider;
 }
