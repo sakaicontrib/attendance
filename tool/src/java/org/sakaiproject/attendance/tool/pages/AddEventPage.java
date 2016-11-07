@@ -77,6 +77,11 @@ public class AddEventPage extends BasePage {
 						refreshPageComponents(ajaxRequestTarget);
 					}
 				}
+
+				@Override
+				public boolean isEnabled() {
+					return !attendanceEvent.getAttendanceSite().getIsSyncing();
+				}
 			};
 
 		} else {
@@ -118,6 +123,11 @@ public class AddEventPage extends BasePage {
 						}
 						refreshPageComponents(ajaxRequestTarget);
 					}
+
+					@Override
+					public boolean isEnabled() {
+						return !modelObject.getAttendanceSite().getIsSyncing();
+					}
 				};
 				item.add(deleteLink);
 				Link<Void> editLink = new Link<Void>("edit-link") {
@@ -156,7 +166,7 @@ public class AddEventPage extends BasePage {
 				refreshPageComponents(null);
 			}
 		};
-		form.add(new EventInputPanel("event", new CompoundPropertyModel<AttendanceEvent>(this.attendanceEvent)));
+		form.add(new EventInputPanel("event", new CompoundPropertyModel<>(this.attendanceEvent)));
 		form.add(new AjaxSubmitLink("submit") {
 			@Override
 			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {

@@ -42,7 +42,9 @@ public class AttendanceSite implements Serializable {
 	@Getter @Setter private					Boolean					sendToGradebook;
 	@Getter @Setter private					String					gradebookItemName;
 	@Getter @Setter private					Boolean					showCommentsToStudents;
-	@Getter	@Setter	private 				Set<AttendanceStatus>	attendanceStatuses	= new HashSet<AttendanceStatus>(0);
+			@Setter private					Boolean					isSyncing;
+	@Getter @Setter private					Date					syncTime;
+	@Getter	@Setter	private 				Set<AttendanceStatus>	attendanceStatuses	= new HashSet<>(0);
 
 	public AttendanceSite(String siteID){
 		this.siteID 				= siteID;
@@ -51,6 +53,15 @@ public class AttendanceSite implements Serializable {
 		this.sendToGradebook 		= false;
 		this.gradebookItemName 		= AttendanceConstants.GRADEBOOK_ITEM_NAME;
 		this.showCommentsToStudents = false;
+		this.isSyncing				= false;
+	}
+
+	public Boolean getIsSyncing() {
+		if(this.isSyncing == null) {
+			return false;
+		}
+
+		return this.isSyncing;
 	}
 
 	@Override

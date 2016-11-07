@@ -19,6 +19,7 @@ package org.sakaiproject.attendance.dao;
 import org.sakaiproject.attendance.model.*;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -36,6 +37,13 @@ public interface AttendanceDao {
 	 * @return the AttendanceSite
      */
 	AttendanceSite getAttendanceSite(String siteId);
+
+	/**
+	 * Return attendanceSite by ID
+	 * @param id, the attendance Site ID
+	 * @return {@link AttendanceSite}
+	 */
+	AttendanceSite getAttendanceSite(Long id);
 
 	/**
 	 * Add a new AttendanceSite record to the database
@@ -233,6 +241,25 @@ public interface AttendanceDao {
 	 */
 	boolean updateAttendanceItemStats(AttendanceItemStats aIS);
 
+	/**
+	 * Return a batch of AttendanceSites
+	 * @return a List of AttendanceSite IDs (max 5)
+	 */
+	List<Long> getAttendanceSiteBatch(Date syncTime);
+
+	/**
+	 * Return a list of all AttendanceSites In Sync
+	 * @return List of IDs
+	 */
+	List<Long> getAttendanceSitesInSync();
+
+	/**
+	 * Mark a set of AttendanceSites as currently syncing
+	 * @param ids, a list of IDs to mark
+	 * @return boolean value of success
+	 */
+	boolean markAttendanceSiteForSync(List<Long> ids, Date syncTime);
+
 	// Hibernate Query Constants
 	String QUERY_GET_ATTENDANCE_EVENT = "getAttendanceEvent";
 	String QUERY_GET_ATTENDANCE_EVENTS_FOR_SITE = "getAttendanceEventsForSite";
@@ -256,10 +283,17 @@ public interface AttendanceDao {
 	String QUERY_GET_ATTENDANCE_USER_STATS_FOR_SITE = "getAttendanceUserStatsForSite";
 	String QUERY_GET_ATTENDANCE_ITEM_STATS = "getAttendanceItemStats";
 
+	// Attendance Sync for Statistics Queries
+	String QUERY_GET_ATTENDANCE_SITE_BATCH = "getAttendanceSiteBatch";
+	String QUERY_GET_ATTENDANCE_SITES_IN_SYNC = "getAttendanceSitesInSync";
+	String QUERY_MARK_ATTENDANCE_SITE_IN_SYNC = "markAttendanceSiteForSync";
+
 	// Hibernate Object Fields
 	String ID = "id";
+	String IDS = "ids";
 	String USER_ID = "userID";
 	String SITE_ID = "siteID";
 	String ATTENDANCE_SITE = "attendanceSite";
 	String ATTENDANCE_EVENT = "attendanceEvent";
+	String SYNC_TIME = "syncTime";
 }
