@@ -26,7 +26,6 @@ import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.Radio;
 import org.apache.wicket.markup.html.form.RadioGroup;
 import org.apache.wicket.markup.html.form.TextArea;
-import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.data.DataView;
@@ -35,7 +34,6 @@ import org.sakaiproject.attendance.model.AttendanceRecord;
 import org.sakaiproject.attendance.model.AttendanceStatus;
 import org.sakaiproject.attendance.model.Status;
 import org.sakaiproject.attendance.tool.dataproviders.AttendanceStatusProvider;
-import org.sakaiproject.attendance.tool.pages.StudentView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -93,59 +91,17 @@ public class AttendanceRecordFormDataPanel extends BasePanel {
                     getSession().error(temp.getString());
                 }
             }
+
+            @Override
+            public boolean isEnabled() {
+                return !recordIModel.getObject().getAttendanceEvent().getAttendanceSite().getIsSyncing();
+            }
         };
 
         createStatusRadio(recordForm);
         createCommentBox(recordForm);
-        //createLabel(recordForm);
 
         return recordForm;
-    }
-
-    private void createLabel(Form<AttendanceRecord> rF) {
-        WebMarkupContainer student = new WebMarkupContainer("student") {
-            @Override
-            public boolean isVisible(){
-                return isStudentView;
-            }
-        };
-
-        Label studentName = new Label("student-name");
-        Link<Void> studentLink = new Link<Void>("student-link") {
-            @Override
-            public void onClick(){
-                // do nothing
-            }
-        };
-
-        if(isStudentView) {
-            final String id = this.recordIModel.getObject().getUserID();
-            String s = sakaiProxy.getUserSortName(id);
-            studentName = new Label("student-name", s.equals("") ? new ResourceModel("attendance.student.name.unknown") : s);
-
-            studentLink = new Link<Void>("student-link") {
-                @Override
-                public void onClick() {
-                    setResponsePage(new StudentView(id, recordIModel.getObject().getAttendanceEvent().getId(), returnPage));
-                }
-            };
-
-
-        }
-
-        studentLink.add(studentName);
-        student.add(studentLink);
-
-        Label eventName = new Label("event-name", this.recordIModel.getObject().getAttendanceEvent().getName()){
-            @Override
-            public boolean isVisible(){
-                return !isStudentView;
-            }
-        };
-
-
-        rF.add(student);
-        rF.add(eventName);
     }
 
     private void createStatusRadio(final Form<AttendanceRecord> rF) {

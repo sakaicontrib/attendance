@@ -139,7 +139,10 @@ public class BasePage extends WebPage implements IHeaderContributor {
         };
 		feedbackPanel.setOutputMarkupId(true);
         add(feedbackPanel);
-		
+
+		if(attendanceLogic.getCurrentAttendanceSite().getIsSyncing()) {
+			getSession().error((new ResourceModel("attendance.site.syncing.error")).getObject());
+		}
     }
 	
 	/**

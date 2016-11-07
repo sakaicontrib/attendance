@@ -126,11 +126,25 @@ public interface SakaiProxy {
 	List<String> getCurrentSiteMembershipIds();
 
 	/**
+	 * Get the site's membership Ids
+	 * @param siteId the Site ID
+	 * @return List of userIDs in SiteId
+	 */
+	List<String> getSiteMembershipIds(String siteId);
+
+	/**
 	 * Get the Users in the current Site
 	 *
 	 * @return List of Users in the current site
 	 */
 	List<User> getCurrentSiteMembership();
+
+	/**
+	 * Get the Users in Site
+	 * @param siteId, siteId to get the users for
+	 * @return List of Users
+	 */
+	List<User> getSiteMembership(String siteId);
 
 	/**
 	 * Get the Users in a group of the current Site

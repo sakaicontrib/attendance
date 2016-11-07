@@ -37,6 +37,8 @@
         <property name="sendToGradebook"        column="SEND_TO_GRADEBOOK"      type="java.lang.Boolean" />
         <property name="gradebookItemName"      column="GRADEBOOK_ITEM_NAME"    type="java.lang.String" />
         <property name="showCommentsToStudents" column="SHOW_COMMENTS"          type="java.lang.Boolean" />
+        <property name="isSyncing"              column="SYNC"                   type="java.lang.Boolean" />
+        <property name="syncTime"               column="SYNC_TIME"              type="java.util.Date" />
         
         <set name="attendanceStatuses" table="ATTENDANCE_STATUS_T" fetch="join" inverse="true" lazy="false" cascade="all">
             <key column="A_SITE_ID" not-null="true"/>
@@ -51,5 +53,17 @@
 
     <query name="getSiteByID">
         <![CDATA[from AttendanceSite attendanceSite WHERE attendanceSite.id = :id]]>
+    </query>
+
+    <query name="getAttendanceSiteBatch">
+        <![CDATA[SELECT id FROM AttendanceSite attendanceSite WHERE (attendanceSite.syncTime IS NULL OR attendanceSite.syncTime < :syncTime)]]>
+    </query>
+
+    <query name="getAttendanceSitesInSync">
+        <![CDATA[SELECT id FROM AttendanceSite attendanceSite WHERE attendanceSite.isSyncing = TRUE]]>
+    </query>
+
+    <query name="markAttendanceSiteForSync">
+        <![CDATA[UPDATE AttendanceSite attendanceSite SET attendanceSite.isSyncing = true, attendanceSite.syncTime = :syncTime WHERE id in (:ids)]]>
     </query>
 </hibernate-mapping>

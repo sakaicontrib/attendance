@@ -124,6 +124,11 @@ public class EventView extends BasePage {
                 getSession().info("All attendance records " + who + " for " + attendanceEvent.getName() + " set to " + setAllStatus.getModelObject());
                 setResponsePage(new EventView(attendanceEvent.getId(), returnPage, selectedGroup));
             }
+
+            @Override
+            public boolean isEnabled() {
+                return !attendanceEvent.getAttendanceSite().getIsSyncing();
+            }
         };
 
         List<AttendanceStatus> activeAttendanceStatuses = attendanceLogic.getActiveStatusesForCurrentSite();
@@ -133,12 +138,12 @@ public class EventView extends BasePage {
                 return o1.getSortOrder() - o2.getSortOrder();
             }
         });
-        List<Status> activeStatuses = new ArrayList<Status>();
+        List<Status> activeStatuses = new ArrayList<>();
         for(AttendanceStatus attendanceStatus : activeAttendanceStatuses) {
             activeStatuses.add(attendanceStatus.getStatus());
         }
 
-        setAllForm.add(setAllStatus = new DropDownChoice<Status>("set-all-status", new Model<Status>(), activeStatuses, new EnumChoiceRenderer<Status>(this)));
+        setAllForm.add(setAllStatus = new DropDownChoice<>("set-all-status", new Model<>(), activeStatuses, new EnumChoiceRenderer<>(this)));
         setAllStatus.add(new AjaxFormSubmitBehavior("onchange") {
             @Override
             protected void onSubmit(AjaxRequestTarget target) {
@@ -150,7 +155,7 @@ public class EventView extends BasePage {
         this.printContainer = new WebMarkupContainer("print-container");
         printContainer.setOutputMarkupId(true);
 
-        this.printPanel = new PrintPanel("print-panel", new Model<AttendanceEvent>(attendanceEvent));
+        this.printPanel = new PrintPanel("print-panel", new Model<>(attendanceEvent));
 
         printContainer.add(printPanel);
 
@@ -233,7 +238,7 @@ public class EventView extends BasePage {
                 return sakaiProxy.getGroupTitleForCurrentSite(o1).compareTo(sakaiProxy.getGroupTitleForCurrentSite(o2));
             }
         });
-        groupChoice = new DropDownChoice<String>("group-choice", new PropertyModel<String>(this, "selectedGroup"), groupIds, new IChoiceRenderer<String>() {
+        groupChoice = new DropDownChoice<>("group-choice", new PropertyModel<>(this, "selectedGroup"), groupIds, new IChoiceRenderer<String>() {
             @Override
             public Object getDisplayValue(String s) {
                 return sakaiProxy.getGroupTitleForCurrentSite(s);

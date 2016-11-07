@@ -169,11 +169,16 @@ public class SakaiProxyImpl implements SakaiProxy {
 	 * {@inheritDoc}
 	 */
 	public List<String> getCurrentSiteMembershipIds() {
-		List<User> members = getCurrentSiteMembership();
-		List<String> studentIds = new ArrayList<String>();
-		for(User user : members) {
-			studentIds.add(user.getId());
-		}
+		return getSiteMembershipIds(getCurrentSiteId());
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public List<String> getSiteMembershipIds(final String siteId) {
+		List<User> members = getSiteMembership(siteId);
+		List<String> studentIds = new ArrayList<>();
+		members.forEach(user-> studentIds.add(user.getId()));
 		return studentIds;
 	}
 
@@ -181,9 +186,16 @@ public class SakaiProxyImpl implements SakaiProxy {
 	 * {@inheritDoc}
 	 */
 	public List<User> getCurrentSiteMembership() {
-		List<User> returnList = new ArrayList<User>();
+		return getSiteMembership(getCurrentSiteId());
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public List<User> getSiteMembership(final String siteId) {
+		List<User> returnList = new ArrayList<>();
 		try {
-			AuthzGroup membership = authzGroupService.getAuthzGroup("/site/" + getCurrentSiteId());
+			AuthzGroup membership = authzGroupService.getAuthzGroup("/site/" + siteId);
 			Set<Member> memberSet = membership.getMembers();
 			String maintainRole = membership.getMaintainRole();
 			returnList = getUserListForMemberSetHelper(memberSet, maintainRole);

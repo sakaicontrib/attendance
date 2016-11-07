@@ -31,6 +31,7 @@ import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 
 import java.io.Serializable;
 import java.sql.SQLException;
+import java.util.Date;
 import java.util.List;
 
 
@@ -64,6 +65,16 @@ public class AttendanceDaoImpl extends HibernateDaoSupport implements Attendance
 		};
 
 		return (AttendanceSite) getHibernateTemplate().execute(hcb);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@SuppressWarnings("unchecked")
+	public AttendanceSite getAttendanceSite(final Long id) {
+		log.debug("getAttendanceSite by ID: " + id);
+
+		return (AttendanceSite) getByIDHelper(id, QUERY_GET_SITE_BY_ID);
 	}
 
 	/**
@@ -500,6 +511,58 @@ public class AttendanceDaoImpl extends HibernateDaoSupport implements Attendance
 			log.error("updateAttendanceItemStats, '" + aIS.getId() + "' failed.", e);
 			return false;
 		}
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@SuppressWarnings("unchecked")
+	public List<Long> getAttendanceSiteBatch(final Date syncTime) {
+		final HibernateCallback<List<Long>> hcb = new HibernateCallback<List<Long>>() {
+			@Override
+			public List<Long> doInHibernate(Session session) throws HibernateException, SQLException {
+				Query q = session.getNamedQuery(QUERY_GET_ATTENDANCE_SITE_BATCH);
+				q.setTimestamp(SYNC_TIME, syncTime);
+				q.setMaxResults(5);
+				return q.list();
+			}
+		};
+
+		return getHibernateTemplate().execute(hcb);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@SuppressWarnings("unchecked")
+	public List<Long> getAttendanceSitesInSync() {
+		final HibernateCallback<List<Long>> hcb = new HibernateCallback<List<Long>>() {
+			@Override
+			public List<Long> doInHibernate(Session session) throws HibernateException, SQLException {
+				Query q = session.getNamedQuery(QUERY_GET_ATTENDANCE_SITES_IN_SYNC);
+				return q.list();
+			}
+		};
+
+		return getHibernateTemplate().execute(hcb);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@SuppressWarnings("unchecked")
+	public boolean markAttendanceSiteForSync(final List<Long> ids, final Date syncTime) {
+		final HibernateCallback hcb = new HibernateCallback() {
+			@Override
+			public Integer doInHibernate(Session session) throws HibernateException, SQLException {
+				Query q = session.getNamedQuery(QUERY_MARK_ATTENDANCE_SITE_IN_SYNC);
+				q.setParameterList(IDS, ids);
+				q.setTimestamp(SYNC_TIME, syncTime);
+				return q.executeUpdate();
+			}
+		};
+
+		return getHibernateTemplate().execute(hcb).equals(ids.size());
 	}
 
 	/**

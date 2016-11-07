@@ -109,4 +109,30 @@
 		<property name="memoryService" ref="org.sakaiproject.memory.api.MemoryService" />
 	</bean>
 
+	<!-- Job to Sync the Statistics -->
+	<bean id="AttendanceStatCalc"
+		  class="org.sakaiproject.attendance.services.AttendanceStatCalcJob"
+		  init-method="init" destroy-method="destroy">
+		<property name="attendanceStatCalc" ref="org.sakaiproject.attendance.services.AttendanceStatCalc" />
+		<property name="eventTrackingService" ref="org.sakaiproject.event.api.EventTrackingService" />
+		<property name="usageSessionService" ref="org.sakaiproject.event.api.UsageSessionService" />
+		<property name="authzGroupService" ref="org.sakaiproject.authz.api.AuthzGroupService" />
+		<property name="sessionManager" ref="org.sakaiproject.tool.api.SessionManager" />
+	</bean>
+
+	<bean id="org.sakaiproject.api.app.scheduler.JobBeanWrapper.AttendanceStatCalc"
+		  class="org.sakaiproject.component.app.scheduler.jobs.SpringJobBeanWrapper"
+		  init-method="init">
+		<property name="beanId" value="AttendanceStatCalc" />
+		<property name="jobName" value="Attendance Stat Calc - SEE DOCS" />
+		<property name="schedulerManager" 	ref="org.sakaiproject.api.app.scheduler.SchedulerManager" />
+	</bean>
+
+	<bean id="org.sakaiproject.attendance.services.AttendanceStatCalc"
+		  class="org.sakaiproject.attendance.services.AttendanceStatCalc"
+		  init-method="init" destroy-method="destroy">
+		<property name="dao" ref="org.sakaiproject.attendance.dao.AttendanceDao" />
+		<property name="sakaiProxy" ref="org.sakaiproject.attendance.logic.SakaiProxy" />
+		<property name="attendanceLogic" ref="org.sakaiproject.attendance.logic.AttendanceLogic" />
+	</bean>
 </beans>
