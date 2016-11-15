@@ -149,10 +149,19 @@ table.itemListTable, table.eventViewTable, table.takeAttendanceTable, div.eventF
     margin: 0;
 }
 
-.overviewTable td, .overviewTable th, .itemListTable td, .itemListTable th, .eventViewTable td, .eventViewTable th, .takeAttendanceTable td, .takeAttendanceTable th {
+.overviewTable td, .overviewTable th, .itemListTable td, .itemListTable th, .eventViewTable td, .eventViewTable th {
     border: 1px solid #ccc;
     padding: .5em;
     text-align: left;
+}
+
+.takeAttendanceTable td, .takeAttendanceTable th {
+    border: 1px solid #ccc;
+    text-align: left;
+}
+
+.takeAttendanceTable td:first-child {
+    padding-left: .5em;
 }
 
 .overviewTable th, .itemListTable th, .eventViewTable th, .takeAttendanceTable th {
@@ -309,13 +318,6 @@ div.attendanceBreadcrumbs span {
     clear:both;
 }
 
-.div-table-col {
-    float:left;/*fix for  buggy browsers*/
-    width:80px;
-    text-align: center;
-    padding: 0 .5em;
-}
-
 .div-table{
     display:table;
     width:auto;
@@ -329,14 +331,6 @@ div.attendanceBreadcrumbs span {
     display:table-row;
     width:auto;
     clear:both;
-}
-
-.div-table-col {
-    float:left;/*fix for  buggy browsers*/
-    display:table-cell;
-    width:80px;
-    text-align: center;
-    padding: .5em;
 }
 
 .divHeader {
@@ -511,4 +505,97 @@ label.gradeSettingsLabel {
 
 .printVisible {
     display: block;
+}
+
+.status-group-container {
+    float: left;
+}
+
+.PRESENT {
+    background-color: #DFF0D8;
+    border: 1px solid green;
+}
+
+.UNEXCUSED_ABSENCE {
+    background-color: #FFBBBB;
+    border: 1px solid red;
+}
+
+.EXCUSED_ABSENCE {
+    background-color: #CCCCCC;
+    border: 1px solid gray;
+}
+
+.LATE, .LEFT_EARLY {
+    background-color: #fcf8a5;
+    border: 1px solid goldenrod;
+}
+
+@media (min-width: 1090px) {
+    .record-status-name {
+        display: none;
+    }
+
+    .div-table-col {
+        float:left;/*fix for  buggy browsers*/
+        display:table-cell;
+        width:80px;
+        text-align: center;
+        padding: .5em;
+        margin-top: 2px;
+    }
+
+    .div-table-col:first-child {
+        margin-left: 1px;
+    }
+
+    .slim-status-header {
+        display: none;
+    }
+
+    .comment-container {
+        float: right;
+    }
+}
+
+@media (max-width: 1090px) {
+    .record-status-name {
+        display: inherit;
+        margin-left: .25em;
+        padding-top: .15em;
+    }
+
+    .div-table-col {
+        display: flex;
+        margin-top: .5em;
+        margin-bottom: .5em;
+        padding-left: .5em;
+        padding-right: .5em;
+    }
+
+    .div-table-col input[name="attendance-record-status-group"] {
+        margin-right: .25em;
+    }
+
+    .slim-status-header {
+        display: inherit;
+    }
+
+    .status-header {
+        display: none;
+    }
+}
+
+@media (max-width: 1090px) and (min-width: 500px) {
+    .comment-container {
+        float: right;
+        margin-left: 2em;
+        margin-top: 5em;
+    }
+}
+
+@media (max-width: 500px) {
+    .comment-container {
+        margin-left: 2em;
+    }
 }

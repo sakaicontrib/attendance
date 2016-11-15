@@ -19,12 +19,16 @@
 <body>
 <wicket:panel>
     <form wicket:id="attendanceRecord">
-        <wicket:container wicket:id="attendance-record-status-group">
-            <div wicket:id="status-radios" class="div-table-col">
-                <input type="radio" wicket:id="record-status" />
-            </div>
-        </wicket:container>
-        <div class="div-table-col" style="position:relative"  wicket:id="comment-container">
+        <div class="status-group-container">
+            <wicket:container wicket:id="attendance-record-status-group">
+                <div wicket:id="status-radios" class="div-table-col">
+                    <input type="radio" wicket:id="record-status" />
+                    <label wicket:id="record-status-name" class="record-status-name" />
+                    <label wicket:id="record-status-name-raw" hidden />
+                </div>
+            </wicket:container>
+        </div>
+        <div class="div-table-col comment-container" style="position:relative"  wicket:id="comment-container">
             <div class="commentToggle">
                 <div wicket:id="no-comment">
                     <img src="images/no_comment_24.png" />

@@ -20,12 +20,12 @@ import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormSubmitBehavior;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
+import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.head.JavaScriptHeaderItem;
+import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.markup.html.form.Radio;
-import org.apache.wicket.markup.html.form.RadioGroup;
-import org.apache.wicket.markup.html.form.TextArea;
+import org.apache.wicket.markup.html.form.*;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.data.DataView;
@@ -34,6 +34,7 @@ import org.sakaiproject.attendance.model.AttendanceRecord;
 import org.sakaiproject.attendance.model.AttendanceStatus;
 import org.sakaiproject.attendance.model.Status;
 import org.sakaiproject.attendance.tool.dataproviders.AttendanceStatusProvider;
+import org.sakaiproject.component.cover.ServerConfigurationService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -110,16 +111,21 @@ public class AttendanceRecordFormDataPanel extends BasePanel {
         DataView<AttendanceStatus> attendanceStatusRadios = new DataView<AttendanceStatus>("status-radios", attendanceStatusProvider) {
             @Override
             protected void populateItem(Item<AttendanceStatus> item) {
-                Radio statusRadio = new Radio<Status>("record-status", new Model<Status>(item.getModelObject().getStatus()));
+                final Status itemStatus = item.getModelObject().getStatus();
+                Radio statusRadio = new Radio<Status>("record-status", new Model<Status>(itemStatus));
                 item.add(statusRadio);
                 statusRadio.add(new AjaxFormSubmitBehavior(rF, "onclick") {
                     protected void onSubmit(AjaxRequestTarget target) {
+                        target.appendJavaScript("attendance.recordFormRowSetup("+ this.getAttributes().getFormId() + ");");
                         for (Component c : ajaxTargets) {
                             target.add(c);
                         }
                     }
                 });
                 ajaxTargets.add(statusRadio);
+                statusRadio.setLabel(Model.of(getStatusString(itemStatus)));
+                item.add(new SimpleFormComponentLabel("record-status-name", statusRadio));
+                item.add(new Label("record-status-name-raw", itemStatus.toString()));
             }
         };
 
@@ -189,5 +195,13 @@ public class AttendanceRecordFormDataPanel extends BasePanel {
         }
 
         rF.add(commentContainer);
+    }
+
+    @Override
+    public void renderHead(IHeaderResponse response) {
+        super.renderHead(response);
+        final String version = ServerConfigurationService.getString("portal.cdn.version", "");
+        response.render(JavaScriptHeaderItem.forUrl(String.format("javascript/attendanceRecordForm.js?version=%s", version)));
+        response.render(OnDomReadyHeaderItem.forScript("attendance.recordFormSetup();"));
     }
 }
