@@ -25,10 +25,10 @@ import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.model.ResourceModel;
 import org.sakaiproject.attendance.model.AttendanceRecord;
 import org.sakaiproject.attendance.tool.dataproviders.AttendanceRecordProvider;
-import org.sakaiproject.attendance.tool.pages.panels.AttendanceGradePanel;
-import org.sakaiproject.attendance.tool.pages.panels.AttendanceRecordFormDataPanel;
-import org.sakaiproject.attendance.tool.pages.panels.AttendanceRecordFormHeaderPanel;
-import org.sakaiproject.attendance.tool.pages.panels.StatisticsPanel;
+import org.sakaiproject.attendance.tool.panels.AttendanceGradePanel;
+import org.sakaiproject.attendance.tool.panels.AttendanceRecordFormDataPanel;
+import org.sakaiproject.attendance.tool.panels.AttendanceRecordFormHeaderPanel;
+import org.sakaiproject.attendance.tool.panels.StatisticsPanel;
 
 /**
  * StudentView is the view of a single user (a student)'s AttendanceRecords
@@ -67,8 +67,7 @@ public class StudentView extends BasePage {
     private void init() {
         if(this.role != null && this.role.equals("Student")){
             this.isStudent = true;
-            hideNavigationLink(this.firstLink);
-            hideNavigationLink(this.addEventLink);
+            hideNavigationLink(this.homepageLink);
             hideNavigationLink(this.studentOverviewLink);
             hideNavigationLink(this.settingsLink);
         }
@@ -92,9 +91,7 @@ public class StudentView extends BasePage {
         Link<Void> closeLink = new Link<Void>("close-link") {
             @Override
             public void onClick() {
-                if(returnPage.equals(BasePage.ITEMS_PAGE)) {
-                    setResponsePage(new AddEventPage());
-                } else if(returnPage.equals(BasePage.STUDENT_OVERVIEW_PAGE)) {
+                if(returnPage.equals(BasePage.STUDENT_OVERVIEW_PAGE)) {
                     setResponsePage(new StudentOverview());
                 } else {
                     setResponsePage(new Overview());
@@ -102,9 +99,7 @@ public class StudentView extends BasePage {
             }
         };
 
-        if(returnPage.equals(BasePage.ITEMS_PAGE)) {
-            closeLink.add(new Label("close-link-text", new ResourceModel("attendance.event.view.link.close.items")));
-        } else if(returnPage.equals(BasePage.STUDENT_OVERVIEW_PAGE)){
+        if(returnPage.equals(BasePage.STUDENT_OVERVIEW_PAGE)){
             closeLink.add(new Label("close-link-text", new ResourceModel("attendance.event.view.link.close.student.overview")));
         } else {
             closeLink.add(new Label("close-link-text", new ResourceModel("attendance.event.view.link.close.overview")));

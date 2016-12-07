@@ -16,10 +16,14 @@
 
 package org.sakaiproject.attendance.tool.pages;
 
+import lombok.Getter;
 import org.apache.log4j.Logger;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.behavior.AttributeAppender;
+import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
 import org.apache.wicket.feedback.FeedbackMessage;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.OnLoadHeaderItem;
@@ -29,12 +33,16 @@ import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
+import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.sakaiproject.attendance.logic.AttendanceLogic;
 import org.sakaiproject.attendance.logic.SakaiProxy;
+import org.sakaiproject.attendance.model.AttendanceEvent;
 import org.sakaiproject.attendance.model.Status;
+import org.sakaiproject.attendance.tool.panels.EventInputPanel;
+import org.sakaiproject.attendance.tool.util.AttendanceFeedbackPanel;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -61,12 +69,14 @@ public class BasePage extends WebPage implements IHeaderContributor {
 
 	protected String role;
 	
-	Link<Void> firstLink;
+	Link<Void> homepageLink;
 	Link<Void> settingsLink;
-	Link<Void> addEventLink;
 	Link<Void> studentOverviewLink;
 	
 	FeedbackPanel feedbackPanel;
+
+	@Getter
+	ModalWindow addOrEditItemWindow;
 	
 	public BasePage() {
 		
@@ -75,27 +85,16 @@ public class BasePage extends WebPage implements IHeaderContributor {
 		this.role = sakaiProxy.getCurrentUserRoleInCurrentSite();
 
     	//Take Attendance Overview link
-		firstLink = new Link<Void>("firstLink") {
+		homepageLink = new Link<Void>("homepage-link") {
 			private static final long serialVersionUID = 1L;
 			public void onClick() {
 				
 				setResponsePage(new Overview());
 			}
 		};
-		firstLink.add(new Label("firstLinkLabel",new ResourceModel("link.first")).setRenderBodyOnly(true));
-		firstLink.add(new AttributeModifier("title", new ResourceModel("link.first.tooltip")));
-		add(firstLink);
-		
-		//Attendance Items link
-		addEventLink = new Link<Void>("addEventLink") {
-			private static final long serialVersionUID = 1L;
-			public void onClick() {
-				setResponsePage(new AddEventPage());
-			}
-		};
-		addEventLink.add(new Label("thirdLinkLabel", new ResourceModel("link.third")).setRenderBodyOnly(true));
-		addEventLink.add(new AttributeModifier("title", new ResourceModel("link.third.tooltip")));
-		add(addEventLink);
+		homepageLink.add(new Label("homepage-link-label",new ResourceModel("attendance.link.homepage")).setRenderBodyOnly(true));
+		homepageLink.add(new AttributeModifier("title", new ResourceModel("attendance.link.homepage.tooltip")));
+		add(homepageLink);
 
 		//student Overview Link
 		studentOverviewLink = new Link<Void>("student-overview-link") {
@@ -114,46 +113,23 @@ public class BasePage extends WebPage implements IHeaderContributor {
 				setResponsePage(new SettingsPage());
 			}
 		};
-		settingsLink.add(new Label("settings-link-label", new ResourceModel("settings.link.label")).setRenderBodyOnly(true));
-		settingsLink.add(new AttributeModifier("title", new ResourceModel("settings.link.tooltip")));
+		settingsLink.add(new Label("settings-link-label", new ResourceModel("attendance.link.settings.label")).setRenderBodyOnly(true));
+		settingsLink.add(new AttributeModifier("title", new ResourceModel("attendance.link.settings.tooltip")));
 		add(settingsLink);
 		
 		// Add a FeedbackPanel for displaying our messages
-        feedbackPanel = new FeedbackPanel("feedback"){
-        	
-        	@Override
-        	protected Component newMessageDisplayComponent(final String id, final FeedbackMessage message) {
-        		final Component newMessageDisplayComponent = super.newMessageDisplayComponent(id, message);
-
-        		if(message.getLevel() == FeedbackMessage.ERROR ||
-        			message.getLevel() == FeedbackMessage.DEBUG ||
-        			message.getLevel() == FeedbackMessage.FATAL ||
-        			message.getLevel() == FeedbackMessage.WARNING){
-        			add(AttributeModifier.replace("class", "alertMessage"));
-        		} else if(message.getLevel() == FeedbackMessage.INFO){
-        			add(AttributeModifier.replace("class", "messageSuccess"));
-        		} 
-
-        		return newMessageDisplayComponent;
-        	}
-        };
-		feedbackPanel.setOutputMarkupId(true);
+        feedbackPanel = new AttendanceFeedbackPanel("feedback");
         add(feedbackPanel);
 
 		if(attendanceLogic.getCurrentAttendanceSite().getIsSyncing()) {
 			getSession().error((new ResourceModel("attendance.site.syncing.error")).getObject());
 		}
+
+		this.addOrEditItemWindow = new ModalWindow("addOrEditItemWindow");
+		this.addOrEditItemWindow.showUnloadConfirmation(false);
+		this.addOrEditItemWindow.setInitialHeight(400);
+		add(this.addOrEditItemWindow);
     }
-	
-	/**
-	 * Helper to clear the feedbackpanel display.
-	 * @param f	FeedBackPanel
-	 */
-	public void clearFeedback(FeedbackPanel f) {
-		if(!f.hasFeedbackMessage()) {
-			f.add(AttributeModifier.replace("class", ""));
-		}
-	}
 	
 	/**
 	 * This block adds the isRequired wrapper markup to style it like a Sakai tool.
@@ -205,8 +181,20 @@ public class BasePage extends WebPage implements IHeaderContributor {
 		}
 	}
 
+	protected AjaxLink<?> getAddEditWindowAjaxLink(final AttendanceEvent obj, final String id) {
+		return new AjaxLink<Void>(id) {
+			private static final long serialVersionUID = 1L;
+
+			public void onClick(AjaxRequestTarget target) {
+				final ModalWindow window = getAddOrEditItemWindow();
+				window.setTitle(new ResourceModel("attendance.add.edit.header"));
+				window.setContent(new EventInputPanel(window.getContentId(), window, new CompoundPropertyModel<>(obj)));
+				window.show(target);
+			}
+		};
+	}
+
 	public static final String OVERVIEW_PAGE = "overview";
-	public static final String ITEMS_PAGE = "items";
 	public static final String STUDENT_PAGE = "student_view";
 	public static final String STUDENT_OVERVIEW_PAGE = "student_overview";
 }

@@ -14,13 +14,12 @@
  *  limitations under the License.
  */
 
-package org.sakaiproject.attendance.tool.pages.panels;
+package org.sakaiproject.attendance.tool.panels;
 
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.data.DataView;
-import org.apache.wicket.model.ResourceModel;
 import org.sakaiproject.attendance.model.AttendanceStatus;
 import org.sakaiproject.attendance.tool.dataproviders.AttendanceStatusProvider;
 

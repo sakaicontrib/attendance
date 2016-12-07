@@ -37,7 +37,7 @@ import org.sakaiproject.attendance.model.AttendanceStatus;
 import org.sakaiproject.attendance.model.AttendanceUserStats;
 import org.sakaiproject.attendance.model.Status;
 import org.sakaiproject.attendance.tool.dataproviders.AttendanceStatusProvider;
-import org.sakaiproject.attendance.tool.pages.panels.AttendanceGradePanel;
+import org.sakaiproject.attendance.tool.panels.AttendanceGradePanel;
 
 import java.util.Collections;
 import java.util.Comparator;

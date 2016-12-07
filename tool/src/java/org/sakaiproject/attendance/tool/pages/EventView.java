@@ -16,6 +16,7 @@
 
 package org.sakaiproject.attendance.tool.pages;
 
+import lombok.Getter;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormSubmitBehavior;
@@ -36,10 +37,10 @@ import org.sakaiproject.attendance.model.AttendanceRecord;
 import org.sakaiproject.attendance.model.AttendanceStatus;
 import org.sakaiproject.attendance.model.Status;
 import org.sakaiproject.attendance.tool.dataproviders.AttendanceRecordProvider;
-import org.sakaiproject.attendance.tool.pages.panels.AttendanceRecordFormDataPanel;
-import org.sakaiproject.attendance.tool.pages.panels.AttendanceRecordFormHeaderPanel;
-import org.sakaiproject.attendance.tool.pages.panels.PrintPanel;
-import org.sakaiproject.attendance.tool.pages.panels.StatisticsPanel;
+import org.sakaiproject.attendance.tool.panels.AttendanceRecordFormDataPanel;
+import org.sakaiproject.attendance.tool.panels.AttendanceRecordFormHeaderPanel;
+import org.sakaiproject.attendance.tool.panels.PrintPanel;
+import org.sakaiproject.attendance.tool.panels.StatisticsPanel;
 
 import java.util.*;
 
@@ -55,6 +56,7 @@ public class EventView extends BasePage {
     private                 Long                attendanceID;
     private                 AttendanceEvent     attendanceEvent;
 
+    @Getter
     private                 String                  returnPage;
 
     private                 DropDownChoice<Status>  setAllStatus;
@@ -171,31 +173,16 @@ public class EventView extends BasePage {
     }
 
     private void createHeader() {
-        Link<Void> editLink = new Link<Void>("edit-link") {
-            @Override
-            public void onClick() {
-                setResponsePage(new AddEventPage(attendanceEvent));
-            }
-        };
-
         Link<Void> closeLink = new Link<Void>("close-link") {
             @Override
             public void onClick() {
-                if(returnPage.equals(BasePage.ITEMS_PAGE)) {
-                    setResponsePage(new AddEventPage());
-                } else {
-                    setResponsePage(new Overview());
-                }
+                setResponsePage(new Overview());
             }
         };
 
-        if(returnPage.equals(BasePage.ITEMS_PAGE)) {
-            closeLink.add(new Label("close-link-text", new ResourceModel("attendance.event.view.link.close.items")));
-        } else {
-            closeLink.add(new Label("close-link-text", new ResourceModel("attendance.event.view.link.close.overview")));
-        }
+         closeLink.add(new Label("close-link-text", new ResourceModel("attendance.event.view.link.close.overview")));
 
-        add(editLink);
+        add(getAddEditWindowAjaxLink(attendanceEvent, "edit-link"));
         add(closeLink);
     }
 
