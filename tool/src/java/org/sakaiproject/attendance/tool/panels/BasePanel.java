@@ -14,7 +14,7 @@
  *  limitations under the License.
  */
 
-package org.sakaiproject.attendance.tool.pages.panels;
+package org.sakaiproject.attendance.tool.panels;
 
 import org.apache.log4j.Logger;
 import org.apache.wicket.markup.html.panel.Panel;

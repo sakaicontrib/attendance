@@ -20,8 +20,8 @@ import org.apache.wicket.RestartResponseException;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.ResourceModel;
-import org.sakaiproject.attendance.tool.pages.panels.AttendanceGradeFormPanel;
-import org.sakaiproject.attendance.tool.pages.panels.AttendanceStatusFormPanel;
+import org.sakaiproject.attendance.tool.panels.AttendanceGradeFormPanel;
+import org.sakaiproject.attendance.tool.panels.AttendanceStatusFormPanel;
 
 /**
  * SettingsPage gets various settings which affect the whole AttendanceSite

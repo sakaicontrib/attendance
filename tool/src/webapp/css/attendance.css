@@ -274,6 +274,9 @@ h3.addEditHeader, h3.itemListHeader, h3.takeAttendanceHeader, h3.itemInfoHeader,
 span.addEditReq {
     color: red;
     font-size: 1.2em;
+    float: left;
+    margin-left: -.5em;
+    margin-right: -.5em;
 }
 
 td.noEventsCol, td.noStudentsCol {
@@ -598,4 +601,53 @@ label.gradeSettingsLabel {
     .comment-container {
         margin-left: 2em;
     }
+}
+
+div a.delete {
+    color: red;
+}
+
+div a.delete:hover {
+    color: red;
+}
+
+.addAttendanceItemForm {
+    margin-left: 70px;
+}
+
+/* Janked from gradebook-grades.css. Credit goes to steveswinsburg & payten */
+div.wicket-modal div.w_content_3 {
+    border: none; /** don't want border wrapping content inside the modal **/
+}
+
+div.wicket-modal div.w_caption {
+    cursor: move;
+    min-height: 60px;
+    height: auto;
+}
+
+div.wicket-modal h3.w_captionText {
+    padding: 20px;
+    font-size: 1.5em;
+    position: relative;
+    height: auto;
+}
+/* End janking */
+
+div.wicket-modal div.w_content_3 div.messageSuccess, div.wicket-modal div.w_content_3 div.alertMessage {
+    margin-top: 0;
+    margin-bottom: 10px;
+    padding: 7px 30px 7px 30px;
+}
+
+form.takeAttendanceNowForm input {
+    background-color: green;
+}
+
+form.takeAttendanceNowForm input:hover {
+    background: linear-gradient(green, darkgreen);
+}
+
+span.yui-skin-sam img {
+    margin-right: .5em;
 }

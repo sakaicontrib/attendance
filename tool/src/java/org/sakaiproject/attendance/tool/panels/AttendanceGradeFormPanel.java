@@ -14,7 +14,7 @@
  *  limitations under the License.
  */
 
-package org.sakaiproject.attendance.tool.pages.panels;
+package org.sakaiproject.attendance.tool.panels;
 
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -31,7 +31,7 @@ import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.ResourceModel;
 import org.sakaiproject.attendance.model.AttendanceSite;
-import org.sakaiproject.attendance.tool.pages.panels.util.GradebookItemNameValidator;
+import org.sakaiproject.attendance.tool.panels.util.GradebookItemNameValidator;
 
 /**
  * AttendanceGradeFormPanel is a Panel is used to get AttendanceSite settings for Grades.

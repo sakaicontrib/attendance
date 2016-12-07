@@ -26,8 +26,8 @@
 		<ul class="navIntraTool actionToolbar">
 			<li class="firstToolBarItem">
 				<span>
-					<a wicket:id="firstLink">
-						<span wicket:id="firstLinkLabel">[firstLinkLabel]</span>
+					<a wicket:id="homepage-link">
+						<span wicket:id="homepage-link-label">[homepage link label]</span>
 					</a>
 				</span>
 			</li>
@@ -35,13 +35,6 @@
 				<span>
 					<a wicket:id="student-overview-link">
 						<span wicket:id="student-overview-label">[student overview label]</span>
-					</a>
-				</span>
-			</li>
-			<li>
-				<span>
-					<a wicket:id="addEventLink">
-						<span wicket:id="thirdLinkLabel">[thirdLinkLabel]</span>
 					</a>
 				</span>
 			</li>
@@ -57,6 +50,8 @@
 		<span wicket:id="feedback">feedbackmessages will be put here</span>
 		
 		<wicket:child />
+
+		<div wicket:id="addOrEditItemWindow" />
 	
 	</div>
 </body>

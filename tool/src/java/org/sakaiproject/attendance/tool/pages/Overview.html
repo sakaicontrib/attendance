@@ -25,8 +25,12 @@
 	</h1>
 
 	<p class="overviewInstructions">
-		<wicket:message key="attendance.overview.header.info" escape="false"/>
+		<wicket:container wicket:id="overview-header-info" />
 	</p>
+
+	<form wicket:id="add-attendance-item-form" class="addAttendanceItemForm">
+		<button type="submit" wicket:id="add-attendance-item" class="active"><wicket:message key="attendance.add.button"/></button>
+	</form>
 
 	<table id="overviewTable" class="overviewTable">
 		<thead>
@@ -86,9 +90,9 @@
 				}
 			}
 		});
-		$("input.active").on("click", function(){
+		$(".takeAttendanceNowForm input").on("click", function(){
 			$("#loadingGif").show();
-			$("input.active").css('visibility', 'hidden');
+			$(this).css('visibility', 'hidden');
 		});
 	</script>
 	<script type="text/javascript" src="javascript/print.js"></script>

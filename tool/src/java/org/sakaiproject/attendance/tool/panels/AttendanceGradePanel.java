@@ -14,7 +14,7 @@
  *  limitations under the License.
  */
 
-package org.sakaiproject.attendance.tool.pages.panels;
+package org.sakaiproject.attendance.tool.panels;
 
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -29,7 +29,6 @@ import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.model.StringResourceModel;
 import org.sakaiproject.attendance.model.AttendanceGrade;
 import org.sakaiproject.attendance.model.AttendanceSite;
-import org.sakaiproject.attendance.util.AttendanceConstants;
 
 /**
  * AttendanceGradePanel allows for inputting of AttendanceGrades
