@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  ~  Copyright (c) 2016, University of Dayton
+  ~  Copyright (c) 2017, University of Dayton
   ~
   ~  Licensed under the Educational Community License, Version 2.0 (the "License");
   ~  you may not use this file except in compliance with the License.
@@ -22,11 +22,10 @@
 	<parent>
     <artifactId>attendance</artifactId>
     <groupId>org.sakaiproject.attendance</groupId>
-    <version>1.0</version>
+    <version>20170215</version>
   </parent>
 	
 	<name>attendance - Tool</name>
-	<groupId>org.sakaiproject.attendance</groupId>
 	<artifactId>attendance-tool</artifactId>
 	
 	<packaging>war</packaging>
