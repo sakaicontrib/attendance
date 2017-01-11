@@ -421,7 +421,14 @@ public class AttendanceLogicImpl implements AttendanceLogic {
 			throw new IllegalArgumentException("uID must not be null or empty.");
 		}
 
-		return dao.getAttendanceGrade(uID, getCurrentAttendanceSite());
+		final AttendanceSite currentSite = getCurrentAttendanceSite();
+		final AttendanceGrade grade = dao.getAttendanceGrade(uID, currentSite);
+
+		if(grade == null) {
+			return new AttendanceGrade(currentSite, uID);
+		}
+
+		return grade;
 	}
 
 	/**
@@ -538,9 +545,6 @@ public class AttendanceLogicImpl implements AttendanceLogic {
 		if (users != null) {
 			for (String userId : users) {
 				AttendanceGrade grade = getAttendanceGrade(userId);
-				if (grade == null) {
-					grade = new AttendanceGrade(attendanceSite, userId);
-				}
 				if (grade.getOverride() == null || !grade.getOverride()) {
 					grade.setGrade(grade(userId, attendanceSite));
 					updateAttendanceGrade(grade);
@@ -778,9 +782,6 @@ public class AttendanceLogicImpl implements AttendanceLogic {
 		if (attendanceRecord != null && currentSite.getMaximumGrade() != null && currentSite.getMaximumGrade() > 0 && currentSite.getUseAutoGrading()) {
 			final String userId = attendanceRecord.getUserID();
 			AttendanceGrade attendanceGrade = getAttendanceGrade(userId);
-			if (attendanceGrade == null) {
-				attendanceGrade = new AttendanceGrade(currentSite, userId);
-			}
 			// Only update if not overridden
 			if (attendanceGrade.getOverride()== null || !attendanceGrade.getOverride()) {
 				attendanceGrade.setGrade(grade(userId, currentSite));
