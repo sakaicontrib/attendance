@@ -128,6 +128,7 @@ public class Overview extends BasePage {
 			@Override
 			protected void populateItem(final Item<AttendanceEvent> item) {
 				final AttendanceEvent modelObject = item.getModelObject();
+				final String name = modelObject.getName();
 				final AttendanceItemStats itemStats = attendanceLogic.getStatsForEvent(modelObject);
 				Link<Void> eventLink = new Link<Void>("event-link") {
 					private static final long serialVersionUID = 1L;
@@ -135,7 +136,7 @@ public class Overview extends BasePage {
 						setResponsePage(new EventView(modelObject, BasePage.OVERVIEW_PAGE));
 					}
 				};
-				eventLink.add(new Label("event-name", modelObject.getName()));
+				eventLink.add(new Label("event-name", name));
 
 				item.add(eventLink);
 				item.add(new Label("event-date", modelObject.getStartDateTime()));
@@ -150,8 +151,11 @@ public class Overview extends BasePage {
 				};
 				item.add(activeStatusStats);
 
-				item.add(getAddEditWindowAjaxLink(modelObject, "event-edit-link"));
-				item.add(new AjaxLink<Void>("print-link"){
+				final AjaxLink eventEditLink = getAddEditWindowAjaxLink(modelObject, "event-edit-link");
+				eventEditLink.add(new Label("event-edit-alt", new StringResourceModel("attendance.icon.edit.alt", null, new String[]{name})));
+				item.add(eventEditLink);
+
+				final AjaxLink printLink = new AjaxLink<Void>("print-link"){
 					@Override
 					public void onClick(AjaxRequestTarget ajaxRequestTarget) {
 						printPanel = new PrintPanel("print-panel", item.getModel());
@@ -160,7 +164,9 @@ public class Overview extends BasePage {
 						printHiddenClass.setObject("printVisible");
 						ajaxRequestTarget.add(printContainer);
 					}
-				});
+				};
+				printLink.add(new Label("event-print-alt",  new StringResourceModel("attendance.icon.print.event.alt", null, new String[]{name})));
+				item.add(printLink);
 			}
 		};
 		add(attendanceEventDataView);

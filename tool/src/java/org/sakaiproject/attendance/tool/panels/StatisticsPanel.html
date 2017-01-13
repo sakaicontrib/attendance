@@ -22,7 +22,10 @@
         <div class="itemInfoHeader">
             <h3 class="itemInfoHeader">
                 <span wicket:id="item-info-header"/>
-                <a wicket:id="refreshPage" title="Refresh" class="statisticsInfo"><img src="images/sync32.png" alt="Refresh" class="refreshImage"></a>
+                <a wicket:id="refreshPage" title="Refresh" class="statisticsInfo">
+                    <span class="fa fa-refresh refreshImage" aria-hidden="true"></span>
+                    <span class="sr-only"><wicket:message key="attendance.icon.refresh"/></span>
+                </a>
                 <div class="statisticsInfo"><span wicket:id="info" /></div>
             </h3>
         </div>

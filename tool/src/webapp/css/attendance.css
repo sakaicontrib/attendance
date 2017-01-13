@@ -43,8 +43,6 @@ form {
 }
 
 h1.overviewHeader, h1.itemsHeader, h1.settingsHeader, h1.gradingHeader {
-    background: url("../images/attendance_icon_32.png") no-repeat left center;
-    padding-left: 32px;
     color: #555;
     margin-top: 1.2em;
     margin-bottom: 1.2em;
@@ -62,14 +60,14 @@ span.overHeaderSpan, span.itemsHeaderSpan, span.settingsHeaderSpan, span.grading
 p.overviewInstructions, p.addEditInstructions {
     font-size: 1.2em;
     line-height: 1.5em;
-    margin-left: 70px;
+    margin-left: 35px;
 }
 
 p.addEditInstructions {
     width: 70%;
 }
 
-img.overviewInfo, div.attendanceBreadcrumbs img, th.takeAttendanceDateHeader, .vertAlignMiddle {
+img.overviewInfo, div.attendanceBreadcrumbs img, .div-table-row th.takeAttendanceDateHeader, .vertAlignMiddle {
     vertical-align: middle;
 }
 
@@ -133,7 +131,7 @@ table.overviewTable, table.itemListTable, table.eventViewTable, table.takeAttend
     border: 2px solid #ccc;
     border-collapse: collapse;
     padding: .5em;
-    margin-left: 70px;
+    margin-left: 35px;
 }
 
 table.overviewTable thead tr .header, table.itemListTable thead tr .header, table.takeAttendanceTable thead tr .header  {
@@ -201,12 +199,21 @@ th.overviewEditCol, td.overviewEditCol, th.itemListEditCol, td.itemListEditCol, 
     text-align: center;
 }
 
-td.overviewGradeCol {
-    vertical-align: middle;
+tr td.overviewEditCol a span.fa, tr td.overviewPrintCol a span.fa, .attendanceBreadcrumbs span a span.fa, #event-buttons  {
+    color: #555;
 }
 
-th.overviewStatusCol, td.overviewStatusCol {
-    width: 84px;
+tr td.overviewEditCol a span.fa:hover, tr td.overviewPrintCol a span.fa:hover,
+.attendanceBreadcrumbs span a span.fa:hover, #event-buttons span:hover {
+    color: #999;
+}
+
+#event-buttons span{
+    padding-right: 0;
+}
+
+td.overviewGradeCol {
+    vertical-align: middle;
 }
 
 td.overviewStatusCol {
@@ -236,7 +243,7 @@ div.addEditContainer, div.itemListContainer, div.takeAttendanceContainer, div.it
     vertical-align: top;
     position:relative;
     display: block;
-    margin: 2em 2em 2em 70px;
+    margin: 2em 2em 2em 35px;
 }
 
 div.rulesContainer {
@@ -251,7 +258,7 @@ div.gradeContainer {
     vertical-align: top;
     position:relative;
     display: block;
-    margin: 2em 2em 2em 70px;
+    margin: 2em 2em 2em 35px;
 }
 
 div.takeAttendanceContainer, div.itemInfoContainer, div.gradeContainer {
@@ -306,15 +313,8 @@ table.addEditFormTable, div.info, .addComment textarea {
     padding-right: 4em;
 }
 
-div.addEditDeleteLinkDiv {
-    background: url("../images/remove.png") no-repeat left center;
-    background-size: 12px;
-    padding-left: 16px;
-    margin-top: 1em;
-}
-
 div.attendanceBreadcrumbs h2 {
-    margin-left: 70px;
+    margin-left: 10px;
 }
 
 div.attendanceBreadcrumbs span {
@@ -332,7 +332,7 @@ div.attendanceBreadcrumbs span {
     background-color:#fff;
     border:1px solid  #ccc;
     font-size: 1.2em;
-    margin-left: 70px;
+    margin-left: 35px;
 }
 
 .div-table-row2 {
@@ -418,7 +418,7 @@ div.printMask {
     opacity: 0.75;
 }
 
-div.printMask:hover, img.printImage:hover, .commentToggle:hover, .div-table-col input:hover {
+div.printMask:hover, .printImage:hover, .commentToggle:hover, .div-table-col input:hover {
     cursor: pointer;
 }
 
@@ -489,7 +489,7 @@ p.editStatusInfo, p.editGradeInfo {
 }
 
 form.studentOverviewFilterForm {
-    margin-left: 70px;
+    margin-left: 35px;
 }
 
 th.overviewGradeCol img.settings {
@@ -582,7 +582,19 @@ form.gradeSettingsForm {
     border: 1px solid goldenrod;
 }
 
-@media (min-width: 1090px) {
+div.noRecord {
+    padding: .5em;
+    text-align: center;
+    font-weight: bold;
+    font-style: italic;
+    color: #999;
+}
+
+div.comment-container {
+    position: relative;
+}
+
+@media (min-width: 1205px) {
     .record-status-name {
         display: none;
     }
@@ -590,7 +602,7 @@ form.gradeSettingsForm {
     .div-table-col {
         float:left;/*fix for  buggy browsers*/
         display:table-cell;
-        width:80px;
+        width:90px;
         text-align: center;
         padding: .5em;
         margin-top: 2px;
@@ -609,7 +621,7 @@ form.gradeSettingsForm {
     }
 }
 
-@media (max-width: 1090px) {
+@media (max-width: 1204px) {
     .record-status-name {
         display: inherit;
         margin-left: .25em;
@@ -637,7 +649,7 @@ form.gradeSettingsForm {
     }
 }
 
-@media (max-width: 1090px) and (min-width: 500px) {
+@media (max-width: 1204px) and (min-width: 500px) {
     .comment-container {
         float: right;
         margin-left: 2em;
@@ -660,7 +672,7 @@ div a.delete:hover {
 }
 
 .addAttendanceItemForm {
-    margin-left: 70px;
+    margin-left: 35px;
 }
 
 /* Janked from gradebook-grades.css. Credit goes to steveswinsburg & payten */

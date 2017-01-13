@@ -31,10 +31,12 @@
         <div class="div-table-col comment-container" style="position:relative"  wicket:id="comment-container">
             <div class="commentToggle">
                 <div wicket:id="no-comment">
-                    <img src="images/no_comment_24.png" />
+                    <span class="fa fa-comment-o fa-2x" aria-hidden="true"></span>
+                    <span class="sr-only"><wicket:message key="attendance.icon.record.form.no_comment"/></span>
                 </div>
                 <div wicket:id="yes-comment">
-                    <img src="images/comment_24.png" />
+                    <span class="fa fa-comment fa-2x" aria-hidden="true"></span>
+                    <span class="sr-only"><wicket:message key="attendance.icon.record.form.yes_comment"/></span>
                 </div>
             </div>
             <div class="addComment" style="display:none;">
