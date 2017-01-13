@@ -47,9 +47,17 @@
 				<td class="itemNameCol"><a wicket:id="event-link"><span wicket:id="event-name" /></a></td>
 				<td class="overviewDateCol"><span wicket:id="event-date" /></td>
 				<td wicket:id="active-status-stats" class="overviewStatusCol"><span wicket:id="event-stats" /></td>
-				<td class="overviewEditCol"><a wicket:id="event-edit-link"><img src="images/settings.png" alt="Edit" width="24px"/></a></td>
+				<td class="overviewEditCol">
+					<a wicket:id="event-edit-link">
+						<span class="fa fa-pencil-square-o fa-2x" aria-hidden="true"></span>
+						<span class="sr-only"><wicket:container wicket:id="event-edit-alt"/></span>
+					</a>
+				</td>
 				<td class="overviewPrintCol">
-					<a class="printLink" wicket:id="print-link"><img src="images/print.png" alt="Print"/></a>
+					<a class="printLink" wicket:id="print-link">
+						<span class="fa fa-print fa-2x" aria-hidden="true"></span>
+						<span class="sr-only"><wicket:container wicket:id="event-print-alt"/></span>
+					</a>
 				</td>
 			</tr>
 			<wicket:enclosure child="no-events">
