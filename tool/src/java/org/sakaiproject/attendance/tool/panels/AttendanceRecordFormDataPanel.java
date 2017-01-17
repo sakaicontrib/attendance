@@ -48,7 +48,6 @@ import java.util.List;
 public class AttendanceRecordFormDataPanel extends BasePanel {
     private static final    long                        serialVersionUID = 1L;
     private                 IModel<AttendanceRecord>    recordIModel;
-    private                 boolean                     isStudentView;
     private                 boolean                     restricted ;
     private                 boolean                     showCommentsToStudents;
     private                 List<Component>             ajaxTargets = new ArrayList<Component>();
@@ -60,16 +59,16 @@ public class AttendanceRecordFormDataPanel extends BasePanel {
     private                 WebMarkupContainer          noComment;
     private                 WebMarkupContainer          yesComment;
 
-    public AttendanceRecordFormDataPanel(String id, IModel<AttendanceRecord> aR, boolean iS, String rP, FeedbackPanel fP) {
+    public AttendanceRecordFormDataPanel(String id, IModel<AttendanceRecord> aR,  String rP, FeedbackPanel fP) {
         super(id, aR);
         this.recordIModel = aR;
         this.oldStatus = aR.getObject().getStatus();
         this.showCommentsToStudents = recordIModel.getObject().getAttendanceEvent().getAttendanceSite().getShowCommentsToStudents();
-        this.isStudentView = iS;
         this.restricted = this.role != null && this.role.equals("Student");
         this.returnPage = rP;
         this.pageFeedbackPanel = fP;
         this.ajaxTargets.add(this.pageFeedbackPanel);
+
         add(createRecordInputForm());
     }
 
@@ -102,11 +101,17 @@ public class AttendanceRecordFormDataPanel extends BasePanel {
         createStatusRadio(recordForm);
         createCommentBox(recordForm);
 
+        boolean noRecordBool = recordForm.getModelObject().getStatus().equals(Status.UNKNOWN) && restricted;
+        recordForm.setVisibilityAllowed(!noRecordBool);
+
+        WebMarkupContainer noRecordContainer = new WebMarkupContainer("no-record");
+        noRecordContainer.setVisibilityAllowed(noRecordBool);
+        add(noRecordContainer);
+
         return recordForm;
     }
 
     private void createStatusRadio(final Form<AttendanceRecord> rF) {
-
         AttendanceStatusProvider attendanceStatusProvider = new AttendanceStatusProvider(attendanceLogic.getCurrentAttendanceSite(), AttendanceStatusProvider.ACTIVE);
         DataView<AttendanceStatus> attendanceStatusRadios = new DataView<AttendanceStatus>("status-radios", attendanceStatusProvider) {
             @Override

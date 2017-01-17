@@ -618,6 +618,8 @@ div.comment-container {
 
     .comment-container {
         float: right;
+        width: auto;
+        margin-right: .5em;
     }
 }
 
@@ -653,7 +655,6 @@ div.comment-container {
     .comment-container {
         float: right;
         margin-left: 2em;
-        margin-top: 5em;
     }
 }
 

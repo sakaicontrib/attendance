@@ -73,6 +73,13 @@ public class StudentView extends BasePage {
             hideNavigationLink(this.gradingLink);
         }
 
+        add(new Label("student-view-hidden","") {
+            @Override
+            public boolean isVisible() {
+                return isStudent;
+            }
+        });
+
         add(createHeader());
         add(createGrade());
         add(createStatistics());
@@ -208,7 +215,7 @@ public class StudentView extends BasePage {
                 }
                 item.add(eventLink);
                 item.add(new Label("event-date", item.getModelObject().getAttendanceEvent().getStartDateTime()));
-                item.add(new AttendanceRecordFormDataPanel("record", item.getModel(), false, returnPage, feedbackPanel));
+                item.add(new AttendanceRecordFormDataPanel("record", item.getModel(), returnPage, feedbackPanel));
             }
         };
 
