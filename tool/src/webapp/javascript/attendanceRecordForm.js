@@ -18,13 +18,16 @@
 
 (function (attendance, $, undefined) {
     // Set the status class (which applies a background) if the input is selected
-    function processInput (inputs) {
+    function processInput (inputs, isStudentView) {
         for(var i = 0; i < inputs.length; i++) {
             if(inputs[i].checked) {
                 var statusName = $(inputs[i]).siblings("label[hidden]").text();
                 $(inputs[i]).parent().addClass(statusName);
             } else {
                 $(inputs[i]).parent().removeClass().addClass("div-table-col");
+                if(isStudentView && $(window).width() < 1205) {
+                    $(inputs[i]).parent().removeClass().addClass("skip");
+                }
             }
         }
     }
@@ -47,6 +50,11 @@
             inputs.push(this);
         });
 
-        processInput(inputs);
+        var isStudentView = false;
+        if($("#studentView").size() > 0) {
+            isStudentView = true;
+        }
+
+        processInput(inputs, isStudentView);
     };
 }(window.attendance = window.attendance || {}, jQuery ));
