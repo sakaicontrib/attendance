@@ -43,26 +43,31 @@ import java.util.*;
  */
 public class AttendanceStatusFormPanel extends BasePanel {
     private static final long serialVersionUID = 1L;
-    private IModel<AttendanceSite> attendanceSiteIModel;
-    private FeedbackPanel pageFeedbackPanel;
+    private Model<AttendanceSite> attendanceSiteModel;
+    private boolean subForm = true;
 
     public AttendanceStatusFormPanel(String id, FeedbackPanel feedbackPanel) {
         super(id);
-        this.pageFeedbackPanel = feedbackPanel;
-        this.attendanceSiteIModel = new Model<AttendanceSite>(attendanceLogic.getCurrentAttendanceSite());
-        init();
+
+        this.attendanceSiteModel = new Model<>(attendanceLogic.getCurrentAttendanceSite());
+        init(feedbackPanel);
     }
 
-    public AttendanceStatusFormPanel(String id, IModel<AttendanceSite> attendanceSiteIModel, FeedbackPanel feedbackPanel) {
-        super(id, attendanceSiteIModel);
-        this.pageFeedbackPanel = feedbackPanel;
-        this.attendanceSiteIModel = attendanceSiteIModel;
-        init();
+    public AttendanceStatusFormPanel(String id, FeedbackPanel feedbackPanel, Model<AttendanceSite> attendanceSiteModel) {
+        super(id, attendanceSiteModel);
+        
+        this.attendanceSiteModel = attendanceSiteModel;
+        init(feedbackPanel);
     }
 
-    private void init() {
+    public void setSubForm(boolean val) {
+        this.subForm = val;
+    }
 
-        Form<AttendanceSite> editStatusSettingsForm = new Form<AttendanceSite>("edit-status-settings-form", new CompoundPropertyModel<AttendanceSite>(this.attendanceSiteIModel)) {
+    private void init(FeedbackPanel panel) {
+        enable(panel);
+
+        Form<AttendanceSite> editStatusSettingsForm = new Form<AttendanceSite>("edit-status-settings-form", new CompoundPropertyModel<>(this.attendanceSiteModel)) {
             @Override
             protected void onSubmit() {
                 AttendanceSite aS = (AttendanceSite) getDefaultModelObject();
@@ -76,7 +81,7 @@ public class AttendanceStatusFormPanel extends BasePanel {
         };
         add(editStatusSettingsForm);
 
-        final IModel<List<AttendanceStatus>> listModel = new PropertyModel<List<AttendanceStatus>>(this.attendanceSiteIModel, "attendanceStatuses") {
+        final IModel<List<AttendanceStatus>> listModel = new PropertyModel<List<AttendanceStatus>>(this.attendanceSiteModel, "attendanceStatuses") {
             @Override
             public List<AttendanceStatus> getObject() {
                 List<AttendanceStatus> attendanceStatuses = new ArrayList((Set)super.getObject());
@@ -109,11 +114,13 @@ public class AttendanceStatusFormPanel extends BasePanel {
                 super.onSubmit(target, form);
                 target.add(pageFeedbackPanel);
             }
+
+            @Override
+            public boolean isVisible() {
+                return !subForm;
+            }
         };
 
         editStatusSettingsForm.add(submit);
-
-        editStatusSettingsForm.add(new CheckBox("show-comments-to-students", new PropertyModel<Boolean>(this.attendanceSiteIModel, "showCommentsToStudents")));
-
     }
 }

@@ -23,7 +23,7 @@
 	<h1 class="settingsHeader indnt1">
 		<span wicket:id="header-settings" class="settingsHeaderSpan" />
 	</h1>
-
+<form wicket:id="settings-form">
 	<div class="activeStatusContainer">
 		<div class="activeStatusHeader">
 			<h3 class="activeStatusHeader"><wicket:message key="attendance.settings.active.status.header" /></h3>
@@ -33,6 +33,19 @@
 			<span wicket:id="edit-status-panel" />
 		</div>
 	</div>
+
+	<div class="commentContainer">
+		<div class="commentHeader">
+			<h3 class="commentHeader"><wicket:message key="attendance.settings.comment.header"/></h3>
+		</div>
+
+		<div wicket:id="comment-container">
+			<wicket:container wicket:id="edit-comment-panel"/>
+		</div>
+	</div>
+
+	<button id="settingsSave" type="submit" wicket:id="submit-link"><wicket:message key="attendance.settings.edit.save" /></button>
+</form>
 
 </wicket:extend>
 </body>

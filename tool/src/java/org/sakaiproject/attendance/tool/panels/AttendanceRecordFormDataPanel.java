@@ -52,7 +52,6 @@ public class AttendanceRecordFormDataPanel extends BasePanel {
     private                 boolean                     showCommentsToStudents;
     private                 List<Component>             ajaxTargets = new ArrayList<Component>();
     private                 String                      returnPage;
-    private                 FeedbackPanel               pageFeedbackPanel;
     private                 Status                      oldStatus;
 
     private                 WebMarkupContainer          commentContainer;
@@ -66,7 +65,7 @@ public class AttendanceRecordFormDataPanel extends BasePanel {
         this.showCommentsToStudents = recordIModel.getObject().getAttendanceEvent().getAttendanceSite().getShowCommentsToStudents();
         this.restricted = this.role != null && this.role.equals("Student");
         this.returnPage = rP;
-        this.pageFeedbackPanel = fP;
+        enable(fP);
         this.ajaxTargets.add(this.pageFeedbackPanel);
 
         add(createRecordInputForm());

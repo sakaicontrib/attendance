@@ -37,14 +37,12 @@ import java.util.*;
 public class GradingRulesPanel extends BasePanel {
     private static final long serialVersionUID = 1L;
 
-    private FeedbackPanel pageFeedbackPanel;
-
     private GradingRulesListPanel gradingRulesListPanel;
 
     public GradingRulesPanel(String id) {
         super(id);
 
-        this.pageFeedbackPanel = new FeedbackPanel("rules-feedback"){
+        enable(new FeedbackPanel("rules-feedback"){
 
             @Override
             protected Component newMessageDisplayComponent(final String id, final FeedbackMessage message) {
@@ -61,7 +59,7 @@ public class GradingRulesPanel extends BasePanel {
 
                 return newMessageDisplayComponent;
             }
-        };
+        });
         this.pageFeedbackPanel.setOutputMarkupId(true);
         add(this.pageFeedbackPanel);
 

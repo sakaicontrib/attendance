@@ -17,10 +17,15 @@ package org.sakaiproject.attendance.tool.pages;
 
 
 import org.apache.wicket.RestartResponseException;
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.model.ResourceModel;
-import org.sakaiproject.attendance.tool.panels.AttendanceGradeFormPanel;
+import org.sakaiproject.attendance.model.AttendanceSite;
+import org.sakaiproject.attendance.tool.panels.AttendanceCommentFormPanel;
 import org.sakaiproject.attendance.tool.panels.AttendanceStatusFormPanel;
 
 /**
@@ -43,13 +48,37 @@ public class SettingsPage extends BasePage {
 		Label headerSettings = new Label("header-settings",	new ResourceModel("attendance.settings.header"));
 		add(headerSettings);
 
-		createEditStatusesPanel();
+		Model<AttendanceSite> siteModel = new Model<>(attendanceLogic.getCurrentAttendanceSite());
+		Form<AttendanceSite> settingsForm = new Form<>("settings-form", siteModel);
+
+
+		settingsForm.add(createEditStatusesPanel(siteModel));
+		settingsForm.add(createEditCommentPanel(siteModel));
+
+		AjaxSubmitLink submit = new AjaxSubmitLink("submit-link") {
+			@Override
+			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+				super.onSubmit(target, form);
+				target.add(feedbackPanel);
+			}
+
+		};
+		settingsForm.add(submit);
+
+		add(settingsForm);
+
 	}
 
-	private void createEditStatusesPanel() {
+	private WebMarkupContainer createEditStatusesPanel(Model<AttendanceSite> siteModel) {
 
 		WebMarkupContainer allStatusesContainer = new WebMarkupContainer("all-statuses-container");
-		allStatusesContainer.add(new AttendanceStatusFormPanel("edit-status-panel", feedbackPanel));
-		add(allStatusesContainer);
+		allStatusesContainer.add(new AttendanceStatusFormPanel("edit-status-panel", feedbackPanel, siteModel));
+		return allStatusesContainer;
+	}
+
+	private WebMarkupContainer createEditCommentPanel(Model<AttendanceSite> siteModel) {
+		WebMarkupContainer commentContainer = new WebMarkupContainer("comment-container");
+		commentContainer.add(new AttendanceCommentFormPanel("edit-comment-panel", feedbackPanel, siteModel));
+		return commentContainer;
 	}
 }

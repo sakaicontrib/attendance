@@ -17,6 +17,7 @@
 package org.sakaiproject.attendance.tool.panels;
 
 import org.apache.log4j.Logger;
+import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.ResourceModel;
@@ -50,6 +51,8 @@ public class BasePanel extends Panel {
 
     protected String role;
 
+    protected FeedbackPanel pageFeedbackPanel;
+
     public BasePanel(String id) {
         super(id);
         init();
@@ -58,6 +61,10 @@ public class BasePanel extends Panel {
     public BasePanel(String id, IModel<?> i){
         super(id, i);
         init();
+    }
+
+    protected void enable(FeedbackPanel panel) {
+        this.pageFeedbackPanel = panel;
     }
 
     protected String getStatusString(Status s) {

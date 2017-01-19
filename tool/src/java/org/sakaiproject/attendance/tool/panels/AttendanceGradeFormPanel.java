@@ -43,7 +43,6 @@ import org.sakaiproject.attendance.tool.panels.util.GradebookItemNameValidator;
 public class AttendanceGradeFormPanel extends BasePanel {
     private static final    long            serialVersionUID = 1L;
 
-    private                 FeedbackPanel   pageFeedbackPanel;
     private                 boolean         previousSendToGradebook;
     private                 String          previousName;
     private                 Double          previousMaxGrade;
@@ -54,7 +53,7 @@ public class AttendanceGradeFormPanel extends BasePanel {
 
     public AttendanceGradeFormPanel(String id, FeedbackPanel pg) {
         super(id);
-        this.pageFeedbackPanel = pg;
+        enable(pg);
 
         init();
     }
