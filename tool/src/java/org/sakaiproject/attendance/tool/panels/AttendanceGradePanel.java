@@ -38,7 +38,6 @@ import org.sakaiproject.attendance.model.AttendanceSite;
 public class AttendanceGradePanel extends BasePanel {
     private static final    long                    serialVersionUID = 1L;
     private                 IModel<AttendanceGrade> agIModel;
-    private                 FeedbackPanel           pageFeedbackPanel;
     private                 AttendanceSite          attendanceSite;
 
     public AttendanceGradePanel(String id, AttendanceGrade aG, FeedbackPanel fP) {
@@ -51,7 +50,7 @@ public class AttendanceGradePanel extends BasePanel {
             this.agIModel = new CompoundPropertyModel<>(aG);
             this.attendanceSite = agIModel.getObject().getAttendanceSite();
         }
-        this.pageFeedbackPanel = fP;
+        enable(fP);
 
         init();
     }

@@ -35,8 +35,6 @@ import java.util.List;
 public class GradingRulesListPanel extends BasePanel {
     private static final long serialVersionUID = 1L;
 
-    FeedbackPanel pageFeedbackPanel;
-
     Form regradeForm;
 
     private boolean needRegrade;
@@ -44,7 +42,7 @@ public class GradingRulesListPanel extends BasePanel {
     public GradingRulesListPanel(String id, FeedbackPanel feedbackPanel, boolean needRegrade) {
         super(id);
 
-        this.pageFeedbackPanel = feedbackPanel;
+        enable(feedbackPanel);
 
         this.needRegrade = needRegrade;
 

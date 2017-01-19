@@ -237,7 +237,8 @@ th.takeAttendanceNameHeader {
     vertical-align: middle;
 }
 
-div.addEditContainer, div.itemListContainer, div.takeAttendanceContainer, div.itemInfoContainer, div.activeStatusContainer, div.gradingContainer {
+div.addEditContainer, div.itemListContainer, div.takeAttendanceContainer, div.itemInfoContainer,
+div.activeStatusContainer, div.commentContainer, div.gradingContainer {
     border:1px solid #ccc;
     padding: 2.5em 2em 2em;
     vertical-align: top;
@@ -269,14 +270,16 @@ div.itemInfoContainer {
     display: flex;
 }
 
-div.addEditHeader, div.itemListHeader, div.takeAttendanceHeader, div.itemInfoHeader, div.activeStatusHeader, div.containerHeader {
+div.addEditHeader, div.itemListHeader, div.takeAttendanceHeader, div.itemInfoHeader,
+div.activeStatusHeader, div.commentHeader, div.containerHeader {
     background-color:#fff;
     position:absolute;
     top:-1em;
     left:.5em;
 }
 
-h3.addEditHeader, h3.itemListHeader, h3.takeAttendanceHeader, h3.itemInfoHeader, h3.activeStatusHeader, h3.containerHeading {
+h3.addEditHeader, h3.itemListHeader, h3.takeAttendanceHeader, h3.itemInfoHeader,
+h3.activeStatusHeader, h3.commentHeader, h3.containerHeading {
     margin: 0;
     padding: 0 .5em;
     font-size: 1.4em;
@@ -481,7 +484,7 @@ li.statusItemDisabled  {
     background-color: #eee;
 }
 
-p.editStatusInfo, p.editGradeInfo {
+p.editStatusInfo, p.editGradeInfo, p.editCommentInfo {
     width: 60%;
     font-size: 1.2em;
     line-height: 1.5em;
@@ -592,6 +595,10 @@ div.noRecord {
 
 div.comment-container {
     position: relative;
+}
+
+#settingsSave {
+    margin-left: 35px;
 }
 
 @media (min-width: 1205px) {
