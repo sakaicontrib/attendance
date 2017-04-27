@@ -46,8 +46,9 @@ public class AttendanceStatCalc {
     public void execute() {
         log.debug("AttendanceStatCalc execute()");
         Date syncTime = new Date();
+        Long lastId = 0L;
 
-        List<Long> ids = dao.getAttendanceSiteBatch(syncTime);
+        List<Long> ids = dao.getAttendanceSiteBatch(syncTime, lastId);
         if(ids.isEmpty()) {
             String summary = getOverallSummary();
             if("".equals(summary)) {
@@ -58,9 +59,12 @@ public class AttendanceStatCalc {
         } else {
             while(!ids.isEmpty()) {
                 dao.markAttendanceSiteForSync(ids, syncTime);
-                ids.forEach(this::calculateStats);
+                for (Long id : ids) {
+                    calculateStats(id);
+                    lastId = id > lastId ? id : lastId++; // never-ending loop protection
+                }
                 log.info("AttendanceStatCalc in progress " + getSummary());
-                ids = dao.getAttendanceSiteBatch(syncTime);
+                ids = dao.getAttendanceSiteBatch(syncTime, lastId);
             }
             log.info("AttendanceStatCalc finished " + getSummary());
             log.info(getOverallSummary());

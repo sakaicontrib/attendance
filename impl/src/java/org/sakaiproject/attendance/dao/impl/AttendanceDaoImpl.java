@@ -576,12 +576,13 @@ public class AttendanceDaoImpl extends HibernateDaoSupport implements Attendance
 	 * {@inheritDoc}
 	 */
 	@SuppressWarnings("unchecked")
-	public List<Long> getAttendanceSiteBatch(final Date syncTime) {
+	public List<Long> getAttendanceSiteBatch(final Date syncTime, final Long lastId) {
 		final HibernateCallback<List<Long>> hcb = new HibernateCallback<List<Long>>() {
 			@Override
 			public List<Long> doInHibernate(Session session) throws HibernateException, SQLException {
 				Query q = session.getNamedQuery(QUERY_GET_ATTENDANCE_SITE_BATCH);
 				q.setTimestamp(SYNC_TIME, syncTime);
+				q.setLong(ID, lastId);
 				q.setMaxResults(5);
 				return q.list();
 			}
@@ -677,4 +678,5 @@ public class AttendanceDaoImpl extends HibernateDaoSupport implements Attendance
 			return null;
 		}
 	}
+
 }
