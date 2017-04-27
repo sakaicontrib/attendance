@@ -30,10 +30,10 @@ import java.util.*;
  */
 @Slf4j
 public class AttendanceStatCalc {
-    private int     sitesProcessed = 0;
-    private int     sitesNotMarked = 0;
-    private int     sitesInError = 0;
-    private int     sitesWithNoUsers = 0;
+    private int     itemsProcessed = 0;
+    private int     itemsNotMarked = 0;
+    private int     itemsInError = 0;
+    private int     itemsWithNoUsers = 0;
 
     public void init() {
         log.debug("AttendanceStatCalc init()");
@@ -52,7 +52,7 @@ public class AttendanceStatCalc {
         if(ids.isEmpty()) {
             String summary = getOverallSummary();
             if("".equals(summary)) {
-                log.info("AttendanceStatCalc no sites left to sync");
+                log.info("AttendanceStatCalc no items left to sync");
             } else {
                 log.info("AttendanceStatCalc done, but there are errors\n" + summary);
             }
@@ -79,7 +79,7 @@ public class AttendanceStatCalc {
 
             if(attendanceSite.getIsSyncing()) {
                 List<String> userIds = sakaiProxy.getSiteMembershipIds(attendanceSite.getSiteID());
-                if(!userIds.isEmpty()) { // only calculate stats for sites still available
+                if(!userIds.isEmpty()) { // only calculate stats for items still available
                     Map<String, int[]> userStatsList = new HashMap<>(userIds.size());
 
                     userIds.forEach(userId -> {
@@ -104,23 +104,23 @@ public class AttendanceStatCalc {
                         }
                     }
                 } else {
-                    sitesWithNoUsers++;
-                    log.debug("AttendanceSite, id: '" + id +"' has no users or Site, id: '"
+                    itemsWithNoUsers++;
+                    log.debug("AttendanceStatCalc, id: '" + id +"' has no users or Site, id: '"
                             + attendanceSite.getSiteID() +"' no longer exists.");
                 }
 
                 attendanceSite.setIsSyncing(false);
                 attendanceLogic.updateAttendanceSite(attendanceSite);
 
-                log.debug("AttendanceSite synced with id: " + id);
-                sitesProcessed++;
+                log.debug("AttendanceStatCalc synced with id: " + id);
+                itemsProcessed++;
             } else {
-                log.debug("AttendanceSite not marked as in progress" + id);
-                sitesNotMarked++;
+                log.debug("AttendanceStatCalc not marked as in progress" + id);
+                itemsNotMarked++;
             }
         } catch (Exception e) {
-            sitesInError++;
-            log.warn("Error syncing AttendanceSite id: " + id, e);
+            itemsInError++;
+            log.warn("Error syncing AttendanceStatCalc id: " + id, e);
         }
     }
 
@@ -171,8 +171,8 @@ public class AttendanceStatCalc {
     }
 
     private String getSummary() {
-        return String.format("%d Attendance Sites synced, %d Attendance Sites with no users, %d Attendance Sites unsuccessfully synced",
-                sitesProcessed, sitesWithNoUsers, sitesInError + sitesNotMarked);
+        return String.format("%d Attendance Items synced, %d Attendance Items with no users, %d Attendance Items unsuccessfully synced",
+                itemsProcessed, itemsWithNoUsers, itemsInError + itemsNotMarked);
     }
 
     private String getOverallSummary() {
@@ -185,10 +185,10 @@ public class AttendanceStatCalc {
     }
 
     private void resetCounters() {
-        this.sitesInError = 0;
-        this.sitesNotMarked = 0;
-        this.sitesProcessed = 0;
-        this.sitesWithNoUsers = 0;
+        this.itemsInError = 0;
+        this.itemsNotMarked = 0;
+        this.itemsProcessed = 0;
+        this.itemsWithNoUsers = 0;
     }
 
     @Setter
