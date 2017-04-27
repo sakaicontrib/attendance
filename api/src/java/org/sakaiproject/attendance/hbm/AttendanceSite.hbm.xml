@@ -58,7 +58,10 @@
     </query>
 
     <query name="getAttendanceSiteBatch">
-        <![CDATA[SELECT id FROM AttendanceSite attendanceSite WHERE (attendanceSite.syncTime IS NULL OR attendanceSite.syncTime < :syncTime)]]>
+        <![CDATA[SELECT id FROM AttendanceSite attendanceSite
+            WHERE (attendanceSite.syncTime IS NULL OR attendanceSite.syncTime < :syncTime) AND id > :id
+            ORDER BY id ASC
+        ]]>
     </query>
 
     <query name="getAttendanceSitesInSync">

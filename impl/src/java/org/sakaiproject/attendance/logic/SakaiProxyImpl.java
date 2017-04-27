@@ -360,7 +360,6 @@ public class SakaiProxyImpl implements SakaiProxy {
 						userList.add(student);
 					} catch (UserNotDefinedException e) {
 						log.error("Unable to get user " + member.getUserId() + " " + e);
-						e.printStackTrace();
 					}
 				}
 			}

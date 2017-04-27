@@ -245,7 +245,7 @@ public interface AttendanceDao {
 	 * Return a batch of AttendanceSites
 	 * @return a List of AttendanceSite IDs (max 5)
 	 */
-	List<Long> getAttendanceSiteBatch(Date syncTime);
+	List<Long> getAttendanceSiteBatch(Date syncTime, Long lastId);
 
 	/**
 	 * Return a list of all AttendanceSites In Sync
