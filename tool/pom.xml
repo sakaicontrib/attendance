@@ -62,6 +62,12 @@
 			<groupId>org.apache.wicket</groupId>
 			<artifactId>wicket-datetime</artifactId>
 		</dependency>
+		<!-- Joda used by wicket-datetime -->
+		<dependency>
+			<groupId>joda-time</groupId>
+			<artifactId>joda-time</artifactId>
+			<version>${joda.time.version}</version>
+		</dependency>
 		<dependency>
 			<groupId>org.apache.wicket</groupId>
 			<artifactId>wicket-extensions</artifactId>
@@ -90,7 +96,7 @@
 		</dependency>
 
 		<!-- Sakai dependencies -->
-       	<dependency>
+		<dependency>
            	<groupId>org.sakaiproject.kernel</groupId>
 			<artifactId>sakai-kernel-api</artifactId>
 		</dependency>
