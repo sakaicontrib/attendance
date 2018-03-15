@@ -29,7 +29,8 @@
 	<parent>
     	<groupId>org.sakaiproject</groupId>
     	<artifactId>master</artifactId>
-    	<version>12-SNAPSHOT</version>
+    	<version>13-SNAPSHOT</version>
+    	<relativePath>../master/pom.xml</relativePath>
   	</parent>
 
 	<developers>
@@ -139,14 +140,12 @@
 			<dependency>
 				<groupId>commons-configuration</groupId>
 				<artifactId>commons-configuration</artifactId>
-				<version>1.6</version>
 			</dependency>
 
 			<!-- sakai dependencies -->
 			<dependency>
 				<groupId>org.sakaiproject</groupId>
 				<artifactId>generic-dao</artifactId>
-				<version>0.9.18</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
