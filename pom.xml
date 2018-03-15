@@ -24,7 +24,7 @@
 	<artifactId>attendance</artifactId>
 	
 	<packaging>pom</packaging>
-	<version>20170215</version>
+	<version>20180315</version>
 	
 	<parent>
     	<groupId>org.sakaiproject</groupId>
@@ -139,14 +139,12 @@
 			<dependency>
 				<groupId>commons-configuration</groupId>
 				<artifactId>commons-configuration</artifactId>
-				<version>1.6</version>
 			</dependency>
 
 			<!-- sakai dependencies -->
 			<dependency>
 				<groupId>org.sakaiproject</groupId>
 				<artifactId>generic-dao</artifactId>
-				<version>0.9.18</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
