@@ -139,14 +139,14 @@
 			<dependency>
 				<groupId>commons-configuration</groupId>
 				<artifactId>commons-configuration</artifactId>
-				<version>1.6</version>
+				<version>1.10</version>
 			</dependency>
 
 			<!-- sakai dependencies -->
 			<dependency>
-				<groupId>org.sakaiproject</groupId>
+				<groupId>org.sakaiproject.genericdao</groupId>
 				<artifactId>generic-dao</artifactId>
-				<version>0.9.18</version>
+				<version>${sakai.genericdao.version}</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
