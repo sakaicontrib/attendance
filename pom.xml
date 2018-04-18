@@ -24,12 +24,12 @@
 	<artifactId>attendance</artifactId>
 	
 	<packaging>pom</packaging>
-	<version>20170215</version>
+	<version>20180412</version>
 	
 	<parent>
     	<groupId>org.sakaiproject</groupId>
     	<artifactId>master</artifactId>
-    	<version>12-SNAPSHOT</version>
+    	<version>13-SNAPSHOT</version>
   	</parent>
 
 	<developers>
@@ -101,16 +101,19 @@
 				<groupId>org.slf4j</groupId>
 				<artifactId>slf4j-log4j12</artifactId>
 				<version>${sakai.slf4j.version}</version>
+				<scope>provided</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.slf4j</groupId>
 				<artifactId>slf4j-api</artifactId>
 				<version>${sakai.slf4j.version}</version>
+				<scope>provided</scope>
 			</dependency>
 			<dependency>
 				<groupId>log4j</groupId>
 				<artifactId>log4j</artifactId>
 				<version>${sakai.log4j.version}</version>
+				<scope>provided</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.projectlombok</groupId>
@@ -139,14 +142,14 @@
 			<dependency>
 				<groupId>commons-configuration</groupId>
 				<artifactId>commons-configuration</artifactId>
-				<version>1.6</version>
+				<version>1.10</version>
 			</dependency>
 
 			<!-- sakai dependencies -->
 			<dependency>
-				<groupId>org.sakaiproject</groupId>
+				<groupId>org.sakaiproject.genericdao</groupId>
 				<artifactId>generic-dao</artifactId>
-				<version>0.9.18</version>
+				<version>${sakai.genericdao.version}</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>

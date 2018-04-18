@@ -1,5 +1,8 @@
 #CHANGELOG
 
+## 20180412
+* Hibernate4 upgrade for Sakai 12+
+
 ## 20170215
 * Change in versioning to date based
 * Performance improvements
