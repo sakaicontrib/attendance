@@ -30,6 +30,7 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.data.DataView;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.ResourceModel;
 import org.sakaiproject.attendance.model.AttendanceGrade;
@@ -37,6 +38,7 @@ import org.sakaiproject.attendance.model.AttendanceStatus;
 import org.sakaiproject.attendance.model.AttendanceUserStats;
 import org.sakaiproject.attendance.model.Status;
 import org.sakaiproject.attendance.tool.dataproviders.AttendanceStatusProvider;
+import org.sakaiproject.attendance.tool.models.ProfileImage;
 import org.sakaiproject.attendance.tool.panels.AttendanceGradePanel;
 
 import java.util.Collections;
@@ -109,6 +111,7 @@ public class StudentOverview extends BasePage {
     private void createStatsTableHeader(WebMarkupContainer t) {
         //headers for the table
         Label               studentName     = new Label("header-student-name",       new ResourceModel("attendance.header.student"));
+        Label               studentPhoto    = new Label("header-student-photo",       new ResourceModel("attendance.header.photo"));
         Label               grade           = new Label("header-grade",               new ResourceModel("attendance.header.grade"));
         Label               totalPoints     = new Label("total-points", "Total: " + attendanceLogic.getCurrentAttendanceSite().getMaximumGrade());
 
@@ -128,6 +131,7 @@ public class StudentOverview extends BasePage {
         };
 
         t.add(studentName);
+        t.add(studentPhoto);
         t.add(grade);
         t.add(totalPoints);
         t.add(statusHeaders);
@@ -188,6 +192,9 @@ public class StudentOverview extends BasePage {
                 };
                 studentLink.add(new Label("student-name", sakaiProxy.getUserSortName(id) + " (" + sakaiProxy.getUserDisplayId(id) + ")"));
                 item.add(studentLink);
+
+                ProfileImage profilePhoto = new ProfileImage("student-photo", new Model<String>(String.format("/direct/profile/%s/image/official", id)));
+                item.add(profilePhoto);
 
                 DataView<AttendanceStatus> activeStatusStats = new DataView<AttendanceStatus>("active-status-stats", attendanceStatusProvider) {
                     @Override
