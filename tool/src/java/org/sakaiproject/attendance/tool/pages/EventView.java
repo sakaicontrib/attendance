@@ -37,6 +37,7 @@ import org.sakaiproject.attendance.model.AttendanceRecord;
 import org.sakaiproject.attendance.model.AttendanceStatus;
 import org.sakaiproject.attendance.model.Status;
 import org.sakaiproject.attendance.tool.dataproviders.AttendanceRecordProvider;
+import org.sakaiproject.attendance.tool.models.ProfileImage;
 import org.sakaiproject.attendance.tool.panels.AttendanceRecordFormDataPanel;
 import org.sakaiproject.attendance.tool.panels.AttendanceRecordFormHeaderPanel;
 import org.sakaiproject.attendance.tool.panels.PrintPanel;
@@ -191,6 +192,8 @@ public class EventView extends BasePage {
 
         add(new Label("student-name", new ResourceModel("attendance.event.view.student.name")));
 
+        add(new Label("student-photo", new ResourceModel("attendance.event.view.student.photo")));
+
         add(new AttendanceRecordFormHeaderPanel("record-header"));
 
         // Generate records if none exist
@@ -263,6 +266,8 @@ public class EventView extends BasePage {
                 };
                 studentLink.add(stuName);
                 item.add(studentLink);
+                ProfileImage profilePhoto = new ProfileImage("stu-photo", new Model<String>(String.format("/direct/profile/%s/image/official", stuId)));
+                item.add(profilePhoto);
                 item.add(new AttendanceRecordFormDataPanel("record", item.getModel(), returnPage, feedbackPanel));
             }
         });

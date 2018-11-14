@@ -34,7 +34,8 @@
     <table wicket:id="student-overview-stats-table" id="overviewTable" class="overviewTable">
         <thead>
         <tr>
-            <th class="studentOverviewNameHeader"><span wicket:id="header-student-name" /></th>
+        <th class="studentOverviewPhotoHeader"><span wicket:id="header-student-photo" /></th>
+        <th class="studentOverviewNameHeader"><span wicket:id="header-student-name" /></th>
             <th wicket:id="status-headers" class="overviewStatusCol"><span wicket:id="header-status-name" /></th>
             <th class="overviewGradeCol {sorter: false}">
                 <span wicket:id="header-grade" />
@@ -50,6 +51,7 @@
         </thead>
         <tbody>
             <tr wicket:id="students">
+                <td class="studentPhotoCol"><img wicket:id="student-photo"/></td>
                 <td class="studentNameCol"><a wicket:id="student-link"><span wicket:id="student-name" /></a></td>
                 <td wicket:id="active-status-stats" class="overviewStatusCol"><span wicket:id="student-stats" /></td>
                 <td class="overviewGradeCol"><wicket:container wicket:id="attendance-grade" /></td>
@@ -71,7 +73,12 @@
     <script type="text/javascript">
         $("p.overviewInstructions").width($("#overviewTable").outerWidth());
         $("#overviewTable").tablesorter({
-            sortList: [[0,0]]
+            sortList: [[0,0]],
+            headers: {
+                0: {
+                    sorter: false
+                }
+            }
         });
     </script>
 
