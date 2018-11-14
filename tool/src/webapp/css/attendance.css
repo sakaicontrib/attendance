@@ -162,15 +162,19 @@ table.itemListTable, table.eventViewTable, table.takeAttendanceTable, div.eventF
     text-align: left;
 }
 
-.takeAttendanceTable td:first-child {
-    padding-left: .5em;
+.takeAttendanceTable td {
+    padding: .5em;
+    text-align: center;
+}
+
+.studentPhotoCol {
+    text-align: center !important;
 }
 
 .overviewTable th, .itemListTable th, .eventViewTable th, .takeAttendanceTable th {
     text-align: center;
     border-bottom-width: 2px;
     font-size: 1.2em;
-    vertical-align: bottom;
 }
 
 .overviewTable thead tr, .itemListTable thead tr, .eventViewTable thead tr, .takeAttendanceTable thead tr, .div-table-row-header  {
