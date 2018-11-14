@@ -33,7 +33,6 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
-
 /**
  * Implementation of AttendanceDao
  *
@@ -173,8 +172,12 @@ public class AttendanceDaoImpl extends HibernateDaoSupport implements Attendance
 			log.debug("deleteAttendanceEvent aE: " + aE.getName());
 		}
 
+		if(aE.getStats() !=null && aE.getStats().getId() == null){
+			aE.setStats(null);
+		}
+
 		try {
-			getHibernateTemplate().delete(aE);
+			getHibernateTemplate().delete(getHibernateTemplate().merge(aE));
 			return true;
 		} catch (DataAccessException e) {
 			log.error("deleteAttendanceEvent, " + aE.getId() + ", failed.", e);

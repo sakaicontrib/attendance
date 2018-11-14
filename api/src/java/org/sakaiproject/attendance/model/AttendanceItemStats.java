@@ -18,9 +18,8 @@ package org.sakaiproject.attendance.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang.builder.HashCodeBuilder;
 
 /**
  * Created by Leonardo Canessa [lcanessa1 (at) udayton (dot) edu]
@@ -28,6 +27,7 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode
 public class AttendanceItemStats extends AttendanceStats{
     private static final    long            serialVersionUID    = 1L;
 
@@ -38,34 +38,4 @@ public class AttendanceItemStats extends AttendanceStats{
         this.attendanceEvent = attendanceEvent;
     }
 
-    @Override
-    public boolean equals(final Object obj) {
-        if(obj == null) {
-            return false;
-        }
-
-        if(obj == this) {
-            return true;
-        }
-
-        if(obj.getClass() != getClass()) {
-            return false;
-        }
-
-        final AttendanceItemStats other = (AttendanceItemStats) obj;
-        return new EqualsBuilder()
-                .appendSuper(super.equals(obj))
-                .append(this.id, other.id)
-                .append(this.attendanceEvent, other.attendanceEvent)
-                .isEquals();
-    }
-
-    @Override
-    public int hashCode() {
-        return new HashCodeBuilder()
-                .appendSuper(super.hashCode())
-                .append(this.id)
-                .append(this.attendanceEvent.getId())
-                .toHashCode();
-    }
 }
