@@ -17,13 +17,13 @@
 package org.sakaiproject.attendance.model;
 
 import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.io.Serializable;
 import java.util.Objects;
-
 
 /**
  * An AttendanceStatus is a wrapper around the Status enum type defining meta information on individual Statuses.
@@ -33,6 +33,7 @@ import java.util.Objects;
  */
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode
 public class AttendanceStatus implements Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -50,20 +51,4 @@ public class AttendanceStatus implements Serializable {
         this.attendanceSite = attendanceStatus.getAttendanceSite();
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        final AttendanceStatus that = (AttendanceStatus) o;
-        return Objects.equals(getId(), that.getId()) &&
-                Objects.equals(getIsActive(), that.getIsActive()) &&
-                getStatus() == that.getStatus() &&
-                getSortOrder() == that.getSortOrder() &&
-                Objects.equals(getAttendanceSite(), that.getAttendanceSite());
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(getId());
-    }
 }

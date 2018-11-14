@@ -31,6 +31,7 @@ import java.util.*;
  */
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode(exclude="attendanceStatuses")
 public class AttendanceSite implements Serializable {
 	private static final 					long 					serialVersionUID 	= 1L;
 
@@ -92,26 +93,4 @@ public class AttendanceSite implements Serializable {
 		return this.autoGradeBySubtraction;
 	}
 
-	@Override
-	public boolean equals(Object o) {
-		if (this == o) return true;
-		if (o == null || getClass() != o.getClass()) return false;
-		final AttendanceSite that = (AttendanceSite) o;
-		return Objects.equals(getId(), that.getId()) &&
-				Objects.equals(getSiteID(), that.getSiteID()) &&
-				getDefaultStatus() == that.getDefaultStatus() &&
-				Objects.equals(getMaximumGrade(), that.getMaximumGrade()) &&
-				Objects.equals(getIsGradeShown(), that.getIsGradeShown()) &&
-				Objects.equals(getSendToGradebook(), that.getSendToGradebook()) &&
-				Objects.equals(getUseAutoGrading(), that.getUseAutoGrading()) &&
-				Objects.equals(getAutoGradeBySubtraction(), that.getAutoGradeBySubtraction()) &&
-				Objects.equals(getGradebookItemName(), that.getGradebookItemName()) &&
-				Objects.equals(getShowCommentsToStudents(), that.getShowCommentsToStudents()) &&
-				Objects.equals(getAttendanceStatuses(), that.getAttendanceStatuses());
-	}
-
-	@Override
-	public int hashCode() {
-		return Objects.hash(getId());
-	}
 }

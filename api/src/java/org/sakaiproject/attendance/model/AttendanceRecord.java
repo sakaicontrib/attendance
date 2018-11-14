@@ -21,7 +21,6 @@ import lombok.*;
 import java.io.Serializable;
 import java.util.Objects;
 
-
 /**
  * An AttendanceRecord for a specific user for a specific AttendanceEvent
  *
@@ -31,6 +30,7 @@ import java.util.Objects;
  */
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode
 public class AttendanceRecord implements Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -46,20 +46,4 @@ public class AttendanceRecord implements Serializable {
         this.status             = s;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        final AttendanceRecord that = (AttendanceRecord) o;
-        return Objects.equals(id, that.id) &&
-                Objects.equals(attendanceEvent, that.attendanceEvent) &&
-                Objects.equals(userID, that.userID) &&
-                status == that.status &&
-                Objects.equals(comment, that.comment);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id);
-    }
 }

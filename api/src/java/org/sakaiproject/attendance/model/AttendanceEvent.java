@@ -30,6 +30,7 @@ import java.util.*;
  */
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode(exclude={"records","stats"})
 public class AttendanceEvent implements Serializable {
 	private static final 	long 		serialVersionUID = 1L;
 
@@ -59,26 +60,4 @@ public class AttendanceEvent implements Serializable {
 		this.location 		= attendanceEvent.location;
 	}
 
-	@Override
-	public boolean equals(Object o) {
-		if (this == o) return true;
-		if (o == null || getClass() != o.getClass()) return false;
-		final AttendanceEvent that = (AttendanceEvent) o;
-		return Objects.equals(id, that.id) &&
-				Objects.equals(name, that.name) &&
-				Objects.equals(startDateTime, that.startDateTime) &&
-				Objects.equals(endDateTime, that.endDateTime) &&
-				Objects.equals(isReoccurring, that.isReoccurring) &&
-				Objects.equals(reoccurringID, that.reoccurringID) &&
-				Objects.equals(isRequired, that.isRequired) &&
-				Objects.equals(releasedTo, that.releasedTo) &&
-				Objects.equals(attendanceSite, that.attendanceSite) &&
-				Objects.equals(location, that.location) &&
-				Objects.equals(records, that.records);
-	}
-
-	@Override
-	public int hashCode() {
-		return Objects.hash(id);
-	}
 }

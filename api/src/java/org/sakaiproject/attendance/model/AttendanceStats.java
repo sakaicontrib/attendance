@@ -17,16 +17,15 @@
 package org.sakaiproject.attendance.model;
 
 import lombok.Getter;
+import lombok.EqualsAndHashCode;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang.builder.HashCodeBuilder;
-
 import java.io.Serializable;
 
 /**
  * Created by Leonardo Canessa [lcanessa1 (at) udayton (dot) edu]
  */
 @Slf4j
+@EqualsAndHashCode
 public class AttendanceStats implements Serializable {
     private static final    long            serialVersionUID    = 1L;
 
@@ -79,42 +78,6 @@ public class AttendanceStats implements Serializable {
             logDebugSetNegative();
         }
         this.leftEarly = leftEarly;
-    }
-
-    @Override
-    public boolean equals(final Object obj) {
-        if(obj == null) {
-            return false;
-        }
-
-        if(obj == this) {
-            return true;
-        }
-
-        if(obj.getClass() != getClass()) {
-            return false;
-        }
-
-        final AttendanceStats other = (AttendanceStats) obj;
-        return new EqualsBuilder()
-                .appendSuper(super.equals(obj))
-                .append(this.present, other.present)
-                .append(this.unexcused, other.unexcused)
-                .append(this.excused, other.excused)
-                .append(this.late, other.late)
-                .append(this.leftEarly, other.leftEarly)
-                .isEquals();
-    }
-
-    @Override
-    public int hashCode() {
-        return new HashCodeBuilder()
-                .append(this.present)
-                .append(this.unexcused)
-                .append(this.excused)
-                .append(this.late)
-                .append(this.leftEarly)
-                .toHashCode();
     }
 
     private void logDebugSetNegative() {
