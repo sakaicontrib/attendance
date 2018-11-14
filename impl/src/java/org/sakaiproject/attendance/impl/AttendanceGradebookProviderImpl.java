@@ -74,7 +74,7 @@ public class AttendanceGradebookProviderImpl implements AttendanceGradebookProvi
 
             String aSUID = getAttendanceUID(aS);
             try {
-                gbExtAssesService.addExternalAssessment(siteID, aSUID, null, aS.getGradebookItemName(), aS.getMaximumGrade(), null, appName, false, null);// add it to the gradebook
+                gbExtAssesService.addExternalAssessment(siteID, aSUID, null, aS.getGradebookItemName(), aS.getMaximumGrade(), null, appName, null, false, null);// add it to the gradebook
 
                 Map<String, String> scores = attendanceLogic.getAttendanceGradeScores();
                 gbExtAssesService.updateExternalAssessmentScoresString(siteID, aSUID, scores);
@@ -120,7 +120,7 @@ public class AttendanceGradebookProviderImpl implements AttendanceGradebookProvi
             String aUID = getAttendanceUID(aS);
             if(isAssessmentDefined(siteID, aUID)){
                 try {
-                    gbExtAssesService.updateExternalAssessment(siteID, aUID, null, aS.getGradebookItemName(), aS.getMaximumGrade(), null, false);
+                    gbExtAssesService.updateExternalAssessment(siteID, aUID, null, null, aS.getGradebookItemName(), aS.getMaximumGrade(), null, false);
                     return true;
                 } catch (ConflictingAssignmentNameException e) {
                     log.warn("Failed to update AttendanceSite for site " + siteID + " in Gradebook", e);
