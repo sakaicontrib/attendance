@@ -266,7 +266,7 @@ public class EventView extends BasePage {
                 };
                 studentLink.add(stuName);
                 item.add(studentLink);
-                ProfileImage profilePhoto = new ProfileImage("stu-photo", new Model<String>(String.format("/direct/profile/%s/image/official", stuId)));
+                ProfileImage profilePhoto = new ProfileImage("stu-photo", new Model<String>(String.format("/direct/profile/%s/image/official?siteId=%s", stuId, sakaiProxy.getCurrentSiteId())));
                 item.add(profilePhoto);
                 item.add(new AttendanceRecordFormDataPanel("record", item.getModel(), returnPage, feedbackPanel));
             }
