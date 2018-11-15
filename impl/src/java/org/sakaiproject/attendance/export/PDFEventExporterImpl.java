@@ -87,7 +87,7 @@ public class PDFEventExporterImpl implements PDFEventExporter {
         Date eventDate = event.getStartDateTime();
 
 
-        SimpleDateFormat dateFormat = new SimpleDateFormat("EEE, MMM d, YYYY h:mm a");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("EEE, MMM d, yyyy h:mm a");
 
         try {
             PdfWriter.getInstance(document, outputStream);
