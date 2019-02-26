@@ -71,6 +71,7 @@ public class StudentView extends BasePage {
             hideNavigationLink(this.studentOverviewLink);
             hideNavigationLink(this.settingsLink);
             hideNavigationLink(this.gradingLink);
+            hideNavigationLink(this.exportLink);
         }
 
         add(new Label("student-view-hidden","") {

@@ -49,6 +49,10 @@
 	<filter>
 		<filter-name>sakai.request</filter-name>
 		<filter-class>org.sakaiproject.util.RequestFilter</filter-class>
+		<init-param>
+			<param-name>upload.enabled</param-name>
+			<param-value>false</param-value>
+		</init-param>
 	</filter>
 	<filter-mapping>
 		<filter-name>sakai.request</filter-name>
