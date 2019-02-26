@@ -185,8 +185,71 @@ table.itemListTable, table.eventViewTable, table.takeAttendanceTable, div.eventF
     background-color: #deeeff;
 }
 
-th.overviewDateCol, td.overviewDateCol, td.takeAttendanceDateHeader, th.takeAttendanceDateHeader, td.studentNameCol, th.studentOverviewNameHeader {
+th.overviewDateCol, td.overviewDateCol, td.takeAttendanceDateHeader, th.takeAttendanceDateHeader, td.studentNameCol, th.studentOverviewNameHeader, th.importEventandStudentHeader, th.importNewCommentandStatusHeader,th.importOldCommentandStatusHeader {
     border-right-width: 3px;
+}
+
+.importChangeTable th{
+    text-align: center;
+    border-bottom-width: 2px;
+    font-size: 1.2em;
+    vertical-align: bottom;
+}
+
+.importChangeTable td{
+    border: 1px solid #ccc;
+    padding: .5em;
+    text-align: right;
+}
+
+.importChangeTable th{
+    border: 1px solid #ccc;
+    padding: .5em;
+    text-align: center;
+}
+
+.importChangeTable thead tr{
+    background-color: #eee;
+}
+
+.importChangeTable tbody tr:hover{
+    background-color: #deeeff;
+}
+
+table.importChangeTable{
+    border: 2px solid #ccc;
+    border-collapse: collapse;
+    padding: .5em;
+    margin-left: 35px;
+}
+
+table.importChangeTable thead tr .header{
+    background: url(../images/bg.gif) no-repeat bottom .5em right;
+    cursor: pointer;
+    padding-right: 24px;
+}
+
+table.importChangeTable thead tr .headerSortUp{
+    background-image: url(../images/asc.gif);
+}
+table.importChangeTable thead tr .headerSortDown{
+    background-image: url(../images/desc.gif);
+}
+
+table.importChangeTable thead tr th.importEventandStudentHeader{
+    background-color: lightgray;
+}
+
+table.importChangeTable thead tr th.importNewCommentandStatusHeader{
+    background-color: lightgreen;
+}
+
+table.importChangeTable thead tr th.importOldCommentandStatusHeader{
+    background-color: lightcoral;
+}
+
+td.importColumn{
+    text-align: right;
 }
 
 .eventViewTable td {
@@ -723,3 +786,134 @@ form.takeAttendanceNowForm input:hover {
 span.yui-skin-sam img {
     margin-right: .5em;
 }
+
+
+.cancel {
+    background: #e54028;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    -ms-border-radius: 3px;
+    -o-border-radius: 3px;
+    border-radius: 3px;
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
+    -webkit-transition-property: background;
+    -moz-transition-property: background;
+    -o-transition-property: background;
+    transition-property: background;
+    -webkit-transition-duration: 0.3s;
+    -moz-transition-duration: 0.3s;
+    -o-transition-duration: 0.3s;
+    transition-duration: 0.3s;
+    color: #ffffff;
+    text-shadow: none;
+    border: none;
+    height: 32px;
+    line-height: 32px;
+    padding: 0px 25.6px;
+    font-weight: 300;
+    margin: 0;
+    text-decoration: none;
+    text-align: center;
+    display: inline-block;
+}
+
+.cancel:active {
+    background: darkred;
+    -webkit-box-shadow: inset 0px 1px 0px rgba(255, 255, 255, 0.03), inset 0px -1px 1px rgba(255, 255, 255, 0.05), 0px 1px 0px #777777, 0px 3px 3px rgba(0, 0, 0, 0.03);
+    -moz-box-shadow: inset 0px 1px 0px rgba(255, 255, 255, 0.3), inset 0px -1px 1px rgba(255, 255, 255, 0.05), 0px 1px 0px #777777, 0px 3px 3px rgba(0, 0, 0, 0.03);
+    box-shadow: inset 0px 1px 0px rgba(255, 255, 255, 0.03), inset 0px -1px 1px rgba(255, 255, 255, 0.05), 0px 1px 0px #777777, 0px 3px 3px rgba(0, 0, 0, 0.03);
+}
+.cancel:hover {
+    background: #FF530D;
+    text-decoration: none;
+    color: #ffffff;
+}
+.cancel:active {
+    background: darkred;
+    -webkit-box-shadow: inset 0px 1px 0px rgba(255, 255, 255, 0.03), inset 0px -1px 1px rgba(255, 255, 255, 0.05), 0px 1px 0px #777777, 0px 3px 3px rgba(0, 0, 0, 0.03);
+    -moz-box-shadow: inset 0px 1px 0px rgba(255, 255, 255, 0.3), inset 0px -1px 1px rgba(255, 255, 255, 0.05), 0px 1px 0px #777777, 0px 3px 3px rgba(0, 0, 0, 0.03);
+    box-shadow: inset 0px 1px 0px rgba(255, 255, 255, 0.03), inset 0px -1px 1px rgba(255, 255, 255, 0.05), 0px 1px 0px #777777, 0px 3px 3px rgba(0, 0, 0, 0.03);
+}
+
+.confirm {
+    background: #00B233;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    -ms-border-radius: 3px;
+    -o-border-radius: 3px;
+    border-radius: 3px;
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
+    -webkit-transition-property: background;
+    -moz-transition-property: background;
+    -o-transition-property: background;
+    transition-property: background;
+    -webkit-transition-duration: 0.3s;
+    -moz-transition-duration: 0.3s;
+    -o-transition-duration: 0.3s;
+    transition-duration: 0.3s;
+    color: #ffffff;
+    text-shadow: none;
+    border: none;
+    height: 32px;
+    line-height: 32px;
+    padding: 0px 25.6px;
+    font-weight: 300;
+    margin: 0;
+    text-decoration: none;
+    text-align: center;
+    display: inline-block;
+}
+
+.confirm:active {
+    background: darkgreen;
+    -webkit-box-shadow: inset 0px 1px 0px rgba(255, 255, 255, 0.03), inset 0px -1px 1px rgba(255, 255, 255, 0.05), 0px 1px 0px #777777, 0px 3px 3px rgba(0, 0, 0, 0.03);
+    -moz-box-shadow: inset 0px 1px 0px rgba(255, 255, 255, 0.3), inset 0px -1px 1px rgba(255, 255, 255, 0.05), 0px 1px 0px #777777, 0px 3px 3px rgba(0, 0, 0, 0.03);
+    box-shadow: inset 0px 1px 0px rgba(255, 255, 255, 0.03), inset 0px -1px 1px rgba(255, 255, 255, 0.05), 0px 1px 0px #777777, 0px 3px 3px rgba(0, 0, 0, 0.03);
+}
+.confirm:hover {
+    background: lightgreen;
+    text-decoration: none;
+    color: #ffffff;
+}
+.confirm:active {
+    background: darkgreen;
+    -webkit-box-shadow: inset 0px 1px 0px rgba(255, 255, 255, 0.03), inset 0px -1px 1px rgba(255, 255, 255, 0.05), 0px 1px 0px #777777, 0px 3px 3px rgba(0, 0, 0, 0.03);
+    -moz-box-shadow: inset 0px 1px 0px rgba(255, 255, 255, 0.3), inset 0px -1px 1px rgba(255, 255, 255, 0.05), 0px 1px 0px #777777, 0px 3px 3px rgba(0, 0, 0, 0.03);
+    box-shadow: inset 0px 1px 0px rgba(255, 255, 255, 0.03), inset 0px -1px 1px rgba(255, 255, 255, 0.05), 0px 1px 0px #777777, 0px 3px 3px rgba(0, 0, 0, 0.03);
+}
+
+.iclPage{
+    padding-left: 35px;
+}
+.exportPage{
+    padding-left: 60px;
+}
+.exportPageDouble{
+    padding-left: 120px;
+}
+.exportPageInfoBox{
+    overflow: auto;
+    border: solid;
+    border-width: 1px;
+    margin-left: 60px;
+    margin-right: 60px;
+}
+.exportPageUL{
+    list-style-type:none;
+}
+.exportPageLI{
+    padding-left: 10px;
+}
+.boldHeader {
+    font-weight:bold;
+    margin-top: 5px;
+}
+.boldSpace {
+    font-weight:bold;
+    padding-right: 4px;
+}
+
