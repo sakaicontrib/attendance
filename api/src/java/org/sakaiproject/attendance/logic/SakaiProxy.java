@@ -181,6 +181,15 @@ public interface SakaiProxy {
 	List<User> getGroupMembership(String siteId, String groupId);
 
 	/**
+	 * Get Users in a Section of a Site
+	 *
+	 * @param siteId, the SiteID
+	 * @param groupId, the Group ID
+	 * @return a List of Users in SectionId of SiteId
+	 */
+	List<User> getSectionMembership(String siteId, String groupId);
+
+	/**
 	 * Get all available Groups for Site
 	 *
 	 * @param siteId, the SiteId
@@ -204,12 +213,27 @@ public interface SakaiProxy {
 	User getUser(String userId);
 
 	/**
+	 * get user
+	 *
+	 * @param userEid, the userId
+	 * @return the user
+	 */
+	User getUserByEID(String userEid);
+
+	/**
 	 * get's a user sort name
 	 *
 	 * @param userId, the userID
 	 * @return their sort name
      */
 	String getUserSortName(String userId);
+
+	/**
+	 *
+	 * @param userEid
+	 * @return
+	 */
+	String getUserSortNameByEID(final String userEid);
 
 	/**
 	 * Get a user's display id (username) ex. jdoe1
