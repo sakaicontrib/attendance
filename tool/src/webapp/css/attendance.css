@@ -169,6 +169,9 @@ table.itemListTable, table.eventViewTable, table.takeAttendanceTable, div.eventF
 
 .studentPhotoCol {
     text-align: center !important;
+    width: 80px;
+    min-height: 60px;
+    max-height: 140px;
 }
 
 .overviewTable th, .itemListTable th, .eventViewTable th, .takeAttendanceTable th {
