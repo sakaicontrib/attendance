@@ -134,6 +134,15 @@ public class SakaiProxyImpl implements SakaiProxy {
 	 * {@inheritDoc}
 	 */
 	public String getCurrentUserRole(String siteId) {
+		if (securityService.unlock("section.role.instructor", "/site/" + siteId)) {
+			return "Instructor";
+		}
+		else if (securityService.unlock("section.role.ta", "/site/" + siteId)) {
+			return "TA";
+		}
+		else if (securityService.unlock("section.role.student", "/site/" + siteId)) {
+			return "Student";
+		}
 		return authzGroupService.getUserRole(getCurrentUserId(), "/site/" + siteId);
 	}
 
@@ -193,17 +202,7 @@ public class SakaiProxyImpl implements SakaiProxy {
 	 * {@inheritDoc}
 	 */
 	public List<User> getSiteMembership(final String siteId) {
-		List<User> returnList = new ArrayList<>();
-		try {
-			AuthzGroup membership = authzGroupService.getAuthzGroup("/site/" + siteId);
-			Set<Member> memberSet = membership.getMembers();
-			String maintainRole = membership.getMaintainRole();
-			returnList = getUserListForMemberSetHelper(memberSet, maintainRole);
-		} catch (GroupNotDefinedException e) {
-			log.error("Unable to get site membership " + e);
-			e.printStackTrace();
-		}
-		return returnList;
+		return securityService.unlockUsers("section.role.student", "/site/" + siteId);
 	}
 
 	/**
@@ -235,38 +234,30 @@ public class SakaiProxyImpl implements SakaiProxy {
 	 * {@inheritDoc}
 	 */
 	public List<User> getGroupMembership(String siteId, String groupId) {
-		List<User> returnList = new ArrayList<User>();
 		try {
 			Group group = siteService.getSite(siteId).getGroup(groupId);
 			if(group != null) {
-				Set<Member> memberSet = group.getMembers();
-				String maintainRole = group.getMaintainRole();
-				returnList = getUserListForMemberSetHelper(memberSet, maintainRole);
+				return securityService.unlockUsers("section.role.student", group.getReference());
 			}
 		} catch (IdUnusedException e) {
-			log.error("Unable to get group membership " + e);
-			e.printStackTrace();
+			log.error("Unable to get group membership", e);
 		}
-		return returnList;
+		return new ArrayList<User>();
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	public List<User> getSectionMembership(String siteId, String groupId) {
-		List<User> returnList = new ArrayList<User>();
 		try {
 			Group group = siteService.getSite(siteId).getGroup(groupId);
 			if(group != null && group.getProviderGroupId() != null) {
-				Set<Member> memberSet = group.getMembers();
-				String maintainRole = group.getMaintainRole();
-				returnList = getUserListForMemberSetHelper(memberSet, maintainRole);
+				return securityService.unlockUsers("section.role.student", group.getReference());
 			}
 		} catch (IdUnusedException e) {
-			log.error("Unable to get group membership " + e);
-			e.printStackTrace();
+			log.error("Unable to get group membership", e);
 		}
-		return returnList;
+		return new ArrayList<User>();
 	}
 
 	/**
@@ -391,23 +382,6 @@ public class SakaiProxyImpl implements SakaiProxy {
 
 	private Session getCurrentSession() {
 		return sessionManager.getCurrentSession();
-	}
-
-	private List<User> getUserListForMemberSetHelper(Set<Member> memberSet, String maintainRole) {
-		List<User> userList = new ArrayList<User>();
-		if(memberSet != null) {
-			for(Member member : memberSet) {
-				if(maintainRole != null && !maintainRole.equals(member.getRole().getId()) && member.isActive()) {
-					try {
-						User student = userDirectoryService.getUser(member.getUserId());
-						userList.add(student);
-					} catch (UserNotDefinedException e) {
-						log.error("Unable to get user " + member.getUserId() + " " + e);
-					}
-				}
-			}
-		}
-		return userList;
 	}
 
 	@Getter @Setter
