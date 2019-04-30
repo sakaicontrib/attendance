@@ -504,7 +504,7 @@ public class AttendanceDaoImpl extends HibernateDaoSupport implements Attendance
 		log.debug("Delete grading rule from site " + gradingRule.getAttendanceSite().getSiteID() + " grading rule: " + gradingRule.getId());
 
 		try {
-			getHibernateTemplate().delete(gradingRule);
+			getHibernateTemplate().delete(getHibernateTemplate().merge(gradingRule));
 			return true;
 		} catch (DataAccessException e) {
 			log.error("deleteGradingRule, " + gradingRule.getId() + ", failed.", e);
