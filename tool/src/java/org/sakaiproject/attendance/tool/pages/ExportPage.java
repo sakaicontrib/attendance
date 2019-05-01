@@ -17,6 +17,7 @@
 package org.sakaiproject.attendance.tool.pages;
 
 import org.apache.commons.codec.binary.StringUtils;
+import org.apache.wicket.model.StringResourceModel;
 import org.sakaiproject.attendance.logic.SakaiProxy;
 import org.sakaiproject.attendance.model.*;
 import org.sakaiproject.user.api.User;
@@ -382,17 +383,18 @@ public class ExportPage extends BasePage{
             List<ImportConfirmList> ICList = new ArrayList<ImportConfirmList>();
             boolean checkHeader = true;
             boolean commentsChanged = false;
+            List<String> errors = new ArrayList<String>();
             // Start processing
             HSSFSheet sheet = getIterableExcelSheet();
             if(sheet != null){    //if we weren't able to get a usable sheet, it would be Null and we shouldn't process it.
                 Iterator rows = sheet.rowIterator();
                 if(rows.hasNext()){ //don't do anything with the Iterator unless it has something.
                     final List<String> headerRow = processHeaderRow(rows);
-                    List<Long> badIds = checkHeader(siteEventList, headerRow);
+                    List<Long> badIds = checkHeader(siteEventList, headerRow, errors);
                     checkHeader = badIds.size()<1;  //if there are bad IDs, the header is bad [checkHeader = false]
                     while(rows.hasNext()){
                         HSSFRow currentRow = (HSSFRow) rows.next();
-                        commentsChanged = processOneDataRow(currentRow, usableIDs, headerRow, ICList, commentsChanged);
+                        commentsChanged = processOneDataRow(currentRow, usableIDs, headerRow, ICList, commentsChanged, errors);
                     }
                 }else{
                     getSession().error(getString("attendance.export.import.error.empty_file"));
@@ -402,6 +404,7 @@ public class ExportPage extends BasePage{
             if(!checkHeader){
                 getSession().error(getString("attendance.export.import.error.badHeaderError.submit"));
             }
+            addErrorsToSession(errors);
             setResponsePage(new ImportConfirmation(ICList ,commentsChanged));
         }
 
@@ -442,27 +445,27 @@ public class ExportPage extends BasePage{
             return data;
         }
 
-        private List<Long> checkHeader(List<AttendanceEvent> siteEventList, List<String> headerRow){
+        private List<Long> checkHeader(List<AttendanceEvent> siteEventList, List<String> headerRow, List<String> errors){
             List<Long> siteEventListIds = getActualEventIds(siteEventList);
             List<Long> badIds = new ArrayList<Long>();
             for(int count = 3; count < headerRow.size() && headerRow.get(count).length()>0; count++){  //see if every ID in idTracker is in Attendance already
-                Long getIdResult = getIdFromString(headerRow.get(count));
+                Long getIdResult = getIdFromString(headerRow.get(count), errors);
                 if(!siteEventListIds.contains(getIdResult)){   //if not, this header had bad IDs (events that Attendance doesn't have)
                     badIds.add(getIdResult);   //add the bad ID into the array.
-                    getSession().error("The spreadsheet's event with ID " + getIdResult + " is not an event listed for this class in Attendance.");
+                    getSession().error(new StringResourceModel("attendance.import.bad.event", null, new String[]{getIdResult.toString()}).getString());
                 }
             }
             return badIds;
         }
 
-        private Long getIdFromString(String cellData){
+        private Long getIdFromString(String cellData, List<String> errors){
             int headerIndexStart = cellData.lastIndexOf("(");
             int headerIndexEnd = cellData.lastIndexOf(")");
             String idHolder = "0";
             try{
                 idHolder = cellData.substring(headerIndexStart + 1, headerIndexEnd);
             }catch(StringIndexOutOfBoundsException e){
-                getSession().error("There is a blank/unusable column in the spreadsheet's header.");
+                errors.add(getString("attendance.import.bad.column"));
             }
             return Long.parseLong(idHolder);
         }
@@ -475,7 +478,17 @@ public class ExportPage extends BasePage{
             return usableIds;
         }
 
-        private boolean processOneDataRow(HSSFRow row, List<Long> usableIds, List<String> headerRow, List<ImportConfirmList> ICList, boolean commentsChanged) {
+        private void addErrorsToSession(List<String> errors){
+            for(int count = 0; count<4 && count<errors.size() && errors.size()>0; count++){
+                getSession().error(errors.get(count));
+            }
+            if(errors.size()>4){
+                String howManyErrors = "" + (errors.size()-4);
+                getSession().error(new StringResourceModel("attendance.import.more.errors", null, new String[]{howManyErrors}).getString());
+            }
+        }
+
+        private boolean processOneDataRow(HSSFRow row, List<Long> usableIds, List<String> headerRow, List<ImportConfirmList> ICList, boolean commentsChanged, List<String> errors) {
             Iterator cells = row.cellIterator();    //iterate over the cells in the current Excel row
             AttendanceSite attendanceSite = attendanceLogic.getAttendanceSite(sakaiProxy.getCurrentSiteId());
             List data = new ArrayList();    // container for the current row's data
@@ -484,7 +497,7 @@ public class ExportPage extends BasePage{
                 data.add(cell.toString());
             }
             if(data.size() != headerRow.size()){
-                getSession().error("Alert: The spreadsheet's header and the row of data for at least one student are not the same length; as a result, data may be dropped. Please check your spreadsheet for misaligned data.");
+                errors.add(getString("attendance.import.header.length"));
             }
             String userEID = "";
             try{
@@ -496,70 +509,74 @@ public class ExportPage extends BasePage{
             if (currentUser != null) { //if it passes this Boolean condition, that should mean that Attendance has a slot for this user.
                 List<AttendanceRecord> oldUserData = attendanceLogic.getAttendanceRecordsForUser(currentUser.getId());   //the student's row of data from Attendance
                 for (int count = 3; count<data.size() && count<headerRow.size(); count++) {    //iterate over current student row, starting at 3 to account for id/name/section
-                    Long currentID = getIdFromString(headerRow.get(count)); //get the eventID of the current cell
+                    Long currentID = getIdFromString(headerRow.get(count), errors); //get the eventID of the current cell
                     if (usableIds.contains(currentID)) { //if it's one of the real event IDs, and also not a comment column...
+                        AttendanceRecord newData = attendanceLogic.getAttendanceRecord(currentID);
                         ImportConfirmList ICL = new ImportConfirmList();
                         if (data.get(count).equals("P") || (data.get(count).equals("PRESENT"))) {   //take data from Excel and put it in the current Attendance record. should this be a Switch statement instead?
-                            ICL.setStatus(Status.PRESENT);
+                            newData.setStatus(Status.PRESENT);
                         } else if (data.get(count).equals("A") || (data.get(count).equals("UNEXCUSED_ABSENCE")) || (data.get(count).equals("ABSENT")) || (data.get(count).equals("UNEXCUSED ABSENCE")) || (data.get(count).equals("UNEXCUSED"))) {
-                            ICL.setStatus(Status.UNEXCUSED_ABSENCE);
+                            newData.setStatus(Status.UNEXCUSED_ABSENCE);
                         } else if (data.get(count).equals("E") || (data.get(count).equals("EXCUSED_ABSENCE")) || (data.get(count).equals("EXCUSED ABSENCE")) || (data.get(count).equals("EXCUSED"))) {
-                            ICL.setStatus(Status.EXCUSED_ABSENCE);
+                            newData.setStatus(Status.EXCUSED_ABSENCE);
                         } else if (data.get(count).equals("L") || (data.get(count).equals("LATE"))) {
-                            ICL.setStatus(Status.LATE);
+                            newData.setStatus(Status.LATE);
                         } else if (data.get(count).equals("LE") || (data.get(count).equals("LEFT_EARLY")) || (data.get(count).equals("LEFT EARLY"))) {
-                            ICL.setStatus(Status.LEFT_EARLY);
+                            newData.setStatus(Status.LEFT_EARLY);
                         } else {
-                            ICL.setStatus(Status.UNKNOWN);
+                            newData.setStatus(Status.UNKNOWN);
                         }
                         Iterator<AttendanceRecord> traverseOldData = oldUserData.iterator();
                         AttendanceRecord checker;
                         while (traverseOldData.hasNext()) {   //get event/record from old data for the eventID we're currently working with
                             checker = traverseOldData.next();
-                            if (checker.getAttendanceEvent().getId().equals(currentID)) {
-                                ICL.setAttendanceEvent(checker.getAttendanceEvent());
-                                ICL.setAttendanceRecord(checker);
-                                ICL.setEventName(checker.getAttendanceEvent().getName() + " ");
-                                ICL.setOldComment(checker.getComment());
+                            if (checker.getAttendanceEvent().getId().equals(currentID)) {   //once we've found the right event ID, put all the data for the current record into the ICL.
+                                newData.setUserID(currentUser.getId());
+                                newData.setAttendanceEvent(checker.getAttendanceEvent());
+                                newData.setId(checker.getId());
+                                newData.setComment(checker.getComment());
                                 if(!headerRow.get(count).contains("]Comments(") && count+1<headerRow.size()){
                                     if(headerRow.get(count+1).contains("]Comments(")){
                                         try{
-                                            ICL.setComment(data.get(count+1).toString());
+                                            newData.setComment(data.get(count+1).toString());
+                                            commentsChanged = true;
                                         }catch(IndexOutOfBoundsException e){
-                                            getSession().error("The column formatting of the file is incorrect for event " + currentID);
+                                            errors.add(new StringResourceModel("attendance.import.column.format", null, new String[]{currentID.toString()}).getString());
                                         }
                                         count++;    //increment Count again to move on to the next ID when grabbing the comment.
                                     }
                                 }
+                                ICL.setAttendanceEvent(checker.getAttendanceEvent()); //start putting everything in the ICL.
+                                ICL.setEventName(checker.getAttendanceEvent().getName() + " ");
+                                ICL.setOldComment(checker.getComment());
                                 ICL.setOldStatus(checker.getStatus());
                                 ICL.setAttendanceSite(attendanceSite);
-                                ICL.setId(currentID);    //Attendace event's ID
+                                ICL.setId(checker.getId());    //Attendace event's ID
                                 ICL.setUserID(currentUser.getId()); //we can't use the EID for this...it has to be the longer, hashy one
-                                ICL.setEventDate(checker.getAttendanceEvent().getStartDateTime().toString());
-                                if(ICL.getComment()!=null && ICL.getComment().length() > 0){
-                                    commentsChanged = true;
-                                }else{
+                                ICL.setEventDate(checker.getAttendanceEvent().getStartDateTime().toString());   //much of the data, like Event Date, will not change, so it can be grabbed from Checker.
+                                if(newData.getComment()!=null && newData.getComment().length() > 0){    //add the newData comment to the ICL if it's not empty.
+                                    ICL.setComment(newData.getComment());
+                                }else{  //if it IS empty, just throw in the old comment.
                                     ICL.setComment(checker.getComment());
                                 }
+                                ICL.setAttendanceRecord(newData);   //the other ones that really need to be from the New Data are these last two.
+                                ICL.setStatus(newData.getStatus());
                                 if (!ICL.getStatus().equals(checker.getStatus()) || !StringUtils.equals(ICL.getComment(), checker.getComment())) { //make sure the new cell doesn't just have the same status/comment as the old one before processing.
                                     ICList.add(ICL);
                                 }
-                                System.out.println(currentUser.getDisplayName() + " " + ICL.getId() + "      " + count);
                                 break;  //stop iterating over oldUserData once we've found the matching event ID and processed its data
                             }
                         }
                     }else{
-                        getSession().error("The event with ID " + currentID + " does not exist in Attendance.");
+                        errors.add(new StringResourceModel("attendance.import.bad.event", null, new String[]{currentID.toString()}).getString());
                     }
                 }
-
             }else if (data.size()>2){
-                getSession().error("The student " + data.get(1) + " is not on this class's roster.");   //when there's a fake student in Excel that isn't in Attendance
+                errors.add(new StringResourceModel("attendance.import.fake.student", null, new String[]{data.get(1).toString()}).getString());   //when there's a fake student in Excel that isn't in Attendance
             }else{
-                getSession().error("There is a blank/unusable Student row in the Excel data.");   //when there's a fake row in Excel that has no data
+                errors.add(getString("attendance.import.blank.row"));   //when there's a fake row in Excel that has no data
             }
             return commentsChanged;
         }
     }
 }
-
