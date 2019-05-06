@@ -230,7 +230,7 @@ public class AttendanceLogicImpl implements AttendanceLogic {
 	 * {@inheritDoc}
 	 */
 	public void updateAttendanceRecordsForEvent(AttendanceEvent aE, Status s, String groupId) {
-		aE = getAttendanceEvent(aE.getId());
+		aE = getAttendanceEvent(aE.getId());	//why are we getting this as a new event when it's a parameter passed in already?
 		List<AttendanceRecord> allRecords = new ArrayList<>(aE.getRecords());
 		List<AttendanceRecord> recordsToUpdate = new ArrayList<>();
 
@@ -250,6 +250,7 @@ public class AttendanceLogicImpl implements AttendanceLogic {
 				for(AttendanceRecord record: allRecords) {
 					if(record.getUserID().equals(userId)) {
 						recordsToUpdate.add(record);
+						break;	//once we've found the record, the loop can break.
 					}
 				}
 			}
@@ -273,6 +274,7 @@ public class AttendanceLogicImpl implements AttendanceLogic {
 			aR.setStatus(s);
 			updateUserStats(aR, oldStatus);
 			regradeForAttendanceRecord(aR);
+			dao.updateAttendanceRecord(aR);	//change the actual data for the student we've just iterated past. This saves looping through it again as part of dao.updateAttendanceRecords on a whole array.
 		}
 
 		AttendanceItemStats itemStats = getStatsForEvent(aE);
@@ -295,7 +297,8 @@ public class AttendanceLogicImpl implements AttendanceLogic {
 		}
 
 		dao.updateAttendanceItemStats(itemStats);
-		dao.updateAttendanceRecords(recordsToUpdate);
+
+		//dao.updateAttendanceRecords(recordsToUpdate);
 	}
 
 	/**

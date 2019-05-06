@@ -18,8 +18,10 @@ package org.sakaiproject.attendance.tool.pages;
 
 import lombok.Getter;
 import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormSubmitBehavior;
+import org.apache.wicket.extensions.ajax.markup.html.AjaxLazyLoadPanel;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.DropDownChoice;
@@ -168,9 +170,14 @@ public class EventView extends BasePage {
     }
 
     private void createStatsTable() {
-        StatisticsPanel infoContainer = new StatisticsPanel("statistics", returnPage, attendanceEvent);
-
-        add(infoContainer);
+        AjaxLazyLoadPanel statsPanelSlow = new AjaxLazyLoadPanel("statsPanelSlow") {    //putting the Stats table in a lazyLoadPanel makes it load independently of the rest of the page.
+            @Override
+            public Component getLazyLoadComponent(String s) {
+                StatisticsPanel infoContainer = new StatisticsPanel(s, returnPage, attendanceEvent);    //this is the actual panel with the stats.
+                return infoContainer;   //when the HTML calls on the lazyPanel to load up its content, the actual stats panel gets fed into it here.
+            }
+        };
+        add(statsPanelSlow);
     }
 
     private void createHeader() {
@@ -268,7 +275,15 @@ public class EventView extends BasePage {
                 item.add(studentLink);
                 ProfileImage profilePhoto = new ProfileImage("stu-photo", new Model<String>(String.format("/direct/profile/%s/image/official?siteId=%s", stuId, sakaiProxy.getCurrentSiteId())));
                 item.add(profilePhoto);
-                item.add(new AttendanceRecordFormDataPanel("record", item.getModel(), returnPage, feedbackPanel));
+                AjaxLazyLoadPanel dataPanelSlow = new AjaxLazyLoadPanel("dataPanelSlow"){
+                    @Override
+                    public Component getLazyLoadComponent(String s){
+                        AttendanceRecordFormDataPanel dataPanel = new AttendanceRecordFormDataPanel(s, item.getModel(), returnPage, feedbackPanel);
+                        return dataPanel;
+                    }
+                };
+                item.add(dataPanelSlow);
+                //item.add(new AttendanceRecordFormDataPanel("record", item.getModel(), returnPage, feedbackPanel));
             }
         });
     }
