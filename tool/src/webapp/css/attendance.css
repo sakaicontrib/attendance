@@ -394,6 +394,8 @@ div.attendanceBreadcrumbs span {
 .div-table-row {
     width:auto;
     clear:both;
+    height: 60px;
+    max-height: 60px;
 }
 
 .div-table{
@@ -664,6 +666,10 @@ div.comment-container {
     position: relative;
 }
 
+div.statsPanelSlow {
+    height: 157px;
+}
+
 #settingsSave {
     margin-left: 35px;
 }
@@ -676,10 +682,10 @@ div.comment-container {
     .div-table-col {
         float:left;/*fix for  buggy browsers*/
         display:table-cell;
-        width:90px;
+        width:97px;
         text-align: center;
-        padding: .5em;
-        margin-top: 2px;
+        padding-left: .5em;
+        padding-right: .5em;
     }
 
     .div-table-col:first-child {

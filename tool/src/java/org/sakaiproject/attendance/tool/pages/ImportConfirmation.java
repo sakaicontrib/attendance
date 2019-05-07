@@ -195,8 +195,7 @@ public class ImportConfirmation  extends BasePage{
 
         public UploadForm(final String id) {
             super(id);
-
-            add(new SubmitLink("submitLink") {
+            SubmitLink completeImport = new SubmitLink("submitLink") {
                 public void onSubmit() {
                     for (int i = 0; i < uploadICLList.size(); i++){
                         boolean updated = attendanceLogic.updateAttendanceRecord(uploadICLList.get(i).getAttendanceRecord(), uploadICLList.get(i).getOldStatus());
@@ -205,7 +204,18 @@ public class ImportConfirmation  extends BasePage{
                     getSession().success(getString("attendance.export.confirmation.import.save.success"));
                     setResponsePage(new Overview());
                 }
-            });
+            };
+            Label lowerErrorAlert = new Label("lowerErrorAlert");
+            if (!getSession().getFeedbackMessages().isEmpty()){
+                completeImport.setEnabled(false);
+                lowerErrorAlert = new Label("lowerErrorAlert", getString("attendance.import.errors.exist"));
+            }
+            if(uploadICLList.size()<1){
+                getSession().error(getString("attendance.export.import.save.noChange"));
+                completeImport.setEnabled(false);
+            }
+            add(lowerErrorAlert);
+            add(completeImport);
             add(new SubmitLink("submitLink2") {
                 public void onSubmit() {
                     setResponsePage(new ExportPage());
