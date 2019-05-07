@@ -17,6 +17,8 @@
 package org.sakaiproject.attendance.tool.pages;
 
 
+import org.apache.wicket.Component;
+import org.apache.wicket.extensions.ajax.markup.html.AjaxLazyLoadPanel;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
@@ -167,8 +169,14 @@ public class StudentView extends BasePage {
         return grade;
     }
 
-    private StatisticsPanel createStatistics() {
-        return new StatisticsPanel("statistics", returnPage, studentId, previousEventId);
+    private AjaxLazyLoadPanel createStatistics() {
+        AjaxLazyLoadPanel statsPanelSlow = new AjaxLazyLoadPanel("statsPanelSlow") {    //putting the Stats table in a lazyLoadPanel makes it load independently of the rest of the page.
+            @Override
+            public Component getLazyLoadComponent(String s) {
+                return new StatisticsPanel(s, returnPage, studentId, previousEventId);
+            }
+        };
+        return statsPanelSlow;
     }
 
     private WebMarkupContainer createStudentViewHeader() {
@@ -216,7 +224,13 @@ public class StudentView extends BasePage {
                 }
                 item.add(eventLink);
                 item.add(new Label("event-date", item.getModelObject().getAttendanceEvent().getStartDateTime()));
-                item.add(new AttendanceRecordFormDataPanel("record", item.getModel(), returnPage, feedbackPanel));
+                AjaxLazyLoadPanel dataPanelSlow = new AjaxLazyLoadPanel("dataPanelSlow") {
+                    @Override
+                    public Component getLazyLoadComponent(String s) {
+                        return new AttendanceRecordFormDataPanel(s, item.getModel(), returnPage, feedbackPanel);
+                    }
+                };
+                item.add(dataPanelSlow);
             }
         };
 
