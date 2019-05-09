@@ -30,7 +30,7 @@
             </generator>
         </id>
 
-        <one-to-one name="attendanceEvent" class="AttendanceEvent" lazy="false" />
+        <one-to-one name="attendanceEvent" class="AttendanceEvent" />
 
         <property name="present"    column="PRESENT"    type="int" />
         <property name="unexcused"  column="UNEXCUSED"  type="int" />

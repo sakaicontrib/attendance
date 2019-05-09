@@ -17,6 +17,7 @@
 package org.sakaiproject.attendance.tool.dataproviders;
 
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 import org.sakaiproject.attendance.model.AttendanceSite;
 import org.sakaiproject.attendance.model.AttendanceStatus;
 import org.sakaiproject.attendance.model.Status;
@@ -92,7 +93,7 @@ public class AttendanceStatusProvider extends BaseProvider<AttendanceStatus> {
 
     @Override
     public IModel<AttendanceStatus> model(AttendanceStatus attendanceStatus) {
-        return new DetachableAttendanceStatusModel(attendanceStatus);
+        return Model.of(attendanceStatus);
     }
 
     private void filterStatuses(List<AttendanceStatus> attendanceStatuses, String filter) {

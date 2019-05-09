@@ -121,6 +121,6 @@ public class AttendanceRecordProvider extends BaseProvider<AttendanceRecord> {
         if(object.getId() == null) {
             return new Model<>(object);
         }
-        return new DetachableAttendanceRecordModel(object);
+        return Model.of(object);
     }
 }
