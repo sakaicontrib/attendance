@@ -452,7 +452,10 @@ public class ExportPage extends BasePage{
                 Long getIdResult = getIdFromString(headerRow.get(count), errors);
                 if(!siteEventListIds.contains(getIdResult)){   //if not, this header had bad IDs (events that Attendance doesn't have)
                     badIds.add(getIdResult);   //add the bad ID into the array.
-                    getSession().error(new StringResourceModel("attendance.import.bad.event", null, new String[]{getIdResult.toString()}).getString());
+                    errors.add(getString("attendance.import.bad.event"));
+                }
+                if(headerRow.get(count).contains("]Comments(") && headerRow.size()%2<1){    //if there are comments in the file, there must be an odd number of columns.
+                    errors.add(getString("attendance.import.missing.column"));
                 }
             }
             return badIds;
@@ -572,9 +575,13 @@ public class ExportPage extends BasePage{
                     }
                 }
             }else if (data.size()>2){
-                errors.add(new StringResourceModel("attendance.import.fake.student", null, new String[]{data.get(1).toString()}).getString());   //when there's a fake student in Excel that isn't in Attendance
+                if(data.get(1).toString().length() > 0){
+                    errors.add(new StringResourceModel("attendance.import.fake.student", null, new String[]{data.get(1).toString()}).getString());   //when there's a fake student in Excel that isn't in Attendance
+                }else{
+                    errors.add(getString("attendance.import.blank.row"));   //when there's a blank row in Excel that has no data
+                }
             }else{
-                errors.add(getString("attendance.import.blank.row"));   //when there's a fake row in Excel that has no data
+                errors.add(getString("attendance.import.blank.row"));   //when there's a fake/extra row in Excel that has no data
             }
             return commentsChanged;
         }
