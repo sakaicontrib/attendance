@@ -18,6 +18,7 @@ package org.sakaiproject.attendance.logic;
 
 import org.sakaiproject.user.api.User;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -203,6 +204,12 @@ public interface SakaiProxy {
 	 * @return a List of the available groups for the current site
      */
 	List<String> getAvailableGroupsForCurrentSite();
+
+	/**
+	 * Get the name of a group for a site that has a particular user as a member
+	 * @return a String that is the title of the user's group within the site
+	 */
+	String getUserGroupWithinSite(List<String> groupIds, String userId, String siteId);
 
 	/**
 	 * get user
