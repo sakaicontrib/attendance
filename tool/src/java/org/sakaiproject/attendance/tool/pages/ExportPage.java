@@ -230,20 +230,21 @@ public class ExportPage extends BasePage{
                 columnCounter++; //increment this here because this counter is not in the For loop's header.
             }
         }
-        return writeFile(wb, tempFile);
+        try {
+            return writeFile(wb, tempFile);
+        } catch (IOException e) {
+            log.error("Error when closing workbook: ", e);
+            return null;
+        }
     }
 
-    private File writeFile(HSSFWorkbook wb, File tempFile){
+    private File writeFile(HSSFWorkbook wb, File tempFile) throws IOException {
         try (FileOutputStream fos = new FileOutputStream(tempFile)){
             wb.write(fos);
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error("Error when closing fileOutputStream: ", e);
         } finally {
-            try {
-                wb.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            wb.close();
         }
         return tempFile;
     }
