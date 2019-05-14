@@ -236,9 +236,14 @@ public class ExportPage extends BasePage{
     private File writeFile(HSSFWorkbook wb, File tempFile){
         try (FileOutputStream fos = new FileOutputStream(tempFile)){
             wb.write(fos);
-            wb.close();
         } catch (IOException e) {
             e.printStackTrace();
+        } finally {
+            try {
+                wb.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
         return tempFile;
     }
