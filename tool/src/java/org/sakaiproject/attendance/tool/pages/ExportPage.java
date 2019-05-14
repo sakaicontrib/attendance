@@ -234,15 +234,8 @@ public class ExportPage extends BasePage{
     }
 
     private File writeFile(HSSFWorkbook wb, File tempFile){
-        FileOutputStream fos = null;
-        try {
-            fos = new FileOutputStream(tempFile);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-        try {
+        try (FileOutputStream fos = new FileOutputStream(tempFile)){
             wb.write(fos);
-            fos.close();
             wb.close();
         } catch (IOException e) {
             e.printStackTrace();
