@@ -19,20 +19,25 @@ package org.sakaiproject.attendance.logic;
 import lombok.Getter;
 import lombok.Setter;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.sakaiproject.authz.api.*;
 import org.sakaiproject.component.api.ServerConfigurationService;
 import org.sakaiproject.entity.api.ResourceProperties;
+import org.sakaiproject.entity.api.ResourcePropertiesEdit;
 import org.sakaiproject.event.api.EventTrackingService;
 import org.sakaiproject.exception.IdUnusedException;
 import org.sakaiproject.site.api.Group;
 import org.sakaiproject.site.api.Site;
 import org.sakaiproject.site.api.SiteService;
+import org.sakaiproject.time.api.Time;
 import org.sakaiproject.tool.api.Session;
 import org.sakaiproject.tool.api.SessionManager;
 import org.sakaiproject.tool.api.ToolManager;
 import org.sakaiproject.user.api.*;
 import org.sakaiproject.util.ResourceLoader;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 
 import java.util.*;
 
@@ -367,6 +372,29 @@ public class SakaiProxyImpl implements SakaiProxy {
 			e.printStackTrace();
 		}
 		return "";
+	}
+
+	public String getUserGroupWithinSite(List<String> groupIds, String userId, String siteId){
+		ArrayList<String> content = new ArrayList<String>(groupIds);
+		for (int count=0; count<content.size(); count++){	//add the rest of the path in for each groupId.
+			String fullPathBuilder = "/site/"+siteId+"/group/"+content.get(count);
+			content.set(count, fullPathBuilder);
+		}
+		List<AuthzGroup> results = authzGroupService.getAuthzUserGroupIds(content, userId);
+		Iterator traverseResults = results.iterator();
+		while(traverseResults.hasNext()){
+			String now = (String) traverseResults.next();
+			try {
+				AuthzGroup nowGroup =  authzGroupService.getAuthzGroup(now);
+				if (StringUtils.isBlank(nowGroup.getProviderGroupId())){	//return Blank if Provider is blank. this will happen for ad-hoc groups but get passed over for legitimate Sections.
+					return "";
+				}
+				return getGroupTitle(siteId, nowGroup.getId());
+			} catch (GroupNotDefinedException e) {
+				return "";
+			}
+		}
+		return "";	//return Nothing for no results.
 	}
 
 	/**

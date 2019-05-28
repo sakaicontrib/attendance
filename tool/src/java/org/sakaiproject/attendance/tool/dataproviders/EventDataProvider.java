@@ -17,6 +17,7 @@
 package org.sakaiproject.attendance.tool.dataproviders;
 
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 import org.sakaiproject.attendance.model.AttendanceEvent;
 import org.sakaiproject.attendance.tool.models.DetachableEventModel;
 
@@ -55,6 +56,6 @@ public class EventDataProvider extends BaseProvider<AttendanceEvent> {
 
     @Override
     public IModel<AttendanceEvent> model(AttendanceEvent object){
-        return new DetachableEventModel(object);
+        return Model.of(object);
     }
 }

@@ -256,8 +256,8 @@ public class EventView extends BasePage {
         });
         filterForm.add(groupChoice);
         filterForm.add(new Label("group-choice-label", new ResourceModel("attendance.event.view.filter")));
-
-        add(new DataView<AttendanceRecord>("records", new AttendanceRecordProvider(this.attendanceEvent, selectedGroup)) {
+        AttendanceRecordProvider statusRecords = new AttendanceRecordProvider(this.attendanceEvent, selectedGroup); // gathers all the attendance records for the current event/group, list accessible by getRecords()
+        add(new DataView<AttendanceRecord>("records", statusRecords) {
             @Override
             protected void populateItem(final Item<AttendanceRecord> item) {
                 final String stuId = item.getModelObject().getUserID();
@@ -283,7 +283,6 @@ public class EventView extends BasePage {
                     }
                 };
                 item.add(dataPanelSlow);
-                //item.add(new AttendanceRecordFormDataPanel("record", item.getModel(), returnPage, feedbackPanel));
             }
         });
     }
