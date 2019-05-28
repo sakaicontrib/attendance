@@ -43,10 +43,7 @@ import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.ss.usermodel.CellType;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 
 import java.util.*;
 import java.util.Collections;
@@ -115,235 +112,139 @@ public class ExportPage extends BasePage{
         add(new UploadForm("form"));
     }
 
-    private File buildExcelFile(boolean blankSheet, boolean commentsOnOff) {
+    private File makeEmptyFile(){
         File tempFile;
-        try {
-            setResponsePage(new ExportPage());
-            userStatsCounter = 0;
+        try{
             tempFile = File.createTempFile(buildFileNamePrefix(), buildFileNameSuffix());
-            final HSSFWorkbook wb = new HSSFWorkbook();
-            int eventCount;
-            int studentCount;
-            int columnFinder = 0;
-            boolean studentRecorded = false;
-            boolean localUserExists = false;
-            // Create new sheet
-            HSSFSheet mainSheet = wb.createSheet("Export");
-            // Create Excel header
-            final List<String> header = new ArrayList<String>();
-            final String selectedGroup = null;
-            final String siteID = sakaiProxy.getCurrentSiteId();
-            final List<AttendanceEvent> eventHolder = new ArrayList<AttendanceEvent>();
-            AttendanceSite attendanceSite = attendanceLogic.getAttendanceSite(siteID);
-            List<AttendanceEvent> attendanceEventlist = attendanceLogic.getAttendanceEventsForSite(attendanceSite);
-            List<String> groupIds = sakaiProxy.getAvailableGroupsForCurrentSite();
-            List<AttendanceUserGroupStats> finalUserStatsList = new ArrayList<AttendanceUserGroupStats>();
-            List<AttendanceUserStats> fullUserList = attendanceLogic.getUserStatsForSite(attendanceLogic.getAttendanceSite(siteID), null);
-
-            AttendanceUserGroupStats finalUserStatsListholder = new AttendanceUserGroupStats();
-
-            for(int i = 0; i < groupIds.size(); i++){
-                List<User> sectionUsers = sakaiProxy.getSectionMembership(siteID, groupIds.get(i));
-                if(sectionUsers.size()>0){
-                    for(int j =0; j < sectionUsers.size(); j++){
-                        for(int k = 0; k < finalUserStatsList.size(); k++){
-                            if(sectionUsers.get(j).getId().equals(finalUserStatsList.get(k).getUserID())){
-                                studentRecorded = true;
-                                repeatPlaceHolder = k;
-                            }
-                        }
-                        if(studentRecorded){
-                            finalUserStatsListholder = new AttendanceUserGroupStats();
-                            finalUserStatsListholder.setUserID(finalUserStatsList.get(repeatPlaceHolder).getUserID());
-                            finalUserStatsListholder.setAttendanceSite(finalUserStatsList.get(repeatPlaceHolder).getAttendanceSite());
-                            finalUserStatsListholder.setGroupId(finalUserStatsList.get(repeatPlaceHolder).getGroupId() + ", " + sakaiProxy.getGroupTitle(siteID ,groupIds.get(i)));
-
-                            finalUserStatsList.set(repeatPlaceHolder, finalUserStatsListholder);
-                        }
-                        else {
-                            finalUserStatsListholder = new AttendanceUserGroupStats();
-                            finalUserStatsListholder.setUserID(sectionUsers.get(j).getId());
-                            finalUserStatsListholder.setAttendanceSite(attendanceLogic.getAttendanceSite(siteID));
-                            finalUserStatsListholder.setGroupId(sakaiProxy.getGroupTitle(siteID ,groupIds.get(i)));
-                            finalUserStatsList.add(userStatsCounter, finalUserStatsListholder);
-                            userStatsCounter++;
-                        }
-                        studentRecorded = false;
-                    }
-                }
-            }
-
-            if(fullUserList.size() > finalUserStatsList.size()){
-                for(int i = 0; i < fullUserList.size(); i++){
-                    for(int j = 0; j < finalUserStatsList.size(); j++){
-                        if(fullUserList.get(i).getUserID().equals(finalUserStatsList.get(j).getUserID())){
-                            localUserExists = true;
-                        }
-
-                    }
-                    if(localUserExists){}
-                    else {
-                        finalUserStatsListholder = new AttendanceUserGroupStats();
-                        finalUserStatsListholder.setUserID(fullUserList.get(i).getUserID());
-                        finalUserStatsListholder.setAttendanceSite(fullUserList.get(i).getAttendanceSite());
-                        finalUserStatsListholder.setGroupId("");
-                        finalUserStatsList.add(userStatsCounter, finalUserStatsListholder);
-                        userStatsCounter++;
-                    }
-                    localUserExists = false;
-                }
-            }
-            Collections.sort(finalUserStatsList, new Comparator<AttendanceUserGroupStats>() {
-                @Override
-                public int compare(AttendanceUserGroupStats attendanceUserGroupStats, AttendanceUserGroupStats t1) {
-                    if((attendanceUserGroupStats.getUserID() == null) && (t1.getUserID() == null)) {
-                        return 0;
-                    } else if (attendanceUserGroupStats.getUserID() == null){
-                        return -1;
-                    } else if (t1.getUserID() == null){
-                        return 1;
-                    } else {
-                        return sakaiProxy.getUserSortName(attendanceUserGroupStats.getUserID()).compareTo(sakaiProxy.getUserSortName(t1.getUserID()));
-                    }
-                }
-            });
-            Collections.reverse(attendanceEventlist);
-            Collections.sort(attendanceEventlist, new Comparator<AttendanceEvent>() {
-                @Override
-                public int compare(AttendanceEvent attendanceEvent, AttendanceEvent t1) {
-                    if((attendanceEvent.getStartDateTime() == null) && (t1.getStartDateTime() == null)) {
-                        return 0;
-                    } else if (attendanceEvent.getStartDateTime() == null){
-                        return -1;
-                    } else if (t1.getStartDateTime() == null){
-                        return 1;
-                    } else{
-                        return attendanceEvent.getStartDateTime().compareTo(t1.getStartDateTime());
-                    }
-                }
-            });
-            eventCount = attendanceEventlist.size();
-            studentCount = finalUserStatsList.size();
-            header.add("StudentID");
-            header.add("Student Name");
-            header.add("Section");
-
-            for(int y = 0; y < eventCount; y++){
-                String holder2 = String.valueOf(attendanceEventlist.get(y).getStartDateTime());
-                if (holder2.equals("null")){
-                    header.add(attendanceEventlist.get(y).getName() + " [] " + "(" + String.valueOf(attendanceEventlist.get(y).getId())+ ")");
-                    if(commentsOnOff){
-                        header.add(attendanceEventlist.get(y).getName() + " [] Comments" + "(" + String.valueOf(attendanceEventlist.get(y).getId())+ ")");
-                    }
-                }
-                else{
-                    header.add(attendanceEventlist.get(y).getName() + "[" + String.valueOf(attendanceEventlist.get(y).getStartDateTime()) + "]" + "(" + String.valueOf(attendanceEventlist.get(y).getId())+ ")");
-                    if(commentsOnOff) {
-                        header.add(attendanceEventlist.get(y).getName() + "[" + String.valueOf(attendanceEventlist.get(y).getStartDateTime()) + "]Comments" + "(" + String.valueOf(attendanceEventlist.get(y).getId())+ ")");
-                    }
-                }
-                eventHolder.add(attendanceLogic.getAttendanceEvent(attendanceEventlist.get(y).getId()));
-            }
-            HSSFFont boldFont = wb.createFont();
-            boldFont.setBold(true);
-            boldFont.setUnderline(HSSFFont.U_SINGLE);
-            HSSFCellStyle boldStyle = wb.createCellStyle();
-            boldStyle.setFont(boldFont);
-
-            // Create the Header row
-            HSSFRow headerRow = mainSheet.createRow(0);
-            for (int i = 0; i < header.size(); i++) {
-                HSSFCell cell = headerRow.createCell(i);
-                cell.setCellValue(header.get(i));
-                cell.setCellType(CellType.STRING);
-                cell.setCellStyle(boldStyle);
-            }
-
-            final int[] rowCount = {1};
-            final int[] cellCount = {0};
-            for(int x = 0; x < studentCount; x++) {
-                rowCounter = 0;
-                List<AttendanceRecord> attendanceRecordlist = attendanceLogic.getAttendanceRecordsForUser(finalUserStatsList.get(x).getUserID().toString());
-                HSSFRow row = mainSheet.createRow(rowCount[0]);
-                final User user = sakaiProxy.getUser(finalUserStatsList.get(x).getUserID());
-                cellCount[0] = 0;
-
-                if (true) {
-                    HSSFCell cell = row.createCell(cellCount[0]);
-                    cell.setCellValue(user.getEid());
-                    cell.setCellType(CellType.STRING);
-                    cellCount[0]++;
-                }
-                if (true) {
-                    HSSFCell cell = row.createCell(cellCount[0]);
-                    cell.setCellValue(user.getSortName());
-                    cell.setCellType(CellType.STRING);
-                    cellCount[0]++;
-                }
-                if (true) {
-                    HSSFCell cell = row.createCell(cellCount[0]);
-                    cell.setCellValue(finalUserStatsList.get(x).getGroupId());
-                    cell.setCellType(CellType.STRING);
-                    cellCount[0]++;
-                }
-                for(int y = 0; y < eventCount; y++){
-                    if (true) {
-                        for(int p = 0; p < eventCount; p++){
-                            if(String.valueOf(eventHolder.get(y)).equals(String.valueOf(attendanceRecordlist.get(p).getAttendanceEvent()))){
-                                columnFinder = p;
-                            }
-                        }
-                        this.holder = String.valueOf(attendanceRecordlist.get(columnFinder).getStatus());
-                        if(this.holder.equals("PRESENT")) {
-                            this.holder = "P";
-                        } else if (this.holder.equals("UNEXCUSED_ABSENCE")){
-                            this.holder = "A";
-                        } else if (this.holder.equals("EXCUSED_ABSENCE")){
-                            this.holder = "E";
-                        } else if (this.holder.equals("LATE")){
-                            this.holder = "L";
-                        } else if (this.holder.equals("LEFT_EARLY")){
-                            this.holder = "LE";
-                        } else {
-                            this.holder = "";
-                        }
-                        HSSFCell cell = row.createCell(cellCount[0]);
-                        if(blankSheet){
-                            cell.setCellValue("");
-                        }else{
-                            cell.setCellValue(this.holder);
-                        }
-                        cell.setCellType(CellType.STRING);
-                        cellCount[0]++;
-                    }
-                    if(commentsOnOff) {
-                        if (true) {
-                            this.holder = String.valueOf(attendanceRecordlist.get(columnFinder).getComment());
-                            if (this.holder.equals("null")){
-                                this.holder = "";
-                            }
-                            HSSFCell cell = row.createCell(cellCount[0]);
-                            if(blankSheet){
-                                cell.setCellValue("");
-                            }else{
-                                cell.setCellValue(this.holder);
-                            }
-                            cell.setCellType(CellType.STRING);
-                            cellCount[0]++;
-                        }
-                    }
-                }
-                rowCount[0]++;
-                this.rowCounter++;
-            }
-            FileOutputStream fos = new FileOutputStream(tempFile);
-            wb.write(fos);
-
-            fos.close();
-            wb.close();
-
-        } catch (final IOException e) {
+        }catch(final IOException e) {
             throw new RuntimeException(e);
+        }
+        return tempFile;
+    }
+
+    private File buildExcelFile(boolean blankSheet, boolean commentsOnOff){
+        File tempFile = makeEmptyFile();
+        setResponsePage(new ExportPage());
+        userStatsCounter = 0;
+        final HSSFWorkbook wb = new HSSFWorkbook();
+        HSSFSheet mainSheet = wb.createSheet("Export"); // Create new sheet
+        final String selectedGroup = null;
+        final String siteID = sakaiProxy.getCurrentSiteId();
+        final ArrayList<AttendanceEvent> eventHolder = new ArrayList<AttendanceEvent>();
+        AttendanceSite attendanceSite = attendanceLogic.getAttendanceSite(siteID);
+        List<String> groupIds = sakaiProxy.getAvailableGroupsForCurrentSite();
+        List<AttendanceUserGroupStats> finalUserStatsList = new ArrayList<AttendanceUserGroupStats>();
+        List<AttendanceUserStats> fullUserList = attendanceLogic.getUserStatsForSite(attendanceLogic.getAttendanceSite(siteID), null);
+        AttendanceUserGroupStats finalUserStatsListholder = new AttendanceUserGroupStats();
+        HSSFRow headerRow = mainSheet.createRow(0); //create blank header row
+        HSSFCellStyle boldStyle = wb.createCellStyle(); //cell styling
+        HSSFFont boldFont = wb.createFont();
+        boldFont.setBold(true);
+        boldFont.setUnderline(HSSFFont.U_SINGLE);
+        boldStyle.setFont(boldFont);
+        HSSFCell headerCell = headerRow.createCell(0, CellType.STRING); //put the labels in the header row
+        headerCell.setCellStyle(boldStyle);
+        headerCell.setCellValue("StudentID");
+        headerCell = headerRow.createCell(1, CellType.STRING);
+        headerCell.setCellStyle(boldStyle);
+        headerCell.setCellValue("Student Name");
+        headerCell = headerRow.createCell(2, CellType.STRING);
+        headerCell.setCellStyle(boldStyle);
+        headerCell.setCellValue("Section");
+        List<AttendanceEvent> attendanceEventlist = attendanceLogic.getAttendanceEventsForSite(attendanceSite); //make list of events to use for header and data processing
+        Collections.sort(attendanceEventlist, new Comparator<AttendanceEvent>() {   //sort the attendanceEvents by date within their array.
+            @Override
+            public int compare(AttendanceEvent attendanceEvent, AttendanceEvent t1) {
+                if ((attendanceEvent.getStartDateTime() == null) && (t1.getStartDateTime() == null)) {
+                    return 0;
+                } else if (attendanceEvent.getStartDateTime() == null) {
+                    return -1;
+                } else if (t1.getStartDateTime() == null) {
+                    return 1;
+                } else {
+                    return attendanceEvent.getStartDateTime().compareTo(t1.getStartDateTime());
+                }
+            }
+        });
+        int columnGetter = 3;   //separate counter for columns in case there are comments, in which case the following loop's counter will increment differently.
+        for(int count=0; count<attendanceEventlist.size(); count++){   //put the actual event info in the rest of the header
+            AttendanceEvent now = attendanceEventlist.get(count);   // Count iterates over the attendance events only.
+            HSSFCell currentCell = headerRow.createCell(columnGetter, CellType.STRING);   //create and fill in a header cell for every event. We use ColumnGetter instead of Count to iterate because the cells may need to iterate by 2 if there are comments.
+            currentCell.setCellStyle(boldStyle);
+            currentCell.setCellValue(now.getName() + '[' + now.getStartDateTime().toString() + "](" + now.getId().toString() + ')');
+            if(commentsOnOff){  //true = has comments. if true, add the comment column for each event.
+                columnGetter++;    //increment one extra, to allow for the comment column
+                currentCell = headerRow.createCell(columnGetter, CellType.STRING);  //making a second header cell [for Comments] for every event
+                currentCell.setCellStyle(boldStyle);
+                currentCell.setCellValue(now.getName() + '[' + now.getStartDateTime().toString() + "]Comments(" + now.getId().toString() + ')');
+            }
+            columnGetter++; //increment this here because it's not part of the For loop's header.
+
+        }
+        for(int count=0; count<fullUserList.size(); count++){   //loop over the students and add each to a row
+            HSSFRow studentRow = mainSheet.createRow(count+1);
+            AttendanceUserStats now = fullUserList.get(count);
+            User user = sakaiProxy.getUser(now.getUserID());
+            String currentUserId = user.getId();
+            List<AttendanceRecord> studentData = attendanceLogic.getAttendanceRecordsForUser(currentUserId, attendanceSite);
+            HSSFCell currentCell = studentRow.createCell(0, CellType.STRING);   //create labels at the beginning of each student row
+            currentCell.setCellValue(user.getEid());
+            currentCell = studentRow.createCell(1, CellType.STRING);
+            currentCell.setCellValue(user.getSortName());
+            currentCell = studentRow.createCell(2, CellType.STRING);
+            currentCell.setCellValue(sakaiProxy.getUserGroupWithinSite(groupIds, user.getId(), siteID));
+            int columnCounter = 3;  //data columns start at 3 because of eid/name/section being first.
+            for(int eventCounter=0; eventCounter< attendanceEventlist.size(); eventCounter++){  //loop over all the events in this site
+                Long currentEventId = attendanceEventlist.get(eventCounter).getId();
+                for(int studentDataCounter = 0; studentDataCounter<studentData.size(); studentDataCounter++){   //find the student's data for this event.
+                    AttendanceRecord currentRecord = studentData.get(studentDataCounter);
+                    if(currentRecord.getAttendanceEvent().getId().equals(currentEventId)){  //make a cell for every record that matches an event
+                        currentCell = studentRow.createCell(columnCounter, CellType.STRING);
+                        if(blankSheet){ //when the user wants a blank sheet exported
+                            currentCell.setCellValue("");
+                        } else if(currentRecord.getStatus().toString().equals("PRESENT")) {    //convert the Status to a one-letter abbreviation
+                            currentCell.setCellValue("P");
+                        } else if (currentRecord.getStatus().toString().equals("UNEXCUSED_ABSENCE")){
+                            currentCell.setCellValue("A");
+                        } else if (currentRecord.getStatus().toString().equals("EXCUSED_ABSENCE")){
+                            currentCell.setCellValue("E");
+                        } else if (currentRecord.getStatus().toString().equals("LATE")){
+                            currentCell.setCellValue("L");
+                        } else if (currentRecord.getStatus().toString().equals("LEFT_EARLY")){
+                            currentCell.setCellValue("LE");
+                        } else {
+                            currentCell.setCellValue("");   //this shows up again as part of the If structure to capture cases in which blankSheet = False but there is no data in CurrentRecord.
+                        }
+                        if(commentsOnOff){  //true = has comments. if true, add the comment data for each student.
+                            columnCounter++;
+                            currentCell = studentRow.createCell(columnCounter, CellType.STRING);
+                            if(blankSheet){ //we can just stick blank Strings in if the sheet is to be blank.
+                                currentCell.setCellValue("");
+                            }else{
+                                currentCell.setCellValue(currentRecord.getComment());
+                            }
+                        }
+                        break;  //stop iterating when the correct data is found, after it's processed
+                    }
+                }
+                columnCounter++; //increment this here because this counter is not in the For loop's header.
+            }
+        }
+        try {
+            return writeFile(wb, tempFile);
+        } catch (IOException e) {
+            log.error("Error when closing workbook: ", e);
+            return null;
+        }
+    }
+
+    private File writeFile(HSSFWorkbook wb, File tempFile) throws IOException {
+        try (FileOutputStream fos = new FileOutputStream(tempFile)){
+            wb.write(fos);
+        } catch (IOException e) {
+            log.error("Error when closing fileOutputStream: ", e);
+        } finally {
+            wb.close();
         }
         return tempFile;
     }

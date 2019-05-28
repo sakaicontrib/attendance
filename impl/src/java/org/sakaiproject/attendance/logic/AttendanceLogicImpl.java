@@ -297,8 +297,6 @@ public class AttendanceLogicImpl implements AttendanceLogic {
 		}
 
 		dao.updateAttendanceItemStats(itemStats);
-
-		//dao.updateAttendanceRecords(recordsToUpdate);
 	}
 
 	/**
