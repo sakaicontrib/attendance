@@ -28,6 +28,7 @@ import org.apache.wicket.feedback.FeedbackMessage;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.OnLoadHeaderItem;
 import org.apache.wicket.markup.head.StringHeaderItem;
+import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.html.IHeaderContributor;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
@@ -37,6 +38,7 @@ import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.sakaiproject.attendance.api.AttendanceGradebookProvider;
 import org.sakaiproject.attendance.logic.AttendanceLogic;
 import org.sakaiproject.attendance.logic.SakaiProxy;
 import org.sakaiproject.attendance.model.AttendanceEvent;
@@ -67,8 +69,12 @@ public class BasePage extends WebPage implements IHeaderContributor {
 	@SpringBean(name="org.sakaiproject.attendance.logic.AttendanceLogic")
 	protected AttendanceLogic attendanceLogic;
 
+	@SpringBean(name="org.sakaiproject.attendance.api.AttendanceGradebookProvider")
+	protected AttendanceGradebookProvider attendanceGradebookProvider;
+
 	protected String role;
 	
+	Link<Void> addLink;
 	Link<Void> homepageLink;
 	Link<Void> settingsLink;
 	Link<Void> studentOverviewLink;
@@ -85,6 +91,19 @@ public class BasePage extends WebPage implements IHeaderContributor {
 		log.debug("BasePage()");
 
 		this.role = sakaiProxy.getCurrentUserRoleInCurrentSite();
+
+		//Add Event link/tab
+		addLink = new Link<Void>("add-link"){
+			private static final long serialVersionUID = 1L;
+			public void onClick() {
+				EventInputPage addEvent = new EventInputPage(new CompoundPropertyModel<>(new AttendanceEvent()));
+				addEvent.setNextPage(getPage().getPageClass().getCanonicalName());
+				setResponsePage(addEvent);
+			}
+		};
+		addLink.add(new Label("add-link-label", new ResourceModel("attendance.link.add.event")));
+		addLink.add(new AttributeModifier("title", new ResourceModel("attendance.link.add.event.tooltip")));
+		add(addLink);
 
     	//Take Attendance Overview link
 		homepageLink = new Link<Void>("homepage-link") {
@@ -169,8 +188,8 @@ public class BasePage extends WebPage implements IHeaderContributor {
 		
 		response.render(StringHeaderItem.forString((String)request.getAttribute("sakai.html.head")));
 		response.render(OnLoadHeaderItem.forScript("setMainFrameHeight( window.name )"));
-		
-		
+		//add Attendance.css as the css class
+		response.render(CssHeaderItem.forUrl("css/attendance.css"));
 		//Tool additions (at end so we can override if isRequired)
 		response.render(StringHeaderItem.forString("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\" />"));
 		//response.renderCSSReference("css/my_tool_styles.css");

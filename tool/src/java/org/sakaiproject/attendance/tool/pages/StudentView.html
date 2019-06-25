@@ -20,12 +20,6 @@
 <wicket:extend>
     <div wicket:id="header" class="attendanceBreadcrumbs">
         <h2>
-            <a wicket:id="close-link"><span wicket:id="close-link-text" /></a>
-            <span>></span>
-            <wicket:container wicket:id="event">
-                <a wicket:id="event-link"><span wicket:id="event-link-text"></span></a>
-                <span>></span>
-            </wicket:container>
             <span wicket:id="student-name" />
         </h2>
     </div>
@@ -42,7 +36,7 @@
         </div>
         <wicket:container wicket:id="attendance-grade" />
     </div>
-    <div wicket:id="statsPanelSlow"></div>
+    <div wicket:id="statsPanelSlow" class="table-responsive"></div>
     <div wicket:id="student-view-data" class="takeAttendanceContainer">
         <div class="takeAttendanceHeader">
             <h3 class="takeAttendanceHeader">
@@ -50,16 +44,16 @@
             </h3>
         </div>
 
-        <table id="takeAttendanceTable" class="takeAttendanceTable">
+        <table id="takeAttendanceTable" class="table table-striped table-bordered">
             <thead>
             <tr class="div-table-row">
-                <th class="takeAttendanceNameHeader">
+                <th class="col-sm-4">
                     <span wicket:id="event-name-header" />
                 </th>
-                <th class="takeAttendanceDateHeader">
+                <th class="col-sm-2">
                     <span wicket:id="event-date-header" />
                 </th>
-                <th class="takeAttendanceStatusCol">
+                <th class="col-sm-6">
                     <span wicket:id="header"/>
                 </th>
             </tr>
@@ -72,7 +66,7 @@
                 <td class="takeAttendanceDateHeader">
                     <span wicket:id="event-date" />
                 </td>
-                <td>
+                <td id="attendanceStatusTd" class="attendanceStatusTd">
                     <div wicket:id="dataPanelSlow"></div>
                 </td>
             </tr>

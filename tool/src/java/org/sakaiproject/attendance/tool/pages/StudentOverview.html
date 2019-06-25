@@ -19,7 +19,7 @@
 <body>
 <wicket:extend>
     <div wicket:id="student-overview-header" id="header">
-        <h1 class="overviewHeader indnt1">
+        <h1 class="overviewHeader">
             <span wicket:id="student-overview-title" class="overHeaderSpan" />
         </h1>
         <p class="overviewInstructions">
@@ -31,13 +31,13 @@
         <span wicket:id="group-choice-label" /> <select wicket:id="group-choice" />
     </form>
 
-    <table wicket:id="student-overview-stats-table" id="overviewTable" class="overviewTable">
+    <table wicket:id="student-overview-stats-table" id="overviewTable" class="table table-striped table-bordered overviewTable">
         <thead>
         <tr>
-        <th class="studentOverviewPhotoHeader"><span wicket:id="header-student-photo" /></th>
-        <th class="studentOverviewNameHeader"><span wicket:id="header-student-name" /></th>
-            <th wicket:id="status-headers" class="overviewStatusCol"><span wicket:id="header-status-name" /></th>
-            <th class="overviewGradeCol {sorter: false}">
+        <th><span wicket:id="header-student-photo" /></th>
+        <th class="studentOverviewNameHeader col-sm-5"><span wicket:id="header-student-name" /></th>
+            <th class="col-sm-1" wicket:id="status-headers"><span wicket:id="header-status-name" /></th>
+            <th class="col sm-1 overviewGradeCol {sorter: false}">
                 <span wicket:id="header-grade" />
                 <a wicket:id="settings-link">
                     <span class="fa fa-cog settings" aria-hidden="true"></span>
@@ -52,7 +52,7 @@
         <tbody>
             <tr wicket:id="students">
                 <td class="studentPhotoCol"><img wicket:id="student-photo"/></td>
-                <td class="studentNameCol"><a wicket:id="student-link"><span wicket:id="student-name" /></a></td>
+                <td class="studentNameCol"><a class="StudentOrEventPadding" wicket:id="student-link"><span wicket:id="student-name" /></a></td>
                 <td wicket:id="active-status-stats" class="overviewStatusCol"><span wicket:id="student-stats" /></td>
                 <td class="overviewGradeCol"><wicket:container wicket:id="attendance-grade" /></td>
             </tr>

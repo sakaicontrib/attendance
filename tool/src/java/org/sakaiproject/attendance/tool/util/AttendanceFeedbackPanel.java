@@ -19,6 +19,8 @@ package org.sakaiproject.attendance.tool.util;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.feedback.FeedbackMessage;
+import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 
 /**
@@ -41,10 +43,10 @@ public class AttendanceFeedbackPanel extends FeedbackPanel {
                 message.getLevel() == FeedbackMessage.DEBUG ||
                 message.getLevel() == FeedbackMessage.FATAL ||
                 message.getLevel() == FeedbackMessage.WARNING){
-            add(AttributeModifier.replace("class", "alertMessage"));
+            add(AttributeModifier.replace("class", "attendanceAlertMessage"));
         } else if(message.getLevel() == FeedbackMessage.INFO ||
                 message.getLevel() == FeedbackMessage.SUCCESS){
-            add(AttributeModifier.replace("class", "messageSuccess"));
+            add(AttributeModifier.replace("class", "attendanceMessageSuccess"));
         }
 
         return newMessageDisplayComponent;
