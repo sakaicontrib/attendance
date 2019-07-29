@@ -19,11 +19,17 @@
  
 <head>
 	<title><wicket:message key="page.title" /></title>
-	<link rel="stylesheet" type="text/css" href="css/attendance.css">
 </head>     
 <body>
 	<div class="portletBody">
 		<ul class="navIntraTool actionToolbar">
+			<li>
+				<span>
+					<a wicket:id="add-link">
+						<span wicket:id="add-link-label">[add item label]</span>
+					</a>
+				</span>
+			</li>
 			<li class="firstToolBarItem">
 				<span>
 					<a wicket:id="homepage-link">
@@ -61,7 +67,7 @@
 			</li>
 		</ul>
 		
-		<span wicket:id="feedback">feedbackmessages will be put here</span>
+		<span id="feedbackSpan" wicket:id="feedback">feedbackmessages will be put here</span>
 		
 		<wicket:child />
 

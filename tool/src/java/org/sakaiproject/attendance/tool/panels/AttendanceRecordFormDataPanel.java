@@ -20,6 +20,7 @@ import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormSubmitBehavior;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
+import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
@@ -127,9 +128,37 @@ public class AttendanceRecordFormDataPanel extends BasePanel {
                     }
                 });
                 ajaxTargets.add(statusRadio);
-                statusRadio.setLabel(Model.of(getStatusString(itemStatus)));
+                statusRadio.setLabel(Model.of(getStatusString(itemStatus))); //main label; it is the raw Status name. It will not be visible
+                SimpleFormComponentLabel normalLabel = new SimpleFormComponentLabel("record-status-name-normal", statusRadio); //secondary label with normal-looking version of the status, for display in mobile view
+                normalLabel.add(new AttributeAppender("content", getStatusString(itemStatus)));
+                statusRadio.setLabel(Model.of("")); //second label for creating a colored box
+                SimpleFormComponentLabel clickBox = new SimpleFormComponentLabel("record-status-box", statusRadio);
+                AttributeAppender iconMaker = null;
+                switch (getStatusString(itemStatus)){   //make icon based on what status it is.
+                    case "Present":
+                        iconMaker = new AttributeAppender("class", " fa fa-check");
+                        break;
+                    case "Absent":
+                        iconMaker = new AttributeAppender("class", " fa fa-times");
+                        break;
+                    case "Excused":
+                        iconMaker = new AttributeAppender("class", " fa fa-genderless");
+                        break;
+                    case "Late":
+                        iconMaker = new AttributeAppender("class", " fa fa-clock-o");
+                        break;
+                    case "Left Early":
+                        iconMaker = new AttributeAppender("class", " fa fa-sign-out");
+                        break;
+                    default:
+                        iconMaker = new AttributeAppender("class", " fa fa-check");
+                        break;
+                }
+                clickBox.add(iconMaker);
                 item.add(new SimpleFormComponentLabel("record-status-name", statusRadio));
+                item.add(clickBox);
                 item.add(new Label("record-status-name-raw", itemStatus.toString()));
+                item.add(normalLabel);
             }
         };
 
