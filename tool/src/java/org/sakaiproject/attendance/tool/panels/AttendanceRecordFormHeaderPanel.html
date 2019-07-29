@@ -19,12 +19,10 @@
 <body>
 <wicket:panel>
     <wicket:container wicket:id="status">
-        <div wicket:id="status-headers" class="div-table-col status-header">
-            <span wicket:id="header-status-name" />
-        </div>
-        <div class="slim-status-header">
-            <wicket:message key="attendance.status" />
-        </div>
+        <span wicket:id="status-headers">
+            <label wicket:id="header-status-name" class="col-sm-2 status-label-centered" />
+        </span>
+        <label class="col-sm-2 status-label-centered">Comments</label>
     </wicket:container>
 </wicket:panel>
 </body>

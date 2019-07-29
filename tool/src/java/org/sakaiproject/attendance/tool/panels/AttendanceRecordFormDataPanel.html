@@ -18,26 +18,27 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:wicket="http://wicket.apache.org">
 <body>
 <wicket:panel>
-    <form wicket:id="attendanceRecord">
-        <div class="status-group-container">
+    <form class="attendanceStatusForm" wicket:id="attendanceRecord">
+        <span class="status-group-container">
             <wicket:container wicket:id="attendance-record-status-group">
-                <div wicket:id="status-radios" class="div-table-col">
-                    <input type="radio" wicket:id="record-status" />
-                    <label wicket:id="record-status-name" class="record-status-name" />
-                    <label wicket:id="record-status-name-raw" hidden />
-                </div>
+                <span wicket:id="status-radios" class="div-table-col">
+                        <input type="radio" class="sr-only" wicket:id="record-status" />
+                        <label wicket:id="record-status-name" hidden class="record-status-name" />
+                        <label wicket:id="record-status-name-raw" hidden />
+                        <label wicket:id="record-status-name-normal" class="record-status-name-normal" />
+                        <label class="statusClickBox" wicket:id="record-status-box"/>
+                </span>
             </wicket:container>
-        </div>
-        <div class="div-table-col comment-container" wicket:id="comment-container">
+            <span class="div-table-col" wicket:id="comment-container">
             <div class="commentToggle">
-                <div wicket:id="no-comment">
+                <span wicket:id="no-comment">
                     <span class="fa fa-comment-o fa-2x" aria-hidden="true"></span>
                     <span class="sr-only"><wicket:message key="attendance.icon.record.form.no_comment"/></span>
-                </div>
-                <div wicket:id="yes-comment">
+                </span>
+                <span wicket:id="yes-comment">
                     <span class="fa fa-comment fa-2x" aria-hidden="true"></span>
                     <span class="sr-only"><wicket:message key="attendance.icon.record.form.yes_comment"/></span>
-                </div>
+                </span>
             </div>
             <div class="addComment" style="display:none;">
                 <h3><span wicket:id="add-header" /></h3>
@@ -55,10 +56,11 @@
                     }
                 });
                 $("span.cancelAddComment").unbind().click(function(){
-                   $(this).parent("div").slideUp();
+                    $(this).parent("div").slideUp();
                 });
             </script>
-        </div>
+        </span>
+        </span>
     </form>
     <div wicket:id="no-record" class="noRecord"><wicket:message key="attendance.no.record"/></div>
 </wicket:panel>

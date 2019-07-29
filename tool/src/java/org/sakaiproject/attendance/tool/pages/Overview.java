@@ -17,19 +17,25 @@
 package org.sakaiproject.attendance.tool.pages;
 
 import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.Page;
 import org.apache.wicket.RestartResponseException;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.form.OnChangeAjaxBehavior;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.extensions.markup.html.form.select.Select;
+import org.apache.wicket.extensions.markup.html.form.select.SelectOption;
+import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.SubmitLink;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.model.StringResourceModel;
 import org.sakaiproject.attendance.model.AttendanceEvent;
@@ -40,8 +46,9 @@ import org.sakaiproject.attendance.tool.dataproviders.AttendanceStatusProvider;
 import org.sakaiproject.attendance.tool.dataproviders.EventDataProvider;
 import org.sakaiproject.attendance.tool.panels.EventInputPanel;
 import org.sakaiproject.attendance.tool.panels.PrintPanel;
+import org.sakaiproject.attendance.tool.util.ConfirmationLink;
 
-import java.util.Date;
+import java.util.*;
 
 /**
  * The overview page which lists AttendanceEvents and basic statistics of each
@@ -150,11 +157,8 @@ public class Overview extends BasePage {
 					}
 				};
 				item.add(activeStatusStats);
-
 				final AjaxLink eventEditLink = getAddEditWindowAjaxLink(modelObject, "event-edit-link");
-				eventEditLink.add(new Label("event-edit-alt", new StringResourceModel("attendance.icon.edit.alt", null, new String[]{name})));
 				item.add(eventEditLink);
-
 				final AjaxLink printLink = new AjaxLink<Void>("print-link"){
 					@Override
 					public void onClick(AjaxRequestTarget ajaxRequestTarget) {
@@ -165,8 +169,34 @@ public class Overview extends BasePage {
 						ajaxRequestTarget.add(printContainer);
 					}
 				};
-				printLink.add(new Label("event-print-alt",  new StringResourceModel("attendance.icon.print.event.alt", null, new String[]{name})));
 				item.add(printLink);
+
+				ConfirmationLink<Void> deleteLink = new ConfirmationLink<Void>("delete-link", getString("attendance.delete.confirm")) {
+					private static final long serialVersionUID = 1L;
+
+					@Override
+					public void onClick(AjaxRequestTarget ajaxRequestTarget) {
+						final String name = modelObject.getName();
+						if(attendanceLogic.deleteAttendanceEvent(modelObject)) {
+							getSession().info(name + " deleted successfully.");
+						} else {
+							getSession().error("Failed to delete " + name);
+						}
+						Class<? extends Page> currentPageClass = getPage().getPageClass();
+						// Not possible to return to an Event View of a page for an item you've just deleted
+						if(EventView.class.equals(currentPageClass)) {
+							setResponsePage(Overview.class);
+						} else {
+							setResponsePage(currentPageClass);
+						}
+					}
+
+					@Override
+					public boolean isEnabled() {
+						return !attendanceLogic.getCurrentAttendanceSite().getIsSyncing();
+					}
+				};
+				item.add(deleteLink);
 			}
 		};
 		add(attendanceEventDataView);

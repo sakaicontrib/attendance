@@ -39,6 +39,7 @@ import org.sakaiproject.attendance.model.AttendanceRecord;
 import org.sakaiproject.attendance.model.AttendanceStatus;
 import org.sakaiproject.attendance.model.Status;
 import org.sakaiproject.attendance.tool.dataproviders.AttendanceRecordProvider;
+import org.sakaiproject.attendance.tool.dataproviders.AttendanceStatusProvider;
 import org.sakaiproject.attendance.tool.models.ProfileImage;
 import org.sakaiproject.attendance.tool.panels.AttendanceRecordFormDataPanel;
 import org.sakaiproject.attendance.tool.panels.AttendanceRecordFormHeaderPanel;
@@ -69,6 +70,7 @@ public class EventView extends BasePage {
 
                             PrintPanel              printPanel;
                             WebMarkupContainer      printContainer;
+                            AttendanceStatusProvider attendanceStatusProvider;
 
     public EventView(Long id, String fromPage) {
         super();
@@ -112,6 +114,7 @@ public class EventView extends BasePage {
     }
 
     private void init() {
+        this.attendanceStatusProvider = new AttendanceStatusProvider(attendanceLogic.getCurrentAttendanceSite(), AttendanceStatusProvider.ACTIVE);
         createHeader();
         createTable();
 
@@ -201,7 +204,13 @@ public class EventView extends BasePage {
 
         add(new Label("student-photo", new ResourceModel("attendance.event.view.student.photo")));
 
-        add(new AttendanceRecordFormHeaderPanel("record-header"));
+        DataView<AttendanceStatus> statusHeaders = new DataView<AttendanceStatus>("status-names", attendanceStatusProvider) {
+            @Override
+            protected void populateItem(Item<AttendanceStatus> item) {  //a label for each Status name.
+                item.add(new Label("header-status-name", getStatusString(item.getModelObject().getStatus())));
+            }
+        };
+        add(statusHeaders);
 
         // Generate records if none exist
         if(records == null || records.isEmpty()) {

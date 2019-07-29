@@ -84,40 +84,6 @@ public class EventInputPanel extends BasePanel {
 
         eventForm.add(createSubmitLink("submitAndAddAnother", eventForm, true));
 
-        ConfirmationLink<Void> deleteLink = new ConfirmationLink<Void>("delete-link", getString("attendance.delete.confirm")) {
-            private static final long serialVersionUID = 1L;
-
-            @Override
-            public void onClick(AjaxRequestTarget ajaxRequestTarget) {
-                final String name = attendanceEvent.getName();
-                if(attendanceLogic.deleteAttendanceEvent(attendanceEvent)) {
-                    getSession().info(name + " deleted successfully.");
-                } else {
-                    getSession().error("Failed to delete " + name);
-                }
-
-                Class<? extends Page> currentPageClass = getPage().getPageClass();
-                // Not possible to return to an Event View of a page for an item you've just deleted
-                if(EventView.class.equals(currentPageClass)) {
-                    setResponsePage(Overview.class);
-                } else {
-                    setResponsePage(currentPageClass);
-                }
-            }
-
-            @Override
-            public boolean isEnabled() {
-                return !attendanceLogic.getCurrentAttendanceSite().getIsSyncing();
-            }
-
-            @Override
-            public boolean isVisible() {
-                return isEditing;
-            }
-        };
-
-        eventForm.add(deleteLink);
-
         final AjaxButton cancel = new AjaxButton("cancel") {
             private static final long serialVersionUID = 1L;
 

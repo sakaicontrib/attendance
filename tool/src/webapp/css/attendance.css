@@ -22,12 +22,21 @@ form {
     margin-bottom: 1em;
 }
 
+form.attendanceStatusForm {
+    margin-bottom: 0px;
+}
+
+.table > tbody > tr > td.attendanceStatusTd {
+    vertical-align: middle;
+}
+
 /* style the Wicket FeedbackPanel to remove the list */
-.alertMessage ul, .messageSuccess ul {
+.attendanceAlertMessage ul, .attendanceMessageSuccess ul {
     list-style-type: none !important;
-    margin-left: 0px;
+    margin-left: -20px;
     margin-bottom: 0px;
     margin-top: 0px;
+    display: inline-block;
 }
 
 .itemListTable a, .itemListTable a:link, .itemListTable a:visited, .itemListTable a:hover, .itemListTable a:focus, .itemListTable a:active{
@@ -45,7 +54,6 @@ form {
 h1.overviewHeader, h1.itemsHeader, h1.settingsHeader, h1.gradingHeader {
     color: #555;
     margin-top: 1.2em;
-    margin-bottom: 1.2em;
     min-height: 32px;
 }
 
@@ -53,14 +61,13 @@ h1.tightHeader, h2.tightHeader, h3.tightHeader, h4.tightHeader, h5.tightHeader, 
     margin-bottom: 0;
 }
 
-span.overHeaderSpan, span.itemsHeaderSpan, span.settingsHeaderSpan, span.gradingHeaderSpan {
+span.itemsHeaderSpan, span.settingsHeaderSpan, span.gradingHeaderSpan {
     margin: 0 .5em;
 }
 
 p.overviewInstructions, p.addEditInstructions {
     font-size: 1.2em;
     line-height: 1.5em;
-    margin-left: 35px;
 }
 
 p.addEditInstructions {
@@ -127,27 +134,27 @@ img.refreshImage {
     height: 1.4em;
 }
 
-table.overviewTable, table.itemListTable, table.eventViewTable, table.takeAttendanceTable {
+table.itemListTable, table.eventViewTable, table.takeAttendanceTable {
     border: 2px solid #ccc;
     border-collapse: collapse;
     padding: .5em;
     margin-left: 35px;
 }
 
-table.overviewTable thead tr .header, table.itemListTable thead tr .header, table.takeAttendanceTable thead tr .header  {
+thead tr .header, table.itemListTable thead tr .header, table.takeAttendanceTable thead tr .header  {
     background: url(../images/bg.gif) no-repeat bottom .5em right;
     cursor: pointer;
     padding-right: 24px;
 }
 
-table.overviewTable thead tr .headerSortUp, table.itemListTable thead tr .headerSortUp, table.takeAttendanceTable thead tr .headerSortUp {
+thead tr .headerSortUp, table.itemListTable thead tr .headerSortUp, table.takeAttendanceTable thead tr .headerSortUp {
     background-image: url(../images/asc.gif);
 }
-table.overviewTable thead tr .headerSortDown, table.itemListTable thead tr .headerSortDown, table.takeAttendanceTable thead tr .headerSortDown {
+thead tr .headerSortDown, table.itemListTable thead tr .headerSortDown, table.takeAttendanceTable thead tr .headerSortDown {
     background-image: url(../images/desc.gif);
 }
 
-table.itemListTable, table.eventViewTable, table.takeAttendanceTable, div.eventFormContainer, form.addEditForm, .addComment h3, form.takeAttendanceNowForm, td.overviewGradeCol form {
+table.itemListTable, table.eventViewTable, table.takeAttendanceTable, div.eventFormContainer, form.addEditForm, .addComment h3, td.overviewGradeCol form {
     margin: 0;
 }
 
@@ -174,17 +181,17 @@ table.itemListTable, table.eventViewTable, table.takeAttendanceTable, div.eventF
     max-height: 140px;
 }
 
-.overviewTable th, .itemListTable th, .eventViewTable th, .takeAttendanceTable th {
+.itemListTable th, .eventViewTable th, .takeAttendanceTable th {
     text-align: center;
     border-bottom-width: 2px;
     font-size: 1.2em;
 }
 
-.overviewTable thead tr, .itemListTable thead tr, .eventViewTable thead tr, .takeAttendanceTable thead tr, .div-table-row-header  {
+.itemListTable thead tr, .eventViewTable thead tr, .takeAttendanceTable thead tr, .div-table-row-header  {
     background-color: #eee;
 }
 
-.overviewTable tbody tr:hover, .itemListTable tbody tr:hover, .eventViewTable tbody tr:hover, .takeAttendanceTable tbody tr:hover, .div-table-row:hover {
+.itemListTable tbody tr:hover, .eventViewTable tbody tr:hover, .takeAttendanceTable tbody tr:hover, .div-table-row:hover {
     background-color: #deeeff;
 }
 
@@ -298,8 +305,17 @@ td.itemListRemoveCol, td.overviewPrintCol, p.printAction {
     text-align: center;
 }
 
-td.itemNameCol, td.studentNameCol {
+td.studentNameCol {
     font-size: 1.2em;
+}
+
+.table > tbody > tr > td.itemNameCol {
+    font-size: 1.2em;
+    border-right: 1px solid transparent;
+}
+
+td.actionsButtonCol {
+    text-align: right;
 }
 
 th.takeAttendanceNameHeader {
@@ -356,12 +372,9 @@ h3.activeStatusHeader, h3.commentHeader, h3.containerHeading {
     font-weight: normal;
 }
 
-span.addEditReq {
+label.addEditReq {
     color: red;
     font-size: 1.2em;
-    float: left;
-    margin-left: -.5em;
-    margin-right: -.5em;
 }
 
 td.noEventsCol, td.noStudentsCol {
@@ -407,7 +420,6 @@ div.attendanceBreadcrumbs span {
     background-color:#fff;
     border:1px solid  #ccc;
     font-size: 1.2em;
-    margin-left: 35px;
 }
 
 .div-table-row2 {
@@ -434,8 +446,6 @@ p.setAll {
 
 .addComment {
     position:absolute;
-    top:-130px;
-    left:-200px;
     background-color:#fff;
     border: 1px solid #555;
     width:200px;
@@ -445,6 +455,8 @@ p.setAll {
     -webkit-box-shadow: 0 8px 6px -6px black;
     -moz-box-shadow: 0 8px 6px -6px black;
     box-shadow: 0 8px 6px -6px black;
+    right: 28px;
+    z-index: 40;
 }
 
 div.printContainer {
@@ -493,7 +505,13 @@ div.printMask {
     opacity: 0.75;
 }
 
-div.printMask:hover, .printImage:hover, .commentToggle:hover, .div-table-col input:hover {
+div.printMask:hover, .printImage:hover {
+    cursor: pointer;
+    margin-right: .5em;
+    margin-left: 2em;
+}
+
+.commentToggle:hover, .div-table-col input:hover {
     cursor: pointer;
 }
 
@@ -563,10 +581,6 @@ p.editStatusInfo, p.editGradeInfo, p.editCommentInfo {
     margin: 0;
 }
 
-form.studentOverviewFilterForm {
-    margin-left: 35px;
-}
-
 th.overviewGradeCol img.settings {
     vertical-align: text-bottom;
 }
@@ -584,6 +598,61 @@ ul.gradeSettings li {
 label.gradeSettingsLabel {
     font-size: 1.2em;
     line-height: 1.7em;
+}
+
+div.addItemLine {
+    margin-top: 1em;
+    margin-bottom: 1em;
+}
+
+label.addItemCaptions {
+    position: relative;
+    top: 21%;
+}
+
+#buttonSection > button.saveNewItem {
+    background: #15597e;
+    color: white;
+}
+
+ul.actions-dropdown {
+    z-index: 90;
+}
+
+a.StudentOrEventPadding {
+    padding-right: 5px;
+}
+
+div.buttonSection {
+    padding-top: 1em;
+}
+
+span.attendanceMessageSuccess {
+    float: right;
+    padding-top: 20px;
+    padding-right: 28px;
+    color: green;
+}
+
+span.attendanceMessageSuccess:before {
+    font-family: "FontAwesome";
+    content: "\f05d";
+    display: inline-block;
+    font-size: 18px;
+}
+
+span.attendanceAlertMessage {
+    float: right;
+    padding-top: 20px;
+    padding-right: 28px;
+    color: red;
+}
+
+span.attendanceAlertMessage:before {
+    font-family: "FontAwesome";
+    content: "\f05c";
+    display: inline-block;
+    font-size:18px;
 }
 
 span.gradingType > div div label {
@@ -633,28 +702,88 @@ form.gradeSettingsForm {
     display: block;
 }
 
-.status-group-container {
-    float: left;
+span.status-group-container {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
 }
 
-.PRESENT {
+.table > thead > tr > th.status-names-area {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    padding-left: 5%;
+}
+
+span.statusRadioCell {
+    display: table-cell;
+    width: 100%;
+    text-align: center;
+    border: 1px solid transparent;
+}
+
+label.statusClickBox {
+    cursor: pointer;
+    z-index: 90;
+    height: 100%;
+    width: 100%;
+    font-size: 22px;
+    opacity: 0.2;
+}
+
+label.statusClickBox:hover {
+    opacity: 1;
+}
+
+span.div-table-col:hover {
+    border: 1px solid darkgrey;
+}
+
+label.record-status-name-normal {
+    display: none;
+}
+
+.PRESENT > label, .UNEXCUSED_ABSENCE > label, .EXCUSED_ABSENCE > label, .LATE > label, .LEFT_EARLY > label {
+    opacity: 1;
+    font-weight: bolder;
+}
+
+.fa-clock-o::before, .fa-check::before, .fa-times::before, .fa-genderless::before, .fa-sign-out::before {
+    vertical-align: middle;
+}
+
+label.status-label-centered {
+    text-align: center;
+    padding-left: 0px;
+    padding-right: 0px;
+}
+
+span.PRESENT {
     background-color: #DFF0D8;
     border: 1px solid green;
+    opacity: 1;
+    color: green;
 }
 
-.UNEXCUSED_ABSENCE {
+span.UNEXCUSED_ABSENCE {
     background-color: #FFBBBB;
     border: 1px solid red;
+    opacity: 1;
+    color: #b30909;;
 }
 
-.EXCUSED_ABSENCE {
-    background-color: #CCCCCC;
+span.EXCUSED_ABSENCE {
+    background-color: rgba(0, 61, 255, 0.26);
     border: 1px solid gray;
+    opacity: 1;
+    color: #0018cc;
 }
 
-.LATE, .LEFT_EARLY {
+span.LATE, span.LEFT_EARLY {
     background-color: #fcf8a5;
     border: 1px solid goldenrod;
+    opacity: 1;
+    color: goldenrod;
 }
 
 div.noRecord {
@@ -684,11 +813,10 @@ div.statsPanelSlow {
 
     .div-table-col {
         float:left;/*fix for  buggy browsers*/
-        display:table-cell;
-        width:97px;
+        display: table-cell;
+        width: 100%;
         text-align: center;
-        padding-left: .5em;
-        padding-right: .5em;
+        border: 1px solid transparent;
     }
 
     .div-table-col:first-child {
@@ -714,11 +842,34 @@ div.statsPanelSlow {
     }
 
     .div-table-col {
-        display: flex;
-        margin-top: .5em;
-        margin-bottom: .5em;
-        padding-left: .5em;
-        padding-right: .5em;
+        display: block;
+        width: 100%;
+        text-align: center;
+        border: 1px solid transparent;
+    }
+
+    div.itemInfoContainer {
+        border: 1px solid transparent;
+    }
+
+    span.status-group-container {
+        display: block;
+    }
+
+    label.record-status-name-normal {
+        display: block;
+    }
+
+    label.record-status-name-normal:hover {
+        cursor: pointer;
+    }
+
+    label.statusClickBox {
+        display: none;
+    }
+
+    label.status-label-centered {
+        display: none;
     }
 
     .div-table-col input[name="attendance-record-status-group"] {
@@ -755,10 +906,6 @@ div a.delete:hover {
     color: red;
 }
 
-.addAttendanceItemForm {
-    margin-left: 35px;
-}
-
 /* Janked from gradebook-grades.css. Credit goes to steveswinsburg & payten */
 div.wicket-modal div.w_content_3 {
     border: none; /** don't want border wrapping content inside the modal **/
@@ -785,11 +932,14 @@ div.wicket-modal div.w_content_3 div.messageSuccess, div.wicket-modal div.w_cont
 }
 
 form.takeAttendanceNowForm input {
-    background-color: green;
+    background: #15597e;
+    color: white;
+    margin-bottom: 1em;
 }
 
 form.takeAttendanceNowForm input:hover {
-    background: linear-gradient(green, darkgreen);
+    background: #15597e;
+    color: white;
 }
 
 span.yui-skin-sam img {
