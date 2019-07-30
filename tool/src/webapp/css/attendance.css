@@ -30,6 +30,10 @@ form.attendanceStatusForm {
     vertical-align: middle;
 }
 
+div.table-responsive {
+    padding-bottom: 75px;
+}
+
 /* style the Wicket FeedbackPanel to remove the list */
 .attendanceAlertMessage ul, .attendanceMessageSuccess ul {
     list-style-type: none !important;
