@@ -34,8 +34,8 @@
     <table wicket:id="student-overview-stats-table" id="overviewTable" class="table table-striped table-bordered overviewTable">
         <thead>
         <tr>
-        <th><span wicket:id="header-student-photo" /></th>
-        <th class="studentOverviewNameHeader col-sm-5"><span wicket:id="header-student-name" /></th>
+            <th><span wicket:id="header-student-photo" class="{sorter: false}"/></th>
+            <th class="studentOverviewNameHeader col-sm-5"><span wicket:id="header-student-name" /></th>
             <th class="col-sm-1" wicket:id="status-headers"><span wicket:id="header-status-name" /></th>
             <th class="col sm-1 overviewGradeCol {sorter: false}">
                 <span wicket:id="header-grade" />
@@ -68,7 +68,6 @@
         </tbody>
     </table>
 
-    <script type="text/javascript" src="javascript/jquery.tablesorter.min.js"></script>
     <script type="text/javascript" src="javascript/jquery.metadata.js"></script>
     <script type="text/javascript">
         $("p.overviewInstructions").width($("#overviewTable").outerWidth());

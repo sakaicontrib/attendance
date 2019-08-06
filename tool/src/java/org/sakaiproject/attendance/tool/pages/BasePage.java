@@ -25,10 +25,7 @@ import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
 import org.apache.wicket.feedback.FeedbackMessage;
-import org.apache.wicket.markup.head.IHeaderResponse;
-import org.apache.wicket.markup.head.OnLoadHeaderItem;
-import org.apache.wicket.markup.head.StringHeaderItem;
-import org.apache.wicket.markup.head.CssHeaderItem;
+import org.apache.wicket.markup.head.*;
 import org.apache.wicket.markup.html.IHeaderContributor;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
@@ -45,6 +42,7 @@ import org.sakaiproject.attendance.model.AttendanceEvent;
 import org.sakaiproject.attendance.model.Status;
 import org.sakaiproject.attendance.tool.panels.EventInputPanel;
 import org.sakaiproject.attendance.tool.util.AttendanceFeedbackPanel;
+import org.sakaiproject.component.cover.ServerConfigurationService;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -194,6 +192,10 @@ public class BasePage extends WebPage implements IHeaderContributor {
 		response.render(StringHeaderItem.forString("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\" />"));
 		//response.renderCSSReference("css/my_tool_styles.css");
 		//response.renderJavascriptReference("js/my_tool_javascript.js");
+		// tablesorter
+		final String version = ServerConfigurationService.getString("portal.cdn.version", "");
+		response.render(JavaScriptHeaderItem.forUrl(String.format("/library/js/jquery/tablesorter/2.27.7/js/jquery.tablesorter.min.js?version=%s", version)));
+		response.render(JavaScriptHeaderItem.forUrl(String.format("/library/js/jquery/tablesorter/2.27.7/js/jquery.tablesorter.widgets.min.js?version=%s", version)));
 	}
 	
 	/** 

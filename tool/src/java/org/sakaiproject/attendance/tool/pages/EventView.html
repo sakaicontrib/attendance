@@ -52,10 +52,12 @@
                     <span wicket:id="student-name" />
                 </th>
                 <th class="row">
-                    <span wicket:id="status-names">
-                        <label class="col-sm-2 status-label-centered" wicket:id="header-status-name" />
-                    </span>
-                    <label class="col-sm-2 status-label-centered">Comments</label>
+                    <div class="justify-flex-div" id="justify-flex-div" >
+                        <span wicket:id="status-names">
+                            <label class="status-label-centered" wicket:id="header-status-name" />
+                        </span>
+                        <label class="status-label-centered">Comments</label>
+                    </div>
                 </th>
             </tr>
             </thead>
@@ -74,7 +76,6 @@
             </tbody>
         </table>
         </div>
-        <script type="text/javascript" src="javascript/jquery.tablesorter.min.js"></script>
         <script type="text/javascript">
             $("#takeAttendanceTable").tablesorter({
                 sortList: [[1,0]],

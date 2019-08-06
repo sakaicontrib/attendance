@@ -78,22 +78,23 @@
 
 	<div id="printMask" class="printMask" style="display:none;"></div>
 
-	<script type="text/javascript" src="javascript/jquery.tablesorter.min.js"></script>
 	<script type="text/javascript" src="javascript/jquery.metadata.js"></script>
 	<script type="text/javascript">
-		$("p.overviewInstructions").width($("#overviewTable").outerWidth());
-		$("#overviewTable").tablesorter({
-			sortList: [[1,0],[0,0]],
-			headers: {
-				1: {
-					sorter: "attendanceDate"
+		$(document).ready(function(){
+			$("p.overviewInstructions").width($("#overviewTable").outerWidth());
+			$("#overviewTable").tablesorter({
+				sortList: [[1,0],[0,0]],
+				headers: {
+					1: {
+						sorter: "attendanceDate"
+					}
 				}
-			}
-		});
-		$(".takeAttendanceNowForm input").on("click", function(){
-			$("#loadingGif").show();
-			$(this).css('visibility', 'hidden');
-		});
+			});
+			$(".takeAttendanceNowForm input").on("click", function(){
+				$("#loadingGif").show();
+				$(this).css('visibility', 'hidden');
+			});
+		})
 	</script>
 	<script type="text/javascript" src="javascript/print.js"></script>
 

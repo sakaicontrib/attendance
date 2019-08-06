@@ -145,17 +145,17 @@ table.itemListTable, table.eventViewTable, table.takeAttendanceTable {
     margin-left: 35px;
 }
 
-thead tr .header, table.itemListTable thead tr .header, table.takeAttendanceTable thead tr .header  {
+thead tr .tablesorter-header:not(.sorter-false):not(.tablesorter-headerAsc):not(.tablesorter-headerDesc), table.itemListTable thead tr .header, table.takeAttendanceTable thead tr .header, th.tablesorter-headerUnsorted  {
     background: url(../images/bg.gif) no-repeat bottom .5em right;
     cursor: pointer;
     padding-right: 24px;
 }
 
-thead tr .headerSortUp, table.itemListTable thead tr .headerSortUp, table.takeAttendanceTable thead tr .headerSortUp {
-    background-image: url(../images/asc.gif);
+thead tr .tablesorter-headerAsc, table.itemListTable thead tr .headerSortUp, table.takeAttendanceTable thead tr .headerSortUp {
+    background: url(../images/asc.gif) no-repeat bottom .5em right;
 }
-thead tr .headerSortDown, table.itemListTable thead tr .headerSortDown, table.takeAttendanceTable thead tr .headerSortDown {
-    background-image: url(../images/desc.gif);
+thead tr .tablesorter-headerDesc, table.itemListTable thead tr .headerSortDown, table.takeAttendanceTable thead tr .headerSortDown {
+    background: url(../images/desc.gif) no-repeat bottom .5em right;
 }
 
 table.itemListTable, table.eventViewTable, table.takeAttendanceTable, div.eventFormContainer, form.addEditForm, .addComment h3, td.overviewGradeCol form {
@@ -615,8 +615,12 @@ label.addItemCaptions {
 }
 
 #buttonSection > button.saveNewItem {
-    background: #15597e;
+    background: #17214A;
     color: white;
+}
+#buttonSection > button.saveNewItem:hover {
+    background: #111837;
+    border-color: #124466;
 }
 
 ul.actions-dropdown {
@@ -726,6 +730,11 @@ span.statusRadioCell {
     border: 1px solid transparent;
 }
 
+div.justify-flex-div {
+    display: flex;
+    justify-content: space-around;
+}
+
 label.statusClickBox {
     cursor: pointer;
     z-index: 90;
@@ -760,6 +769,7 @@ label.status-label-centered {
     text-align: center;
     padding-left: 0px;
     padding-right: 0px;
+    min-width: 10em;
 }
 
 span.PRESENT {
@@ -936,13 +946,14 @@ div.wicket-modal div.w_content_3 div.messageSuccess, div.wicket-modal div.w_cont
 }
 
 form.takeAttendanceNowForm input {
-    background: #15597e;
+    background:#17214A;
     color: white;
     margin-bottom: 1em;
 }
 
 form.takeAttendanceNowForm input:hover {
-    background: #15597e;
+    background: #111837;
+    border-color: #124466;
     color: white;
 }
 
