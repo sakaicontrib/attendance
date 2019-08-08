@@ -211,6 +211,11 @@ public class StudentView extends BasePage {
                 item.add(new Label("header-status-name", getStatusString(item.getModelObject().getStatus())));
             }
         };
+        Label commentLabel = new Label("comments-label", "Comments");
+        if(isStudent){
+            commentLabel.setVisible(attendanceLogic.getCurrentAttendanceSite().getShowCommentsToStudents());    //don't show the Comments label unless students can see comments.
+        }
+        studentViewData.add(commentLabel);
         studentViewData.add(statusHeaders);
         studentViewData.add(new Label("event-name-header", new ResourceModel("attendance.record.form.header.event")));
         studentViewData.add(new Label("event-date-header", new ResourceModel("attendance.record.form.header.date")));
