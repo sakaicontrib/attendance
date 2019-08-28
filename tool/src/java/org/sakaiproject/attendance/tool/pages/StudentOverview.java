@@ -193,7 +193,7 @@ public class StudentOverview extends BasePage {
                 studentLink.add(new Label("student-name", sakaiProxy.getUserSortName(id) + " (" + sakaiProxy.getUserDisplayId(id) + ")"));
                 item.add(studentLink);
 
-                ProfileImage profilePhoto = new ProfileImage("student-photo", new Model<String>(String.format("/direct/profile/%s/image/official", id)));
+                ProfileImage profilePhoto = new ProfileImage("student-photo", new Model<String>(String.format("/direct/profile/%s/image/official?siteId=%s", id, sakaiProxy.getCurrentSiteId())));
                 item.add(profilePhoto);
 
                 DataView<AttendanceStatus> activeStatusStats = new DataView<AttendanceStatus>("active-status-stats", attendanceStatusProvider) {
