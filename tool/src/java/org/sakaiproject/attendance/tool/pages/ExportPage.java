@@ -171,12 +171,17 @@ public class ExportPage extends BasePage{
             AttendanceEvent now = attendanceEventlist.get(count);   // Count iterates over the attendance events only.
             HSSFCell currentCell = headerRow.createCell(columnGetter, CellType.STRING);   //create and fill in a header cell for every event. We use ColumnGetter instead of Count to iterate because the cells may need to iterate by 2 if there are comments.
             currentCell.setCellStyle(boldStyle);
-            currentCell.setCellValue(now.getName() + '[' + now.getStartDateTime().toString() + "](" + now.getId().toString() + ')');
+            String startDate = "";
+            try {   // there may not be a date set for the event, so it could be null.
+                startDate = now.getStartDateTime().toString();
+            } catch (NullPointerException e) {
+            }
+            currentCell.setCellValue(now.getName() + '[' + startDate + "](" + now.getId().toString() + ')');
             if(commentsOnOff){  //true = has comments. if true, add the comment column for each event.
                 columnGetter++;    //increment one extra, to allow for the comment column
                 currentCell = headerRow.createCell(columnGetter, CellType.STRING);  //making a second header cell [for Comments] for every event
                 currentCell.setCellStyle(boldStyle);
-                currentCell.setCellValue(now.getName() + '[' + now.getStartDateTime().toString() + "]Comments(" + now.getId().toString() + ')');
+                currentCell.setCellValue(now.getName() + '[' + startDate + "]Comments(" + now.getId().toString() + ')');
             }
             columnGetter++; //increment this here because it's not part of the For loop's header.
 
@@ -250,7 +255,7 @@ public class ExportPage extends BasePage{
     }
 
     private String buildFileNamePrefix() {
-        final String prefix = "attendence_Export-";
+        final String prefix = "attendance_Export-";
         return prefix;
     }
 
@@ -393,15 +398,12 @@ public class ExportPage extends BasePage{
         }
 
         private boolean processOneDataRow(HSSFRow row, List<Long> usableIds, List<String> headerRow, List<ImportConfirmList> ICList, boolean commentsChanged, List<String> errors) {
-            Iterator cells = row.cellIterator();    //iterate over the cells in the current Excel row
             AttendanceSite attendanceSite = attendanceLogic.getAttendanceSite(sakaiProxy.getCurrentSiteId());
             List data = new ArrayList();    // container for the current row's data
-            while (cells.hasNext()) {   // create the arrayList of the current Excel row's data
-                HSSFCell cell = (HSSFCell) cells.next();
-                data.add(cell.toString());
-            }
-            if(data.size() != headerRow.size()){
-                errors.add(getString("attendance.import.header.length"));
+            for (int countCells=0; countCells<headerRow.size(); countCells++) {   // create the arrayList of the current Excel row's data. we'll base it on the length of the header, to avoid reaching out beyond the data's end.
+                HSSFCell cell = row.getCell(countCells);
+                try {data.add(cell.toString());}    //try adding the next cell's data to the array
+                catch (NullPointerException e) {data.add("");}  //if it's null, we'll make it a blank
             }
             String userEID = "";
             try{
@@ -415,7 +417,7 @@ public class ExportPage extends BasePage{
                 for (int count = 3; count<data.size() && count<headerRow.size(); count++) {    //iterate over current student row, starting at 3 to account for id/name/section
                     Long currentID = getIdFromString(headerRow.get(count), errors); //get the eventID of the current cell
                     if (usableIds.contains(currentID)) { //if it's one of the real event IDs, and also not a comment column...
-                        AttendanceRecord newData = attendanceLogic.getAttendanceRecord(currentID);
+                        AttendanceRecord newData = new AttendanceRecord();  //make a blank AttendanceRecord for the new data and start filling it in
                         ImportConfirmList ICL = new ImportConfirmList();
                         if (data.get(count).equals("P") || (data.get(count).equals("PRESENT"))) {   //take data from Excel and put it in the current Attendance record. should this be a Switch statement instead?
                             newData.setStatus(Status.PRESENT);
@@ -438,7 +440,7 @@ public class ExportPage extends BasePage{
                                 newData.setUserID(currentUser.getId());
                                 newData.setAttendanceEvent(checker.getAttendanceEvent());
                                 newData.setId(checker.getId());
-                                newData.setComment(checker.getComment());
+                                newData.setComment(checker.getComment());   //set it to the old comment here; it will be replaced if there's a new one.
                                 if(!headerRow.get(count).contains("]Comments(") && count+1<headerRow.size()){
                                     if(headerRow.get(count+1).contains("]Comments(")){
                                         try{
@@ -457,7 +459,11 @@ public class ExportPage extends BasePage{
                                 ICL.setAttendanceSite(attendanceSite);
                                 ICL.setId(checker.getId());    //Attendace event's ID
                                 ICL.setUserID(currentUser.getId()); //we can't use the EID for this...it has to be the longer, hashy one
-                                ICL.setEventDate(checker.getAttendanceEvent().getStartDateTime().toString());   //much of the data, like Event Date, will not change, so it can be grabbed from Checker.
+                                String startDate = "";
+                                try {   //we gate the Date inside this Try block because it might be null.
+                                    startDate = checker.getAttendanceEvent().getStartDateTime().toString();
+                                } catch (NullPointerException e) {/*don't need to do anything here*/}
+                                ICL.setEventDate(startDate);   //much of the data, like Event Date, will not change, so it can be grabbed from Checker.
                                 if(newData.getComment()!=null && newData.getComment().length() > 0){    //add the newData comment to the ICL if it's not empty.
                                     ICL.setComment(newData.getComment());
                                 }else{  //if it IS empty, just throw in the old comment.

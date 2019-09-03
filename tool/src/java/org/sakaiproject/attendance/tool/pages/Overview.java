@@ -92,7 +92,7 @@ public class Overview extends BasePage {
 		add(printContainer);
 
 		createTakeAttendanceNow();
-		createAddAttendanceItem();
+		//createAddAttendanceItem();
 	}
 
 	private void createHeaders() {
