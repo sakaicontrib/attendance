@@ -26,7 +26,9 @@ import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.model.ResourceModel;
 import org.sakaiproject.attendance.model.AttendanceRecord;
+import org.sakaiproject.attendance.model.AttendanceStatus;
 import org.sakaiproject.attendance.tool.dataproviders.AttendanceRecordProvider;
+import org.sakaiproject.attendance.tool.dataproviders.AttendanceStatusProvider;
 import org.sakaiproject.attendance.tool.panels.AttendanceGradePanel;
 import org.sakaiproject.attendance.tool.panels.AttendanceRecordFormDataPanel;
 import org.sakaiproject.attendance.tool.panels.AttendanceRecordFormHeaderPanel;
@@ -44,6 +46,7 @@ public class StudentView extends BasePage {
     private                 Long        previousEventId;
     private                 boolean     isStudent           = false;
     private                 String      returnPage          = "";
+    private                 AttendanceStatusProvider attendanceStatusProvider;
 
     public StudentView() {
         this.studentId = sakaiProxy.getCurrentUserId();
@@ -67,8 +70,10 @@ public class StudentView extends BasePage {
     }
 
     private void init() {
+        this.attendanceStatusProvider = new AttendanceStatusProvider(attendanceLogic.getCurrentAttendanceSite(), AttendanceStatusProvider.ACTIVE);
         if(this.role != null && this.role.equals("Student")){
             this.isStudent = true;
+            hideNavigationLink(this.addLink);
             hideNavigationLink(this.homepageLink);
             hideNavigationLink(this.studentOverviewLink);
             hideNavigationLink(this.settingsLink);
@@ -200,7 +205,18 @@ public class StudentView extends BasePage {
         } else {
             studentViewData.add(new Label("take-attendance-header", getString("attendance.student.view.attendance")));
         }
-        studentViewData.add(new AttendanceRecordFormHeaderPanel("header"));
+        DataView<AttendanceStatus> statusHeaders = new DataView<AttendanceStatus>("status-names", attendanceStatusProvider) {
+            @Override
+            protected void populateItem(Item<AttendanceStatus> item) {  //a label for each Status name.
+                item.add(new Label("header-status-name", getStatusString(item.getModelObject().getStatus())));
+            }
+        };
+        Label commentLabel = new Label("comments-label", "Comments");
+        if(isStudent){
+            commentLabel.setVisible(attendanceLogic.getCurrentAttendanceSite().getShowCommentsToStudents());    //don't show the Comments label unless students can see comments.
+        }
+        studentViewData.add(commentLabel);
+        studentViewData.add(statusHeaders);
         studentViewData.add(new Label("event-name-header", new ResourceModel("attendance.record.form.header.event")));
         studentViewData.add(new Label("event-date-header", new ResourceModel("attendance.record.form.header.date")));
         studentViewData.add(createData());

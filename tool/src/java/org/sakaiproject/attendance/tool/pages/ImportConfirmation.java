@@ -154,22 +154,14 @@ public class ImportConfirmation  extends BasePage{
             }
         };
 
-        Label noStudents = new Label("no-students", new ResourceModel("attendance.student.overview.no.students")) {
+        Label noChanges = new Label("no-changes", new ResourceModel("attendance.export.import.save.noChange")) {
             @Override
             public boolean isVisible(){
                 return uListView.size() <= 0;
             }
         };
-        Label noStudents2 = new Label("no-students2", new ResourceModel("attendance.student.overview.no.students.2")) {
-            @Override
-            public boolean isVisible(){
-                return uListView.size() <= 0;
-            }
-        };
-
         attendanceItemTableContainer.add(uListView);
-        attendanceItemTableContainer.add(noStudents);
-        attendanceItemTableContainer.add(noStudents2);
+        attendanceItemTableContainer.add(noChanges);
     }
 
     private String changeStatString(String stat){
