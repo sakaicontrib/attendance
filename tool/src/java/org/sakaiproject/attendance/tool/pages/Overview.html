@@ -36,9 +36,10 @@
 	<table id="overviewTable" class="table table-striped table-bordered overviewTable">
 		<thead>
 			<tr>
-				<th class="col-sm-4" colspan=2 ><span wicket:id="header-event-name" /></th>
-				<th class="col-sm-2"><span wicket:id="header-event-date" /></th>
-				<th class="col-sm-1" wicket:id="status-headers"><span wicket:id="header-status-name" /></th>
+				<th class="col-sm-4 tablesorter-headerUnsorted" ><span wicket:id="header-event-name" /></th>
+				<th class="col-sm-1 {sorter: false}" ><span wicket:id="header-event-actions" /></th>
+				<th class="col-sm-2 tablesorter-headerUnsorted"><span wicket:id="header-event-date" /></th>
+				<th class="col-sm-1 tablesorter-headerUnsorted" wicket:id="status-headers"><span wicket:id="header-status-name" /></th>
 			</tr>
 		</thead>
 		<tbody>
@@ -82,14 +83,7 @@
 	<script type="text/javascript">
 		$(document).ready(function(){
 			$("p.overviewInstructions").width($("#overviewTable").outerWidth());
-			$("#overviewTable").tablesorter({
-				sortList: [[1,0],[0,0]],
-				headers: {
-					1: {
-						sorter: "attendanceDate"
-					}
-				}
-			});
+			$("#overviewTable").tablesorter();
 			$(".takeAttendanceNowForm input").on("click", function(){
 				$("#loadingGif").show();
 				$(this).css('visibility', 'hidden');

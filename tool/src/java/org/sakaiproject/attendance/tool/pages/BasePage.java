@@ -194,8 +194,8 @@ public class BasePage extends WebPage implements IHeaderContributor {
 		//response.renderJavascriptReference("js/my_tool_javascript.js");
 		// tablesorter
 		final String version = ServerConfigurationService.getString("portal.cdn.version", "");
-		response.render(JavaScriptHeaderItem.forUrl(String.format("/library/js/jquery/tablesorter/2.27.7/js/jquery.tablesorter.min.js?version=%s", version)));
-		response.render(JavaScriptHeaderItem.forUrl(String.format("/library/js/jquery/tablesorter/2.27.7/js/jquery.tablesorter.widgets.min.js?version=%s", version)));
+		response.render(JavaScriptHeaderItem.forUrl(String.format("javascript/jquery.tablesorter.min.js?version=%s", version)));
+		response.render(JavaScriptHeaderItem.forUrl(String.format("javascript/jquery.tablesorter.widgets.min.js?version=%s", version)));
 	}
 	
 	/** 
