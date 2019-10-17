@@ -83,7 +83,9 @@
 	<script type="text/javascript">
 		$(document).ready(function(){
 			$("p.overviewInstructions").width($("#overviewTable").outerWidth());
-			$("#overviewTable").tablesorter();
+			$("#overviewTable").tablesorter({
+				sortList: [[0,0], [2,0]]	//default to sorting by name [column 0] first, then Date [column 2]
+			});
 			$(".takeAttendanceNowForm input").on("click", function(){
 				$("#loadingGif").show();
 				$(this).css('visibility', 'hidden');
