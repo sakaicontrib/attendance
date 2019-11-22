@@ -107,6 +107,7 @@ public class Overview extends BasePage {
 
 		//headers for the table
 		Label headerEventName 		= new Label("header-event-name", 			new ResourceModel("attendance.overview.header.event.name"));
+		Label headerEventActions	= new Label("header-event-actions", 		new ResourceModel("attendance.overview.header.event.actions"));
 		Label headerEventDate 		= new Label("header-event-date", 			new ResourceModel("attendance.overview.header.event.date"));
 
 		DataView<AttendanceStatus> statusHeaders = new DataView<AttendanceStatus>("status-headers", attendanceStatusProvider) {
@@ -123,6 +124,7 @@ public class Overview extends BasePage {
 		add(headerOverview);
 		add(headerInfo);
 		add(headerEventName);
+		add(headerEventActions);
 		add(headerEventDate);
 		add(headerEventEdit);
 		add(headerPrintLinks);
