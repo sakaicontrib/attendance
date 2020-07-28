@@ -50,13 +50,13 @@
 				<td class="actionsButtonCol col-sm-1">
 					<span class="btn-group">
 						<button class="btn btn-xs dropdown-toggle" aria-expanded="false" data-toggle="dropdown">
-							Actions
+							<wicket:message key="attendance.overview.header.event.actions" />
 							<span class="caret"></span>
 						</button>
 						<ul class="dropdown-menu row actions-dropdown">
-							<li><a wicket:id="event-edit-link">Edit</a></li>
-							<li><a wicket:id="print-link">Print</a></li>
-							<li><a wicket:id="delete-link">Delete</a></li>
+							<li><a wicket:id="event-edit-link"><wicket:message key="attendance.overview.header.event.edit" /></a></li>
+							<li><a wicket:id="print-link"><wicket:message key="attendance.overview.header.print" /></a></li>
+							<li><a wicket:id="delete-link"><wicket:message key="attendance.delete" /></a></li>
 						</ul>
 					</span>
 				</td>
