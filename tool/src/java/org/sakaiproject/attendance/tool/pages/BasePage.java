@@ -20,6 +20,7 @@ import lombok.Getter;
 import org.apache.log4j.Logger;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
+import org.apache.wicket.Session;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.behavior.AttributeAppender;
@@ -43,6 +44,7 @@ import org.sakaiproject.attendance.model.Status;
 import org.sakaiproject.attendance.tool.panels.EventInputPanel;
 import org.sakaiproject.attendance.tool.util.AttendanceFeedbackPanel;
 import org.sakaiproject.component.cover.ServerConfigurationService;
+import org.sakaiproject.util.ResourceLoader;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -173,6 +175,7 @@ public class BasePage extends WebPage implements IHeaderContributor {
 		this.addOrEditItemWindow.showUnloadConfirmation(false);
 		this.addOrEditItemWindow.setInitialHeight(400);
 		add(this.addOrEditItemWindow);
+		Session.get().setLocale((new ResourceLoader()).getLocale());
     }
 	
 	/**
