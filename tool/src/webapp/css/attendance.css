@@ -511,7 +511,7 @@ div.printMask {
 div.printMask:hover, .printImage:hover {
     cursor: pointer;
     margin-right: .5em;
-    margin-left: 2em;
+    /*margin-left: 2em;*/
 }
 
 .commentToggle:hover, .div-table-col input:hover {
