@@ -20,12 +20,10 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.sakaiproject.attendance.model.AttendanceEvent;
 import org.sakaiproject.attendance.model.AttendanceRecord;
-import org.sakaiproject.attendance.tool.models.DetachableAttendanceRecordModel;
 
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
-import java.util.Set;
 
 /**
  * An AttendanceRecord Provider
@@ -34,6 +32,10 @@ import java.util.Set;
  * @author David Bauer [dbauer1 (at) udayton (dot) edu]
  */
 public class AttendanceRecordProvider extends BaseProvider<AttendanceRecord> {
+
+    private AttendanceEvent aE;
+    private String groupId;
+    private String id; // User id
 
     public AttendanceRecordProvider() {
         super();
@@ -45,11 +47,10 @@ public class AttendanceRecordProvider extends BaseProvider<AttendanceRecord> {
      * @param id, the User ID
      */
     public AttendanceRecordProvider(String id) {
-        List<AttendanceRecord> records = attendanceLogic.getAttendanceRecordsForUser(id);
-        if(!records.isEmpty()) {
-            // don't think records will ever be empty
-            this.list = records;
-        }
+        super();
+        this.aE = null;
+        this.groupId = null;
+        this.id = id;
     }
 
     /**
@@ -59,16 +60,9 @@ public class AttendanceRecordProvider extends BaseProvider<AttendanceRecord> {
      */
     public AttendanceRecordProvider(AttendanceEvent aE) {
         super();
-        if(aE != null) {
-            aE = attendanceLogic.getAttendanceEvent(aE.getId());
-            List<String> currentStudentIds = sakaiProxy.getCurrentSiteMembershipIds();
-            this.list = new ArrayList<AttendanceRecord>();
-            for(AttendanceRecord record: aE.getRecords()) {
-                if(currentStudentIds.contains(record.getUserID())) {
-                    this.list.add(record);
-                }
-            }
-        }
+        this.aE = aE;
+        this.groupId = null;
+        this.id = null;
     }
 
     /**
@@ -79,9 +73,15 @@ public class AttendanceRecordProvider extends BaseProvider<AttendanceRecord> {
      */
     public AttendanceRecordProvider(AttendanceEvent aE, String groupId) {
         super();
-        if(aE != null) {
+        this.aE = aE;
+        this.groupId = groupId;
+        this.id = null;
+    }
+
+    protected List<AttendanceRecord> getData() {
+        if(this.aE != null) {
             List<String> currentStudentIds;
-            if(groupId == null) {
+            if(this.groupId == null) {
                 currentStudentIds = sakaiProxy.getCurrentSiteMembershipIds();
             } else {
                 currentStudentIds = sakaiProxy.getGroupMembershipIdsForCurrentSite(groupId);
@@ -92,26 +92,21 @@ public class AttendanceRecordProvider extends BaseProvider<AttendanceRecord> {
                     this.list.add(record);
                 }
             }
+        } else if (id != null) {
+            List<AttendanceRecord> records = attendanceLogic.getAttendanceRecordsForUser(id);
+            if(!records.isEmpty()) {
+                // don't think records will ever be empty
+                this.list = records;
+            }
         }
-    }
 
-    /**
-     * Constructor with provided AttendanceRecord data
-     *
-     * @param data, set of AttendanceRecords
-     */
-    public AttendanceRecordProvider(Set<AttendanceRecord> data) {
-        super();
-        if(data != null && !data.isEmpty()) {
-            this.list = new ArrayList<>(data);
-        }
-    }
-
-    protected List<AttendanceRecord> getData() {
         if(this.list == null) {
             this.list = new ArrayList<>();
-            Collections.reverse(this.list);
         }
+
+        this.list.sort(Comparator.comparing(
+                AttendanceRecord::getUserID, Comparator.comparing(u -> sakaiProxy.getUser(u).getSortName())
+        ));
 
         return this.list;
     }
