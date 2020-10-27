@@ -296,7 +296,13 @@ public class EventView extends BasePage {
                 item.add(dataPanelSlow);
             }
         };
-        recordDataView.setItemsPerPage(25);
+        String pagerItemsString = sakaiProxy.getConfigParam("attendance.pager.items", "25");
+        try {
+            recordDataView.setItemsPerPage(Integer.parseInt(pagerItemsString));
+        } catch (NumberFormatException nfe) {
+            log.error("Attendance Pager Items is not set to a valid integer");
+            recordDataView.setItemsPerPage(25);
+        }
         add(recordDataView);
         add(new PagingNavigator("pagingNavigator", recordDataView));
     }
