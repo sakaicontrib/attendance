@@ -75,20 +75,8 @@
             </tr>
             </tbody>
         </table>
+            <div wicket:id="pagingNavigator" class="eventTablePager"></div>
         </div>
-        <script type="text/javascript">
-            $("#takeAttendanceTable").tablesorter({
-                sortList: [[1,0]],
-                headers: {
-                    0: {
-                        sorter: false
-                    },
-                    2: {
-                        sorter: false
-                    }
-                }
-            });
-        </script>
     </div>
     <div wicket:id="statsPanelSlow" class="table-responsive"></div>
     <div id="printContainer" class="printContainer" wicket:id="print-container">

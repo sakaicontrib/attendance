@@ -29,7 +29,9 @@ import org.apache.wicket.markup.html.form.EnumChoiceRenderer;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.markup.html.link.Link;
+import org.apache.wicket.markup.html.navigation.paging.PagingNavigator;
 import org.apache.wicket.markup.repeater.Item;
+import org.apache.wicket.markup.repeater.ReuseIfModelsEqualStrategy;
 import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
@@ -266,7 +268,7 @@ public class EventView extends BasePage {
         filterForm.add(groupChoice);
         filterForm.add(new Label("group-choice-label", new ResourceModel("attendance.event.view.filter")));
         AttendanceRecordProvider statusRecords = new AttendanceRecordProvider(this.attendanceEvent, selectedGroup); // gathers all the attendance records for the current event/group, list accessible by getRecords()
-        add(new DataView<AttendanceRecord>("records", statusRecords) {
+        DataView<AttendanceRecord> recordDataView = new DataView<AttendanceRecord>("records", statusRecords) {
             @Override
             protected void populateItem(final Item<AttendanceRecord> item) {
                 final String stuId = item.getModelObject().getUserID();
@@ -293,6 +295,15 @@ public class EventView extends BasePage {
                 };
                 item.add(dataPanelSlow);
             }
-        });
+        };
+        String pagerItemsString = sakaiProxy.getConfigParam("attendance.pager.items", "25");
+        try {
+            recordDataView.setItemsPerPage(Integer.parseInt(pagerItemsString));
+        } catch (NumberFormatException nfe) {
+            log.error("Attendance Pager Items is not set to a valid integer");
+            recordDataView.setItemsPerPage(25);
+        }
+        add(recordDataView);
+        add(new PagingNavigator("pagingNavigator", recordDataView));
     }
 }
