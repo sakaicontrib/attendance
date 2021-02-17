@@ -20,7 +20,6 @@ import org.sakaiproject.user.api.User;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 /**
  * An interface to abstract all Sakai related API calls in a central method that can be injected into our app.
@@ -65,13 +64,6 @@ public interface SakaiProxy {
 	 * @return the current User DisplayName
 	 */
 	String getCurrentUserDisplayName();
-
-	/**
-	 * Get Current User's Locale
-	 *
-	 * @return the current User Locale
-	 */
-	Locale getCurrentUserLocale();
 
 	/**
 	 * Get's the current user's role in the current site

@@ -175,7 +175,7 @@ public class BasePage extends WebPage implements IHeaderContributor {
 		this.addOrEditItemWindow.showUnloadConfirmation(false);
 		this.addOrEditItemWindow.setInitialHeight(400);
 		add(this.addOrEditItemWindow);
-		Session.get().setLocale((new ResourceLoader()).getLocale());
+		getSession().setLocale((new ResourceLoader()).getLocale());
     }
 	
 	/**
