@@ -96,41 +96,6 @@ public class SakaiProxyImpl implements SakaiProxy {
 	/**
 	 * {@inheritDoc}
 	 */
-	public Locale getCurrentUserLocale() {
-		Locale loc = null;
-		try{
-			// check if locale is requested for specific user
-			String userId = getCurrentUserId();
-			if(userId != null){
-				Preferences prefs = getCurrentUserPreferences();
-				ResourceProperties locProps = prefs.getProperties(ResourceLoader.APPLICATION_ID);
-				String localeString = locProps.getProperty(ResourceLoader.LOCALE_KEY);
-				// Parse user locale preference if set
-				if(localeString != null){
-					String[] locValues = localeString.split("_");
-					if(locValues.length > 1)
-						// language, country
-						loc = new Locale(locValues[0], locValues[1]);
-					else if(locValues.length == 1)
-						// language
-						loc = new Locale(locValues[0]);
-				}
-				if(loc == null) {
-					loc = Locale.getDefault();
-				}
-			}else{
-				loc = (Locale) getCurrentSession().getAttribute(ResourceLoader.LOCALE_KEY + getCurrentUserId());
-			}
-		}catch(NullPointerException e){
-			loc = Locale.getDefault();
-		}
-		return loc;
-
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
 	public String getCurrentUserRoleInCurrentSite() {
 		return getCurrentUserRole(getCurrentSiteId());
 	}
