@@ -33,7 +33,7 @@ import java.util.Objects;
  */
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode
+@EqualsAndHashCode(of = {"id"})
 public class AttendanceStatus implements Serializable {
     private static final long serialVersionUID = 1L;
 
