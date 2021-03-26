@@ -18,10 +18,9 @@ package org.sakaiproject.attendance.dao.impl;
 
 import org.apache.log4j.Logger;
 import org.hibernate.HibernateException;
-import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.query.Query;
 import org.hibernate.type.LongType;
-import org.hibernate.type.ManyToOneType;
 import org.hibernate.type.StringType;
 import org.sakaiproject.attendance.dao.AttendanceDao;
 import org.sakaiproject.attendance.model.*;
@@ -264,16 +263,10 @@ public class AttendanceDaoImpl extends HibernateDaoSupport implements Attendance
 		}
 
 		try {
-			HibernateCallback hcb = new HibernateCallback() {
-				@Override
-				public Object doInHibernate(Session session) throws HibernateException {
-					Query q = session.getNamedQuery(QUERY_GET_ACTIVE_ATTENDANCE_STATUSES_FOR_SITE);
-					q.setParameter(ATTENDANCE_SITE, attendanceSite, new ManyToOneType(null, "org.sakaiproject.attendance.model.AttendanceSite"));
-					return q.list();
-				}
-			};
-
-			return (List<AttendanceStatus>) getHibernateTemplate().execute(hcb);
+			return getHibernateTemplate().execute(session -> session
+					.getNamedQuery(QUERY_GET_ACTIVE_ATTENDANCE_STATUSES_FOR_SITE)
+					.setParameter(ATTENDANCE_SITE, attendanceSite)
+					.getResultList());
 		} catch (DataAccessException e) {
 			log.error("getActiveStatusesForSite failed", e);
 			return null;
@@ -290,16 +283,10 @@ public class AttendanceDaoImpl extends HibernateDaoSupport implements Attendance
 		}
 
 		try {
-			HibernateCallback hcb = new HibernateCallback() {
-                @Override
-                public Object doInHibernate(Session session) throws HibernateException {
-                    Query q = session.getNamedQuery(QUERY_GET_ALL_ATTENDANCE_STATUSES_FOR_SITE);
-                    q.setParameter(ATTENDANCE_SITE, attendanceSite, new ManyToOneType(null, "org.sakaiproject.attendance.model.AttendanceSite"));
-                    return q.list();
-                }
-            };
-
-			return (List<AttendanceStatus>) getHibernateTemplate().execute(hcb);
+			return getHibernateTemplate().execute(session -> session
+					.getNamedQuery(QUERY_GET_ALL_ATTENDANCE_STATUSES_FOR_SITE)
+					.setParameter(ATTENDANCE_SITE, attendanceSite)
+					.getResultList());
 		} catch (DataAccessException e) {
 			log.error("getAllStatusesForSite failed", e);
 			return null;
@@ -337,17 +324,11 @@ public class AttendanceDaoImpl extends HibernateDaoSupport implements Attendance
 		}
 
 		try{
-			HibernateCallback hcb = new HibernateCallback() {
-				@Override
-				public Object doInHibernate(Session session) throws HibernateException {
-					Query q = session.getNamedQuery(QUERY_GET_ATTENDANCE_GRADE);
-					q.setParameter(ATTENDANCE_SITE, aS, new ManyToOneType(null, "org.sakaiproject.attendance.model.AttendanceSite"));
-					q.setParameter(USER_ID, userID, new StringType());
-					return q.uniqueResult();
-				}
-			};
-
-			return (AttendanceGrade) getHibernateTemplate().execute(hcb);
+			return (AttendanceGrade) getHibernateTemplate().execute(session -> session
+					.getNamedQuery(QUERY_GET_ATTENDANCE_GRADE)
+					.setParameter(ATTENDANCE_SITE, aS)
+					.setParameter(USER_ID, userID)
+					.uniqueResult());
 		} catch (DataAccessException e) {
 			log.error("Failed to get AttendanceGrade for " + userID + " in " + aS.getSiteID());
 			return null;
@@ -364,16 +345,10 @@ public class AttendanceDaoImpl extends HibernateDaoSupport implements Attendance
 		}
 
 		try{
-			HibernateCallback hcb = new HibernateCallback() {
-				@Override
-				public Object doInHibernate(Session session) throws HibernateException {
-					Query q = session.getNamedQuery(QUERY_GET_ATTENDANCE_GRADES_FOR_SITE);
-					q.setParameter(ATTENDANCE_SITE, aS, new ManyToOneType(null, "org.sakaiproject.attendance.model.AttendanceSite"));
-					return q.list();
-				}
-			};
-
-			return (List<AttendanceGrade>) getHibernateTemplate().execute(hcb);
+			return getHibernateTemplate().execute(session -> session
+					.getNamedQuery(QUERY_GET_ATTENDANCE_GRADES_FOR_SITE)
+					.setParameter(ATTENDANCE_SITE, aS)
+					.getResultList());
 		} catch (DataAccessException e) {
 			log.error("DataAccessException getting AttendanceGrades for " + aS.getSiteID() + ". E:", e);
 			return null;
@@ -421,17 +396,11 @@ public class AttendanceDaoImpl extends HibernateDaoSupport implements Attendance
 		log.debug("getAttendanceUserStats for User '" + userId + "' and Site: '" + aS.getSiteID() + "'.");
 
 		try{
-			HibernateCallback hcb = new HibernateCallback() {
-				@Override
-				public Object doInHibernate(Session session) throws HibernateException {
-					Query q = session.getNamedQuery(QUERY_GET_ATTENDANCE_USER_STATS);
-					q.setParameter(ATTENDANCE_SITE, aS, new ManyToOneType(null, "org.sakaiproject.attendance.model.AttendanceSite"));
-					q.setParameter(USER_ID, userId);
-					return q.uniqueResult();
-				}
-			};
-
-			return (AttendanceUserStats) getHibernateTemplate().execute(hcb);
+			return (AttendanceUserStats) getHibernateTemplate().execute(session -> session
+					.getNamedQuery(QUERY_GET_ATTENDANCE_USER_STATS)
+					.setParameter(ATTENDANCE_SITE, aS)
+					.setParameter(USER_ID, userId)
+					.uniqueResult());
 		} catch (DataAccessException e) {
 			log.error("DataAccessException getting AttendanceUserStats for User '" + userId + "' and Site: '" + aS.getSiteID() + "'.", e);
 			return null;
@@ -446,16 +415,10 @@ public class AttendanceDaoImpl extends HibernateDaoSupport implements Attendance
 		log.debug("getAttendanceUserStatsForSite for site: " + aS.getSiteID());
 
 		try{
-			HibernateCallback hcb = new HibernateCallback() {
-				@Override
-				public Object doInHibernate(Session session) throws HibernateException {
-					Query q = session.getNamedQuery(QUERY_GET_ATTENDANCE_USER_STATS_FOR_SITE);
-					q.setParameter(ATTENDANCE_SITE, aS, new ManyToOneType(null, "org.sakaiproject.attendance.model.AttendanceSite"));
-					return q.list();
-				}
-			};
-
-			return (List<AttendanceUserStats>) getHibernateTemplate().execute(hcb);
+			return getHibernateTemplate().execute(session -> session
+					.getNamedQuery(QUERY_GET_ATTENDANCE_USER_STATS_FOR_SITE)
+					.setParameter(ATTENDANCE_SITE, aS)
+					.getResultList());
 		} catch (DataAccessException e) {
 			log.error("DataAccessException getting AttendanceUserStats for Site: " + aS.getSiteID() + ".", e);
 			return null;
@@ -519,16 +482,10 @@ public class AttendanceDaoImpl extends HibernateDaoSupport implements Attendance
 		log.debug("getAttendanceUserStats for Event '" + aE.getName() + "' and Site: '" + aE.getAttendanceSite().getSiteID() + "'.");
 
 		try{
-			HibernateCallback hcb = new HibernateCallback() {
-				@Override
-				public Object doInHibernate(Session session) throws HibernateException {
-					Query q = session.getNamedQuery(QUERY_GET_ATTENDANCE_ITEM_STATS);
-					q.setParameter(ATTENDANCE_EVENT, aE, new ManyToOneType(null, "org.sakaiproject.attendance.model.AttendanceEvent"));
-					return q.uniqueResult();
-				}
-			};
-
-			return (AttendanceItemStats) getHibernateTemplate().execute(hcb);
+			return (AttendanceItemStats) getHibernateTemplate().execute(session -> session
+					.getNamedQuery(QUERY_GET_ATTENDANCE_ITEM_STATS)
+					.setParameter(ATTENDANCE_EVENT, aE)
+					.uniqueResult());
 		} catch (DataAccessException e) {
 			log.error("DataAccessException getting AttendanceItemStats for Event '" + aE.getName() + "' and Site: '" + aE.getAttendanceSite().getSiteID() + "'.", e);
 			return null;
@@ -560,14 +517,10 @@ public class AttendanceDaoImpl extends HibernateDaoSupport implements Attendance
 		}
 
 		try {
-			HibernateCallback hcb = session -> {
-                Query q = session.getNamedQuery(QUERY_GET_GRADING_RULES_FOR_SITE);
-                q.setParameter(ATTENDANCE_SITE, attendanceSite, new ManyToOneType(null, "org.sakaiproject.attendance.model.AttendanceSite"));
-                return q.list();
-            };
-
-			return (List<GradingRule>) getHibernateTemplate().execute(hcb);
-
+			return getHibernateTemplate().execute(session -> session
+					.getNamedQuery(QUERY_GET_GRADING_RULES_FOR_SITE)
+					.setParameter(ATTENDANCE_SITE, attendanceSite)
+					.getResultList());
 		} catch (DataAccessException e) {
 			log.error("getGradingRulesForSite failed", e);
 			return null;
@@ -641,16 +594,11 @@ public class AttendanceDaoImpl extends HibernateDaoSupport implements Attendance
 		}
 
 		try {
-			HibernateCallback hcb = new HibernateCallback() {
-                @Override
-                public Object doInHibernate(Session session) throws HibernateException {
-                    Query q = session.getNamedQuery(QUERY_GET_ATTENDANCE_EVENTS_FOR_SITE);
-                    q.setParameter(ATTENDANCE_SITE, aS, new ManyToOneType(null, "org.sakaiproject.attendance.model.AttendanceSite"));
-                    return q.list();
-                }
-            };
+			return getHibernateTemplate().execute(session -> session
+				.getNamedQuery(QUERY_GET_ATTENDANCE_EVENTS_FOR_SITE)
+				.setParameter(ATTENDANCE_SITE, aS)
+				.getResultList());
 
-			return (List<AttendanceEvent>) getHibernateTemplate().execute(hcb);
 		} catch (DataAccessException e) {
 			log.error("getEventsForAttendanceSiteHelper failed", e);
 			return null;
@@ -664,17 +612,12 @@ public class AttendanceDaoImpl extends HibernateDaoSupport implements Attendance
 		}
 
 		try {
-			HibernateCallback hcb = new HibernateCallback() {
-                @Override
-                public Object doInHibernate(Session session) throws HibernateException {
-                    Query q = session.getNamedQuery(queryString);
-                    q.setParameter(ID, id, new LongType());
-                    q.setMaxResults(1);
-                    return q.uniqueResult();
-                }
-            };
+			return getHibernateTemplate().execute(session -> session
+					.getNamedQuery(queryString)
+					.setParameter(ID, id, new LongType())
+					.setMaxResults(1)
+					.uniqueResult());
 
-			return getHibernateTemplate().execute(hcb);
 		} catch (DataAccessException e) {
 			log.error("getByIDHelper for " + queryString + " failed", e);
 			return null;
