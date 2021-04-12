@@ -207,6 +207,8 @@ public class ExportPage extends BasePage{
                         currentCell = studentRow.createCell(columnCounter, CellType.STRING);
                         if(blankSheet){ //when the user wants a blank sheet exported
                             currentCell.setCellValue("");
+                        } else if(currentRecord.getStatus() == null) {
+                            currentCell.setCellValue("");
                         } else if(currentRecord.getStatus().toString().equals("PRESENT")) {    //convert the Status to a one-letter abbreviation
                             currentCell.setCellValue("P");
                         } else if (currentRecord.getStatus().toString().equals("UNEXCUSED_ABSENCE")){
@@ -333,7 +335,7 @@ public class ExportPage extends BasePage{
                 FileInputStream fis = new FileInputStream(temp);
                 HSSFWorkbook workbook = new HSSFWorkbook(fis);
                 sheet = workbook.getSheetAt(0);
-            }catch (final IOException e){
+            }catch (final Exception e){
                 getSession().error(getString("attendance.export.import.save.fileError"));
                 setResponsePage(new ExportPage());
             }
