@@ -149,7 +149,7 @@ public class Overview extends BasePage {
 				item.add(eventLink);
 
 				Label eventDate = new Label("event-date", modelObject.getStartDateTime());
-				eventDate.add(new AttributeModifier("data-text", modelObject.getStartDateTime().getTime()));
+				eventDate.add(new AttributeModifier("data-text", modelObject.getStartDateTime() != null ? modelObject.getStartDateTime().getTime() : 0));
 				item.add(eventDate);
 
 				DataView<AttendanceStatus> activeStatusStats = new DataView<AttendanceStatus>("active-status-stats", attendanceStatusProvider) {
