@@ -17,6 +17,8 @@
 package org.sakaiproject.attendance.tool.pages;
 
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
+
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -56,6 +58,7 @@ import java.util.*;
  * @author Leonardo Canessa [lcanessa1 (at) udayton (dot) edu]
  * @author David Bauer [dbauer1 (at) udayton (dot) edu]
  */
+@Slf4j
 public class EventView extends BasePage {
     private static final    long                serialVersionUID = 1L;
 

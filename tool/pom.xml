@@ -22,7 +22,7 @@
 	<parent>
     <artifactId>attendance</artifactId>
     <groupId>org.sakaiproject.attendance</groupId>
-    <version>20180412</version>
+    <version>22-SNAPSHOT</version>
   </parent>
 	
 	<name>attendance - Tool</name>
@@ -71,14 +71,6 @@
 		<dependency>
 			<groupId>org.apache.wicket</groupId>
 			<artifactId>wicket-extensions</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-log4j12</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-api</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>log4j</groupId>

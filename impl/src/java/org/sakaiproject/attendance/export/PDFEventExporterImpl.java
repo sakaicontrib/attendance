@@ -21,7 +21,7 @@ import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import lombok.Setter;
-import org.apache.log4j.Logger;
+import lombok.extern.slf4j.Slf4j;
 import org.sakaiproject.attendance.export.util.SortNameUserComparator;
 import org.sakaiproject.attendance.logic.AttendanceLogic;
 import org.sakaiproject.attendance.logic.SakaiProxy;
@@ -41,9 +41,8 @@ import java.util.List;
  *
  * @author David Bauer [dbauer1 (at) udayton (dot) edu]
  */
+@Slf4j
 public class PDFEventExporterImpl implements PDFEventExporter {
-
-    private static final Logger log = Logger.getLogger(PDFEventExporterImpl.class);
 
     private static final Font h1 = new Font(Font.FontFamily.HELVETICA, 18, Font.BOLD, BaseColor.BLACK);
     private static final Font h3 = new Font(Font.FontFamily.HELVETICA, 14, Font.BOLD, BaseColor.BLACK);
