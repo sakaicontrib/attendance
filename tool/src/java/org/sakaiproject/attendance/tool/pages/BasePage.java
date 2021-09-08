@@ -17,7 +17,8 @@
 package org.sakaiproject.attendance.tool.pages;
 
 import lombok.Getter;
-import org.apache.log4j.Logger;
+import lombok.extern.slf4j.Slf4j;
+
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.Session;
@@ -60,9 +61,8 @@ import javax.servlet.http.HttpServletRequest;
  * @author David Bauer [dbauer1 (at) udayton (dot) edu]
  * @author Steve Swinsburg (steve.swinsburg@gmail.com)
  */
+@Slf4j
 public class BasePage extends WebPage implements IHeaderContributor {
-	protected static final Logger log = Logger.getLogger(BasePage.class);
-	
 	@SpringBean(name="org.sakaiproject.attendance.logic.SakaiProxy")
 	protected SakaiProxy sakaiProxy;
 	

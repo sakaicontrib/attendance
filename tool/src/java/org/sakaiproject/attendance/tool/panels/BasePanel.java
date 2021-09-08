@@ -16,7 +16,6 @@
 
 package org.sakaiproject.attendance.tool.panels;
 
-import org.apache.log4j.Logger;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
@@ -28,12 +27,16 @@ import org.sakaiproject.attendance.logic.AttendanceLogic;
 import org.sakaiproject.attendance.logic.SakaiProxy;
 import org.sakaiproject.attendance.model.Status;
 
+
+import lombok.extern.slf4j.Slf4j;
+
 /**
  * A BasePanel which all panels extend
  *
  * @author Leonardo Canessa [lcanessa1 (at) udayton (dot) edu]
  * @author David Bauer [dbauer1 (at) udayton (dot) edu]
  */
+@Slf4j
 public class BasePanel extends Panel {
     @SpringBean(name="org.sakaiproject.attendance.logic.SakaiProxy")
     protected SakaiProxy sakaiProxy;
@@ -46,8 +49,6 @@ public class BasePanel extends Panel {
 
     @SpringBean(name="org.sakaiproject.attendance.api.AttendanceGradebookProvider")
     protected AttendanceGradebookProvider attendanceGradebookProvider;
-
-    protected static final Logger log = Logger.getLogger(BasePanel.class);
 
     protected String role;
 

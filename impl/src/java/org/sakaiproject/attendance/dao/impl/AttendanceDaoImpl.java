@@ -16,7 +16,6 @@
 
 package org.sakaiproject.attendance.dao.impl;
 
-import org.apache.log4j.Logger;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
@@ -32,6 +31,8 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
+import lombok.extern.slf4j.Slf4j;
+
 /**
  * Implementation of AttendanceDao
  *
@@ -39,9 +40,8 @@ import java.util.List;
  * @author David Bauer [dbauer1 (at) udayton (dot) edu]
  * @author Steve Swinsburg (steve.swinsburg@gmail.com)
  */
+@Slf4j
 public class AttendanceDaoImpl extends HibernateDaoSupport implements AttendanceDao {
-
-	private static final Logger log = Logger.getLogger(AttendanceDaoImpl.class);
 
 	/**
 	 * {@inheritDoc}

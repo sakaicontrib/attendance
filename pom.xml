@@ -24,12 +24,11 @@
 	<artifactId>attendance</artifactId>
 	
 	<packaging>pom</packaging>
-	<version>20180412</version>
 	
 	<parent>
     	<groupId>org.sakaiproject</groupId>
     	<artifactId>master</artifactId>
-    	<version>21-SNAPSHOT</version>
+    	<version>22-SNAPSHOT</version>
   	</parent>
 
 	<developers>

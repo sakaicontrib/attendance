@@ -20,8 +20,8 @@ import java.io.Serializable;
 import java.util.*;
 
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 
-import org.apache.log4j.Logger;
 
 import org.sakaiproject.attendance.api.AttendanceGradebookProvider;
 import org.sakaiproject.attendance.dao.AttendanceDao;
@@ -35,9 +35,8 @@ import org.sakaiproject.user.api.User;
  * @author David Bauer [dbauer1 (at) udayton (dot) edu]
  * @author Steve Swinsburg (steve.swinsburg@gmail.com)
  */
+@Slf4j
 public class AttendanceLogicImpl implements AttendanceLogic {
-	private static final Logger log = Logger.getLogger(AttendanceLogicImpl.class);
-
 	/**
 	 * {@inheritDoc}
      */

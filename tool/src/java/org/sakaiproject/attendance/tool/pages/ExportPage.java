@@ -51,10 +51,13 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import lombok.extern.slf4j.Slf4j;
+
 
 /**
  * Created by james on 5/18/17.
  */
+@Slf4j
 public class ExportPage extends BasePage{
     enum ExportFormat {
         XLS
