@@ -118,16 +118,11 @@ public class Overview extends BasePage {
 		};
 		add(statusHeaders);
 
-		Label headerEventEdit		= new Label("header-event-edit", 			new ResourceModel("attendance.overview.header.event.edit"));
-		Label headerPrintLinks		= new Label("header-print-links",			new ResourceModel("attendance.overview.header.print"));
-
 		add(headerOverview);
 		add(headerInfo);
 		add(headerEventName);
 		add(headerEventActions);
 		add(headerEventDate);
-		add(headerEventEdit);
-		add(headerPrintLinks);
 
 	}
 
