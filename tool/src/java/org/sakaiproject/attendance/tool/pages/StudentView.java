@@ -104,25 +104,6 @@ public class StudentView extends BasePage {
         };
         header.setOutputMarkupPlaceholderTag(true);
 
-        Link<Void> closeLink = new Link<Void>("close-link") {
-            @Override
-            public void onClick() {
-                if(returnPage.equals(BasePage.STUDENT_OVERVIEW_PAGE)) {
-                    setResponsePage(new StudentOverview());
-                } else {
-                    setResponsePage(new Overview());
-                }
-            }
-        };
-
-        if(returnPage.equals(BasePage.STUDENT_OVERVIEW_PAGE)){
-            closeLink.add(new Label("close-link-text", new ResourceModel("attendance.event.view.link.close.student.overview")));
-        } else {
-            closeLink.add(new Label("close-link-text", new ResourceModel("attendance.event.view.link.close.overview")));
-        }
-
-        header.add(closeLink);
-
         WebMarkupContainer event = new WebMarkupContainer("event") {
             @Override
             public boolean isVisible() {

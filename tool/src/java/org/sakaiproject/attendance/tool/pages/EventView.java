@@ -189,17 +189,7 @@ public class EventView extends BasePage {
     }
 
     private void createHeader() {
-        Link<Void> closeLink = new Link<Void>("close-link") {
-            @Override
-            public void onClick() {
-                setResponsePage(new Overview());
-            }
-        };
-
-         closeLink.add(new Label("close-link-text", new ResourceModel("attendance.event.view.link.close.overview")));
-
         add(getAddEditWindowAjaxLink(attendanceEvent, "edit-link"));
-        add(closeLink);
     }
 
     private void createTable() {
