@@ -239,6 +239,7 @@ public class BasePage extends WebPage implements IHeaderContributor {
 			public void onClick(AjaxRequestTarget target) {
 				final ModalWindow window = getAddOrEditItemWindow();
 				window.setTitle(new ResourceModel("attendance.add.edit.header"));
+				window.setCssClassName(window.getCssClassName() + " editItemModal");
 				window.setContent(new EventInputPanel(window.getContentId(), window, new CompoundPropertyModel<>(obj)));
 				window.show(target);
 			}
