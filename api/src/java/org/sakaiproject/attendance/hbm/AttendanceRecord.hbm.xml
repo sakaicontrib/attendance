@@ -30,11 +30,11 @@
             </generator>
         </id>
 
-        <property name="userID"     column="USER_ID"            type="java.lang.String"                                  length="99"     unique-key="user_record" />
-        <property name="status"     column="STATUS"             type="org.sakaiproject.attendance.types.StatusUserType"  length="20" />
-        <property name="comment"    column="RECORD_COMMENT"     type="text"                                              length="4000"   unique-key="user_record" />
+        <property name="userID"     column="USER_ID"            type="java.lang.String"                                  length="99"   unique-key="user_record" />
+        <property name="status"     column="STATUS"             type="org.sakaiproject.attendance.types.StatusUserType"  length="20"   />
+        <property name="comment"    column="RECORD_COMMENT"     type="text"                                              length="4000" />
 
-        <many-to-one name="attendanceEvent" column="A_EVENT_ID" unique="false" not-null="true" class="AttendanceEvent" lazy="false"/>
+        <many-to-one name="attendanceEvent" column="A_EVENT_ID" unique="false" not-null="true" class="AttendanceEvent" lazy="false" unique-key="user_record" />
     </class>
 
     <query name="getAttendanceRecord">
