@@ -38,10 +38,6 @@
     	
     	<!-- third party dependencies -->
 		<dependency>
-			<groupId>log4j</groupId>
-			<artifactId>log4j</artifactId>
-		</dependency>
-		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
 		</dependency>
@@ -70,9 +66,8 @@
 			<artifactId>hibernate-core</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>com.itextpdf</groupId>
-			<artifactId>itextpdf</artifactId>
-			<version>5.5.8</version>
+			<groupId>com.github.librepdf</groupId>
+			<artifactId>openpdf</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.quartz-scheduler</groupId>

@@ -16,10 +16,10 @@
 
 package org.sakaiproject.attendance.export;
 
-import com.itextpdf.text.*;
-import com.itextpdf.text.pdf.PdfPCell;
-import com.itextpdf.text.pdf.PdfPTable;
-import com.itextpdf.text.pdf.PdfWriter;
+import com.lowagie.text.*;
+import com.lowagie.text.pdf.PdfPCell;
+import com.lowagie.text.pdf.PdfPTable;
+import com.lowagie.text.pdf.PdfWriter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.sakaiproject.attendance.export.util.SortNameUserComparator;
@@ -30,6 +30,7 @@ import org.sakaiproject.attendance.model.AttendanceStatus;
 import org.sakaiproject.attendance.model.Status;
 import org.sakaiproject.user.api.User;
 
+import java.awt.Color;
 import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Collections;
@@ -44,11 +45,11 @@ import java.util.List;
 @Slf4j
 public class PDFEventExporterImpl implements PDFEventExporter {
 
-    private static final Font h1 = new Font(Font.FontFamily.HELVETICA, 18, Font.BOLD, BaseColor.BLACK);
-    private static final Font h3 = new Font(Font.FontFamily.HELVETICA, 14, Font.BOLD, BaseColor.BLACK);
-    private static final Font body = new Font(Font.FontFamily.HELVETICA, 10, Font.NORMAL, BaseColor.BLACK);
+    private static final Font h1 = new Font(Font.HELVETICA, 18, Font.BOLD, Color.BLACK);
+    private static final Font h3 = new Font(Font.HELVETICA, 14, Font.BOLD, Color.BLACK);
+    private static final Font body = new Font(Font.HELVETICA, 10, Font.NORMAL, Color.BLACK);
 
-    private static final Font tableHeader = new Font(Font.FontFamily.HELVETICA, 12, Font.BOLD, BaseColor.BLACK);
+    private static final Font tableHeader = new Font(Font.HELVETICA, 12, Font.BOLD, Color.BLACK);
 
     private AttendanceEvent event;
     private Document document;
