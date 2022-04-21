@@ -5,10 +5,9 @@ name: Java CI with Maven
 
 on:
   pull_request:
-    branches: [ master, 19.x, 20.x, 21.x, 22.x, 23.x ]
 
 jobs:
-  build:
+  maven-build:
     runs-on: ubuntu-20.04
     steps:
       - name: Git Checkout
