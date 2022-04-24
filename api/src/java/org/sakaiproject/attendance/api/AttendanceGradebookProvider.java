@@ -52,15 +52,7 @@ public interface AttendanceGradebookProvider {
      */
     boolean sendToGradebook(AttendanceGrade ag);
 
-    /**
-     * Returns if a Gradebook has been Defined in a site
-     * @param gbUID
-     * @return
-     */
-    boolean isGradebookDefined(String gbUID);
-
-    /**
-     * Returns if gradebook has an assignment defined with the provided title
+    /**assignment defined with the provided title
      * @param gbUID
      * @param title
      * @return

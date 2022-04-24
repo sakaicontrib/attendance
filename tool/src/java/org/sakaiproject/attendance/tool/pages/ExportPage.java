@@ -281,7 +281,6 @@ public class ExportPage extends BasePage{
             this.fileUploadField = new FileUploadField("upload");
             add(this.fileUploadField);
 
-            add(new Button("continuebutton"));
             SubmitLink submit = new SubmitLink("submitLink");
             add(submit);
         }
