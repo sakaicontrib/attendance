@@ -174,7 +174,6 @@ public class AttendanceGradeFormPanel extends BasePanel {
         gradebook.add(gradebookItemName);
         grading.add(gradebook);
 
-        final boolean gradebookDefined = attendanceGradebookProvider.isGradebookDefined(aS.getSiteID());
         final AjaxCheckBox sendToGradebook = new AjaxCheckBox("sendToGradebook") {
             @Override
             protected void onUpdate(AjaxRequestTarget target) {
@@ -183,14 +182,14 @@ public class AttendanceGradeFormPanel extends BasePanel {
 
             @Override
             public boolean isVisible() {
-                return gradebookDefined;
+                return true;
 
             }
         };
         Label sendToGBLabel = new Label("send-to-gradebook", new ResourceModel("attendance.settings.grading.send.to.gradebook")) {
             @Override
             public boolean isVisible() {
-                return gradebookDefined;
+                return true;
             }
         };
         grading.add(sendToGradebook);

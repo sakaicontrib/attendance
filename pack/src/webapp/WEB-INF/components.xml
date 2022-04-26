@@ -83,7 +83,7 @@
 		<property name="attendanceLogic" ref="org.sakaiproject.attendance.logic.AttendanceLogic" />
 		<property name="sakaiProxy" ref="org.sakaiproject.attendance.logic.SakaiProxy" />
 		<property name="toolManager" ref="org.sakaiproject.tool.api.ToolManager" />
-		<property name="gbExtAssesService" ref="org.sakaiproject.service.gradebook.GradebookExternalAssessmentService" />
+		<property name="gradingService" ref="org.sakaiproject.grading.api.GradingService" />
 	</bean>
 
 	<!-- Add our HBM files to the Sakai global session factory -->
