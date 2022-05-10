@@ -63,12 +63,7 @@ public class AttendanceGradebookProviderImpl implements AttendanceGradebookProvi
 
         String siteID = aS.getSiteID();
 
-        Tool tool = toolManager.getCurrentTool();
-        String appName = AttendanceConstants.TOOL_NAME;
-        if(tool != null ) {
-            appName = tool.getTitle();
-
-        }
+        String appName = AttendanceConstants.SAKAI_TOOL_NAME;
 
         String aSUID = getAttendanceUID(aS);
         try {
