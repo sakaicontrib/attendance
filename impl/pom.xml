@@ -24,9 +24,13 @@
   </parent>
 	
 	<name>attendance - Implementation</name>
-		<artifactId>attendance-impl</artifactId>
+	<artifactId>attendance-impl</artifactId>
 
-	<packaging>jar</packaging>
+	<packaging>sakai-component</packaging>
+
+	<properties>
+		<deploy.target>components</deploy.target>
+	</properties>
 	
   	<dependencies>
 
