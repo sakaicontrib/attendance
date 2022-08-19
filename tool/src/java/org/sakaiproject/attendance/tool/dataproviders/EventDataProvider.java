@@ -18,8 +18,7 @@ package org.sakaiproject.attendance.tool.dataproviders;
 
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
-import org.sakaiproject.attendance.model.AttendanceEvent;
-import org.sakaiproject.attendance.tool.models.DetachableEventModel;
+import org.sakaiproject.attendance.api.model.AttendanceEvent;
 
 import java.util.Collections;
 import java.util.List;

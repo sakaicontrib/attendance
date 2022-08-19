@@ -25,13 +25,12 @@ import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.model.ResourceModel;
-import org.sakaiproject.attendance.model.AttendanceRecord;
-import org.sakaiproject.attendance.model.AttendanceStatus;
+import org.sakaiproject.attendance.api.model.AttendanceRecord;
+import org.sakaiproject.attendance.api.model.AttendanceStatus;
 import org.sakaiproject.attendance.tool.dataproviders.AttendanceRecordProvider;
 import org.sakaiproject.attendance.tool.dataproviders.AttendanceStatusProvider;
 import org.sakaiproject.attendance.tool.panels.AttendanceGradePanel;
 import org.sakaiproject.attendance.tool.panels.AttendanceRecordFormDataPanel;
-import org.sakaiproject.attendance.tool.panels.AttendanceRecordFormHeaderPanel;
 import org.sakaiproject.attendance.tool.panels.StatisticsPanel;
 
 /**

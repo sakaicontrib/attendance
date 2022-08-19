@@ -24,7 +24,7 @@ import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.request.handler.resource.ResourceStreamRequestHandler;
 import org.apache.wicket.util.resource.AbstractResourceStreamWriter;
-import org.sakaiproject.attendance.model.AttendanceEvent;
+import org.sakaiproject.attendance.api.model.AttendanceEvent;
 import org.sakaiproject.user.api.User;
 
 import java.io.IOException;

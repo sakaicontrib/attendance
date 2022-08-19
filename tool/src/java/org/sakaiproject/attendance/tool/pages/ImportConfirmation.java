@@ -16,8 +16,11 @@
 
 package org.sakaiproject.attendance.tool.pages;
 
+import org.sakaiproject.attendance.api.model.AttendanceGrade;
+import org.sakaiproject.attendance.api.model.AttendanceRecord;
+import org.sakaiproject.attendance.api.model.AttendanceSite;
+import org.sakaiproject.attendance.api.model.ImportConfirmList;
 import org.sakaiproject.attendance.tool.dataproviders.AttendanceStatusProvider;
-import org.sakaiproject.attendance.model.*;
 
 import java.util.*;
 import java.util.List;
@@ -190,7 +193,7 @@ public class ImportConfirmation  extends BasePage{
             SubmitLink completeImport = new SubmitLink("submitLink") {
                 public void onSubmit() {
                     for (int i = 0; i < uploadICLList.size(); i++){
-                        boolean updated = attendanceLogic.updateAttendanceRecord(uploadICLList.get(i).getAttendanceRecord(), uploadICLList.get(i).getOldStatus());
+                        attendanceLogic.updateAttendanceRecord(uploadICLList.get(i).getAttendanceRecord(), uploadICLList.get(i).getOldStatus());
                         attendanceLogic.updateAttendanceSite(uploadICLList.get(i).getAttendanceSite());
                     }
                     getSession().success(getString("attendance.export.confirmation.import.save.success"));

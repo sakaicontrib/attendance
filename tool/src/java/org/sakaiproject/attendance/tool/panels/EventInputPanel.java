@@ -27,11 +27,10 @@ import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.*;
-import org.sakaiproject.attendance.model.AttendanceEvent;
+import org.sakaiproject.attendance.api.model.AttendanceEvent;
 import org.sakaiproject.attendance.tool.pages.EventView;
 import org.sakaiproject.attendance.tool.pages.Overview;
 import org.sakaiproject.attendance.tool.util.AttendanceFeedbackPanel;
-import org.sakaiproject.attendance.tool.util.ConfirmationLink;
 import org.sakaiproject.attendance.tool.util.PlaceholderBehavior;
 
 
@@ -106,9 +105,9 @@ public class EventInputPanel extends BasePanel {
     private void processSave(AjaxRequestTarget target, Form<?> form, boolean addAnother) {
         AttendanceEvent e = (AttendanceEvent) form.getModelObject();
         e.setAttendanceSite(attendanceLogic.getCurrentAttendanceSite());
-        boolean result = attendanceLogic.updateAttendanceEvent(e);
+        e = attendanceLogic.updateAttendanceEvent(e);
 
-        if(result){
+        if(e != null){
             StringResourceModel temp = new StringResourceModel("attendance.add.success", null, new String[]{e.getName()});
             getSession().success(temp.getString());
         } else {
@@ -144,11 +143,6 @@ public class EventInputPanel extends BasePanel {
                 super.onSubmit(target, form);
 
                 processSave(target, form, createAnother);
-            }
-
-            @Override
-            public boolean isEnabled() {
-                return !attendanceLogic.getCurrentAttendanceSite().getIsSyncing();
             }
 
             @Override

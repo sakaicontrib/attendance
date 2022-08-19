@@ -25,9 +25,9 @@ import org.apache.wicket.markup.html.form.*;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
-import org.sakaiproject.attendance.model.AttendanceStatus;
-import org.sakaiproject.attendance.model.GradingRule;
-import org.sakaiproject.attendance.model.Status;
+import org.sakaiproject.attendance.api.model.AttendanceStatus;
+import org.sakaiproject.attendance.api.model.GradingRule;
+import org.sakaiproject.attendance.api.model.Status;
 
 import java.util.*;
 

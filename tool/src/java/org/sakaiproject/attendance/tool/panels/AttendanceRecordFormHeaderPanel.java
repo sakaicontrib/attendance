@@ -20,7 +20,7 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.data.DataView;
-import org.sakaiproject.attendance.model.AttendanceStatus;
+import org.sakaiproject.attendance.api.model.AttendanceStatus;
 import org.sakaiproject.attendance.tool.dataproviders.AttendanceStatusProvider;
 
 /**

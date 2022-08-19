@@ -29,7 +29,7 @@ import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.ResourceModel;
-import org.sakaiproject.attendance.model.AttendanceSite;
+import org.sakaiproject.attendance.api.model.AttendanceSite;
 import org.sakaiproject.attendance.tool.panels.util.GradebookItemNameValidator;
 
 /**
@@ -96,9 +96,8 @@ public class AttendanceGradeFormPanel extends BasePanel {
                     aS.setUseAutoGrading(false);
                 }
 
-                boolean result = attendanceLogic.updateAttendanceSite(aS);
-
-                if (result) {
+                try {
+                    aS = attendanceLogic.updateAttendanceSite(aS);
                     if(aS.getSendToGradebook()){
                         if(previousSendToGradebook) { // if previously true, see if any relevant values have changed
                             if(!previousName.equals(aS.getGradebookItemName()) || !previousMaxGrade.equals(aS.getMaximumGrade())){
@@ -124,10 +123,9 @@ public class AttendanceGradeFormPanel extends BasePanel {
                     }
 
                     getSession().info(getString("attendance.settings.grading.success"));
-                } else {
+                } catch (Exception exception) {
                     getSession().error(getString("attendance.settings.grading.failure"));
                 }
-
             }
         };
 

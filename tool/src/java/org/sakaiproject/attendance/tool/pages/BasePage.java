@@ -20,13 +20,10 @@ import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
 import org.apache.wicket.AttributeModifier;
-import org.apache.wicket.Component;
-import org.apache.wicket.Session;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
-import org.apache.wicket.feedback.FeedbackMessage;
 import org.apache.wicket.markup.head.*;
 import org.apache.wicket.markup.html.IHeaderContributor;
 import org.apache.wicket.markup.html.WebPage;
@@ -38,10 +35,10 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.sakaiproject.attendance.api.AttendanceGradebookProvider;
-import org.sakaiproject.attendance.logic.AttendanceLogic;
-import org.sakaiproject.attendance.logic.SakaiProxy;
-import org.sakaiproject.attendance.model.AttendanceEvent;
-import org.sakaiproject.attendance.model.Status;
+import org.sakaiproject.attendance.api.logic.AttendanceLogic;
+import org.sakaiproject.attendance.api.logic.SakaiProxy;
+import org.sakaiproject.attendance.api.model.AttendanceEvent;
+import org.sakaiproject.attendance.api.model.Status;
 import org.sakaiproject.attendance.tool.panels.EventInputPanel;
 import org.sakaiproject.attendance.tool.util.AttendanceFeedbackPanel;
 import org.sakaiproject.component.cover.ServerConfigurationService;
@@ -166,10 +163,6 @@ public class BasePage extends WebPage implements IHeaderContributor {
 		// Add a FeedbackPanel for displaying our messages
         feedbackPanel = new AttendanceFeedbackPanel("feedback");
         add(feedbackPanel);
-
-		if(attendanceLogic.getCurrentAttendanceSite().getIsSyncing()) {
-			getSession().error((new ResourceModel("attendance.site.syncing.error")).getObject());
-		}
 
 		this.addOrEditItemWindow = new ModalWindow("addOrEditItemWindow");
 		this.addOrEditItemWindow.showUnloadConfirmation(false);

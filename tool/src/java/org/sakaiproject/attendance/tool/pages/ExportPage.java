@@ -18,12 +18,11 @@ package org.sakaiproject.attendance.tool.pages;
 
 import org.apache.commons.codec.binary.StringUtils;
 import org.apache.wicket.model.StringResourceModel;
-import org.sakaiproject.attendance.logic.SakaiProxy;
-import org.sakaiproject.attendance.model.*;
+import org.sakaiproject.attendance.api.model.*;
+import org.sakaiproject.attendance.api.model.stats.AttendanceUserStats;
 import org.sakaiproject.user.api.User;
 
 import org.apache.wicket.RestartResponseException;
-import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.SubmitLink;
 import org.apache.wicket.model.LoadableDetachableModel;
@@ -136,9 +135,7 @@ public class ExportPage extends BasePage{
         final ArrayList<AttendanceEvent> eventHolder = new ArrayList<AttendanceEvent>();
         AttendanceSite attendanceSite = attendanceLogic.getAttendanceSite(siteID);
         List<String> groupIds = sakaiProxy.getAvailableGroupsForCurrentSite();
-        List<AttendanceUserGroupStats> finalUserStatsList = new ArrayList<AttendanceUserGroupStats>();
-        List<AttendanceUserStats> fullUserList = attendanceLogic.getUserStatsForSite(attendanceLogic.getAttendanceSite(siteID), null);
-        AttendanceUserGroupStats finalUserStatsListholder = new AttendanceUserGroupStats();
+        List<AttendanceUserStats> fullUserList = attendanceLogic.getUserStatsForSite(attendanceSite, null);
         HSSFRow headerRow = mainSheet.createRow(0); //create blank header row
         HSSFCellStyle boldStyle = wb.createCellStyle(); //cell styling
         HSSFFont boldFont = wb.createFont();

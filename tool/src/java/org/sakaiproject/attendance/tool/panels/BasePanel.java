@@ -22,10 +22,10 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.sakaiproject.attendance.api.AttendanceGradebookProvider;
-import org.sakaiproject.attendance.export.PDFEventExporter;
-import org.sakaiproject.attendance.logic.AttendanceLogic;
-import org.sakaiproject.attendance.logic.SakaiProxy;
-import org.sakaiproject.attendance.model.Status;
+import org.sakaiproject.attendance.api.export.PDFEventExporter;
+import org.sakaiproject.attendance.api.logic.AttendanceLogic;
+import org.sakaiproject.attendance.api.logic.SakaiProxy;
+import org.sakaiproject.attendance.api.model.Status;
 
 
 import lombok.extern.slf4j.Slf4j;

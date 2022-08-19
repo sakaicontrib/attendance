@@ -33,20 +33,18 @@ import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.navigation.paging.PagingNavigator;
 import org.apache.wicket.markup.repeater.Item;
-import org.apache.wicket.markup.repeater.ReuseIfModelsEqualStrategy;
 import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.ResourceModel;
-import org.sakaiproject.attendance.model.AttendanceEvent;
-import org.sakaiproject.attendance.model.AttendanceRecord;
-import org.sakaiproject.attendance.model.AttendanceStatus;
-import org.sakaiproject.attendance.model.Status;
+import org.sakaiproject.attendance.api.model.AttendanceEvent;
+import org.sakaiproject.attendance.api.model.AttendanceRecord;
+import org.sakaiproject.attendance.api.model.AttendanceStatus;
+import org.sakaiproject.attendance.api.model.Status;
 import org.sakaiproject.attendance.tool.dataproviders.AttendanceRecordProvider;
 import org.sakaiproject.attendance.tool.dataproviders.AttendanceStatusProvider;
 import org.sakaiproject.attendance.tool.models.ProfileImage;
 import org.sakaiproject.attendance.tool.panels.AttendanceRecordFormDataPanel;
-import org.sakaiproject.attendance.tool.panels.AttendanceRecordFormHeaderPanel;
 import org.sakaiproject.attendance.tool.panels.PrintPanel;
 import org.sakaiproject.attendance.tool.panels.StatisticsPanel;
 
@@ -136,11 +134,6 @@ public class EventView extends BasePage {
                 String who = selectedGroup == null?"":" for " + sakaiProxy.getGroupTitleForCurrentSite(selectedGroup);
                 getSession().info("All attendance records " + who + " for " + attendanceEvent.getName() + " set to " + setAllStatus.getModelObject());
                 setResponsePage(new EventView(attendanceEvent.getId(), returnPage, selectedGroup));
-            }
-
-            @Override
-            public boolean isEnabled() {
-                return !attendanceEvent.getAttendanceSite().getIsSyncing();
             }
         };
 

@@ -20,35 +20,30 @@ import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Page;
 import org.apache.wicket.RestartResponseException;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.form.OnChangeAjaxBehavior;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.extensions.markup.html.form.select.Select;
-import org.apache.wicket.extensions.markup.html.form.select.SelectOption;
-import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.SubmitLink;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.model.Model;
-import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.model.StringResourceModel;
-import org.sakaiproject.attendance.model.AttendanceEvent;
-import org.sakaiproject.attendance.model.AttendanceItemStats;
-import org.sakaiproject.attendance.model.AttendanceStatus;
-import org.sakaiproject.attendance.model.Status;
+import org.sakaiproject.attendance.api.model.AttendanceEvent;
+import org.sakaiproject.attendance.api.model.stats.AttendanceItemStats;
+import org.sakaiproject.attendance.api.model.AttendanceStatus;
+import org.sakaiproject.attendance.api.model.Status;
 import org.sakaiproject.attendance.tool.dataproviders.AttendanceStatusProvider;
 import org.sakaiproject.attendance.tool.dataproviders.EventDataProvider;
 import org.sakaiproject.attendance.tool.panels.EventInputPanel;
 import org.sakaiproject.attendance.tool.panels.PrintPanel;
 import org.sakaiproject.attendance.tool.util.ConfirmationLink;
 
-import java.util.*;
+import java.time.Instant;
 
 /**
  * The overview page which lists AttendanceEvents and basic statistics of each
@@ -144,7 +139,7 @@ public class Overview extends BasePage {
 				item.add(eventLink);
 
 				Label eventDate = new Label("event-date", modelObject.getStartDateTime());
-				eventDate.add(new AttributeModifier("data-text", modelObject.getStartDateTime() != null ? modelObject.getStartDateTime().getTime() : 0));
+				eventDate.add(new AttributeModifier("data-text", modelObject.getStartDateTime() != null ? modelObject.getStartDateTime() : 0));
 				item.add(eventDate);
 
 				DataView<AttendanceStatus> activeStatusStats = new DataView<AttendanceStatus>("active-status-stats", attendanceStatusProvider) {
@@ -176,9 +171,10 @@ public class Overview extends BasePage {
 					@Override
 					public void onClick(AjaxRequestTarget ajaxRequestTarget) {
 						final String name = modelObject.getName();
-						if(attendanceLogic.deleteAttendanceEvent(modelObject)) {
+						try {
+							attendanceLogic.deleteAttendanceEvent(modelObject);
 							getSession().info(name + " deleted successfully.");
-						} else {
+						} catch (Exception ex) {
 							getSession().error("Failed to delete " + name);
 						}
 						Class<? extends Page> currentPageClass = getPage().getPageClass();
@@ -188,11 +184,6 @@ public class Overview extends BasePage {
 						} else {
 							setResponsePage(currentPageClass);
 						}
-					}
-
-					@Override
-					public boolean isEnabled() {
-						return !attendanceLogic.getCurrentAttendanceSite().getIsSyncing();
 					}
 				};
 				item.add(deleteLink);
@@ -218,11 +209,10 @@ public class Overview extends BasePage {
 				AttendanceEvent newEvent = new AttendanceEvent();
 				newEvent.setAttendanceSite(attendanceLogic.getCurrentAttendanceSite());
 				newEvent.setName(new ResourceModel("attendance.now.name").getObject());
-				newEvent.setStartDateTime(new Date());
-				Long newEventId = (Long) attendanceLogic.addAttendanceEventNow(newEvent);
-				if(newEventId != null) {
-					newEvent = attendanceLogic.getAttendanceEvent(newEventId);
-					setResponsePage(new EventView(newEvent, BasePage.OVERVIEW_PAGE));
+				newEvent.setStartDateTime(Instant.now());
+				AttendanceEvent savedEvent = attendanceLogic.addAttendanceEventNow(newEvent);
+				if(savedEvent != null) {
+					setResponsePage(new EventView(savedEvent, BasePage.OVERVIEW_PAGE));
 				} else {
 					error(new ResourceModel("attendance.now.error").getObject());
 				}

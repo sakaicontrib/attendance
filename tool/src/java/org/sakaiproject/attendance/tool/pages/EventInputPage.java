@@ -1,6 +1,5 @@
 package org.sakaiproject.attendance.tool.pages;
 import org.apache.commons.codec.binary.StringUtils;
-import org.apache.wicket.Page;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
@@ -11,11 +10,7 @@ import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.*;
-import org.sakaiproject.attendance.model.AttendanceEvent;
-import org.sakaiproject.attendance.tool.pages.EventView;
-import org.sakaiproject.attendance.tool.pages.Overview;
-import org.sakaiproject.attendance.tool.util.AttendanceFeedbackPanel;
-import org.sakaiproject.attendance.tool.util.ConfirmationLink;
+import org.sakaiproject.attendance.api.model.AttendanceEvent;
 import org.sakaiproject.attendance.tool.util.PlaceholderBehavior;
 
 public class EventInputPage extends BasePage{
@@ -88,11 +83,11 @@ public class EventInputPage extends BasePage{
     private void processSave(AjaxRequestTarget target, Form<?> form, boolean addAnother) {
         AttendanceEvent e = (AttendanceEvent) form.getModelObject();
         e.setAttendanceSite(attendanceLogic.getCurrentAttendanceSite());
-        boolean result = attendanceLogic.updateAttendanceEvent(e);
-        if(result){
-            StringResourceModel temp = new StringResourceModel("attendance.add.success", null, new String[]{e.getName()});
+        StringResourceModel temp = new StringResourceModel("attendance.add.success", null, new String[]{e.getName()});
+        try {
+            e = attendanceLogic.updateAttendanceEvent(e);
             getSession().success(temp.getString());
-        } else {
+        } catch (Exception ex) {
             error(getString("attendance.add.failure"));
             target.addChildren(form, FeedbackPanel.class);
         }
@@ -109,11 +104,6 @@ public class EventInputPage extends BasePage{
             protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
                 super.onSubmit(target, form);
                 processSave(target, form, createAnother);
-            }
-
-            @Override
-            public boolean isEnabled() {
-                return !attendanceLogic.getCurrentAttendanceSite().getIsSyncing();
             }
 
             @Override

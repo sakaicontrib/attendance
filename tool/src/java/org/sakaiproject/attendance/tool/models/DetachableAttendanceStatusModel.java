@@ -19,8 +19,8 @@ package org.sakaiproject.attendance.tool.models;
 import org.apache.wicket.injection.Injector;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
-import org.sakaiproject.attendance.logic.AttendanceLogic;
-import org.sakaiproject.attendance.model.AttendanceStatus;
+import org.sakaiproject.attendance.api.logic.AttendanceLogic;
+import org.sakaiproject.attendance.api.model.AttendanceStatus;
 
 /**
  * DetachableAttendanceStatusModel
@@ -85,6 +85,6 @@ public class DetachableAttendanceStatusModel extends LoadableDetachableModel<Att
     protected AttendanceStatus load(){
         Injector.get().inject(this);
         // get the thing
-        return attendanceLogic.getAttendanceStatusById(id);
+        return attendanceLogic.getAttendanceStatusById(id).orElseThrow( () -> { throw new IllegalArgumentException("Unable to get attendance status by id " + id); });
     }
 }

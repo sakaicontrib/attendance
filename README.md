@@ -1,12 +1,6 @@
 # Attendance
 A simple [Sakai](https://github.com/sakaiproject/sakai) tool for tracking attendance that integrates with the Gradebook.
 
-## Performance Improvements - MUST READ
-With the release of 20170215, statistics are now stored in a table. As such, a job was created to calculate these stats.
-This job should be run once after the deployment of 20170215; afterwards it may be run as needed or at regular interval
-as determined by the administrators. The job **MUST BE** run at least once to calculate & save the statistics to begin with, afterwards the job is only needed to be run to sync up the stats to the current roster (in
-the case of users attending an item and then later leaving the site). This job is titled "Attendance Stat Calc - SEE DOCS".
-
 ## Resources
 Pages: http://sakaicontrib.github.io/attendance/
 

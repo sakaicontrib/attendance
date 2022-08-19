@@ -31,9 +31,9 @@ import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.model.*;
-import org.sakaiproject.attendance.model.AttendanceRecord;
-import org.sakaiproject.attendance.model.AttendanceStatus;
-import org.sakaiproject.attendance.model.Status;
+import org.sakaiproject.attendance.api.model.AttendanceRecord;
+import org.sakaiproject.attendance.api.model.AttendanceStatus;
+import org.sakaiproject.attendance.api.model.Status;
 import org.sakaiproject.attendance.tool.dataproviders.AttendanceStatusProvider;
 import org.sakaiproject.component.cover.ServerConfigurationService;
 
@@ -79,22 +79,14 @@ public class AttendanceRecordFormDataPanel extends BasePanel {
                 if(aR.getStatus() == null) {
                     aR.setStatus(Status.UNKNOWN);
                 }
-                boolean result = attendanceLogic.updateAttendanceRecord(aR, oldStatus);
-                String[] resultMsgVars = new String[]{sakaiProxy.getUserSortName(aR.getUserID()), aR.getAttendanceEvent().getName(), getStatusString(aR.getStatus())};
-                StringResourceModel temp;
-                if(result){
-                    temp = new StringResourceModel("attendance.record.save.success", null, resultMsgVars);
-                    getSession().info(temp.getString());
+                try {
+                    aR = attendanceLogic.updateAttendanceRecord(aR, oldStatus);
+                    String[] resultMsgVars = new String[]{sakaiProxy.getUserSortName(aR.getUserID()), aR.getAttendanceEvent().getName(), getStatusString(aR.getStatus())};
+                    getSession().info(new StringResourceModel("attendance.record.save.success", null, (Object) resultMsgVars).getString());
                     oldStatus = aR.getStatus();
-                } else {
-                    temp = new StringResourceModel("attendance.record.save.failure", null, resultMsgVars);
-                    getSession().error(temp.getString());
+                } catch (Exception ex) {
+                    getSession().error(new StringResourceModel("attendance.record.save.failure", null, (Object) new String[]{sakaiProxy.getUserSortName(aR.getUserID()), aR.getAttendanceEvent().getName(), getStatusString(aR.getStatus())}).getString());
                 }
-            }
-
-            @Override
-            public boolean isEnabled() {
-                return !recordIModel.getObject().getAttendanceEvent().getAttendanceSite().getIsSyncing();
             }
         };
 

@@ -18,8 +18,8 @@ package org.sakaiproject.attendance.tool.dataproviders;
 
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
-import org.sakaiproject.attendance.model.AttendanceEvent;
-import org.sakaiproject.attendance.model.AttendanceRecord;
+import org.sakaiproject.attendance.api.model.AttendanceEvent;
+import org.sakaiproject.attendance.api.model.AttendanceRecord;
 
 import java.util.ArrayList;
 import java.util.Comparator;

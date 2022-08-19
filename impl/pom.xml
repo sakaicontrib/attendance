@@ -43,20 +43,24 @@
     	
     	<!-- third party dependencies -->
 		<dependency>
-			<groupId>org.projectlombok</groupId>
-			<artifactId>lombok</artifactId>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-core</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.data</groupId>
+			<artifactId>spring-data-jpa</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
-			<artifactId>spring-core</artifactId>
+			<artifactId>spring-context</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-orm</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>net.sf.ehcache</groupId>
-			<artifactId>ehcache-core</artifactId>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-tx</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.commons</groupId>
@@ -75,21 +79,17 @@
 			<artifactId>quartz</artifactId>
 		</dependency>
 		<!-- Sakai dependencies -->
-        <dependency>
-            <groupId>org.sakaiproject.kernel</groupId>
-            <artifactId>sakai-kernel-api</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.sakaiproject.kernel</groupId>
-            <artifactId>sakai-component-manager</artifactId>
-        </dependency>
-        <dependency>
+		<dependency>
 			<groupId>org.sakaiproject.kernel</groupId>
-  			<artifactId>sakai-kernel-util</artifactId>
+			<artifactId>sakai-kernel-api</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.sakaiproject.genericdao</groupId>
-			<artifactId>generic-dao</artifactId>
+			<groupId>org.sakaiproject.kernel</groupId>
+			<artifactId>sakai-kernel-util</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.sakaiproject.kernel</groupId>
+			<artifactId>sakai-component-manager</artifactId>
 		</dependency>
         <dependency>
             <groupId>org.sakaiproject.grading</groupId>

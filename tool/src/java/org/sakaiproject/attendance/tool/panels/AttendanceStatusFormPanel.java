@@ -29,9 +29,9 @@ import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
-import org.sakaiproject.attendance.model.AttendanceSite;
-import org.sakaiproject.attendance.model.AttendanceStatus;
-import org.sakaiproject.attendance.model.Status;
+import org.sakaiproject.attendance.api.model.AttendanceSite;
+import org.sakaiproject.attendance.api.model.AttendanceStatus;
+import org.sakaiproject.attendance.api.model.Status;
 
 import java.util.*;
 
@@ -71,10 +71,10 @@ public class AttendanceStatusFormPanel extends BasePanel {
             @Override
             protected void onSubmit() {
                 AttendanceSite aS = (AttendanceSite) getDefaultModelObject();
-                boolean result = attendanceLogic.updateAttendanceSite(aS);
-                if(result){
+                try {
+                    aS = attendanceLogic.updateAttendanceSite(aS);
                     getSession().info(getString("attendance.settings.edit.status.save.success"));
-                } else {
+                } catch (Exception ex) {
                     getSession().error(getString("attendance.settings.edit.status.save.error"));
                 }
             }
