@@ -48,6 +48,8 @@ import org.sakaiproject.attendance.tool.panels.AttendanceRecordFormDataPanel;
 import org.sakaiproject.attendance.tool.panels.PrintPanel;
 import org.sakaiproject.attendance.tool.panels.StatisticsPanel;
 
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.util.*;
 
 /**
@@ -123,8 +125,13 @@ public class EventView extends BasePage {
 
         createStatsTable();
 
+        DateTimeFormatter formatter = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.FULL, FormatStyle.SHORT)
+                .withZone(userTimeService.getLocalTimeZone().toZoneId());
+
+        String eventDateString = attendanceEvent.getStartDateTime() == null ? "" : formatter.format(attendanceEvent.getStartDateTime());
+
         add(new Label("event-name", attendanceEvent.getName()));
-        add(new Label("event-date", attendanceEvent.getStartDateTime()));
+        add(new Label("event-date", eventDateString));
         add(new Label("take-attendance-header", getString("attendance.event.view.take.attendance")));
 
         final Form<?> setAllForm = new Form<Void>("set-all-form"){
@@ -138,12 +145,7 @@ public class EventView extends BasePage {
         };
 
         List<AttendanceStatus> activeAttendanceStatuses = attendanceLogic.getActiveStatusesForCurrentSite();
-        Collections.sort(activeAttendanceStatuses, new Comparator<AttendanceStatus>() {
-            @Override
-            public int compare(AttendanceStatus o1, AttendanceStatus o2) {
-                return o1.getSortOrder() - o2.getSortOrder();
-            }
-        });
+        activeAttendanceStatuses.sort(Comparator.comparingInt(AttendanceStatus::getSortOrder));
         List<Status> activeStatuses = new ArrayList<>();
         for(AttendanceStatus attendanceStatus : activeAttendanceStatuses) {
             activeStatuses.add(attendanceStatus.getStatus());
@@ -182,7 +184,7 @@ public class EventView extends BasePage {
     }
 
     private void createHeader() {
-        add(getAddEditWindowAjaxLink(attendanceEvent, "edit-link"));
+        add(getAddEditWindowAjaxLink(attendanceEvent.getId(), "edit-link"));
     }
 
     private void createTable() {

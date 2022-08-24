@@ -3,8 +3,6 @@ import org.apache.commons.codec.binary.StringUtils;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
-import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
-import org.apache.wicket.extensions.yui.calendar.DateTimeField;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
@@ -12,14 +10,19 @@ import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.*;
 import org.sakaiproject.attendance.api.model.AttendanceEvent;
 import org.sakaiproject.attendance.tool.util.PlaceholderBehavior;
+import org.sakaiproject.wicket.component.SakaiDateTimeField;
+
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 
 public class EventInputPage extends BasePage{
     private static final long serialVersionUID = 1L;
-    private IModel<AttendanceEvent> eventModel;
-    private AttendanceEvent attendanceEvent;
-    private ModalWindow window;
-    private boolean isEditing;
-    private boolean recursiveAddAnother;
+
+    private TextField<String> eventNameField;
+    private SakaiDateTimeField startDateTimeField;
+
+    private ZonedDateTime startDateTime;
+
     private String nextPage;
     public static String STUDENT_OVERVIEW = "org.sakaiproject.attendance.tool.pages.StudentView";
     public static String GRADING = "org.sakaiproject.attendance.tool.pages.GradingPage";
@@ -27,16 +30,13 @@ public class EventInputPage extends BasePage{
     public static String IMPORTEXPORT = "org.sakaiproject.attendance.tool.pages.ExportPage";
 
     public EventInputPage(final IModel<AttendanceEvent> event) {
-        this.isEditing = true;
-        this.eventModel = event;
-        attendanceEvent = event.getObject();
         disableLink(this.addLink);
-        Form<AttendanceEvent> eventForm = createEventInputForm();
+        Form<?> eventForm = createEventInputForm();
         this.add(eventForm);
     }
 
-    private Form<AttendanceEvent> createEventInputForm() {
-        Form<AttendanceEvent> eventForm = new Form<>("event", this.eventModel);
+    private Form<?> createEventInputForm() {
+        Form<?> eventForm = new Form<Void>("event");
         eventForm.add(new Label("addItemTitle", getString("event.add")));
         AjaxSubmitLink submit = createSubmitLink("submit", eventForm, false);
         submit.add(new Label("submitLabel", new ResourceModel("attendance.add.create")));
@@ -66,27 +66,47 @@ public class EventInputPage extends BasePage{
         };
         cancel.setDefaultFormProcessing(false);
         eventForm.add(cancel);
-        final TextField name = new TextField<String>("name") {
+
+        eventNameField = new TextField<>("name", new Model<>()) {
             @Override
-            protected void onInitialize(){
+            protected void onInitialize() {
                 super.onInitialize();
                 add(new PlaceholderBehavior(getString("event.placeholder.name")));
             }
         };
-        final DateTimeField startDateTime = new DateTimeField("startDateTime");
-        name.setRequired(true);
-        eventForm.add(name);
-        eventForm.add(startDateTime);
+        eventNameField.setRequired(true);
+        eventForm.add(eventNameField);
+
+        startDateTimeField = new SakaiDateTimeField("startDateTime", new PropertyModel<>(this, "startDateTime"), ZoneId.systemDefault());
+        startDateTimeField.setUseTime(true);
+        startDateTimeField.setAllowEmptyDate(true);
+        eventForm.add(startDateTimeField);
+
         return eventForm;
     }
 
+    public ZonedDateTime getStartDateTime() {
+        return this.startDateTime;
+    }
+
+    public void setStartDateTime(ZonedDateTime zoned)	{
+        this.startDateTime = zoned;
+    }
+
+
     private void processSave(AjaxRequestTarget target, Form<?> form, boolean addAnother) {
-        AttendanceEvent e = (AttendanceEvent) form.getModelObject();
-        e.setAttendanceSite(attendanceLogic.getCurrentAttendanceSite());
-        StringResourceModel temp = new StringResourceModel("attendance.add.success", null, new String[]{e.getName()});
         try {
-            e = attendanceLogic.updateAttendanceEvent(e);
-            getSession().success(temp.getString());
+            AttendanceEvent nEvent = new AttendanceEvent();
+
+            nEvent.setAttendanceSite(attendanceLogic.getCurrentAttendanceSite());
+            nEvent.setName(eventNameField.getModelObject());
+
+            ZonedDateTime startDate = startDateTimeField.getModelObject();
+            nEvent.setStartDateTime(startDate == null ? null : startDate.toInstant());
+
+            nEvent = attendanceLogic.updateAttendanceEvent(nEvent);
+
+            getSession().success(new StringResourceModel("attendance.add.success", null, (Object[]) new String[]{nEvent.getName()}).toString());
         } catch (Exception ex) {
             error(getString("attendance.add.failure"));
             target.addChildren(form, FeedbackPanel.class);

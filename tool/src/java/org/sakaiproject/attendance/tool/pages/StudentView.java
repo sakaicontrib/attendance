@@ -33,6 +33,9 @@ import org.sakaiproject.attendance.tool.panels.AttendanceGradePanel;
 import org.sakaiproject.attendance.tool.panels.AttendanceRecordFormDataPanel;
 import org.sakaiproject.attendance.tool.panels.StatisticsPanel;
 
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
+
 /**
  * StudentView is the view of a single user (a student)'s AttendanceRecords
  *
@@ -219,7 +222,12 @@ public class StudentView extends BasePage {
                     disableLink(eventLink);
                 }
                 item.add(eventLink);
-                item.add(new Label("event-date", item.getModelObject().getAttendanceEvent().getStartDateTime()));
+                DateTimeFormatter formatter = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.FULL, FormatStyle.SHORT)
+                        .withZone(userTimeService.getLocalTimeZone().toZoneId());
+
+                String eventDateString = item.getModelObject().getAttendanceEvent().getStartDateTime() == null ? "" : formatter.format(item.getModelObject().getAttendanceEvent().getStartDateTime());
+
+                item.add(new Label("event-date", eventDateString));
                 AjaxLazyLoadPanel dataPanelSlow = new AjaxLazyLoadPanel("dataPanelSlow") {
                     @Override
                     public Component getLazyLoadComponent(String s) {

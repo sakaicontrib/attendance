@@ -21,8 +21,6 @@ import org.apache.wicket.Page;
 import org.apache.wicket.RestartResponseException;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
-import org.apache.wicket.ajax.markup.html.form.AjaxButton;
-import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
@@ -39,11 +37,12 @@ import org.sakaiproject.attendance.api.model.AttendanceStatus;
 import org.sakaiproject.attendance.api.model.Status;
 import org.sakaiproject.attendance.tool.dataproviders.AttendanceStatusProvider;
 import org.sakaiproject.attendance.tool.dataproviders.EventDataProvider;
-import org.sakaiproject.attendance.tool.panels.EventInputPanel;
 import org.sakaiproject.attendance.tool.panels.PrintPanel;
 import org.sakaiproject.attendance.tool.util.ConfirmationLink;
 
 import java.time.Instant;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 
 /**
  * The overview page which lists AttendanceEvents and basic statistics of each
@@ -87,7 +86,6 @@ public class Overview extends BasePage {
 		add(printContainer);
 
 		createTakeAttendanceNow();
-		//createAddAttendanceItem();
 	}
 
 	private void createHeaders() {
@@ -138,7 +136,11 @@ public class Overview extends BasePage {
 				eventLink.add(new Label("event-name", name));
 				item.add(eventLink);
 
-				Label eventDate = new Label("event-date", modelObject.getStartDateTime());
+				DateTimeFormatter formatter = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.FULL, FormatStyle.SHORT)
+						.withZone(userTimeService.getLocalTimeZone().toZoneId());
+
+				String eventDateString = modelObject.getStartDateTime() == null ? "" : formatter.format(modelObject.getStartDateTime());
+				Label eventDate = new Label("event-date", eventDateString);
 				eventDate.add(new AttributeModifier("data-text", modelObject.getStartDateTime() != null ? modelObject.getStartDateTime() : 0));
 				item.add(eventDate);
 
@@ -151,7 +153,7 @@ public class Overview extends BasePage {
 					}
 				};
 				item.add(activeStatusStats);
-				final AjaxLink eventEditLink = getAddEditWindowAjaxLink(modelObject, "event-edit-link");
+				final AjaxLink eventEditLink = getAddEditWindowAjaxLink(modelObject.getId(), "event-edit-link");
 				item.add(eventEditLink);
 				final AjaxLink printLink = new AjaxLink<Void>("print-link"){
 					@Override
@@ -220,24 +222,5 @@ public class Overview extends BasePage {
 		};
 		takeAttendanceNowForm.add(new SubmitLink("take-attendance-now"));
 		add(takeAttendanceNowForm);
-	}
-
-	private void createAddAttendanceItem() {
-		final Form<?> addAttendanceItemForm = new Form<Void>("add-attendance-item-form");
-		final AjaxButton addAttendanceItem = new AjaxButton("add-attendance-item") {
-			@Override
-			public void onSubmit(final AjaxRequestTarget target, final Form form) {
-				final ModalWindow window = getAddOrEditItemWindow();
-				window.setTitle(new ResourceModel("attendance.add.header"));
-				window.setContent(new EventInputPanel(window.getContentId(), window, null));
-				window.show(target);
-			}
-		};
-
-		addAttendanceItem.setDefaultFormProcessing(false);
-		addAttendanceItem.setOutputMarkupId(true);
-		addAttendanceItemForm.add(addAttendanceItem);
-
-		add(addAttendanceItemForm);
 	}
 }

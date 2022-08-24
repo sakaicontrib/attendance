@@ -21,7 +21,8 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
-import org.apache.wicket.extensions.yui.calendar.DateTimeField;
+import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.head.StringHeaderItem;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
@@ -32,6 +33,11 @@ import org.sakaiproject.attendance.tool.pages.EventView;
 import org.sakaiproject.attendance.tool.pages.Overview;
 import org.sakaiproject.attendance.tool.util.AttendanceFeedbackPanel;
 import org.sakaiproject.attendance.tool.util.PlaceholderBehavior;
+import org.sakaiproject.portal.util.PortalUtils;
+import org.sakaiproject.wicket.component.SakaiDateTimeField;
+
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 
 
 /**
@@ -43,36 +49,40 @@ import org.sakaiproject.attendance.tool.util.PlaceholderBehavior;
 public class EventInputPanel extends BasePanel {
     private static final long serialVersionUID = 1L;
 
-    private IModel<AttendanceEvent> eventModel;
+    private TextField<String> eventNameField;
+    private SakaiDateTimeField startDateTimeField;
+
+    private ZonedDateTime startDateTime;
     private AttendanceEvent attendanceEvent;
+
     private ModalWindow window;
+
     private boolean isEditing;
     private boolean recursiveAddAnother;
 
-    public EventInputPanel(String id, final ModalWindow window, final IModel<AttendanceEvent> event) {
-        this(id, window, event, false);
+    public EventInputPanel(String id, final ModalWindow window, final IModel<Long> eventIdModel) {
+        this(id, window, eventIdModel, false);
     }
 
-    public EventInputPanel(String id, final ModalWindow window, final IModel<AttendanceEvent> event, boolean recursive) {
-        super(id, event);
+    public EventInputPanel(String id, final ModalWindow window, final IModel<Long> eventIdModel, boolean recursive) {
+        super(id, eventIdModel);
         this.window = window;
         this.recursiveAddAnother = recursive;
 
-        if(event == null) {
+        if(eventIdModel == null) {
             this.isEditing = false;
             this.attendanceEvent = new AttendanceEvent();
-            this.eventModel = new CompoundPropertyModel<>(attendanceEvent);
         } else {
             this.isEditing = true;
-            this.eventModel = event;
-            attendanceEvent = event.getObject();
+            this.attendanceEvent = attendanceLogic.getAttendanceEvent(eventIdModel.getObject());
+            this.startDateTime = this.attendanceEvent.getStartDateTime() == null ? null : ZonedDateTime.ofInstant(this.attendanceEvent.getStartDateTime(), ZoneId.systemDefault());
         }
 
         add(createEventInputForm());
     }
 
-    private Form<AttendanceEvent> createEventInputForm() {
-        Form<AttendanceEvent> eventForm = new Form<>("event", this.eventModel);
+    private Form<?> createEventInputForm() {
+        Form<?> eventForm = new Form<Void>("event");
 
         eventForm.add(new AttendanceFeedbackPanel("addEditItemFeedback"));
 
@@ -102,19 +112,31 @@ public class EventInputPanel extends BasePanel {
         return eventForm;
     }
 
-    private void processSave(AjaxRequestTarget target, Form<?> form, boolean addAnother) {
-        AttendanceEvent e = (AttendanceEvent) form.getModelObject();
-        e.setAttendanceSite(attendanceLogic.getCurrentAttendanceSite());
-        e = attendanceLogic.updateAttendanceEvent(e);
+    public ZonedDateTime getStartDateTime() {
+        return this.startDateTime;
+    }
 
-        if(e != null){
-            StringResourceModel temp = new StringResourceModel("attendance.add.success", null, new String[]{e.getName()});
+    public void setStartDateTime(ZonedDateTime zoned)	{
+        this.startDateTime = zoned;
+    }
+
+    private void processSave(AjaxRequestTarget target, Form<?> form, boolean addAnother) {
+        try {
+            AttendanceEvent saveEvent = attendanceLogic.getAttendanceEvent(this.attendanceEvent.getId());
+
+            saveEvent.setName(eventNameField.getModelObject());
+
+            ZonedDateTime startDate = startDateTimeField.getModelObject();
+            saveEvent.setStartDateTime(startDate == null ? null : startDate.toInstant());
+
+            saveEvent = attendanceLogic.updateAttendanceEvent(saveEvent);
+
+            StringResourceModel temp = new StringResourceModel("attendance.add.success", null, (Object[]) new String[]{saveEvent.getName()});
             getSession().success(temp.getString());
-        } else {
+        } catch (Exception ex) {
             error(getString("attendance.add.failure"));
             target.addChildren(form, FeedbackPanel.class);
         }
-
         final Class<? extends Page> currentPageClass = getPage().getPageClass();
         if(addAnother) {
             if(Overview.class.equals(currentPageClass)) {
@@ -161,20 +183,21 @@ public class EventInputPanel extends BasePanel {
         };
     }
 
-    private void createValues(Form<AttendanceEvent> event){
-        final TextField name = new TextField<String>("name") {
+    private void createValues(Form<?> form){
+        eventNameField = new TextField<>("name", Model.of(attendanceEvent.getName())) {
             @Override
-            protected void onInitialize(){
+            protected void onInitialize() {
                 super.onInitialize();
                 add(new PlaceholderBehavior(getString("event.placeholder.name")));
             }
         };
-        final DateTimeField startDateTime = new DateTimeField("startDateTime");
+        eventNameField.setRequired(true);
+        form.add(eventNameField);
 
-        name.setRequired(true);
-
-        event.add(name);
-        event.add(startDateTime);
+        startDateTimeField = new SakaiDateTimeField("startDateTime", new PropertyModel<>(this, "startDateTime"), ZoneId.systemDefault());
+        startDateTimeField.setUseTime(true);
+        startDateTimeField.setAllowEmptyDate(true);
+        form.add(startDateTimeField);
     }
 
     private ResourceModel getSubmitLabel() {
@@ -183,6 +206,15 @@ public class EventInputPanel extends BasePanel {
         }
 
         return new ResourceModel("attendance.add.create");
+    }
+
+    public void renderHead(final IHeaderResponse response) {
+
+        final String version = PortalUtils.getCDNQuery();
+        response.render(StringHeaderItem.forString(
+                "<script src=\"/webcomponents/rubrics/sakai-rubrics-utils.js" + version + "\"></script>"));
+        response.render(StringHeaderItem.forString(
+                "<script type=\"module\" src=\"/webcomponents/rubrics/rubric-association-requirements.js" + version + "\"></script>"));
     }
 }
 

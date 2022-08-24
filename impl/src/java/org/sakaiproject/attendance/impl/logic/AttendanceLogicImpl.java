@@ -138,7 +138,7 @@ public class AttendanceLogicImpl implements AttendanceLogic {
 		if(aE == null) {
 			throw new IllegalArgumentException("AttendanceEvent is null");
 		}
-		attendanceEventRepository.delete(aE);
+		attendanceEventRepository.deleteById(aE.getId());
 	}
 
 	/**
@@ -443,7 +443,7 @@ public class AttendanceLogicImpl implements AttendanceLogic {
 	 * {@inheritDoc}
 	 */
 	public void deleteGradingRule(GradingRule gradingRule) {
-		gradingRuleRepository.delete(gradingRule);
+		gradingRuleRepository.deleteById(gradingRule.getId());
 	}
 
 	/**
