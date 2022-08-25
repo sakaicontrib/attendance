@@ -41,13 +41,11 @@ import org.sakaiproject.attendance.api.model.AttendanceEvent;
 import org.sakaiproject.attendance.api.model.Status;
 import org.sakaiproject.attendance.tool.panels.EventInputPanel;
 import org.sakaiproject.attendance.tool.util.AttendanceFeedbackPanel;
-import org.sakaiproject.component.cover.ServerConfigurationService;
 import org.sakaiproject.portal.util.PortalUtils;
 import org.sakaiproject.time.api.UserTimeService;
 import org.sakaiproject.util.ResourceLoader;
 
 import javax.servlet.http.HttpServletRequest;
-import java.time.format.DateTimeFormatter;
 
 
 /**

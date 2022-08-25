@@ -35,7 +35,6 @@ import org.sakaiproject.attendance.api.model.AttendanceRecord;
 import org.sakaiproject.attendance.api.model.AttendanceStatus;
 import org.sakaiproject.attendance.api.model.Status;
 import org.sakaiproject.attendance.tool.dataproviders.AttendanceStatusProvider;
-import org.sakaiproject.component.cover.ServerConfigurationService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -225,7 +224,7 @@ public class AttendanceRecordFormDataPanel extends BasePanel {
     @Override
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
-        final String version = ServerConfigurationService.getString("portal.cdn.version", "");
+        final String version = serverConfigurationService.getString("portal.cdn.version", "");
         response.render(JavaScriptHeaderItem.forUrl(String.format("javascript/attendanceRecordForm.js?version=%s", version)));
         response.render(OnDomReadyHeaderItem.forScript("attendance.recordFormSetup();"));
     }

@@ -29,6 +29,7 @@ import org.sakaiproject.attendance.api.model.Status;
 
 
 import lombok.extern.slf4j.Slf4j;
+import org.sakaiproject.component.api.ServerConfigurationService;
 
 /**
  * A BasePanel which all panels extend
@@ -49,6 +50,9 @@ public class BasePanel extends Panel {
 
     @SpringBean(name="org.sakaiproject.attendance.api.AttendanceGradebookProvider")
     protected AttendanceGradebookProvider attendanceGradebookProvider;
+
+    @SpringBean(name="org.sakaiproject.component.api.ServerConfigurationService")
+    protected ServerConfigurationService serverConfigurationService;
 
     protected String role;
 
