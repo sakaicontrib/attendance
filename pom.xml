@@ -68,12 +68,6 @@
       			<version>${project.version}</version>
       			<scope>provided</scope>
     		</dependency>
-    		<dependency>
-      			<groupId>org.sakaiproject.attendance</groupId>
-      			<artifactId>attendance-impl</artifactId>
-      			<version>${project.version}</version>
-      			<scope>runtime</scope>
-    		</dependency>
 			
 			<!-- third party dependencies -->
 			<dependency>
@@ -96,11 +90,6 @@
 				<groupId>org.apache.wicket</groupId>
 				<artifactId>wicket-extensions</artifactId>
 				<version>6.21.0</version>
-			</dependency>
-			<dependency>
-				<groupId>commons-configuration</groupId>
-				<artifactId>commons-configuration</artifactId>
-				<version>1.10</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
