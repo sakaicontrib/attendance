@@ -25,11 +25,14 @@ import org.sakaiproject.attendance.model.AttendanceGrade;
 import org.sakaiproject.attendance.model.AttendanceSite;
 import org.sakaiproject.attendance.util.AttendanceConstants;
 import org.sakaiproject.grading.api.AssessmentNotFoundException;
+import org.sakaiproject.grading.api.CategoryDefinition;
 import org.sakaiproject.grading.api.ConflictingAssignmentNameException;
 import org.sakaiproject.grading.api.GradingService;
 import org.sakaiproject.tool.api.Tool;
 import org.sakaiproject.tool.api.ToolManager;
 
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -54,7 +57,7 @@ public class AttendanceGradebookProviderImpl implements AttendanceGradebookProvi
     /**
      * {@inheritDoc}
      */
-    public boolean create(AttendanceSite aS) {
+    public boolean create(AttendanceSite aS, String categoryId) {
         if(log.isDebugEnabled()) {
             log.debug("create Gradebook");
         }
@@ -64,10 +67,13 @@ public class AttendanceGradebookProviderImpl implements AttendanceGradebookProvi
         String siteID = aS.getSiteID();
 
         String appName = AttendanceConstants.SAKAI_TOOL_NAME;
-
+        Long categoryIdNumber = null;
+        if(categoryId != null){
+            categoryIdNumber = Long.valueOf(categoryId);
+        }
         String aSUID = getAttendanceUID(aS);
         try {
-            gradingService.addExternalAssessment(siteID, aSUID, null, aS.getGradebookItemName(), aS.getMaximumGrade(), null, appName, null, false, null);// add it to the gradebook
+            gradingService.addExternalAssessment(siteID, aSUID, null, aS.getGradebookItemName(), aS.getMaximumGrade(), null, appName, null, false, categoryIdNumber);// add it to the gradebook
 
             Map<String, String> scores = attendanceLogic.getAttendanceGradeScores();
             gradingService.updateExternalAssessmentScoresString(siteID, aSUID, scores);
@@ -104,16 +110,19 @@ public class AttendanceGradebookProviderImpl implements AttendanceGradebookProvi
     /**
      * {@inheritDoc}
      */
-    public boolean update(AttendanceSite aS) {
+    public boolean update(AttendanceSite aS, String categoryId) {
         if(log.isDebugEnabled()) {
             log.debug("Updating GB for AS " + aS.getSiteID());
         }
-
+        Long categoryIdNumber = null;
+        if(categoryId != null){
+            categoryIdNumber = Long.valueOf(categoryId);
+        }
         String siteID = aS.getSiteID();
         String aUID = getAttendanceUID(aS);
         if(gradingService.isExternalAssignmentDefined(siteID, aUID)) {
         	try {
-        		gradingService.updateExternalAssessment(siteID, aUID, null, null, aS.getGradebookItemName(), aS.getMaximumGrade(), null, false);
+        		    gradingService.updateExternalAssessment(siteID, aUID, null, null, aS.getGradebookItemName(), categoryIdNumber, aS.getMaximumGrade(), null, false);
                     return true;
             } catch (ConflictingAssignmentNameException e) {
             	log.warn("Failed to update AttendanceSite for site " + siteID + " in Gradebook", e);
@@ -146,11 +155,27 @@ public class AttendanceGradebookProviderImpl implements AttendanceGradebookProvi
                 return true;
             } else {
                 //does not exist, add to GB and add all grades
-                return create(aS);
+                return create(aS,null);
             }
         }
 
         return false;
+    }
+
+    public Map<String,String> getGradebookCategories(String gbUID){
+        if(!doesGradebookHaveCategories(gbUID)){
+            return null;
+        }
+        Map<String,String> categoryMap = new HashMap<>();
+        List<CategoryDefinition> categories = gradingService.getCategoryDefinitions(gbUID);
+        for(CategoryDefinition d: categories){
+            categoryMap.put(d.getId().toString(),d.getName());
+        }
+        return categoryMap;
+    }
+
+    public boolean doesGradebookHaveCategories(String gbUID){
+        return gradingService.isCategoriesEnabled(gbUID);
     }
 
     /**
@@ -169,6 +194,16 @@ public class AttendanceGradebookProviderImpl implements AttendanceGradebookProvi
 
     private boolean isAssessmentDefined(String gbUID, String id) {
         return gradingService.isExternalAssignmentDefined(gbUID, id);
+    }
+
+    public Long getCategoryForItem(String gbUID,Long aSID){
+        Long category = null;
+        try {
+            category = gradingService.getExternalAssessmentCategoryId(gbUID,getAttendanceUID(aSID));
+        } catch (AssessmentNotFoundException g){
+            //just return Null.
+        }
+        return category;
     }
 
     //this is hacky
