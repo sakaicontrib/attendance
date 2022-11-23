@@ -24,12 +24,13 @@
 	<artifactId>attendance</artifactId>
 	
 	<packaging>pom</packaging>
-	
+
 	<parent>
-    	<groupId>org.sakaiproject</groupId>
-    	<artifactId>master</artifactId>
-    	<version>23-SNAPSHOT</version>
-  	</parent>
+		<groupId>org.sakaiproject</groupId>
+		<artifactId>master</artifactId>
+		<version>24-SNAPSHOT</version>
+		<relativePath>../master/pom.xml</relativePath>
+	</parent>
 
 	<developers>
 		<developer>
