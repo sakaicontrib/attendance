@@ -17,17 +17,16 @@
 package org.sakaiproject.attendance.api.model;
 
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
-import org.hibernate.Hibernate;
+import lombok.ToString;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.sakaiproject.springframework.data.PersistableEntity;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Objects;
 
 /**
  * An AttendanceStatus is a wrapper around the Status enum type defining meta information on individual Statuses.
@@ -38,8 +37,9 @@ import java.util.Objects;
 @Entity
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 @Table(name = "ATTENDANCE_STATUS_T")
-@Getter
-@Setter
+@Data
+@ToString(exclude = {"attendanceSite"})
+@EqualsAndHashCode(of = "id")
 @NoArgsConstructor
 @AllArgsConstructor
 public class AttendanceStatus implements Serializable, PersistableEntity<Long> {
@@ -71,18 +71,5 @@ public class AttendanceStatus implements Serializable, PersistableEntity<Long> {
         this.status = attendanceStatus.getStatus();
         this.sortOrder = attendanceStatus.getSortOrder();
         this.attendanceSite = attendanceStatus.getAttendanceSite();
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
-        AttendanceStatus that = (AttendanceStatus) o;
-        return id != null && Objects.equals(id, that.id);
-    }
-
-    @Override
-    public int hashCode() {
-        return getClass().hashCode();
     }
 }

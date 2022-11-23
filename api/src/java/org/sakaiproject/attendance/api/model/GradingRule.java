@@ -16,17 +16,16 @@
 
 package org.sakaiproject.attendance.api.model;
 
-import lombok.Getter;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
-import org.hibernate.Hibernate;
+import lombok.ToString;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.sakaiproject.springframework.data.PersistableEntity;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Objects;
 
 /**
  * @author David P. Bauer [dbauer1 (at) udayton (dot) edu]
@@ -34,8 +33,9 @@ import java.util.Objects;
 @Entity
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 @Table(name = "ATTENDANCE_RULE_T")
-@Getter
-@Setter
+@Data
+@ToString(exclude = {"attendanceSite", "records"})
+@EqualsAndHashCode(of = "id")
 @NoArgsConstructor
 public class GradingRule implements Serializable, PersistableEntity<Long> {
     private static final long serialVersionUID = 1L;
@@ -65,18 +65,5 @@ public class GradingRule implements Serializable, PersistableEntity<Long> {
 
     public GradingRule(AttendanceSite attendanceSite) {
         this.attendanceSite = attendanceSite;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
-        GradingRule that = (GradingRule) o;
-        return id != null && Objects.equals(id, that.id);
-    }
-
-    @Override
-    public int hashCode() {
-        return getClass().hashCode();
     }
 }

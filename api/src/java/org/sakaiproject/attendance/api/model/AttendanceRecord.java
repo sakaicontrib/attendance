@@ -17,17 +17,16 @@
 package org.sakaiproject.attendance.api.model;
 
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
-import org.hibernate.Hibernate;
+import lombok.ToString;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.sakaiproject.springframework.data.PersistableEntity;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Objects;
 
 /**
  * An AttendanceRecord for a specific user for a specific AttendanceEvent
@@ -43,8 +42,9 @@ import java.util.Objects;
                 @Index(name = "ATTEN_EVENT_STATUS_I", columnList = "A_EVENT_ID, STATUS"),
                 @Index(name = "ATTEN_EVENT_USER_STATUS_I", columnList = "A_EVENT_ID, USER_ID, STATUS")
         })
-@Getter
-@Setter
+@Data
+@ToString(exclude = {"attendanceEvent"})
+@EqualsAndHashCode(of = "id")
 @NoArgsConstructor
 @AllArgsConstructor
 public class AttendanceRecord implements Serializable, PersistableEntity<Long> {
@@ -75,27 +75,5 @@ public class AttendanceRecord implements Serializable, PersistableEntity<Long> {
         this.attendanceEvent = e;
         this.userID = uId;
         this.status = s;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
-        AttendanceRecord that = (AttendanceRecord) o;
-        return id != null && Objects.equals(id, that.id);
-    }
-
-    @Override
-    public int hashCode() {
-        return getClass().hashCode();
-    }
-
-    @Override
-    public String toString() {
-        return getClass().getSimpleName() + "(" +
-                "id = " + id + ", " +
-                "userID = " + userID + ", " +
-                "status = " + status + ", " +
-                "comment = " + comment + ")";
     }
 }

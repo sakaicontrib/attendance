@@ -17,17 +17,16 @@
 package org.sakaiproject.attendance.api.model;
 
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
-import org.hibernate.Hibernate;
+import lombok.ToString;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.sakaiproject.springframework.data.PersistableEntity;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Objects;
 
 /**
  * The AttendanceGrade earned for the all AttendanceItems
@@ -39,8 +38,9 @@ import java.util.Objects;
 @Entity
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 @Table(name = "ATTENDANCE_GRADE_T")
-@Getter
-@Setter
+@Data
+@ToString(exclude = {"attendanceSite"})
+@EqualsAndHashCode(of = "id")
 @NoArgsConstructor
 @AllArgsConstructor
 public class AttendanceGrade implements Serializable, PersistableEntity<Long> {
@@ -68,27 +68,5 @@ public class AttendanceGrade implements Serializable, PersistableEntity<Long> {
     public AttendanceGrade(AttendanceSite aS, String userId) {
         this.attendanceSite = aS;
         this.userID = userId;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
-        AttendanceGrade that = (AttendanceGrade) o;
-        return id != null && Objects.equals(id, that.id);
-    }
-
-    @Override
-    public int hashCode() {
-        return getClass().hashCode();
-    }
-
-    @Override
-    public String toString() {
-        return getClass().getSimpleName() + "(" +
-                "id = " + id + ", " +
-                "grade = " + grade + ", " +
-                "userID = " + userID + ", " +
-                "override = " + override + ")";
     }
 }

@@ -17,10 +17,10 @@
 package org.sakaiproject.attendance.api.model;
 
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
-import org.hibernate.Hibernate;
+import lombok.ToString;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.sakaiproject.attendance.api.util.AttendanceConstants;
@@ -29,7 +29,6 @@ import org.sakaiproject.springframework.data.PersistableEntity;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.HashSet;
-import java.util.Objects;
 import java.util.Set;
 
 /**
@@ -43,8 +42,9 @@ import java.util.Set;
 @Entity
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 @Table(name = "ATTENDANCE_SITE_T")
-@Getter
-@Setter
+@Data
+@ToString
+@EqualsAndHashCode(of = "id")
 @NoArgsConstructor
 @AllArgsConstructor
 public class AttendanceSite implements Serializable, PersistableEntity<Long> {
@@ -91,17 +91,4 @@ public class AttendanceSite implements Serializable, PersistableEntity<Long> {
         this.siteID = siteID;
         this.gradebookItemName = AttendanceConstants.GRADEBOOK_ITEM_NAME;
     }
-
-	@Override
-	public boolean equals(Object o) {
-		if (this == o) return true;
-		if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
-		AttendanceSite that = (AttendanceSite) o;
-		return id != null && Objects.equals(id, that.id);
-	}
-
-	@Override
-	public int hashCode() {
-		return getClass().hashCode();
-	}
 }

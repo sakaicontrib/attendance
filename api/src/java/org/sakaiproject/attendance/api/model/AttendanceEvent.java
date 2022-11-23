@@ -17,10 +17,10 @@
 package org.sakaiproject.attendance.api.model;
 
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
-import org.hibernate.Hibernate;
+import lombok.ToString;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Type;
@@ -30,7 +30,6 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.time.Instant;
 import java.util.HashSet;
-import java.util.Objects;
 import java.util.Set;
 
 /**
@@ -43,8 +42,9 @@ import java.util.Set;
 @Entity
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 @Table(name = "ATTENDANCE_EVENT_T")
-@Getter
-@Setter
+@Data
+@ToString(exclude = {"attendanceSite", "records"})
+@EqualsAndHashCode(of = "id")
 @NoArgsConstructor
 @AllArgsConstructor
 public class AttendanceEvent implements Serializable, PersistableEntity<Long> {
@@ -75,26 +75,5 @@ public class AttendanceEvent implements Serializable, PersistableEntity<Long> {
         this.name = attendanceEvent.name;
         this.startDateTime = attendanceEvent.startDateTime;
         this.attendanceSite = attendanceEvent.attendanceSite;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
-        AttendanceEvent that = (AttendanceEvent) o;
-        return id != null && Objects.equals(id, that.id);
-    }
-
-    @Override
-    public int hashCode() {
-        return getClass().hashCode();
-    }
-
-    @Override
-    public String toString() {
-        return getClass().getSimpleName() + "(" +
-                "id = " + id + ", " +
-                "name = " + name + ", " +
-                "startDateTime = " + startDateTime + ")";
     }
 }

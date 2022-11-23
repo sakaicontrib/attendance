@@ -17,58 +17,33 @@
 package org.sakaiproject.attendance.api.model;
 
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import java.io.Serializable;
-import java.util.Objects;
 
 /**
  * Holds the records that are being changed by the Import function.
  *
  * Created by james on 6/9/17.
  */
+@Data
+@EqualsAndHashCode(of = {"id","attendanceEvent","userID","status","comment","oldComment","oldStatus"})
 @NoArgsConstructor
 @AllArgsConstructor
 public class ImportConfirmList implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    @Getter @Setter private Long                id;
-    @Getter @Setter private AttendanceEvent     attendanceEvent;
-    @Getter @Setter private AttendanceRecord    attendanceRecord;
-    @Getter @Setter private AttendanceSite      attendanceSite;
-    @Getter @Setter private String              userID;
-    @Getter @Setter private Status              status;
-    @Getter @Setter private Status              oldStatus;
-    @Getter @Setter private String              comment;
-    @Getter @Setter private String              oldComment;
-    @Getter @Setter private String              eventName;
-    @Getter @Setter private String              eventDate;
-
-
-    public ImportConfirmList(AttendanceEvent e, String uId, Status newStatus) {
-        this.attendanceEvent    = e;
-        this.userID             = uId;
-        this.status             = newStatus;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        final ImportConfirmList that = (ImportConfirmList) o;
-        return Objects.equals(id, that.id) &&
-                Objects.equals(attendanceEvent, that.attendanceEvent) &&
-                Objects.equals(userID, that.userID) &&
-                status == that.status &&
-                Objects.equals(comment, that.comment) &&
-                Objects.equals(oldComment, that.oldComment) &&
-                Objects.equals(oldStatus, that.oldStatus);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id);
-    }
+    private Long id;
+    private AttendanceEvent attendanceEvent;
+    private AttendanceRecord attendanceRecord;
+    private AttendanceSite attendanceSite;
+    private String userID;
+    private Status status;
+    private Status oldStatus;
+    private String comment;
+    private String oldComment;
+    private String eventName;
+    private String eventDate;
 }
