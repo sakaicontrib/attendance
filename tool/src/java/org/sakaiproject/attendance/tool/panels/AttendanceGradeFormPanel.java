@@ -16,6 +16,8 @@
 
 package org.sakaiproject.attendance.tool.panels;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
@@ -31,6 +33,11 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.model.ResourceModel;
 import org.sakaiproject.attendance.model.AttendanceSite;
 import org.sakaiproject.attendance.tool.panels.util.GradebookItemNameValidator;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 /**
  * AttendanceGradeFormPanel is a Panel is used to get AttendanceSite settings for Grades.
@@ -50,6 +57,8 @@ public class AttendanceGradeFormPanel extends BasePanel {
     private        final    IModel<Boolean> autoGradeBySubtraction      = new Model<>();
     private                 GradingRulesPanel gradingRulesPanel;
     private                 WebMarkupContainer autoGradingTypeContainer;
+    private                 String          previousCategory;
+    private                 WebMarkupContainer  gradebookCategories;
 
     public AttendanceGradeFormPanel(String id, FeedbackPanel pg) {
         super(id);
@@ -82,12 +91,20 @@ public class AttendanceGradeFormPanel extends BasePanel {
         this.previousMaxGrade = aS.getMaximumGrade();
         this.useAutoGrading.setObject(aS.getUseAutoGrading());
         this.autoGradeBySubtraction.setObject(aS.getAutoGradeBySubtraction());
-
+        this.previousCategory = null;
+        if(attendanceGradebookProvider.doesGradebookHaveCategories(aS.getSiteID()) && attendanceGradebookProvider.getCategoryForItem(aS.getSiteID(), aS.getId())!=null){
+            this.previousCategory = String.valueOf(attendanceGradebookProvider.getCategoryForItem(aS.getSiteID(), aS.getId()));
+        }
         Form<AttendanceSite> aSForm = new Form<AttendanceSite>("settings", new CompoundPropertyModel<>(aS)) {
             @Override
             public void onSubmit() {
                 AttendanceSite aS = (AttendanceSite) getDefaultModelObject();
-
+                CategoryParts catNow = null;
+                String categoryId = null;
+                if(attendanceGradebookProvider.doesGradebookHaveCategories(aS.getSiteID())){
+                    catNow = (CategoryParts) gradebookCategories.getDefaultModelObject();
+                    categoryId = catNow.getCategoryId();
+                }
                 aS.setUseAutoGrading(useAutoGrading.getObject());
                 aS.setAutoGradeBySubtraction(autoGradeBySubtraction.getObject());
 
@@ -101,13 +118,15 @@ public class AttendanceGradeFormPanel extends BasePanel {
                 if (result) {
                     if(aS.getSendToGradebook()){
                         if(previousSendToGradebook) { // if previously true, see if any relevant values have changed
-                            if(!previousName.equals(aS.getGradebookItemName()) || !previousMaxGrade.equals(aS.getMaximumGrade())){
-                                attendanceGradebookProvider.update(aS);
+                            if(!previousName.equals(aS.getGradebookItemName()) || !previousMaxGrade.equals(aS.getMaximumGrade()) || (categoryId!=null && !previousCategory.equals(categoryId))){
+                                attendanceGradebookProvider.update(aS, categoryId);
                             }
-
+                            if(attendanceGradebookProvider.doesGradebookHaveCategories(aS.getSiteID()) && attendanceGradebookProvider.getCategoryForItem(aS.getSiteID(), aS.getId())!=null) {
+                                previousCategory = String.valueOf(attendanceGradebookProvider.getCategoryForItem(aS.getSiteID(), aS.getId()));
+                            }
                             previousName = aS.getGradebookItemName();
                         } else {
-                            attendanceGradebookProvider.create(aS);
+                            attendanceGradebookProvider.create(aS, categoryId);
                         }
                     } else {
                         if(previousSendToGradebook) {
@@ -194,7 +213,33 @@ public class AttendanceGradeFormPanel extends BasePanel {
         };
         grading.add(sendToGradebook);
         grading.add(sendToGBLabel);
-
+        final boolean gradebookHasCategories = attendanceGradebookProvider.doesGradebookHaveCategories(aS.getSiteID());
+        Map<String,String> categories = attendanceGradebookProvider.getGradebookCategories(aS.getSiteID());
+        final List<CategoryParts> categoryParts = categoryListLoader(categories);
+        if(gradebookHasCategories){
+            gradebookCategories = new DropDownChoice<CategoryParts>("gradebookCategory",new Model<CategoryParts>(new CategoryParts(this.previousCategory,categories.get(this.previousCategory))),categoryParts,new ChoiceRenderer<CategoryParts>(){
+                private static final long serialVersionUID = 1L;
+                @Override
+                public Object getDisplayValue(final CategoryParts a) {
+                    return a.getCategoryName();
+                }
+                @Override
+                public String getIdValue(final CategoryParts a,final int index) {
+                    return a.getCategoryId();
+                }
+            });
+        } else {
+            gradebookCategories = new WebMarkupContainer("gradebookCategory");
+        }
+        gradebookCategories.setVisible(gradebookHasCategories);
+        Label categoriesLabel = new Label("gradebookCategoryLabel", new ResourceModel("attendance.settings.grading.gradebook.category")){
+            @Override
+            public boolean isVisible(){
+                return gradebookHasCategories;
+            }
+        };
+        gradebook.add(gradebookCategories);
+        gradebook.add(categoriesLabel);
         final RadioGroup<Boolean> useAutoGradingGroup = new RadioGroup<>("use-auto-grading-group", this.useAutoGrading);
         useAutoGradingGroup.add(new AjaxFormComponentUpdatingBehavior("onchange") {
             @Override
@@ -252,5 +297,25 @@ public class AttendanceGradeFormPanel extends BasePanel {
         aSForm.add(submit);
 
         return aSForm;
+    }
+    private List<CategoryParts> categoryListLoader(Map<String,String> categoryMap){
+        List<CategoryParts> parts = new ArrayList<>();
+        if(categoryMap == null){
+            return parts;
+        }
+        for(String idNow: categoryMap.keySet()){
+            CategoryParts categoryNow = new CategoryParts(idNow,categoryMap.get(idNow));
+            parts.add(categoryNow);
+        }
+        return parts;
+    }
+
+    private class CategoryParts implements Serializable {
+        @Getter @Setter private String categoryId;
+        @Getter @Setter private String categoryName;
+        public CategoryParts(String id, String name){
+            this.categoryName = name;
+            this.categoryId = id;
+        }
     }
 }
