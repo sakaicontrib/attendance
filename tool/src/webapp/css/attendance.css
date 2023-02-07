@@ -13,19 +13,6 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-
-body {
-    color: #111;
-}
-
-form {
-    margin-bottom: 1em;
-}
-
-form.attendanceStatusForm {
-    margin-bottom: 0px;
-}
-
 .table > tbody > tr > td.attendanceStatusTd {
     vertical-align: middle;
 }
@@ -47,15 +34,11 @@ div.table-responsive {
     color: #0064cd;
 }
 
-.overviewTable a, .overviewTable a:link, .overviewTable a:visited, .overviewTable a:hover, .overviewTable a:focus, .overviewTable a:active{
-    color: var(--infoBanner-color);
-}
-
 .attendanceBreadcrumbs a, .attendanceBreadcrumbs a:link, .attendanceBreadcrumbs a:visited, .attendanceBreadcrumbs a:hover, .attendanceBreadcrumbs a:focus, .attendanceBreadcrumbs a:active{
     color: #0064cd;
 }
 
-h1.overviewHeader, h1.itemsHeader, h1.settingsHeader, h1.gradingHeader {
+h1.itemsHeader, h1.settingsHeader, h1.gradingHeader {
     color: var(--sakai-text-color-1);
     margin-top: 1.2em;
     min-height: 32px;
@@ -67,15 +50,6 @@ h1.tightHeader, h2.tightHeader, h3.tightHeader, h4.tightHeader, h5.tightHeader, 
 
 span.itemsHeaderSpan, span.settingsHeaderSpan, span.gradingHeaderSpan {
     margin: 0 .5em;
-}
-
-p.overviewInstructions, p.addEditInstructions {
-    font-size: 1.2em;
-    line-height: 1.5em;
-}
-
-p.addEditInstructions {
-    width: 70%;
 }
 
 img.overviewInfo, div.attendanceBreadcrumbs img, .div-table-row th.takeAttendanceDateHeader, .vertAlignMiddle {
@@ -146,26 +120,12 @@ table.itemListTable, table.eventViewTable, table.takeAttendanceTable {
 }
 
 thead tr .tablesorter-header:not(.sorter-false):not(.tablesorter-headerAsc):not(.tablesorter-headerDesc), table.itemListTable thead tr .header, table.takeAttendanceTable thead tr .header, th.tablesorter-headerUnsorted, tr.div-table-row > th.header:not(.headerSortDown):not(.headerSortUp)  {
-    background: url(../images/bg.png) no-repeat bottom .5em right;
     cursor: pointer;
     padding-right: 24px;
 }
 
-thead tr .tablesorter-headerAsc, table.itemListTable thead tr .headerSortUp, table.takeAttendanceTable thead tr .headerSortUp, th.headerSortUp {
-    background: url(../images/asc.png) no-repeat bottom .5em right;
-}
-thead tr .tablesorter-headerDesc, table.itemListTable thead tr .headerSortDown, table.takeAttendanceTable thead tr .headerSortDown, th.headerSortDown {
-    background: url(../images/desc.png) no-repeat bottom .5em right;
-}
-
 table.itemListTable, table.eventViewTable, table.takeAttendanceTable, div.eventFormContainer, form.addEditForm, .addComment h3, td.overviewGradeCol form {
     margin: 0;
-}
-
-.overviewTable td, .overviewTable th, .itemListTable td, .itemListTable th, .eventViewTable td, .eventViewTable th {
-    border: 1px solid #ccc;
-    padding: .5em;
-    text-align: left;
 }
 
 .takeAttendanceTable td, .takeAttendanceTable th {

@@ -24,7 +24,7 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.ResourceModel;
-import org.sakaiproject.attendance.model.AttendanceSite;
+import org.sakaiproject.attendance.api.model.AttendanceSite;
 import org.sakaiproject.attendance.tool.panels.AttendanceCommentFormPanel;
 import org.sakaiproject.attendance.tool.panels.AttendanceStatusFormPanel;
 

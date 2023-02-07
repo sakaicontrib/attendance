@@ -14,13 +14,22 @@
   ~  See the License for the specific language governing permissions and
   ~  limitations under the License.
   -->
-<beans xmlns="http://www.springframework.org/schema/beans"
-	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xmlns:tx="http://www.springframework.org/schema/tx"
+	   xmlns:context="http://www.springframework.org/schema/context"
+	   xmlns:util="http://www.springframework.org/schema/util"
+	   xmlns="http://www.springframework.org/schema/beans"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+                           http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
+                           http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd
+                           http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+	<context:component-scan base-package="org.sakaiproject.attendance"/>
+	<tx:annotation-driven transaction-manager="org.sakaiproject.springframework.orm.hibernate.GlobalTransactionManager"/>
 
 	<!--  SakaiProxy -->
  	<bean id="org.sakaiproject.attendance.logic.SakaiProxy"
-    	class="org.sakaiproject.attendance.logic.SakaiProxyImpl"
+    	class="org.sakaiproject.attendance.impl.logic.SakaiProxyImpl"
         init-method="init">
 
         <!-- API injection -->
@@ -36,42 +45,28 @@
 
 	</bean>
 
-    <!-- DAO. This uses the DataSource that has already been setup by Sakai  -->
-	<bean id="org.sakaiproject.attendance.dao.AttendanceDaoTarget"
-		  class="org.sakaiproject.attendance.dao.impl.AttendanceDaoImpl"
-		  init-method="init">
-		<property name="sessionFactory" ref="org.sakaiproject.springframework.orm.hibernate.GlobalSessionFactory" />
-	</bean>
-
-	<!-- Attendance Data Access Object -->
-	<bean id="org.sakaiproject.attendance.dao.AttendanceDao"
-		  class="org.sakaiproject.genericdao.springutil.CurrentClassLoaderTxProxyFactoryBean">
-		<property name="transactionManager" ref="org.sakaiproject.springframework.orm.hibernate.GlobalTransactionManager" />
-		<property name="target" ref="org.sakaiproject.attendance.dao.AttendanceDaoTarget" />
-		<property name="transactionAttributes">
-			<props>
-				<prop key="*">PROPAGATION_REQUIRED</prop>
-			</props>
-		</property>
-	</bean>
-
 	<!-- AttendanceLogic -->
 	<bean id="org.sakaiproject.attendance.logic.AttendanceLogic"
-		  class="org.sakaiproject.attendance.logic.AttendanceLogicImpl"
-		  init-method="init">
+		  class="org.sakaiproject.attendance.impl.logic.AttendanceLogicImpl">
 
-		<property name="dao" ref="org.sakaiproject.attendance.dao.AttendanceDao" />
+		<property name="attendanceEventRepository" ref="org.sakaiproject.attendance.api.repository.AttendanceEventRepository" />
+		<property name="attendanceGradeRepository" ref="org.sakaiproject.attendance.api.repository.AttendanceGradeRepository" />
+		<property name="attendanceRecordRepository" ref="org.sakaiproject.attendance.api.repository.AttendanceRecordRepository" />
+		<property name="attendanceSiteRepository" ref="org.sakaiproject.attendance.api.repository.AttendanceSiteRepository" />
+		<property name="attendanceStatusRepository" ref="org.sakaiproject.attendance.api.repository.AttendanceStatusRepository" />
+		<property name="gradingRuleRepository" ref="org.sakaiproject.attendance.api.repository.GradingRuleRepository" />
 		<property name="sakaiProxy" ref="org.sakaiproject.attendance.logic.SakaiProxy" />
 		<property name="attendanceGradebookProvider" ref="org.sakaiproject.attendance.api.AttendanceGradebookProvider" />
 	</bean>
 
 	<!-- PDFEventExporter -->
 	<bean id="org.sakaiproject.attendance.export.PDFEventExporter"
-		  class="org.sakaiproject.attendance.export.PDFEventExporterImpl"
+		  class="org.sakaiproject.attendance.impl.export.PDFEventExporterImpl"
 		  init-method="init">
 
 		<property name="attendanceLogic" ref="org.sakaiproject.attendance.logic.AttendanceLogic" />
 		<property name="sakaiProxy" ref="org.sakaiproject.attendance.logic.SakaiProxy" />
+		<property name="userTimeService" ref="org.sakaiproject.time.api.UserTimeService" />
 
 	</bean>
 
@@ -86,55 +81,49 @@
 		<property name="gradingService" ref="org.sakaiproject.grading.api.GradingService" />
 	</bean>
 
-	<!-- Add our HBM files to the Sakai global session factory -->
-	<bean id="org.sakaiproject.attendance.hbm.HBMMappingList"
-		  class="org.sakaiproject.springframework.orm.hibernate.impl.AdditionalHibernateMappingsImpl">
+	<!--  Hibernate persistence -->
 
-		<property name="mappingResources">
+	<bean id="org.sakaiproject.springframework.orm.hibernate.impl.AdditionalHibernateMappings.attendance"
+		  class="org.sakaiproject.springframework.orm.hibernate.impl.AdditionalHibernateMappingsImpl">
+		<property name="annotatedClasses">
 			<list>
-				<value>org/sakaiproject/attendance/hbm/AttendanceEvent.hbm.xml</value>
-				<value>org/sakaiproject/attendance/hbm/AttendanceGrade.hbm.xml</value>
-				<value>org/sakaiproject/attendance/hbm/AttendanceItemStats.hbm.xml</value>
-				<value>org/sakaiproject/attendance/hbm/AttendanceRecord.hbm.xml</value>
-				<value>org/sakaiproject/attendance/hbm/AttendanceSite.hbm.xml</value>
-				<value>org/sakaiproject/attendance/hbm/AttendanceStatus.hbm.xml</value>
-				<value>org/sakaiproject/attendance/hbm/AttendanceUserStats.hbm.xml</value>
-				<value>org/sakaiproject/attendance/hbm/GradingRule.hbm.xml</value>
+				<value>org.sakaiproject.attendance.api.model.AttendanceEvent</value>
+				<value>org.sakaiproject.attendance.api.model.AttendanceGrade</value>
+				<value>org.sakaiproject.attendance.api.model.AttendanceRecord</value>
+				<value>org.sakaiproject.attendance.api.model.AttendanceStatus</value>
+				<value>org.sakaiproject.attendance.api.model.AttendanceSite</value>
+				<value>org.sakaiproject.attendance.api.model.GradingRule</value>
 			</list>
 		</property>
-
 	</bean>
 
-	<!-- Cache: ttl=1 hour -->
-	<bean id="org.sakaiproject.attendance.cache.CacheManager"
-		  class="org.sakaiproject.attendance.cache.CacheManagerImpl">
-		<property name="memoryService" ref="org.sakaiproject.memory.api.MemoryService" />
+	<bean id="org.sakaiproject.attendance.api.repository.AttendanceEventRepository"
+		  class="org.sakaiproject.attendance.impl.repository.AttendanceEventRepositoryImpl">
+		<property name="sessionFactory" ref="org.sakaiproject.springframework.orm.hibernate.GlobalSessionFactory"/>
 	</bean>
 
-	<!-- Job to Sync the Statistics -->
-	<bean id="AttendanceStatCalc"
-		  class="org.sakaiproject.attendance.services.AttendanceStatCalcJob"
-		  init-method="init" destroy-method="destroy">
-		<property name="attendanceStatCalc" ref="org.sakaiproject.attendance.services.AttendanceStatCalc" />
-		<property name="eventTrackingService" ref="org.sakaiproject.event.api.EventTrackingService" />
-		<property name="usageSessionService" ref="org.sakaiproject.event.api.UsageSessionService" />
-		<property name="authzGroupService" ref="org.sakaiproject.authz.api.AuthzGroupService" />
-		<property name="sessionManager" ref="org.sakaiproject.tool.api.SessionManager" />
+	<bean id="org.sakaiproject.attendance.api.repository.AttendanceGradeRepository"
+		  class="org.sakaiproject.attendance.impl.repository.AttendanceGradeRepositoryImpl">
+		<property name="sessionFactory" ref="org.sakaiproject.springframework.orm.hibernate.GlobalSessionFactory"/>
 	</bean>
 
-	<bean id="org.sakaiproject.api.app.scheduler.JobBeanWrapper.AttendanceStatCalc"
-		  class="org.sakaiproject.component.app.scheduler.jobs.SpringJobBeanWrapper"
-		  init-method="init">
-		<property name="beanId" value="AttendanceStatCalc" />
-		<property name="jobName" value="Attendance Stat Calc - SEE DOCS" />
-		<property name="schedulerManager" 	ref="org.sakaiproject.api.app.scheduler.SchedulerManager" />
+	<bean id="org.sakaiproject.attendance.api.repository.AttendanceRecordRepository"
+		  class="org.sakaiproject.attendance.impl.repository.AttendanceRecordRepositoryImpl">
+		<property name="sessionFactory" ref="org.sakaiproject.springframework.orm.hibernate.GlobalSessionFactory"/>
 	</bean>
 
-	<bean id="org.sakaiproject.attendance.services.AttendanceStatCalc"
-		  class="org.sakaiproject.attendance.services.AttendanceStatCalc"
-		  init-method="init" destroy-method="destroy">
-		<property name="dao" ref="org.sakaiproject.attendance.dao.AttendanceDao" />
-		<property name="sakaiProxy" ref="org.sakaiproject.attendance.logic.SakaiProxy" />
-		<property name="attendanceLogic" ref="org.sakaiproject.attendance.logic.AttendanceLogic" />
+	<bean id="org.sakaiproject.attendance.api.repository.AttendanceSiteRepository"
+		  class="org.sakaiproject.attendance.impl.repository.AttendanceSiteRepositoryImpl">
+		<property name="sessionFactory" ref="org.sakaiproject.springframework.orm.hibernate.GlobalSessionFactory"/>
+	</bean>
+
+	<bean id="org.sakaiproject.attendance.api.repository.AttendanceStatusRepository"
+		  class="org.sakaiproject.attendance.impl.repository.AttendanceStatusRepositoryImpl">
+		<property name="sessionFactory" ref="org.sakaiproject.springframework.orm.hibernate.GlobalSessionFactory"/>
+	</bean>
+
+	<bean id="org.sakaiproject.attendance.api.repository.GradingRuleRepository"
+		  class="org.sakaiproject.attendance.impl.repository.GradingRuleRepositoryImpl">
+		<property name="sessionFactory" ref="org.sakaiproject.springframework.orm.hibernate.GlobalSessionFactory"/>
 	</bean>
 </beans>

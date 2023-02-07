@@ -24,12 +24,13 @@
 	<artifactId>attendance</artifactId>
 	
 	<packaging>pom</packaging>
-	
+
 	<parent>
-    	<groupId>org.sakaiproject</groupId>
-    	<artifactId>master</artifactId>
-    	<version>23-SNAPSHOT</version>
-  	</parent>
+		<groupId>org.sakaiproject</groupId>
+		<artifactId>master</artifactId>
+		<version>24-SNAPSHOT</version>
+		<relativePath>../master/pom.xml</relativePath>
+	</parent>
 
 	<developers>
 		<developer>
@@ -67,12 +68,6 @@
       			<version>${project.version}</version>
       			<scope>provided</scope>
     		</dependency>
-    		<dependency>
-      			<groupId>org.sakaiproject.attendance</groupId>
-      			<artifactId>attendance-impl</artifactId>
-      			<version>${project.version}</version>
-      			<scope>runtime</scope>
-    		</dependency>
 			
 			<!-- third party dependencies -->
 			<dependency>
@@ -95,11 +90,6 @@
 				<groupId>org.apache.wicket</groupId>
 				<artifactId>wicket-extensions</artifactId>
 				<version>6.21.0</version>
-			</dependency>
-			<dependency>
-				<groupId>commons-configuration</groupId>
-				<artifactId>commons-configuration</artifactId>
-				<version>1.10</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>

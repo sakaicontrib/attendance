@@ -16,8 +16,8 @@
 
 package org.sakaiproject.attendance.api;
 
-import org.sakaiproject.attendance.model.AttendanceGrade;
-import org.sakaiproject.attendance.model.AttendanceSite;
+import org.sakaiproject.attendance.api.model.AttendanceGrade;
+import org.sakaiproject.attendance.api.model.AttendanceSite;
 
 import java.util.List;
 import java.util.Map;

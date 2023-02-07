@@ -32,10 +32,12 @@
             </div>
         </div>
         <div class="addItemLine">
-            <label wicket:for="startDateTime">
+            <label wicket:for="startDateTime" id="startDateTimeLabel">
                 <wicket:message key="attendance.add.label.startDateTime" />
             </label>
-            <div wicket:id="startDateTime" id="startDateTime"/>
+            <div>
+                <input wicket:id="startDateTime" id="startDateTime"  type="text" class="form-control" aria-describedby="startDateTimeLabel" />
+            </div>
         </div>
 
         <div class="buttonSection" id="buttonSection">

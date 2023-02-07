@@ -18,10 +18,11 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
-    <artifactId>attendance</artifactId>
-    <groupId>org.sakaiproject.attendance</groupId>
-    <version>23-SNAPSHOT</version>
-  </parent>
+		<artifactId>attendance</artifactId>
+		<groupId>org.sakaiproject.attendance</groupId>
+		<version>24-SNAPSHOT</version>
+		<relativePath>../pom.xml</relativePath>
+	</parent>
 	
 	<name>attendance - Implementation</name>
 	<artifactId>attendance-impl</artifactId>
@@ -42,28 +43,28 @@
     	
     	<!-- third party dependencies -->
 		<dependency>
-			<groupId>org.projectlombok</groupId>
-			<artifactId>lombok</artifactId>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-core</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.data</groupId>
+			<artifactId>spring-data-jpa</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
-			<artifactId>spring-core</artifactId>
+			<artifactId>spring-context</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-orm</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>net.sf.ehcache</groupId>
-			<artifactId>ehcache-core</artifactId>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-tx</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>commons-lang</groupId>
-			<artifactId>commons-lang</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>commons-configuration</groupId>
-			<artifactId>commons-configuration</artifactId>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.hibernate</groupId>
@@ -78,21 +79,13 @@
 			<artifactId>quartz</artifactId>
 		</dependency>
 		<!-- Sakai dependencies -->
-        <dependency>
-            <groupId>org.sakaiproject.kernel</groupId>
-            <artifactId>sakai-kernel-api</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.sakaiproject.kernel</groupId>
-            <artifactId>sakai-component-manager</artifactId>
-        </dependency>
-        <dependency>
+		<dependency>
 			<groupId>org.sakaiproject.kernel</groupId>
-  			<artifactId>sakai-kernel-util</artifactId>
+			<artifactId>sakai-kernel-api</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.sakaiproject.genericdao</groupId>
-			<artifactId>generic-dao</artifactId>
+			<groupId>org.sakaiproject.kernel</groupId>
+			<artifactId>sakai-component-manager</artifactId>
 		</dependency>
         <dependency>
             <groupId>org.sakaiproject.grading</groupId>
