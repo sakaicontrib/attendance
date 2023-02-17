@@ -42,6 +42,7 @@ public class EventInputPage extends BasePage{
 
     private Form<AttendanceEvent> createEventInputForm() {
         Form<AttendanceEvent> eventForm = new Form<>("event", this.eventModel);
+        eventForm.add(new AttendanceFeedbackPanel("addEditItemFeedback"));
         eventForm.add(new Label("addItemTitle", getString("event.add")));
         AjaxSubmitLink submit = createSubmitLink("submit", eventForm, false);
         submit.add(new Label("submitLabel", new ResourceModel("attendance.add.create")));
