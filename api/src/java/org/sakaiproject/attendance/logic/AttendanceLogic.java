@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.sakaiproject.attendance.model.*;
+import org.sakaiproject.entity.api.EntityProducer;
 
 /**
  * The brains of the operation.
@@ -29,7 +30,7 @@ import org.sakaiproject.attendance.model.*;
  * @author David Bauer [dbauer1 (at) udayton (dot) edu]
  * @author Steve Swinsburg (steve.swinsburg@gmail.com)
  */
-public interface AttendanceLogic {
+public interface AttendanceLogic extends EntityProducer {
 
 	/**
 	 * Gets the AttendanceSite by Sakai Site ID
