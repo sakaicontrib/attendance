@@ -63,6 +63,7 @@
 		<property name="dao" ref="org.sakaiproject.attendance.dao.AttendanceDao" />
 		<property name="sakaiProxy" ref="org.sakaiproject.attendance.logic.SakaiProxy" />
 		<property name="attendanceGradebookProvider" ref="org.sakaiproject.attendance.api.AttendanceGradebookProvider" />
+		<property name="entityManager" ref="org.sakaiproject.entity.api.EntityManager" />
 	</bean>
 
 	<!-- PDFEventExporter -->
