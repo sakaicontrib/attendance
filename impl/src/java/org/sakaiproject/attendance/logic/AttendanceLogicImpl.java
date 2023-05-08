@@ -26,6 +26,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.sakaiproject.attendance.api.AttendanceGradebookProvider;
 import org.sakaiproject.attendance.dao.AttendanceDao;
 import org.sakaiproject.attendance.model.*;
+import org.sakaiproject.entity.api.Entity;
+import org.sakaiproject.entity.api.EntityManager;
+import org.sakaiproject.entity.api.EntityProducer;
+import org.sakaiproject.entity.api.EntityTransferrer;
 import org.sakaiproject.user.api.User;
 
 /**
@@ -36,7 +40,8 @@ import org.sakaiproject.user.api.User;
  * @author Steve Swinsburg (steve.swinsburg@gmail.com)
  */
 @Slf4j
-public class AttendanceLogicImpl implements AttendanceLogic {
+public class AttendanceLogicImpl implements AttendanceLogic, EntityTransferrer {
+
 	/**
 	 * {@inheritDoc}
      */
@@ -570,6 +575,8 @@ public class AttendanceLogicImpl implements AttendanceLogic {
 	 */
 	public void init() {
 		log.debug("AttendanceLogicImpl init()");
+
+		entityManager.registerEntityProducer(this, Entity.SEPARATOR + "attendance");
 	}
 
 	private boolean addSite(AttendanceSite s) {
@@ -835,6 +842,62 @@ public class AttendanceLogicImpl implements AttendanceLogic {
 		}
 	}
 
+	@Override
+	public Map<String, String> transferCopyEntities(String fromContext, String toContext, List<String> ids, List<String> transferOptions) {
+		return transferCopyEntities(fromContext, toContext, ids, transferOptions);
+	}
+
+	@Override
+	public String[] myToolIds() {
+		return new String[]{ "sakai.attendance" };
+	}
+
+	@Override
+	public Map<String, String> transferCopyEntities(String fromContext, String toContext, List<String> ids, List<String> transferOptions, boolean cleanup) {
+		Map<String, String> transversalMap = new HashMap<>();
+		AttendanceSite fromSite = getAttendanceSite(fromContext);
+		AttendanceSite toSite = getAttendanceSite(toContext);
+
+		if (cleanup) {
+			// TODO: implement deleting all content in toContext
+			// Maybe wait until soft delete is confirmed everywhere
+		}
+
+		try {
+			// TODO: consider bringing over the statuses from the original site
+
+			List<AttendanceEvent> fromEvents = getAttendanceEventsForSite(fromSite);
+			for (AttendanceEvent fromEvent : fromEvents) {
+				AttendanceEvent toEvent = new AttendanceEvent();
+				toEvent.setAttendanceSite(toSite);
+				toEvent.setName(fromEvent.getName());
+				toEvent.setIsReoccurring(fromEvent.getIsReoccurring());
+				toEvent.setIsRequired(fromEvent.getIsRequired());
+
+				if (fromEvent.getStartDateTime() != null) {
+					toEvent.setStartDateTime(fromEvent.getStartDateTime());
+				}
+				if (fromEvent.getEndDateTime() != null) {
+					toEvent.setEndDateTime(fromEvent.getEndDateTime());
+				}
+
+				addAttendanceEventNow(toEvent);
+				log.info("transferCopyEntities: new attendance event ({})", toEvent.getName());
+
+				transversalMap.put("attendance/" + fromEvent.getId(), "attendance/" + toEvent.getId());
+			}
+		} catch (Exception e) {
+			log.error("transferCopyEntities error", e);
+		}
+
+		return transversalMap;
+	}
+
+	@Override
+	public void updateEntityReferences(String toContext, Map<String, String> transversalMap) {
+		return;
+	}
+
 	@Setter
 	private AttendanceDao dao;
 
@@ -843,4 +906,7 @@ public class AttendanceLogicImpl implements AttendanceLogic {
 
 	@Setter
 	private AttendanceGradebookProvider attendanceGradebookProvider;
+
+	@Setter
+	private EntityManager entityManager;
 }
