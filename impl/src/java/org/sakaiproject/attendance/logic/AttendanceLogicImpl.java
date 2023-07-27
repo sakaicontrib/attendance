@@ -46,7 +46,21 @@ public class AttendanceLogicImpl implements AttendanceLogic, EntityTransferrer {
 	 * {@inheritDoc}
      */
 	public AttendanceSite getAttendanceSite(String siteID) {
-		return dao.getAttendanceSite(siteID);
+		AttendanceSite attendanceSite = dao.getAttendanceSite(siteID);
+
+		if (attendanceSite == null) {
+			attendanceSite = new AttendanceSite(siteID);
+
+			// This will create the site and add statuses to the new site
+			if (!addSite(attendanceSite)) {
+				return null;
+			}
+
+			// We need to re-load the AttendanceSite because of the status creation above
+			attendanceSite = dao.getAttendanceSite(siteID);
+		}
+
+		return attendanceSite;
 	}
 
 	/**
@@ -65,20 +79,7 @@ public class AttendanceLogicImpl implements AttendanceLogic, EntityTransferrer {
 	 */
 	public AttendanceSite getCurrentAttendanceSite() {
 		String currentSiteID = sakaiProxy.getCurrentSiteId();
-
-		AttendanceSite currentAttendanceSite = getAttendanceSite(currentSiteID);
-		// is this the best way to do this?
-		if(currentAttendanceSite == null) {
-			currentAttendanceSite = new AttendanceSite(currentSiteID);
-			if(!addSite(currentAttendanceSite)){
-				return null;
-			}
-		}
-
-		generateMissingAttendanceStatusesForSite(currentAttendanceSite);
-		currentAttendanceSite = getAttendanceSite(currentSiteID);
-
-		return currentAttendanceSite;
+		return getAttendanceSite(currentSiteID);
 	}
 
 	/**
@@ -580,7 +581,12 @@ public class AttendanceLogicImpl implements AttendanceLogic, EntityTransferrer {
 	}
 
 	private boolean addSite(AttendanceSite s) {
-		return dao.addAttendanceSite(s);
+		if (dao.addAttendanceSite(s)) {
+			generateMissingAttendanceStatusesForSite(s);
+			return true;
+		}
+
+		return false;
 	}
 
 	private List<AttendanceGrade> generateAttendanceGrades(AttendanceSite aS) {
