@@ -20,8 +20,7 @@
 	<parent>
 		<artifactId>attendance</artifactId>
 		<groupId>org.sakaiproject.attendance</groupId>
-		<version>24-SNAPSHOT</version>
-		<relativePath>../pom.xml</relativePath>
+		<version>25-SNAPSHOT</version>
 	</parent>
 	
 	<name>attendance - API</name>
