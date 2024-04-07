@@ -16,6 +16,8 @@
 
 package org.sakaiproject.attendance.tool.panels;
 
+import java.util.Arrays;
+
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormSubmitBehavior;
@@ -77,9 +79,9 @@ public class AttendanceGradePanel extends BasePanel {
 
                 if (result) {
                     String grade = aG.getGrade() == null ? "null" : aG.getGrade().toString();
-                    getSession().info(new StringResourceModel("attendance.grade.update.success", null, new String[]{grade, displayName}).getString());
+                    info(new StringResourceModel("attendance.grade.update.success", this, Model.ofList(Arrays.asList(grade, displayName))).getString());
                 } else {
-                    getSession().error(new StringResourceModel("attendance.grade.update.failure", null, new String[]{displayName}).getString());
+                    error(new StringResourceModel("attendance.grade.update.failure", null, Model.of(displayName)).getString());
                 }
 
             }
@@ -114,7 +116,7 @@ public class AttendanceGradePanel extends BasePanel {
 
         if(maximumGrade == null) {
             maximum = new Label("maximum", "/ -");
-            points.add(new AttributeModifier("title", new StringResourceModel("attendance.grade.tooltip.disabled", null, new String[]{new ResourceModel("settings.link.label").getObject()})));
+            points.add(new AttributeModifier("title", new StringResourceModel("attendance.grade.tooltip.disabled", this, Model.of(new ResourceModel("settings.link.label").getObject()))));
         } else {
             maximum = new Label("maximum", "/ "+ maximumGrade.toString());
         }

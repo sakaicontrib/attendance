@@ -22,7 +22,7 @@
 	<parent>
     <artifactId>attendance</artifactId>
     <groupId>org.sakaiproject.attendance</groupId>
-    <version>23-SNAPSHOT</version>
+    <version>25-SNAPSHOT</version>
   </parent>
 	
 	<name>attendance - Tool</name>

@@ -35,6 +35,7 @@ import org.apache.wicket.markup.html.navigation.paging.PagingNavigator;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.ReuseIfModelsEqualStrategy;
 import org.apache.wicket.markup.repeater.data.DataView;
+import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.ResourceModel;
@@ -248,6 +249,16 @@ public class EventView extends BasePage {
             @Override
             public String getIdValue(String s, int i) {
                 return s;
+            }
+
+            @Override
+            public String getObject(String s, IModel<? extends List<? extends String>> iModel) {
+                for (String groupId : groupIds) {
+                    if (groupId.equals(s)) {
+                        return s;
+                    }
+                }
+                return null;
             }
         });
         groupChoice.setNullValid(true);

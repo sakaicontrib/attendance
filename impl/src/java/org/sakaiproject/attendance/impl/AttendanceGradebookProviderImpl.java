@@ -28,7 +28,6 @@ import org.sakaiproject.grading.api.AssessmentNotFoundException;
 import org.sakaiproject.grading.api.CategoryDefinition;
 import org.sakaiproject.grading.api.ConflictingAssignmentNameException;
 import org.sakaiproject.grading.api.GradingService;
-import org.sakaiproject.tool.api.Tool;
 import org.sakaiproject.tool.api.ToolManager;
 
 import java.util.HashMap;

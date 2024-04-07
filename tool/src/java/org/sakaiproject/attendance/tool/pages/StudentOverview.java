@@ -30,6 +30,7 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.data.DataView;
+import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.ResourceModel;
@@ -167,6 +168,17 @@ public class StudentOverview extends BasePage {
             @Override
             public String getIdValue(String s, int i) {
                 return s;
+            }
+
+            @Override
+            public String getObject(String id, IModel<? extends List<? extends String>> choices) {
+                // Logic to retrieve the appropriate group object based on 'id'
+                for (String s : groupIds) {
+                    if (s.equals(id)) {
+                        return s;
+                    }
+                }
+                return null; // Return null if the group isn't found
             }
         });
         groupChoice.setNullValid(true);

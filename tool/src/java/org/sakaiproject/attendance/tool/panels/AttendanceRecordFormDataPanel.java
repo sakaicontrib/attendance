@@ -83,11 +83,11 @@ public class AttendanceRecordFormDataPanel extends BasePanel {
                 String[] resultMsgVars = new String[]{sakaiProxy.getUserSortName(aR.getUserID()), aR.getAttendanceEvent().getName(), getStatusString(aR.getStatus())};
                 StringResourceModel temp;
                 if(result){
-                    temp = new StringResourceModel("attendance.record.save.success", null, resultMsgVars);
+                    temp = new StringResourceModel("attendance.record.save.success", this, Model.of(resultMsgVars));
                     getSession().info(temp.getString());
                     oldStatus = aR.getStatus();
                 } else {
-                    temp = new StringResourceModel("attendance.record.save.failure", null, resultMsgVars);
+                    temp = new StringResourceModel("attendance.record.save.failure", null, Model.of(resultMsgVars));
                     getSession().error(temp.getString());
                 }
             }

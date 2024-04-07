@@ -20,7 +20,7 @@
 	<parent>
     <artifactId>attendance</artifactId>
     <groupId>org.sakaiproject.attendance</groupId>
-    <version>23-SNAPSHOT</version>
+    <version>25-SNAPSHOT</version>
   </parent>
 	
 	<name>attendance - Implementation</name>
@@ -58,12 +58,12 @@
 			<artifactId>ehcache-core</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>commons-lang</groupId>
-			<artifactId>commons-lang</artifactId>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>commons-configuration</groupId>
-			<artifactId>commons-configuration</artifactId>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-configuration2</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.hibernate</groupId>

@@ -20,22 +20,15 @@ import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Page;
 import org.apache.wicket.RestartResponseException;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.form.OnChangeAjaxBehavior;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
-import org.apache.wicket.ajax.markup.html.form.AjaxButton;
-import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.extensions.markup.html.form.select.Select;
-import org.apache.wicket.extensions.markup.html.form.select.SelectOption;
-import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.SubmitLink;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.model.Model;
-import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.model.StringResourceModel;
 import org.sakaiproject.attendance.model.AttendanceEvent;
@@ -44,11 +37,10 @@ import org.sakaiproject.attendance.model.AttendanceStatus;
 import org.sakaiproject.attendance.model.Status;
 import org.sakaiproject.attendance.tool.dataproviders.AttendanceStatusProvider;
 import org.sakaiproject.attendance.tool.dataproviders.EventDataProvider;
-import org.sakaiproject.attendance.tool.panels.EventInputPanel;
 import org.sakaiproject.attendance.tool.panels.PrintPanel;
 import org.sakaiproject.attendance.tool.util.ConfirmationLink;
 
-import java.util.*;
+import java.util.Date;
 
 /**
  * The overview page which lists AttendanceEvents and basic statistics of each
@@ -101,8 +93,10 @@ public class Overview extends BasePage {
 
 		String addButtonText = (new ResourceModel("attendance.add.button")).getObject();
 		String takeAttendanceNowText = (new ResourceModel("attendance.now.button")).getObject();
-		Label headerInfo 			= new Label("overview-header-info",			new StringResourceModel("attendance.overview.header.info",
-				null, new Object[]{addButtonText, takeAttendanceNowText}));
+		Label headerInfo 			= new Label("overview-header-info",
+				new StringResourceModel("attendance.overview.header.info")
+						.setParameters(addButtonText, takeAttendanceNowText)
+		);
 		headerInfo.setEscapeModelStrings(false);
 
 		//headers for the table
@@ -232,22 +226,4 @@ public class Overview extends BasePage {
 		add(takeAttendanceNowForm);
 	}
 
-	private void createAddAttendanceItem() {
-		final Form<?> addAttendanceItemForm = new Form<Void>("add-attendance-item-form");
-		final AjaxButton addAttendanceItem = new AjaxButton("add-attendance-item") {
-			@Override
-			public void onSubmit(final AjaxRequestTarget target, final Form form) {
-				final ModalWindow window = getAddOrEditItemWindow();
-				window.setTitle(new ResourceModel("attendance.add.header"));
-				window.setContent(new EventInputPanel(window.getContentId(), window, null));
-				window.show(target);
-			}
-		};
-
-		addAttendanceItem.setDefaultFormProcessing(false);
-		addAttendanceItem.setOutputMarkupId(true);
-		addAttendanceItemForm.add(addAttendanceItem);
-
-		add(addAttendanceItemForm);
-	}
 }

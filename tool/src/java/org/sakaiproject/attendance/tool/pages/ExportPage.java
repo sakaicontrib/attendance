@@ -16,17 +16,23 @@
 
 package org.sakaiproject.attendance.tool.pages;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.binary.StringUtils;
+import org.apache.poi.hssf.usermodel.HSSFCell;
+import org.apache.poi.hssf.usermodel.HSSFCellStyle;
+import org.apache.poi.hssf.usermodel.HSSFFont;
+import org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.ss.usermodel.CellType;
 import org.apache.wicket.model.StringResourceModel;
-import org.sakaiproject.component.cover.ServerConfigurationService;
-import org.sakaiproject.attendance.logic.SakaiProxy;
 import org.sakaiproject.attendance.model.*;
+import org.sakaiproject.component.cover.ServerConfigurationService;
 import org.sakaiproject.user.api.User;
 
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.wicket.RestartResponseException;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
-import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.SubmitLink;
 import org.apache.wicket.model.LoadableDetachableModel;
@@ -39,13 +45,6 @@ import org.apache.wicket.markup.html.form.upload.FileUploadField;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxCheckBox;
 
-import org.apache.poi.hssf.usermodel.*;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.hssf.usermodel.HSSFSheet;
-import org.apache.poi.hssf.usermodel.HSSFRow;
-import org.apache.poi.hssf.usermodel.HSSFCell;
-import org.apache.poi.ss.usermodel.CellType;
-
 import java.io.*;
 
 import java.util.*;
@@ -53,8 +52,6 @@ import java.util.Collections;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-
-import lombok.extern.slf4j.Slf4j;
 
 
 /**
@@ -394,13 +391,14 @@ public class ExportPage extends BasePage{
             return usableIds;
         }
 
-        private void addErrorsToSession(List<String> errors){
-            for(int count = 0; count<4 && count<errors.size() && errors.size()>0; count++){
+        private void addErrorsToSession(List<String> errors) {
+            for (int count = 0; count < Math.min(4, errors.size()); count++) {
                 getSession().error(errors.get(count));
             }
-            if(errors.size()>4){
-                String howManyErrors = "" + (errors.size()-4);
-                getSession().error(new StringResourceModel("attendance.import.more.errors", null, new String[]{howManyErrors}).getString());
+
+            if (errors.size() > 4) {
+                String howManyErrors = String.valueOf(errors.size() - 4);
+                getSession().error(getString("attendance.import.more.errors", null, howManyErrors));
             }
         }
 
@@ -454,7 +452,7 @@ public class ExportPage extends BasePage{
                                             newData.setComment(data.get(count+1).toString());
                                             commentsChanged = true;
                                         }catch(IndexOutOfBoundsException e){
-                                            errors.add(new StringResourceModel("attendance.import.column.format", null, new String[]{currentID.toString()}).getString());
+                                            errors.add(new StringResourceModel("attendance.import.column.format", this, Model.of(currentID)).getString());
                                         }
                                         count++;    //increment Count again to move on to the next ID when grabbing the comment.
                                     }
@@ -485,12 +483,12 @@ public class ExportPage extends BasePage{
                             }
                         }
                     }else{
-                        errors.add(new StringResourceModel("attendance.import.bad.event", null, new String[]{currentID.toString()}).getString());
+                        errors.add(new StringResourceModel("attendance.import.bad.event", this, Model.of(currentID)).getString());
                     }
                 }
             }else if (data.size()>2){
-                if(data.get(1).toString().length() > 0){
-                    errors.add(new StringResourceModel("attendance.import.fake.student", null, new String[]{data.get(1).toString()}).getString());   //when there's a fake student in Excel that isn't in Attendance
+                if(!data.get(1).toString().isEmpty()){
+                    errors.add(new StringResourceModel("attendance.import.fake.student", this, Model.of(data.get(1).toString())).getString());
                 }else{
                     errors.add(getString("attendance.import.blank.row"));   //when there's a blank row in Excel that has no data
                 }

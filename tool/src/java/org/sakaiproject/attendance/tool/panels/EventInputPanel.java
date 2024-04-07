@@ -109,7 +109,7 @@ public class EventInputPanel extends BasePanel {
         boolean result = attendanceLogic.updateAttendanceEvent(e);
 
         if(result){
-            StringResourceModel temp = new StringResourceModel("attendance.add.success", null, new String[]{e.getName()});
+            StringResourceModel temp = new StringResourceModel("attendance.add.success", this, Model.of(e.getName()));
             getSession().success(temp.getString());
         } else {
             error(getString("attendance.add.failure"));

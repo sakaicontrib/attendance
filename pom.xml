@@ -28,7 +28,7 @@
 	<parent>
     	<groupId>org.sakaiproject</groupId>
     	<artifactId>master</artifactId>
-    	<version>23-SNAPSHOT</version>
+    	<version>25-SNAPSHOT</version>
   	</parent>
 
 	<developers>
@@ -78,28 +78,28 @@
 			<dependency>
 				<groupId>org.apache.wicket</groupId>
 				<artifactId>wicket</artifactId>
-				<version>6.21.0</version>
+				<version>7.18.0</version>
                 <type>pom</type>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.wicket</groupId>
 				<artifactId>wicket-spring</artifactId>
-				<version>6.21.0</version>
+				<version>7.18.0</version>
 	    	</dependency>
 			<dependency>
 				<groupId>org.apache.wicket</groupId>
 				<artifactId>wicket-datetime</artifactId>
-				<version>6.21.0</version>
+				<version>7.18.0</version>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.wicket</groupId>
 				<artifactId>wicket-extensions</artifactId>
-				<version>6.21.0</version>
+				<version>7.18.0</version>
 			</dependency>
 			<dependency>
-				<groupId>commons-configuration</groupId>
-				<artifactId>commons-configuration</artifactId>
-				<version>1.10</version>
+				<groupId>org.apache.commons</groupId>
+				<artifactId>commons-configuration2</artifactId>
+				<version>${sakai.commons.configuration2.version}</version>
 				<exclusions>
 					<exclusion>
 						<groupId>commons-logging</groupId>

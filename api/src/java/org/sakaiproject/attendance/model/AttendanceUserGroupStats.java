@@ -18,9 +18,8 @@ package org.sakaiproject.attendance.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang.builder.HashCodeBuilder;
 
 /**
  * Created by james on 7/11/17.
@@ -29,49 +28,11 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode
 public class AttendanceUserGroupStats {
     private static final    long            serialVersionUID    = 1L;
 
     private                 String          userID;
     private                 String          groupId;
     private                 AttendanceSite  attendanceSite;
-
-
-    public AttendanceUserGroupStats(String userID, AttendanceSite attendanceSite) {
-        this.userID = userID;
-        this.attendanceSite = attendanceSite;
-    }
-
-    @Override
-    public boolean equals (final Object obj) {
-        if(obj == null) {
-            return false;
-        }
-
-        if(obj == this) {
-            return true;
-        }
-
-        if(obj.getClass() != getClass()) {
-            return false;
-        }
-
-        final AttendanceUserGroupStats other = (AttendanceUserGroupStats) obj;
-        return new EqualsBuilder()
-                .appendSuper(super.equals(obj))
-                .append(this.userID, other.userID)
-                .append(this.groupId, other.groupId)
-                .append(this.attendanceSite, other.attendanceSite)
-                .isEquals();
-    }
-
-    @Override
-    public int hashCode() {
-        return new HashCodeBuilder()
-                .appendSuper(super.hashCode())
-                .append(this.userID)
-                .append(this.groupId)
-                .append(this.attendanceSite.getId())
-                .toHashCode();
-    }
 }
