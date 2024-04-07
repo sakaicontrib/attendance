@@ -183,7 +183,7 @@ public class StudentOverview extends BasePage {
         });
         groupChoice.setNullValid(true);
 
-        groupChoice.add(new AjaxFormSubmitBehavior("onchange") {
+        groupChoice.add(new AjaxFormSubmitBehavior("change") {
             @Override
             protected void onSubmit(AjaxRequestTarget target) {
                 super.onSubmit(target);

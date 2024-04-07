@@ -119,7 +119,7 @@ public class AttendanceRecordFormDataPanel extends BasePanel {
                 final Status itemStatus = item.getModelObject().getStatus();
                 Radio statusRadio = new Radio<Status>("record-status", new Model<Status>(itemStatus));
                 item.add(statusRadio);
-                statusRadio.add(new AjaxFormSubmitBehavior(rF, "onclick") {
+                statusRadio.add(new AjaxFormSubmitBehavior(rF, "click") {
                     protected void onSubmit(AjaxRequestTarget target) {
                         target.appendJavaScript("attendance.recordFormRowSetup("+ this.getAttributes().getFormId() + ");");
                         for (Component c : ajaxTargets) {

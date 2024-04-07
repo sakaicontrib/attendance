@@ -162,7 +162,7 @@ public class AttendanceGradeFormPanel extends BasePanel {
         NumberTextField<Double> maximum = new NumberTextField<Double>("maximumGrade");
         maximum.setMinimum(0.1);
         maximum.setStep(0.1);
-        maximum.add(new AjaxFormComponentUpdatingBehavior("oninput") {
+        maximum.add(new AjaxFormComponentUpdatingBehavior("input") {
             @Override
             protected void onUpdate(AjaxRequestTarget target) {
                 target.add(grading);
@@ -241,7 +241,7 @@ public class AttendanceGradeFormPanel extends BasePanel {
         gradebook.add(gradebookCategories);
         gradebook.add(categoriesLabel);
         final RadioGroup<Boolean> useAutoGradingGroup = new RadioGroup<>("use-auto-grading-group", this.useAutoGrading);
-        useAutoGradingGroup.add(new AjaxFormComponentUpdatingBehavior("onchange") {
+        useAutoGradingGroup.add(new AjaxFormComponentUpdatingBehavior("change") {
             @Override
             protected void onUpdate(AjaxRequestTarget target) {
                 target.add(gradingRulesPanel);

@@ -158,7 +158,7 @@ public class EventView extends BasePage {
         }
 
         setAllForm.add(setAllStatus = new DropDownChoice<>("set-all-status", new Model<>(), activeStatuses, new EnumChoiceRenderer<>(this)));
-        setAllStatus.add(new AjaxFormSubmitBehavior("onchange") {
+        setAllStatus.add(new AjaxFormSubmitBehavior("change") {
             @Override
             protected void onSubmit(AjaxRequestTarget target) {
                 super.onSubmit(target);
@@ -263,7 +263,7 @@ public class EventView extends BasePage {
         });
         groupChoice.setNullValid(true);
 
-        groupChoice.add(new AjaxFormSubmitBehavior("onchange") {
+        groupChoice.add(new AjaxFormSubmitBehavior("change") {
             @Override
             protected void onSubmit(AjaxRequestTarget target) {
                 super.onSubmit(target);
