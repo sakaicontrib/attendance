@@ -16,7 +16,7 @@
 
 package org.sakaiproject.attendance.tool.panels;
 
-import java.util.Arrays;
+import java.util.Map;
 
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -79,9 +79,11 @@ public class AttendanceGradePanel extends BasePanel {
 
                 if (result) {
                     String grade = aG.getGrade() == null ? "null" : aG.getGrade().toString();
-                    info(new StringResourceModel("attendance.grade.update.success", this, Model.ofList(Arrays.asList(grade, displayName))).getString());
+                    StringResourceModel messageModel = new StringResourceModel("attendance.grade.update.success", this);
+                    messageModel.setParameters(grade, displayName);
+                    info(messageModel.getString());
                 } else {
-                    error(new StringResourceModel("attendance.grade.update.failure", null, Model.of(displayName)).getString());
+                    getSession().error(new StringResourceModel("attendance.grade.update.failure", null, Model.of(displayName)).getString());
                 }
 
             }
