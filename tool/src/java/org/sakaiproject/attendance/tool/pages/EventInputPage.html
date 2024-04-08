@@ -36,13 +36,13 @@
             <label wicket:for="startDateTime">
                 <wicket:message key="attendance.add.label.startDateTime" />
             </label>
-            <div wicket:id="startDateTime" id="startDateTime"/>
+            <input wicket:id="startDateTime" id="startDateTime"/>
         </div>
 
         <div class="buttonSection" id="buttonSection">
-            <button type="submit" class="saveNewItem" wicket:id="submit" value="Save"><wicket:container wicket:id="submitLabel" /></button>
-            <button type="submit" wicket:id="submitAndAddAnother" value="SaveAndAddAnother"><wicket:container wicket:id="submitMoreLabel"/></button>
-            <button type="button" wicket:id="cancel"><wicket:message key="button.cancel" /></button>
+            <button type="submit" class="saveNewItem btn-primary" wicket:id="submit" value="Save"><wicket:container wicket:id="submitLabel" /></button>
+            <button type="submit" class="button" wicket:id="submitAndAddAnother" value="SaveAndAddAnother"><wicket:container wicket:id="submitMoreLabel"/></button>
+            <button type="button" class="button" wicket:id="cancel"><wicket:message key="button.cancel" /></button>
         </div>
     </form>
 </wicket:extend>

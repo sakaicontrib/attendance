@@ -45,7 +45,10 @@ public class Attendance extends WebApplication {
 	protected void init() {
 		super.init();
 
-		//Configure for Spring injection
+        // Disable the CSP header (we can handle this in root of application)
+        getCspSettings().blocking().disabled();
+
+        //Configure for Spring injection
         getComponentInstantiationListeners().add(new SpringComponentInjector(this));
 
 		//Don't throw an exception if we are missing a property, just fallback

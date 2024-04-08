@@ -195,8 +195,8 @@ public class AttendanceRecordFormDataPanel extends BasePanel {
 
         final AjaxSubmitLink saveComment = new AjaxSubmitLink("save-comment") {
             @Override
-            protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-                super.onSubmit(target, form);
+            protected void onSubmit(AjaxRequestTarget target) {
+                super.onSubmit(target);
                 if(recordIModel.getObject().getComment() != null && !recordIModel.getObject().getComment().equals("")) {
                     noComment.setVisible(false);
                     yesComment.setVisible(true);

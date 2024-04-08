@@ -607,15 +607,6 @@ label.addItemCaptions {
     top: 21%;
 }
 
-#buttonSection > button.saveNewItem {
-    background: #17214A;
-    color: white;
-}
-#buttonSection > button.saveNewItem:hover {
-    background: #111837;
-    border-color: #124466;
-}
-
 ul.actions-dropdown {
     z-index: 90;
 }
@@ -950,11 +941,6 @@ form.takeAttendanceNowForm input:hover {
     color: white;
 }
 
-span.yui-skin-sam img {
-    margin-right: .5em;
-}
-
-
 .cancel {
     background: #e54028;
     -webkit-border-radius: 3px;
@@ -1086,9 +1072,4 @@ span.yui-skin-sam img {
 .eventTablePager {
     text-align: center;
     font-size: 1.3em;
-}
-
-div#startDateTime span.yui-skin-sam span.yui-calcontainer, div#startDateTime th.calweekdaycell, div#startDateTime td.calcell:not(.oom), div#startDateTime span.yui-skin-sam span.yui-calcontainer a:not(.calnavright):not(.calnavleft), div#startDateTime span.yui-skin-sam span.yui-calcontainer div.title {
-    background: var(--sakai-background-color-2);
-    color: var(--sakai-text-color-2);
 }

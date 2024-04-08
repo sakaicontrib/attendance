@@ -283,13 +283,13 @@ public class AttendanceGradeFormPanel extends BasePanel {
 
         AjaxSubmitLink submit = new AjaxSubmitLink("submit") {
             @Override
-            protected void onError(AjaxRequestTarget target, Form<?> form) {
+            protected void onError(AjaxRequestTarget target) {
                 target.add(pageFeedbackPanel);
             }
 
             @Override
-            protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-                super.onSubmit(target, form);
+            protected void onSubmit(AjaxRequestTarget target) {
+                super.onSubmit(target);
                 target.add(pageFeedbackPanel);
             }
         };

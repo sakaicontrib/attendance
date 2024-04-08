@@ -78,23 +78,18 @@
 			<dependency>
 				<groupId>org.apache.wicket</groupId>
 				<artifactId>wicket</artifactId>
-				<version>7.18.0</version>
-                <type>pom</type>
+				<version>9.17.0</version>
+				<type>pom</type>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.wicket</groupId>
 				<artifactId>wicket-spring</artifactId>
-				<version>7.18.0</version>
-	    	</dependency>
-			<dependency>
-				<groupId>org.apache.wicket</groupId>
-				<artifactId>wicket-datetime</artifactId>
-				<version>7.18.0</version>
-			</dependency>
+				<version>9.17.0</version>
+				</dependency>
 			<dependency>
 				<groupId>org.apache.wicket</groupId>
 				<artifactId>wicket-extensions</artifactId>
-				<version>7.18.0</version>
+				<version>9.17.0</version>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.commons</groupId>

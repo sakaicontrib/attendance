@@ -76,9 +76,9 @@ public class GradingRulesPanel extends BasePanel {
             private static final long serialVersionUID = 1L;
 
             @Override
-            protected void onSubmit(final AjaxRequestTarget target, final Form<?> form) {
+            protected void onSubmit(final AjaxRequestTarget target) {
 
-                final GradingRule gradingRule = (GradingRule) form.getModelObject();
+                final GradingRule gradingRule = (GradingRule) getForm().getModelObject();
 
                 if (gradingRule.getStartRange() < 0) {
                     pageFeedbackPanel.error(getString("attendance.grading.start.range.error"));
@@ -97,7 +97,7 @@ public class GradingRulesPanel extends BasePanel {
             }
 
             @Override
-            protected void onError(AjaxRequestTarget target, Form<?> form) {
+            protected void onError(AjaxRequestTarget target) {
                 target.add(pageFeedbackPanel);
             }
         };

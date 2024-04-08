@@ -38,7 +38,6 @@ import org.apache.wicket.markup.html.form.SubmitLink;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.util.lang.Bytes;
-import org.apache.wicket.util.time.Duration;
 import org.apache.wicket.markup.html.link.DownloadLink;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.apache.wicket.markup.html.form.upload.FileUploadField;
@@ -46,7 +45,7 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxCheckBox;
 
 import java.io.*;
-
+import java.time.Duration;
 import java.util.*;
 import java.util.Collections;
 import java.util.ArrayList;
@@ -110,7 +109,7 @@ public class ExportPage extends BasePage{
             public void onSubmit() {
                 setResponsePage(new ExportPage());
             }
-        }).setCacheDuration(Duration.NONE).setDeleteAfterDownload(true));
+        }).setCacheDuration(Duration.ZERO).setDeleteAfterDownload(true));
 
         add(new UploadForm("form"));
     }

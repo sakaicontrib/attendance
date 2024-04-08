@@ -43,12 +43,12 @@
 
     // Set up the whole page record forms
     attendance.recordFormSetup = function() {
-        var inputs = [];
+        let inputs = [];
         $("input[name='attendance-record-status-group']").each(function() {
             inputs.push(this);
         });
 
-        var isStudentView = false;
+        let isStudentView = false;
         if($("#studentView").size() > 0) {
             isStudentView = true;
         }
