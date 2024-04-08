@@ -145,19 +145,6 @@ table.itemListTable, table.eventViewTable, table.takeAttendanceTable {
     margin-left: 35px;
 }
 
-thead tr .tablesorter-header:not(.sorter-false):not(.tablesorter-headerAsc):not(.tablesorter-headerDesc), table.itemListTable thead tr .header, table.takeAttendanceTable thead tr .header, th.tablesorter-headerUnsorted, tr.div-table-row > th.header:not(.headerSortDown):not(.headerSortUp)  {
-    background: url(../images/bg.png) no-repeat bottom .5em right;
-    cursor: pointer;
-    padding-right: 24px;
-}
-
-thead tr .tablesorter-headerAsc, table.itemListTable thead tr .headerSortUp, table.takeAttendanceTable thead tr .headerSortUp, th.headerSortUp {
-    background: url(../images/asc.png) no-repeat bottom .5em right;
-}
-thead tr .tablesorter-headerDesc, table.itemListTable thead tr .headerSortDown, table.takeAttendanceTable thead tr .headerSortDown, th.headerSortDown {
-    background: url(../images/desc.png) no-repeat bottom .5em right;
-}
-
 table.itemListTable, table.eventViewTable, table.takeAttendanceTable, div.eventFormContainer, form.addEditForm, .addComment h3, td.overviewGradeCol form {
     margin: 0;
 }

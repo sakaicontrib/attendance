@@ -45,8 +45,6 @@ public class ImportConfirmation  extends BasePage{
     protected void onBeforeRender() {
         super.onBeforeRender();
         disableLink(exportLink);
-
-
         add(new ImportConfirmation.UploadForm("form"));
     }
     private static final long serialVersionUID = 1L;
@@ -58,16 +56,6 @@ public class ImportConfirmation  extends BasePage{
     public ImportConfirmation(List<ImportConfirmList> attendanceItemDataList, Boolean commentsChanged) {
 
         this.uploadICLList = attendanceItemDataList;
-        homepageLink = new Link<Void>("homepage-link2") {
-            private static final long serialVersionUID = 1L;
-            public void onClick() {
-
-                setResponsePage(new Overview());
-            }
-        };
-        homepageLink.add(new Label("homepage-link-label",new ResourceModel("attendance.link.homepage")).setRenderBodyOnly(true));
-        homepageLink.add(new AttributeModifier("title", new ResourceModel("attendance.link.homepage.tooltip")));
-        add(homepageLink);
 
         if(this.role != null && this.role.equals("Student")) {
             throw new RestartResponseException(StudentView.class);
@@ -184,28 +172,20 @@ public class ImportConfirmation  extends BasePage{
     }
 
     private class UploadForm extends Form<Void> {
+        private Label lowerErrorAlert = new Label("lowerErrorAlert");
+        private SubmitLink completeImport = new SubmitLink("submitLink") {
+            public void onSubmit() {
+                for (int i = 0; i < uploadICLList.size(); i++){
+                    attendanceLogic.updateAttendanceRecord(uploadICLList.get(i).getAttendanceRecord(), uploadICLList.get(i).getOldStatus());
+                    attendanceLogic.updateAttendanceSite(uploadICLList.get(i).getAttendanceSite());
+                }
+                success(getString("attendance.export.confirmation.import.save.success"));
+                setResponsePage(new Overview());
+            }
+        };
 
         public UploadForm(final String id) {
             super(id);
-            SubmitLink completeImport = new SubmitLink("submitLink") {
-                public void onSubmit() {
-                    for (int i = 0; i < uploadICLList.size(); i++){
-                        boolean updated = attendanceLogic.updateAttendanceRecord(uploadICLList.get(i).getAttendanceRecord(), uploadICLList.get(i).getOldStatus());
-                        attendanceLogic.updateAttendanceSite(uploadICLList.get(i).getAttendanceSite());
-                    }
-                    getSession().success(getString("attendance.export.confirmation.import.save.success"));
-                    setResponsePage(new Overview());
-                }
-            };
-            Label lowerErrorAlert = new Label("lowerErrorAlert");
-            if (!getSession().getFeedbackMessages().isEmpty()){
-                completeImport.setEnabled(false);
-                lowerErrorAlert = new Label("lowerErrorAlert", getString("attendance.import.errors.exist"));
-            }
-            if (uploadICLList.isEmpty()) {
-                getSession().error(getString("attendance.export.import.save.noChange"));
-                completeImport.setEnabled(false);
-            }
             add(lowerErrorAlert);
             add(completeImport);
             add(new SubmitLink("submitLink2") {
@@ -213,6 +193,20 @@ public class ImportConfirmation  extends BasePage{
                     setResponsePage(new ExportPage());
                 }
             });
+        }
+
+        @Override
+        protected void onConfigure() {
+            super.onConfigure();
+
+            if (!getSession().getFeedbackMessages().isEmpty()) {
+                completeImport.setEnabled(false);
+                lowerErrorAlert.setDefaultModelObject(getString("attendance.import.errors.exist"));
+            }
+            if (uploadICLList != null && uploadICLList.isEmpty()) {
+                completeImport.setEnabled(false);
+                getSession().error(getString("attendance.export.import.save.noChange"));
+            }
         }
     }
 
