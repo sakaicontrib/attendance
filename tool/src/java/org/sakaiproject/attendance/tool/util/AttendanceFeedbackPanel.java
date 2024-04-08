@@ -43,10 +43,10 @@ public class AttendanceFeedbackPanel extends FeedbackPanel {
                 message.getLevel() == FeedbackMessage.DEBUG ||
                 message.getLevel() == FeedbackMessage.FATAL ||
                 message.getLevel() == FeedbackMessage.WARNING){
-            add(AttributeModifier.replace("class", "attendanceAlertMessage"));
+            add(AttributeModifier.replace("class", "attendanceAlertMessage alert alert-warning"));
         } else if(message.getLevel() == FeedbackMessage.INFO ||
                 message.getLevel() == FeedbackMessage.SUCCESS){
-            add(AttributeModifier.replace("class", "attendanceMessageSuccess"));
+            add(AttributeModifier.replace("class", "attendanceMessageSuccess alert alert-success"));
         }
 
         return newMessageDisplayComponent;
