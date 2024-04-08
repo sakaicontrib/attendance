@@ -202,7 +202,7 @@ public class ImportConfirmation  extends BasePage{
                 completeImport.setEnabled(false);
                 lowerErrorAlert = new Label("lowerErrorAlert", getString("attendance.import.errors.exist"));
             }
-            if(uploadICLList.size()<1){
+            if (uploadICLList.isEmpty()) {
                 getSession().error(getString("attendance.export.import.save.noChange"));
                 completeImport.setEnabled(false);
             }

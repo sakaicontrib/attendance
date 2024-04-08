@@ -17,13 +17,12 @@
 package org.sakaiproject.attendance.tool.panels;
 
 import lombok.extern.slf4j.Slf4j;
-import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Page;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.form.AjaxFormSubmitBehavior;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
+import org.apache.wicket.extensions.markup.html.form.DateTextField;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
@@ -33,13 +32,6 @@ import org.sakaiproject.attendance.model.AttendanceEvent;
 import org.sakaiproject.attendance.tool.pages.EventView;
 import org.sakaiproject.attendance.tool.pages.Overview;
 import org.sakaiproject.attendance.tool.util.AttendanceFeedbackPanel;
-import org.sakaiproject.attendance.tool.util.PlaceholderBehavior;
-
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.format.DateTimeParseException;
-import java.util.Date;
-
 
 /**
  * EventInputPanel is used to get AttendanceEvent settings for a new or existing AttendanceEvent
@@ -177,38 +169,11 @@ public class EventInputPanel extends BasePanel {
     private void createValues(Form<AttendanceEvent> event) {
         final TextField<String> name = new TextField<>("name");
         name.setRequired(true);
-        name.add(new PlaceholderBehavior(getString("event.placeholder.name")));
 
-        final TextField<String> startDateTime = new TextField<>("startDateTime", Model.of(""));
+        final DateTextField startDateTime = new DateTextField("startDateTime", "yyyy-MM-dd'T'HH:mm");
 
         event.add(name);
         event.add(startDateTime);
-
-        // Add submit behavior (assuming your form is named 'event')
-        event.add(new AjaxFormSubmitBehavior("submit") {
-            @Override
-            protected void onSubmit(AjaxRequestTarget target) {
-                AttendanceEvent attendanceEvent = event.getModelObject();
-                String isoDateString = startDateTime.getModelObject();
-
-                Date convertedDate = convertToDate(isoDateString);
-                attendanceEvent.setStartDateTime(convertedDate);
-            }
-        });
-    }
-
-    private Date convertToDate(String isoDateString) {
-        if (isoDateString == null || isoDateString.isEmpty()) {
-            return null;
-        }
-
-        try {
-            LocalDateTime localDateTime = LocalDateTime.parse(isoDateString);
-            return Date.from(localDateTime.atZone(ZoneId.systemDefault()).toInstant());
-        } catch (DateTimeParseException e) {
-            log.error("Could not parse Attendance date", e);
-            return null; // Example: return null on parsing error
-        }
     }
 
     private ResourceModel getSubmitLabel() {

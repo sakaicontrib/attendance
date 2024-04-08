@@ -4,6 +4,7 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
+import org.apache.wicket.extensions.markup.html.form.DateTextField;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
@@ -13,7 +14,7 @@ import org.sakaiproject.attendance.model.AttendanceEvent;
 import org.sakaiproject.attendance.tool.util.AttendanceFeedbackPanel;
 import org.sakaiproject.attendance.tool.util.PlaceholderBehavior;
 
-import java.time.LocalDateTime;
+import java.util.Date;
 
 
 public class EventInputPage extends BasePage{
@@ -74,7 +75,7 @@ public class EventInputPage extends BasePage{
         name.setRequired(true);
         name.add(new PlaceholderBehavior(getString("event.placeholder.name")));
 
-        final TextField<String> startDateTime = new TextField<>("startDateTime", Model.of(""));
+        final DateTextField startDateTime = new DateTextField("startDateTime", null, "yyyy-MM-dd'T'HH:mm");
 
         eventForm.add(name);
         eventForm.add(startDateTime);

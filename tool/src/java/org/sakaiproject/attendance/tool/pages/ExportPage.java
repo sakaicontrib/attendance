@@ -451,7 +451,9 @@ public class ExportPage extends BasePage{
                                             newData.setComment(data.get(count+1).toString());
                                             commentsChanged = true;
                                         }catch(IndexOutOfBoundsException e){
-                                            errors.add(new StringResourceModel("attendance.import.column.format", this, Model.of(currentID)).getString());
+                                            StringResourceModel srm = new StringResourceModel("attendance.import.column.format", this);
+                                            srm.setParameters(currentID);
+                                            errors.add(srm.getString());
                                         }
                                         count++;    //increment Count again to move on to the next ID when grabbing the comment.
                                     }

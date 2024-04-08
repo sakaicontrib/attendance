@@ -48,10 +48,7 @@
             inputs.push(this);
         });
 
-        let isStudentView = false;
-        if($("#studentView").size() > 0) {
-            isStudentView = true;
-        }
+        const isStudentView = document.getElementById("studentView") !== null;
 
         processInput(inputs, isStudentView);
     };

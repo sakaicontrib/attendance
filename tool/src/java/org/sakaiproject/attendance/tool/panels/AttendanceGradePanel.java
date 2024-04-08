@@ -83,7 +83,9 @@ public class AttendanceGradePanel extends BasePanel {
                     messageModel.setParameters(grade, displayName);
                     info(messageModel.getString());
                 } else {
-                    getSession().error(new StringResourceModel("attendance.grade.update.failure", null, Model.of(displayName)).getString());
+                    StringResourceModel errorString = new StringResourceModel("attendance.grade.update.failure", this);
+                    errorString.setParameters(displayName);
+                    getSession().error(errorString);
                 }
 
             }

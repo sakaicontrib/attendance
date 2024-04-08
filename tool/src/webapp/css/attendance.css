@@ -914,13 +914,6 @@ div.wicket-modal div.w_caption {
     height: auto;
 }
 
-div.wicket-modal h3.w_captionText {
-    padding: 20px;
-    font-size: 1.5em;
-    position: relative;
-    height: auto;
-    color: var(--sakai-text-color-1);
-}
 /* End janking */
 
 div.wicket-modal div.w_content_3 div.messageSuccess, div.wicket-modal div.w_content_3 div.alertMessage {
