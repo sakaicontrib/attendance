@@ -19,7 +19,7 @@ package org.sakaiproject.attendance.tool.models;
 import org.apache.wicket.injection.Injector;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
-import org.sakaiproject.attendance.logic.SakaiProxy;
+import org.sakaiproject.attendance.api.logic.SakaiProxy;
 import org.sakaiproject.user.api.User;
 
 /**

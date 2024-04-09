@@ -21,7 +21,7 @@ import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.*;
-import org.sakaiproject.attendance.model.AttendanceSite;
+import org.sakaiproject.attendance.api.model.AttendanceSite;
 
 /**
  * Created by Leonardo Canessa [lcanessa1 (at) udayton (dot) edu]
@@ -53,9 +53,9 @@ public class AttendanceCommentFormPanel extends BasePanel {
             @Override
             protected void onSubmit() {
                 final AttendanceSite aS = (AttendanceSite) getDefaultModelObject();
-                boolean result = attendanceLogic.updateAttendanceSite(aS);
+                AttendanceSite result = attendanceLogic.updateAttendanceSite(aS);
 
-                if(result) {
+                if(result != null) {
                     getSession().success(getString("attendance.settings.edit.comment.save.success"));
                 } else {
                     getSession().error(getString("attendance.settings.edit.comment.save.error"));

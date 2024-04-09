@@ -22,7 +22,7 @@ import org.apache.wicket.validation.IValidatable;
 import org.apache.wicket.validation.IValidator;
 import org.apache.wicket.validation.ValidationError;
 import org.sakaiproject.attendance.api.AttendanceGradebookProvider;
-import org.sakaiproject.attendance.model.AttendanceSite;
+import org.sakaiproject.attendance.api.model.AttendanceSite;
 
 /**
  * GradebookItemNameValidator is used to ensure the Gradebook Item Name is not all ready present in the gradebook

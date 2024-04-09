@@ -22,7 +22,10 @@ import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.model.ResourceModel;
-import org.sakaiproject.attendance.model.*;
+import org.sakaiproject.attendance.api.model.AttendanceEvent;
+import org.sakaiproject.attendance.api.model.stats.AttendanceStats;
+import org.sakaiproject.attendance.api.model.AttendanceStatus;
+import org.sakaiproject.attendance.api.model.Status;
 import org.sakaiproject.attendance.tool.dataproviders.AttendanceStatusProvider;
 import org.sakaiproject.attendance.tool.pages.EventView;
 import org.sakaiproject.attendance.tool.pages.StudentView;
@@ -37,12 +40,12 @@ import org.sakaiproject.attendance.tool.pages.StudentView;
 public class StatisticsPanel extends BasePanel {
     private static final    long                    serialVersionUID = 1L;
 
-    private                 AttendanceEvent         attendanceEvent;
+    private AttendanceEvent attendanceEvent;
     private                 String                  userId;
     private                 String                  fromPage;
     private                 Long                    previousEventId;
 
-    private                 AttendanceStats         stats;
+    private AttendanceStats stats;
 
     public StatisticsPanel(String id, String fromPage, AttendanceEvent aE) {
         super(id);

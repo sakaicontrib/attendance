@@ -20,13 +20,10 @@ import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
 import org.apache.wicket.AttributeModifier;
-import org.apache.wicket.Component;
-import org.apache.wicket.Session;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
-import org.apache.wicket.feedback.FeedbackMessage;
 import org.apache.wicket.markup.head.*;
 import org.apache.wicket.markup.html.IHeaderContributor;
 import org.apache.wicket.markup.html.WebPage;
@@ -38,13 +35,14 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.sakaiproject.attendance.api.AttendanceGradebookProvider;
-import org.sakaiproject.attendance.logic.AttendanceLogic;
-import org.sakaiproject.attendance.logic.SakaiProxy;
-import org.sakaiproject.attendance.model.AttendanceEvent;
-import org.sakaiproject.attendance.model.Status;
+import org.sakaiproject.attendance.api.logic.AttendanceLogic;
+import org.sakaiproject.attendance.api.logic.SakaiProxy;
+import org.sakaiproject.attendance.api.model.AttendanceEvent;
+import org.sakaiproject.attendance.api.model.Status;
 import org.sakaiproject.attendance.tool.panels.EventInputPanel;
 import org.sakaiproject.attendance.tool.util.AttendanceFeedbackPanel;
-import org.sakaiproject.component.cover.ServerConfigurationService;
+import org.sakaiproject.portal.util.PortalUtils;
+import org.sakaiproject.time.api.UserTimeService;
 import org.sakaiproject.util.ResourceLoader;
 
 import javax.servlet.http.HttpServletRequest;
@@ -71,6 +69,9 @@ public class BasePage extends WebPage implements IHeaderContributor {
 
 	@SpringBean(name="org.sakaiproject.attendance.api.AttendanceGradebookProvider")
 	protected AttendanceGradebookProvider attendanceGradebookProvider;
+
+	@SpringBean(name="org.sakaiproject.time.api.UserTimeService")
+	protected UserTimeService userTimeService;
 
 	protected String role;
 	
@@ -167,10 +168,6 @@ public class BasePage extends WebPage implements IHeaderContributor {
         feedbackPanel = new AttendanceFeedbackPanel("feedback");
         add(feedbackPanel);
 
-		if(attendanceLogic.getCurrentAttendanceSite().getIsSyncing()) {
-			getSession().error((new ResourceModel("attendance.site.syncing.error")).getObject());
-		}
-
 		this.addOrEditItemWindow = new ModalWindow("addOrEditItemWindow");
 		this.addOrEditItemWindow.showUnloadConfirmation(false);
 		this.addOrEditItemWindow.setInitialHeight(400);
@@ -183,20 +180,40 @@ public class BasePage extends WebPage implements IHeaderContributor {
 	 * Add to this any additional CSS or JS references that you need.
 	 * 
 	 */
+	@Override
 	public void renderHead(IHeaderResponse response) {
+		super.renderHead(response);
+
+		final String version = PortalUtils.getCDNQuery();
+
 		//get the Sakai skin header fragment from the request attribute
 		HttpServletRequest request = (HttpServletRequest)getRequest().getContainerRequest();
+
+		response.render(new PriorityHeaderItem(JavaScriptHeaderItem
+				.forReference(getApplication().getJavaScriptLibrarySettings().getJQueryReference())));
 		
 		response.render(StringHeaderItem.forString((String)request.getAttribute("sakai.html.head")));
 		response.render(OnLoadHeaderItem.forScript("setMainFrameHeight( window.name )"));
+
 		//add Attendance.css as the css class
 		response.render(CssHeaderItem.forUrl("css/attendance.css"));
+
 		//Tool additions (at end so we can override if isRequired)
 		response.render(StringHeaderItem.forString("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\" />"));
-		//response.renderCSSReference("css/my_tool_styles.css");
-		//response.renderJavascriptReference("js/my_tool_javascript.js");
+
+		// Shared JavaScript and stylesheets
+		// Force Wicket to use Sakai's version of jQuery
+		response.render(
+				new PriorityHeaderItem(
+						JavaScriptHeaderItem
+								.forUrl(String.format("/library/webjars/jquery/1.12.4/jquery.min.js%s", version))));
+		// And pair this instance of jQuery with a Bootstrap version we've tested with
+		response.render(
+				new PriorityHeaderItem(
+						JavaScriptHeaderItem
+								.forUrl(String.format("/library/webjars/bootstrap/3.3.7/js/bootstrap.min.js%s", version))));
+
 		// tablesorter
-		final String version = ServerConfigurationService.getString("portal.cdn.version", "");
 		response.render(JavaScriptHeaderItem.forUrl(String.format("javascript/jquery.tablesorter.min.js?version=%s", version)));
 		response.render(JavaScriptHeaderItem.forUrl(String.format("javascript/jquery.tablesorter.widgets.min.js?version=%s", version)));
 	}
@@ -232,7 +249,7 @@ public class BasePage extends WebPage implements IHeaderContributor {
 		}
 	}
 
-	protected AjaxLink<?> getAddEditWindowAjaxLink(final AttendanceEvent obj, final String id) {
+	protected AjaxLink<?> getAddEditWindowAjaxLink(Long attendanceEventId, final String id) {
 		return new AjaxLink<Void>(id) {
 			private static final long serialVersionUID = 1L;
 
@@ -240,7 +257,7 @@ public class BasePage extends WebPage implements IHeaderContributor {
 				final ModalWindow window = getAddOrEditItemWindow();
 				window.setTitle(new ResourceModel("attendance.add.edit.header"));
 				window.setCssClassName(window.getCssClassName() + " editItemModal");
-				window.setContent(new EventInputPanel(window.getContentId(), window, new CompoundPropertyModel<>(obj)));
+				window.setContent(new EventInputPanel(window.getContentId(), window, Model.of(attendanceEventId)));
 				window.show(target);
 			}
 		};

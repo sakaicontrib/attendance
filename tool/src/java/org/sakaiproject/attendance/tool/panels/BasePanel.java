@@ -22,13 +22,14 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.sakaiproject.attendance.api.AttendanceGradebookProvider;
-import org.sakaiproject.attendance.export.PDFEventExporter;
-import org.sakaiproject.attendance.logic.AttendanceLogic;
-import org.sakaiproject.attendance.logic.SakaiProxy;
-import org.sakaiproject.attendance.model.Status;
+import org.sakaiproject.attendance.api.export.PDFEventExporter;
+import org.sakaiproject.attendance.api.logic.AttendanceLogic;
+import org.sakaiproject.attendance.api.logic.SakaiProxy;
+import org.sakaiproject.attendance.api.model.Status;
 
 
 import lombok.extern.slf4j.Slf4j;
+import org.sakaiproject.component.api.ServerConfigurationService;
 
 /**
  * A BasePanel which all panels extend
@@ -49,6 +50,9 @@ public class BasePanel extends Panel {
 
     @SpringBean(name="org.sakaiproject.attendance.api.AttendanceGradebookProvider")
     protected AttendanceGradebookProvider attendanceGradebookProvider;
+
+    @SpringBean(name="org.sakaiproject.component.api.ServerConfigurationService")
+    protected ServerConfigurationService serverConfigurationService;
 
     protected String role;
 

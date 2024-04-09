@@ -19,8 +19,8 @@ package org.sakaiproject.attendance.tool.dataproviders;
 import org.apache.wicket.injection.Injector;
 import org.apache.wicket.markup.repeater.data.IDataProvider;
 import org.apache.wicket.spring.injection.annot.SpringBean;
-import org.sakaiproject.attendance.logic.AttendanceLogic;
-import org.sakaiproject.attendance.logic.SakaiProxy;
+import org.sakaiproject.attendance.api.logic.AttendanceLogic;
+import org.sakaiproject.attendance.api.logic.SakaiProxy;
 
 import java.util.Iterator;
 import java.util.List;

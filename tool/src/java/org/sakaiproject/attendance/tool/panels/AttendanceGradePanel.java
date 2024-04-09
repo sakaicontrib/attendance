@@ -26,8 +26,8 @@ import org.apache.wicket.markup.html.form.FormComponentLabel;
 import org.apache.wicket.markup.html.form.NumberTextField;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.*;
-import org.sakaiproject.attendance.model.AttendanceGrade;
-import org.sakaiproject.attendance.model.AttendanceSite;
+import org.sakaiproject.attendance.api.model.AttendanceGrade;
+import org.sakaiproject.attendance.api.model.AttendanceSite;
 
 /**
  * AttendanceGradePanel allows for inputting of AttendanceGrades
@@ -64,24 +64,20 @@ public class AttendanceGradePanel extends BasePanel {
             @Override
             public void onSubmit() {
                 AttendanceGrade aG = (AttendanceGrade) getDefaultModelObject();
-
-                boolean result;
-
-                if (Boolean.TRUE.equals(attendanceSite.getUseAutoGrading()) && Boolean.FALSE.equals(aG.getOverride())) {
-                    result = attendanceLogic.regrade(aG, true) != null;
-                } else {
-                    result = attendanceLogic.updateAttendanceGrade(aG);
-                }
-
                 String displayName = sakaiProxy.getUserSortName(aG.getUserID());
 
-                if (result) {
-                    String grade = aG.getGrade() == null ? "null" : aG.getGrade().toString();
-                    getSession().info(new StringResourceModel("attendance.grade.update.success", null, new String[]{grade, displayName}).getString());
-                } else {
-                    getSession().error(new StringResourceModel("attendance.grade.update.failure", null, new String[]{displayName}).getString());
+                try {
+                    Double grade;
+                    if (Boolean.TRUE.equals(attendanceSite.getUseAutoGrading()) && Boolean.FALSE.equals(aG.getOverride())) {
+                        grade = attendanceLogic.regrade(aG, true);
+                    } else {
+                        aG = attendanceLogic.updateAttendanceGrade(aG);
+                        grade = aG.getGrade();
+                    }
+                    getSession().info(new StringResourceModel("attendance.grade.update.success", null, (Object) new String[]{String.valueOf(grade), displayName}).getString());
+                } catch (Exception ex) {
+                    getSession().error(new StringResourceModel("attendance.grade.update.failure", null, (Object) new String[]{displayName}).getString());
                 }
-
             }
         };
 

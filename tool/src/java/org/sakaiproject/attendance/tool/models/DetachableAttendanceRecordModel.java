@@ -19,8 +19,8 @@ package org.sakaiproject.attendance.tool.models;
 import org.apache.wicket.injection.Injector;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
-import org.sakaiproject.attendance.logic.AttendanceLogic;
-import org.sakaiproject.attendance.model.AttendanceRecord;
+import org.sakaiproject.attendance.api.logic.AttendanceLogic;
+import org.sakaiproject.attendance.api.model.AttendanceRecord;
 
 /**
  * DetachableAttendanceRecordModel
@@ -85,6 +85,6 @@ public class DetachableAttendanceRecordModel extends LoadableDetachableModel<Att
     protected AttendanceRecord load(){
         Injector.get().inject(this);
         // get the thing
-        return attendanceLogic.getAttendanceRecord(id);
+        return attendanceLogic.getAttendanceRecord(id).orElseThrow( () -> { throw new IllegalArgumentException("Unable to get attendance record for id " + id); });
     }
 }

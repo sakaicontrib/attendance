@@ -33,23 +33,23 @@ import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.navigation.paging.PagingNavigator;
 import org.apache.wicket.markup.repeater.Item;
-import org.apache.wicket.markup.repeater.ReuseIfModelsEqualStrategy;
 import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.ResourceModel;
-import org.sakaiproject.attendance.model.AttendanceEvent;
-import org.sakaiproject.attendance.model.AttendanceRecord;
-import org.sakaiproject.attendance.model.AttendanceStatus;
-import org.sakaiproject.attendance.model.Status;
+import org.sakaiproject.attendance.api.model.AttendanceEvent;
+import org.sakaiproject.attendance.api.model.AttendanceRecord;
+import org.sakaiproject.attendance.api.model.AttendanceStatus;
+import org.sakaiproject.attendance.api.model.Status;
 import org.sakaiproject.attendance.tool.dataproviders.AttendanceRecordProvider;
 import org.sakaiproject.attendance.tool.dataproviders.AttendanceStatusProvider;
 import org.sakaiproject.attendance.tool.models.ProfileImage;
 import org.sakaiproject.attendance.tool.panels.AttendanceRecordFormDataPanel;
-import org.sakaiproject.attendance.tool.panels.AttendanceRecordFormHeaderPanel;
 import org.sakaiproject.attendance.tool.panels.PrintPanel;
 import org.sakaiproject.attendance.tool.panels.StatisticsPanel;
 
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.util.*;
 
 /**
@@ -125,8 +125,13 @@ public class EventView extends BasePage {
 
         createStatsTable();
 
+        DateTimeFormatter formatter = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.FULL, FormatStyle.SHORT)
+                .withZone(userTimeService.getLocalTimeZone().toZoneId());
+
+        String eventDateString = attendanceEvent.getStartDateTime() == null ? "" : formatter.format(attendanceEvent.getStartDateTime());
+
         add(new Label("event-name", attendanceEvent.getName()));
-        add(new Label("event-date", attendanceEvent.getStartDateTime()));
+        add(new Label("event-date", eventDateString));
         add(new Label("take-attendance-header", getString("attendance.event.view.take.attendance")));
 
         final Form<?> setAllForm = new Form<Void>("set-all-form"){
@@ -137,20 +142,10 @@ public class EventView extends BasePage {
                 getSession().info("All attendance records " + who + " for " + attendanceEvent.getName() + " set to " + setAllStatus.getModelObject());
                 setResponsePage(new EventView(attendanceEvent.getId(), returnPage, selectedGroup));
             }
-
-            @Override
-            public boolean isEnabled() {
-                return !attendanceEvent.getAttendanceSite().getIsSyncing();
-            }
         };
 
         List<AttendanceStatus> activeAttendanceStatuses = attendanceLogic.getActiveStatusesForCurrentSite();
-        Collections.sort(activeAttendanceStatuses, new Comparator<AttendanceStatus>() {
-            @Override
-            public int compare(AttendanceStatus o1, AttendanceStatus o2) {
-                return o1.getSortOrder() - o2.getSortOrder();
-            }
-        });
+        activeAttendanceStatuses.sort(Comparator.comparingInt(AttendanceStatus::getSortOrder));
         List<Status> activeStatuses = new ArrayList<>();
         for(AttendanceStatus attendanceStatus : activeAttendanceStatuses) {
             activeStatuses.add(attendanceStatus.getStatus());
@@ -189,7 +184,7 @@ public class EventView extends BasePage {
     }
 
     private void createHeader() {
-        add(getAddEditWindowAjaxLink(attendanceEvent, "edit-link"));
+        add(getAddEditWindowAjaxLink(attendanceEvent.getId(), "edit-link"));
     }
 
     private void createTable() {

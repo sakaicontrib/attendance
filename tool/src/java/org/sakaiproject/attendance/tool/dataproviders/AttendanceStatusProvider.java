@@ -18,10 +18,9 @@ package org.sakaiproject.attendance.tool.dataproviders;
 
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
-import org.sakaiproject.attendance.model.AttendanceSite;
-import org.sakaiproject.attendance.model.AttendanceStatus;
-import org.sakaiproject.attendance.model.Status;
-import org.sakaiproject.attendance.tool.models.DetachableAttendanceStatusModel;
+import org.sakaiproject.attendance.api.model.AttendanceSite;
+import org.sakaiproject.attendance.api.model.AttendanceStatus;
+import org.sakaiproject.attendance.api.model.Status;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -55,8 +54,10 @@ public class AttendanceStatusProvider extends BaseProvider<AttendanceStatus> {
         AttendanceSite attendanceSite = attendanceLogic.getAttendanceSite(siteId);
         if(attendanceSite != null) {
             List<AttendanceStatus> attendanceStatuses = attendanceLogic.getAllStatusesForSite(attendanceSite);
-            this.list = new ArrayList<AttendanceStatus>();
+            this.list = new ArrayList<>();
             filterStatuses(attendanceStatuses, filter);
+        } else {
+            throw new IllegalArgumentException("Unable to get attendance site for site id " + siteId);
         }
     }
 
