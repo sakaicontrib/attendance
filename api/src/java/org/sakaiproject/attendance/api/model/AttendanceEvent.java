@@ -17,19 +17,32 @@
 package org.sakaiproject.attendance.api.model;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Type;
+import org.hibernate.proxy.HibernateProxy;
 import org.sakaiproject.springframework.data.PersistableEntity;
 
-import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
 import java.io.Serializable;
 import java.time.Instant;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 /**
@@ -42,10 +55,10 @@ import java.util.Set;
 @Entity
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 @Table(name = "ATTENDANCE_EVENT_T")
-@Data
-@ToString(exclude = {"attendanceSite", "records"})
-@EqualsAndHashCode(of = "id")
-@NoArgsConstructor
+@Getter
+@Setter
+@RequiredArgsConstructor
+@ToString
 @AllArgsConstructor
 public class AttendanceEvent implements Serializable, PersistableEntity<Long> {
     private static final long serialVersionUID = 1L;
@@ -65,9 +78,11 @@ public class AttendanceEvent implements Serializable, PersistableEntity<Long> {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "A_SITE_ID")
+    @ToString.Exclude
     private AttendanceSite attendanceSite;
 
     @OneToMany(mappedBy = "attendanceEvent", cascade = CascadeType.ALL, orphanRemoval = true)
+    @ToString.Exclude
     private Set<AttendanceRecord> records = new HashSet<>(0);
 
     // Copy constructor
@@ -75,5 +90,21 @@ public class AttendanceEvent implements Serializable, PersistableEntity<Long> {
         this.name = attendanceEvent.name;
         this.startDateTime = attendanceEvent.startDateTime;
         this.attendanceSite = attendanceEvent.attendanceSite;
+    }
+
+    @Override
+    public final boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null) return false;
+        Class<?> oEffectiveClass = o instanceof HibernateProxy ? ((HibernateProxy) o).getHibernateLazyInitializer().getPersistentClass() : o.getClass();
+        Class<?> thisEffectiveClass = this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass() : this.getClass();
+        if (thisEffectiveClass != oEffectiveClass) return false;
+        AttendanceEvent that = (AttendanceEvent) o;
+        return getId() != null && Objects.equals(getId(), that.getId());
+    }
+
+    @Override
+    public final int hashCode() {
+        return this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass().hashCode() : getClass().hashCode();
     }
 }

@@ -30,7 +30,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode
+@EqualsAndHashCode(callSuper = true)
 public class AttendanceUserStats extends AttendanceStats {
     private static final    long            serialVersionUID    = 1L;
 

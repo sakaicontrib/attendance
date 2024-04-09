@@ -17,18 +17,30 @@
 package org.sakaiproject.attendance.api.model;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.proxy.HibernateProxy;
 import org.sakaiproject.attendance.api.util.AttendanceConstants;
 import org.sakaiproject.springframework.data.PersistableEntity;
 
-import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
 import java.io.Serializable;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 /**
@@ -42,10 +54,10 @@ import java.util.Set;
 @Entity
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 @Table(name = "ATTENDANCE_SITE_T")
-@Data
+@Getter
+@Setter
+@RequiredArgsConstructor
 @ToString
-@EqualsAndHashCode(of = "id")
-@NoArgsConstructor
 @AllArgsConstructor
 public class AttendanceSite implements Serializable, PersistableEntity<Long> {
     private static final long serialVersionUID = 1L;
@@ -85,10 +97,27 @@ public class AttendanceSite implements Serializable, PersistableEntity<Long> {
 	private Boolean showCommentsToStudents = Boolean.FALSE;
 
 	@OneToMany(mappedBy = "attendanceSite", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<AttendanceStatus> attendanceStatuses = new HashSet<>(0);
+	@ToString.Exclude
+	private Set<AttendanceStatus> attendanceStatuses = new HashSet<>(0);
 
     public AttendanceSite(String siteID) {
         this.siteID = siteID;
         this.gradebookItemName = AttendanceConstants.GRADEBOOK_ITEM_NAME;
     }
+
+	@Override
+	public final boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null) return false;
+		Class<?> oEffectiveClass = o instanceof HibernateProxy ? ((HibernateProxy) o).getHibernateLazyInitializer().getPersistentClass() : o.getClass();
+		Class<?> thisEffectiveClass = this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass() : this.getClass();
+		if (thisEffectiveClass != oEffectiveClass) return false;
+		AttendanceSite that = (AttendanceSite) o;
+		return getId() != null && Objects.equals(getId(), that.getId());
+	}
+
+	@Override
+	public final int hashCode() {
+		return this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass().hashCode() : getClass().hashCode();
+	}
 }
