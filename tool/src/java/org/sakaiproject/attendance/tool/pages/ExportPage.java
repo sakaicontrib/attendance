@@ -23,6 +23,10 @@ import org.sakaiproject.attendance.api.model.stats.AttendanceUserStats;
 import org.sakaiproject.user.api.User;
 
 import org.apache.wicket.RestartResponseException;
+import org.sakaiproject.component.cover.ServerConfigurationService;
+
+import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.SubmitLink;
 import org.apache.wicket.model.LoadableDetachableModel;
@@ -493,5 +497,12 @@ public class ExportPage extends BasePage{
             }
             return commentsChanged;
         }
+    }
+
+    @Override
+    public void renderHead(IHeaderResponse response) {
+	    super.renderHead(response);
+	    final String version = ServerConfigurationService.getString("portal.cdn.version", "");
+	    response.render(JavaScriptHeaderItem.forUrl(String.format("javascript/exportPage.js?version=%s", version)));
     }
 }

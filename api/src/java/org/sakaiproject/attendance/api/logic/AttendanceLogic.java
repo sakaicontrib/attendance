@@ -24,6 +24,7 @@ import org.sakaiproject.attendance.api.model.*;
 import org.sakaiproject.attendance.api.model.stats.AttendanceItemStats;
 import org.sakaiproject.attendance.api.model.stats.AttendanceStats;
 import org.sakaiproject.attendance.api.model.stats.AttendanceUserStats;
+import org.sakaiproject.entity.api.EntityProducer;
 
 /**
  * The brains of the operation.
@@ -32,7 +33,7 @@ import org.sakaiproject.attendance.api.model.stats.AttendanceUserStats;
  * @author David Bauer [dbauer1 (at) udayton (dot) edu]
  * @author Steve Swinsburg (steve.swinsburg@gmail.com)
  */
-public interface AttendanceLogic {
+public interface AttendanceLogic extends EntityProducer {
 
 	/**
 	 * Gets the AttendanceSite by Sakai Site ID

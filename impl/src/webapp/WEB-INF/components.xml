@@ -57,6 +57,7 @@
 		<property name="gradingRuleRepository" ref="org.sakaiproject.attendance.api.repository.GradingRuleRepository" />
 		<property name="sakaiProxy" ref="org.sakaiproject.attendance.logic.SakaiProxy" />
 		<property name="attendanceGradebookProvider" ref="org.sakaiproject.attendance.api.AttendanceGradebookProvider" />
+		<property name="entityManager" ref="org.sakaiproject.entity.api.EntityManager" />
 	</bean>
 
 	<!-- PDFEventExporter -->

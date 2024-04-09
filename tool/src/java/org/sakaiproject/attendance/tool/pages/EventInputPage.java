@@ -9,6 +9,7 @@ import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.*;
 import org.sakaiproject.attendance.api.model.AttendanceEvent;
+import org.sakaiproject.attendance.tool.util.AttendanceFeedbackPanel;
 import org.sakaiproject.attendance.tool.util.PlaceholderBehavior;
 import org.sakaiproject.wicket.component.SakaiDateTimeField;
 
@@ -37,6 +38,7 @@ public class EventInputPage extends BasePage{
 
     private Form<?> createEventInputForm() {
         Form<?> eventForm = new Form<Void>("event");
+        eventForm.add(new AttendanceFeedbackPanel("addEditItemFeedback"));
         eventForm.add(new Label("addItemTitle", getString("event.add")));
         AjaxSubmitLink submit = createSubmitLink("submit", eventForm, false);
         submit.add(new Label("submitLabel", new ResourceModel("attendance.add.create")));

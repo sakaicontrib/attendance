@@ -19,6 +19,9 @@ package org.sakaiproject.attendance.api;
 import org.sakaiproject.attendance.api.model.AttendanceGrade;
 import org.sakaiproject.attendance.api.model.AttendanceSite;
 
+import java.util.List;
+import java.util.Map;
+
 /**
  * A Provider which sends grades to the Gradebook
  *
@@ -31,7 +34,7 @@ public interface AttendanceGradebookProvider {
      * Create a new External Assessment in the Gradebook
      * @param aS, the AttendanceSite
      */
-    boolean create(AttendanceSite aS);
+    boolean create(AttendanceSite aS, String categoryId);
 
     /**
      * Remove an External Assessment from the Gradebook
@@ -43,7 +46,7 @@ public interface AttendanceGradebookProvider {
      * Updates the external Assessment in the Gradebook
      * @param aS
      */
-    boolean update(AttendanceSite aS);
+    boolean update(AttendanceSite aS, String categoryId);
 
     /**
      * Sends an AttendanceGrade to the Gradebook
@@ -51,6 +54,12 @@ public interface AttendanceGradebookProvider {
      * @return success of operation
      */
     boolean sendToGradebook(AttendanceGrade ag);
+
+    boolean doesGradebookHaveCategories(String gbUID);
+
+    Map<String,String> getGradebookCategories(String gbUID);
+
+    Long getCategoryForItem(String gbUID,Long aSID);
 
     /**assignment defined with the provided title
      * @param gbUID

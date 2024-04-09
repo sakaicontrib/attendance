@@ -31,6 +31,8 @@ import org.sakaiproject.attendance.api.model.stats.AttendanceItemStats;
 import org.sakaiproject.attendance.api.model.stats.AttendanceStats;
 import org.sakaiproject.attendance.api.model.stats.AttendanceUserStats;
 import org.sakaiproject.attendance.api.repository.*;
+import org.sakaiproject.entity.api.EntityManager;
+import org.sakaiproject.entity.api.EntityTransferrer;
 import org.sakaiproject.user.api.User;
 
 /**
@@ -42,7 +44,7 @@ import org.sakaiproject.user.api.User;
  */
 @Slf4j
 @Setter
-public class AttendanceLogicImpl implements AttendanceLogic {
+public class AttendanceLogicImpl implements AttendanceLogic, EntityTransferrer {
 
 	private AttendanceEventRepository attendanceEventRepository;
 
@@ -60,11 +62,27 @@ public class AttendanceLogicImpl implements AttendanceLogic {
 
 	private AttendanceGradebookProvider attendanceGradebookProvider;
 
+	private EntityManager entityManager;
+
 	/**
 	 * {@inheritDoc}
 	 */
 	public AttendanceSite getAttendanceSite(String siteID) {
-		return attendanceSiteRepository.findBySiteId(siteID);
+		AttendanceSite attendanceSite = attendanceSiteRepository.findBySiteId(siteID);
+
+		if (attendanceSite == null) {
+			attendanceSite = new AttendanceSite(siteID);
+
+			// This will create the site and add statuses to the new site
+			if (!addSite(attendanceSite)) {
+				return null;
+			}
+
+			// We need to re-load the AttendanceSite because of the status creation above
+			attendanceSite = attendanceSiteRepository.findBySiteId(siteID);
+		}
+
+		return attendanceSite;
 	}
 
 	/**
@@ -81,14 +99,8 @@ public class AttendanceLogicImpl implements AttendanceLogic {
 	 * {@inheritDoc}
 	 */
 	public AttendanceSite getCurrentAttendanceSite() {
-		final String currentSiteID = sakaiProxy.getCurrentSiteId();
-
-		AttendanceSite currentAttendanceSite = getAttendanceSite(currentSiteID);
-		if (currentAttendanceSite == null) {
-			currentAttendanceSite = addSite(new AttendanceSite(currentSiteID));
-		}
-		generateMissingAttendanceStatusesForSite(currentAttendanceSite);
-		return currentAttendanceSite;
+		String currentSiteID = sakaiProxy.getCurrentSiteId();
+		return getAttendanceSite(currentSiteID);
 	}
 
 	/**
@@ -481,8 +493,14 @@ public class AttendanceLogicImpl implements AttendanceLogic {
 		return grade;
 	}
 
-	private AttendanceSite addSite(AttendanceSite s) {
-		return attendanceSiteRepository.save(s);
+	private boolean addSite(AttendanceSite s) {
+		AttendanceSite attendanceSite = attendanceSiteRepository.save(s);
+		if (attendanceSite != null) {
+			generateMissingAttendanceStatusesForSite(s);
+			return true;
+		}
+
+		return false;
 	}
 
 	private List<AttendanceGrade> generateAttendanceGrades(AttendanceSite aS) {
@@ -652,5 +670,56 @@ public class AttendanceLogicImpl implements AttendanceLogic {
 
 		// Don't allow negative total points
 		return Math.max(totalPoints, 0D);
+	}
+
+	@Override
+	public Map<String, String> transferCopyEntities(String fromContext, String toContext, List<String> ids, List<String> transferOptions) {
+		return transferCopyEntities(fromContext, toContext, ids, transferOptions, false);
+	}
+
+	@Override
+	public String[] myToolIds() {
+		return new String[]{ "sakai.attendance" };
+	}
+
+	@Override
+	public Map<String, String> transferCopyEntities(String fromContext, String toContext, List<String> ids, List<String> transferOptions, boolean cleanup) {
+		Map<String, String> transversalMap = new HashMap<>();
+		AttendanceSite fromSite = getAttendanceSite(fromContext);
+		AttendanceSite toSite = getAttendanceSite(toContext);
+
+		if (cleanup) {
+			// TODO: implement deleting all content in toContext
+			// Maybe wait until soft delete is confirmed everywhere
+		}
+
+		try {
+			// TODO: consider bringing over the statuses from the original site
+
+			List<AttendanceEvent> fromEvents = getAttendanceEventsForSite(fromSite);
+			for (AttendanceEvent fromEvent : fromEvents) {
+				AttendanceEvent toEvent = new AttendanceEvent();
+				toEvent.setAttendanceSite(toSite);
+				toEvent.setName(fromEvent.getName());
+
+				if (fromEvent.getStartDateTime() != null) {
+					toEvent.setStartDateTime(fromEvent.getStartDateTime());
+				}
+
+				addAttendanceEventNow(toEvent);
+				log.info("transferCopyEntities: new attendance event ({})", toEvent.getName());
+
+				transversalMap.put("attendance/" + fromEvent.getId(), "attendance/" + toEvent.getId());
+			}
+		} catch (Exception e) {
+			log.error("transferCopyEntities error", e);
+		}
+
+		return transversalMap;
+	}
+
+	@Override
+	public void updateEntityReferences(String toContext, Map<String, String> transversalMap) {
+		return;
 	}
 }
