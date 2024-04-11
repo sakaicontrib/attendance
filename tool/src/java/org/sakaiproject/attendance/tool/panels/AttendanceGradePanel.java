@@ -16,8 +16,6 @@
 
 package org.sakaiproject.attendance.tool.panels;
 
-import java.util.Map;
-
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormSubmitBehavior;

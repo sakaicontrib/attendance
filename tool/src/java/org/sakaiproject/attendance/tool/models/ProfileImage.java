@@ -11,6 +11,7 @@ public class ProfileImage extends WebComponent
     super( id, urlModel );
   }
 
+  @Override
   protected void onComponentTag(ComponentTag tag)
   {
     super.onComponentTag( tag );

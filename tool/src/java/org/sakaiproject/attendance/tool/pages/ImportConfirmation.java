@@ -22,14 +22,12 @@ import org.sakaiproject.attendance.model.*;
 import java.util.*;
 import java.util.List;
 
-import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.RestartResponseException;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.*;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.SubmitLink;
-import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 
@@ -174,11 +172,12 @@ public class ImportConfirmation  extends BasePage{
     private class UploadForm extends Form<Void> {
         private Label lowerErrorAlert = new Label("lowerErrorAlert");
         private SubmitLink completeImport = new SubmitLink("submitLink") {
+            @Override
             public void onSubmit() {
-                for (int i = 0; i < uploadICLList.size(); i++){
-                    attendanceLogic.updateAttendanceRecord(uploadICLList.get(i).getAttendanceRecord(), uploadICLList.get(i).getOldStatus());
-                    attendanceLogic.updateAttendanceSite(uploadICLList.get(i).getAttendanceSite());
-                }
+                uploadICLList.forEach(item -> {
+                    attendanceLogic.updateAttendanceRecord(item.getAttendanceRecord(), item.getOldStatus());
+                    attendanceLogic.updateAttendanceSite(item.getAttendanceSite());
+                });
                 success(getString("attendance.export.confirmation.import.save.success"));
                 setResponsePage(new Overview());
             }
@@ -189,6 +188,7 @@ public class ImportConfirmation  extends BasePage{
             add(lowerErrorAlert);
             add(completeImport);
             add(new SubmitLink("submitLink2") {
+                @Override
                 public void onSubmit() {
                     setResponsePage(new ExportPage());
                 }
