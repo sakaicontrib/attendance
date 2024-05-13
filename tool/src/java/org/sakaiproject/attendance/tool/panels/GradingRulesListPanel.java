@@ -18,6 +18,7 @@ package org.sakaiproject.attendance.tool.panels;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
@@ -35,7 +36,7 @@ import java.util.List;
 public class GradingRulesListPanel extends BasePanel {
     private static final long serialVersionUID = 1L;
 
-    Form regradeForm;
+    WebMarkupContainer regradeForm;
 
     private boolean needRegrade;
 
@@ -73,10 +74,10 @@ public class GradingRulesListPanel extends BasePanel {
                     private static final long serialVersionUID = 1L;
 
                     @Override
-                    protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-                        super.onSubmit(target, form);
+                    protected void onSubmit(AjaxRequestTarget target) {
+                        super.onSubmit(target);
 
-                        final boolean result = attendanceLogic.deleteGradingRule((GradingRule) form.getModelObject());
+                        final boolean result = attendanceLogic.deleteGradingRule((GradingRule) getForm().getModelObject());
 
                         if (result) {
                             setNeedRegrade(true);
@@ -89,7 +90,7 @@ public class GradingRulesListPanel extends BasePanel {
                     }
 
                     @Override
-                    protected void onError(AjaxRequestTarget target, Form<?> form) {
+                    protected void onError(AjaxRequestTarget target) {
                         target.add(GradingRulesListPanel.this.pageFeedbackPanel);
                     }
                 });
@@ -100,16 +101,14 @@ public class GradingRulesListPanel extends BasePanel {
 
         add(rules);
 
-        this.regradeForm = new Form("regrade-form1"){
+        // Use a WebMarkupContainer - it's simpler than a Form
+        this.regradeForm = new WebMarkupContainer("regrade-form1");
+        this.regradeForm.setVisibilityAllowed(getNeedRegrade());
+
+        this.regradeForm.add(new AjaxButton("regrade-submit1") {
             @Override
-            public boolean isVisible() {
-                return getNeedRegrade();
-            }
-        };
-        regradeForm.add(new AjaxButton("regrade-submit1", regradeForm) {
-            @Override
-            protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-                super.onSubmit(target, form);
+            protected void onSubmit(AjaxRequestTarget target) {
+                super.onSubmit(target);
 
                 attendanceLogic.regradeAll(attendanceLogic.getCurrentAttendanceSite());
 
@@ -122,7 +121,7 @@ public class GradingRulesListPanel extends BasePanel {
             }
 
             @Override
-            protected void onError(AjaxRequestTarget target, Form<?> form) {
+            protected void onError(AjaxRequestTarget target) {
                 target.add(GradingRulesListPanel.this.pageFeedbackPanel);
             }
         });

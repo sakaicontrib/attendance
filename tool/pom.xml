@@ -22,7 +22,7 @@
 	<parent>
     <artifactId>attendance</artifactId>
     <groupId>org.sakaiproject.attendance</groupId>
-    <version>23-SNAPSHOT</version>
+    <version>25-SNAPSHOT</version>
   </parent>
 	
 	<name>attendance - Tool</name>
@@ -58,16 +58,6 @@
 				</exclusion>
 			</exclusions>
     	</dependency>
-		<dependency>
-			<groupId>org.apache.wicket</groupId>
-			<artifactId>wicket-datetime</artifactId>
-		</dependency>
-		<!-- Joda used by wicket-datetime -->
-		<dependency>
-			<groupId>joda-time</groupId>
-			<artifactId>joda-time</artifactId>
-			<version>${joda.time.version}</version>
-		</dependency>
 		<dependency>
 			<groupId>org.apache.wicket</groupId>
 			<artifactId>wicket-extensions</artifactId>

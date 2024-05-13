@@ -16,45 +16,42 @@
 
 package org.sakaiproject.attendance.tool.pages;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.binary.StringUtils;
+import org.apache.poi.hssf.usermodel.HSSFCell;
+import org.apache.poi.hssf.usermodel.HSSFCellStyle;
+import org.apache.poi.hssf.usermodel.HSSFFont;
+import org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.ss.usermodel.CellType;
+import org.apache.poi.ss.usermodel.Row;
 import org.apache.wicket.model.StringResourceModel;
-import org.sakaiproject.component.cover.ServerConfigurationService;
-import org.sakaiproject.attendance.logic.SakaiProxy;
 import org.sakaiproject.attendance.model.*;
+import org.sakaiproject.component.cover.ServerConfigurationService;
 import org.sakaiproject.user.api.User;
 
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.wicket.RestartResponseException;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
-import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.SubmitLink;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.util.lang.Bytes;
-import org.apache.wicket.util.time.Duration;
 import org.apache.wicket.markup.html.link.DownloadLink;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.apache.wicket.markup.html.form.upload.FileUploadField;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxCheckBox;
 
-import org.apache.poi.hssf.usermodel.*;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.hssf.usermodel.HSSFSheet;
-import org.apache.poi.hssf.usermodel.HSSFRow;
-import org.apache.poi.hssf.usermodel.HSSFCell;
-import org.apache.poi.ss.usermodel.CellType;
-
 import java.io.*;
-
+import java.time.Duration;
 import java.util.*;
 import java.util.Collections;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-
-import lombok.extern.slf4j.Slf4j;
 
 
 /**
@@ -113,7 +110,7 @@ public class ExportPage extends BasePage{
             public void onSubmit() {
                 setResponsePage(new ExportPage());
             }
-        }).setCacheDuration(Duration.NONE).setDeleteAfterDownload(true));
+        }).setCacheDuration(Duration.ZERO).setDeleteAfterDownload(true));
 
         add(new UploadForm("form"));
     }
@@ -173,8 +170,8 @@ public class ExportPage extends BasePage{
             }
         });
         int columnGetter = 3;   //separate counter for columns in case there are comments, in which case the following loop's counter will increment differently.
-        for(int count=0; count<attendanceEventlist.size(); count++){   //put the actual event info in the rest of the header
-            AttendanceEvent now = attendanceEventlist.get(count);   // Count iterates over the attendance events only.
+        // Count iterates over the attendance events only.
+        for (AttendanceEvent now : attendanceEventlist) {   //put the actual event info in the rest of the header
             HSSFCell currentCell = headerRow.createCell(columnGetter, CellType.STRING);   //create and fill in a header cell for every event. We use ColumnGetter instead of Count to iterate because the cells may need to iterate by 2 if there are comments.
             currentCell.setCellStyle(boldStyle);
             String startDate = "";
@@ -183,7 +180,7 @@ public class ExportPage extends BasePage{
             } catch (NullPointerException e) {
             }
             currentCell.setCellValue(now.getName() + '[' + startDate + "](" + now.getId().toString() + ')');
-            if(commentsOnOff){  //true = has comments. if true, add the comment column for each event.
+            if (commentsOnOff) {  //true = has comments. if true, add the comment column for each event.
                 columnGetter++;    //increment one extra, to allow for the comment column
                 currentCell = headerRow.createCell(columnGetter, CellType.STRING);  //making a second header cell [for Comments] for every event
                 currentCell.setCellStyle(boldStyle);
@@ -205,35 +202,34 @@ public class ExportPage extends BasePage{
             currentCell = studentRow.createCell(2, CellType.STRING);
             currentCell.setCellValue(sakaiProxy.getUserGroupWithinSite(groupIds, user.getId(), siteID));
             int columnCounter = 3;  //data columns start at 3 because of eid/name/section being first.
-            for(int eventCounter=0; eventCounter< attendanceEventlist.size(); eventCounter++){  //loop over all the events in this site
-                Long currentEventId = attendanceEventlist.get(eventCounter).getId();
-                for(int studentDataCounter = 0; studentDataCounter<studentData.size(); studentDataCounter++){   //find the student's data for this event.
-                    AttendanceRecord currentRecord = studentData.get(studentDataCounter);
-                    if(currentRecord.getAttendanceEvent().getId().equals(currentEventId)){  //make a cell for every record that matches an event
+            for (AttendanceEvent attendanceEvent : attendanceEventlist) {  //loop over all the events in this site
+                Long currentEventId = attendanceEvent.getId();
+                for (AttendanceRecord currentRecord : studentData) {   //find the student's data for this event.
+                    if (currentRecord.getAttendanceEvent().getId().equals(currentEventId)) {  //make a cell for every record that matches an event
                         currentCell = studentRow.createCell(columnCounter, CellType.STRING);
-                        if(blankSheet){ //when the user wants a blank sheet exported
+                        if (blankSheet) { //when the user wants a blank sheet exported
                             currentCell.setCellValue("");
-                        } else if(currentRecord.getStatus() == null) {
+                        } else if (currentRecord.getStatus() == null) {
                             currentCell.setCellValue("");
-                        } else if(currentRecord.getStatus().toString().equals("PRESENT")) {    //convert the Status to a one-letter abbreviation
+                        } else if (currentRecord.getStatus().toString().equals("PRESENT")) {    //convert the Status to a one-letter abbreviation
                             currentCell.setCellValue("P");
-                        } else if (currentRecord.getStatus().toString().equals("UNEXCUSED_ABSENCE")){
+                        } else if (currentRecord.getStatus().toString().equals("UNEXCUSED_ABSENCE")) {
                             currentCell.setCellValue("A");
-                        } else if (currentRecord.getStatus().toString().equals("EXCUSED_ABSENCE")){
+                        } else if (currentRecord.getStatus().toString().equals("EXCUSED_ABSENCE")) {
                             currentCell.setCellValue("E");
-                        } else if (currentRecord.getStatus().toString().equals("LATE")){
+                        } else if (currentRecord.getStatus().toString().equals("LATE")) {
                             currentCell.setCellValue("L");
-                        } else if (currentRecord.getStatus().toString().equals("LEFT_EARLY")){
+                        } else if (currentRecord.getStatus().toString().equals("LEFT_EARLY")) {
                             currentCell.setCellValue("LE");
                         } else {
                             currentCell.setCellValue("");   //this shows up again as part of the If structure to capture cases in which blankSheet = False but there is no data in CurrentRecord.
                         }
-                        if(commentsOnOff){  //true = has comments. if true, add the comment data for each student.
+                        if (commentsOnOff) {  //true = has comments. if true, add the comment data for each student.
                             columnCounter++;
                             currentCell = studentRow.createCell(columnCounter, CellType.STRING);
-                            if(blankSheet){ //we can just stick blank Strings in if the sheet is to be blank.
+                            if (blankSheet) { //we can just stick blank Strings in if the sheet is to be blank.
                                 currentCell.setCellValue("");
-                            }else{
+                            } else {
                                 currentCell.setCellValue(currentRecord.getComment());
                             }
                         }
@@ -252,19 +248,16 @@ public class ExportPage extends BasePage{
     }
 
     private File writeFile(HSSFWorkbook wb, File tempFile) throws IOException {
-        try (FileOutputStream fos = new FileOutputStream(tempFile)){
+        try (wb; FileOutputStream fos = new FileOutputStream(tempFile)) {
             wb.write(fos);
         } catch (IOException e) {
             log.error("Error when closing fileOutputStream: ", e);
-        } finally {
-            wb.close();
         }
         return tempFile;
     }
 
     private String buildFileNamePrefix() {
-        final String prefix = "attendance_Export-";
-        return prefix;
+        return "attendance_Export-";
     }
 
     private String buildFileNameSuffix() {
@@ -300,11 +293,11 @@ public class ExportPage extends BasePage{
             // Start processing
             HSSFSheet sheet = getIterableExcelSheet();
             if(sheet != null){    //if we weren't able to get a usable sheet, it would be Null and we shouldn't process it.
-                Iterator rows = sheet.rowIterator();
+                Iterator<Row> rows = sheet.rowIterator();
                 if(rows.hasNext()){ //don't do anything with the Iterator unless it has something.
                     final List<String> headerRow = processHeaderRow(rows);
                     List<Long> badIds = checkHeader(siteEventList, headerRow, errors);
-                    checkHeader = badIds.size()<1;  //if there are bad IDs, the header is bad [checkHeader = false]
+                    checkHeader = badIds.isEmpty();  //if there are bad IDs, the header is bad [checkHeader = false]
                     while(rows.hasNext()){
                         HSSFRow currentRow = (HSSFRow) rows.next();
                         commentsChanged = processOneDataRow(currentRow, usableIDs, headerRow, ICList, commentsChanged, errors);
@@ -361,7 +354,7 @@ public class ExportPage extends BasePage{
         private List<Long> checkHeader(List<AttendanceEvent> siteEventList, List<String> headerRow, List<String> errors){
             List<Long> siteEventListIds = getActualEventIds(siteEventList);
             List<Long> badIds = new ArrayList<Long>();
-            for(int count = 3; count < headerRow.size() && headerRow.get(count).length()>0; count++){  //see if every ID in idTracker is in Attendance already
+            for(int count = 3; count < headerRow.size() && !headerRow.get(count).isEmpty(); count++){  //see if every ID in idTracker is in Attendance already
                 Long getIdResult = getIdFromString(headerRow.get(count), errors);
                 if(!siteEventListIds.contains(getIdResult)){   //if not, this header had bad IDs (events that Attendance doesn't have)
                     badIds.add(getIdResult);   //add the bad ID into the array.
@@ -394,19 +387,20 @@ public class ExportPage extends BasePage{
             return usableIds;
         }
 
-        private void addErrorsToSession(List<String> errors){
-            for(int count = 0; count<4 && count<errors.size() && errors.size()>0; count++){
+        private void addErrorsToSession(List<String> errors) {
+            for (int count = 0; count < Math.min(4, errors.size()); count++) {
                 getSession().error(errors.get(count));
             }
-            if(errors.size()>4){
-                String howManyErrors = "" + (errors.size()-4);
-                getSession().error(new StringResourceModel("attendance.import.more.errors", null, new String[]{howManyErrors}).getString());
+
+            if (errors.size() > 4) {
+                String howManyErrors = String.valueOf(errors.size() - 4);
+                getSession().error(getString("attendance.import.more.errors", null, howManyErrors));
             }
         }
 
         private boolean processOneDataRow(HSSFRow row, List<Long> usableIds, List<String> headerRow, List<ImportConfirmList> ICList, boolean commentsChanged, List<String> errors) {
             AttendanceSite attendanceSite = attendanceLogic.getAttendanceSite(sakaiProxy.getCurrentSiteId());
-            List data = new ArrayList();    // container for the current row's data
+            List<String> data = new ArrayList<>();    // container for the current row's data
             for (int countCells=0; countCells<headerRow.size(); countCells++) {   // create the arrayList of the current Excel row's data. we'll base it on the length of the header, to avoid reaching out beyond the data's end.
                 HSSFCell cell = row.getCell(countCells);
                 try {data.add(cell.toString());}    //try adding the next cell's data to the array
@@ -451,10 +445,12 @@ public class ExportPage extends BasePage{
                                 if(!headerRow.get(count).contains("]Comments(") && count+1<headerRow.size()){
                                     if(headerRow.get(count+1).contains("]Comments(")){
                                         try{
-                                            newData.setComment(data.get(count+1).toString());
+                                            newData.setComment(data.get(count+1));
                                             commentsChanged = true;
                                         }catch(IndexOutOfBoundsException e){
-                                            errors.add(new StringResourceModel("attendance.import.column.format", null, new String[]{currentID.toString()}).getString());
+                                            StringResourceModel srm = new StringResourceModel("attendance.import.column.format", this);
+                                            srm.setParameters(currentID);
+                                            errors.add(srm.getString());
                                         }
                                         count++;    //increment Count again to move on to the next ID when grabbing the comment.
                                     }
@@ -471,7 +467,7 @@ public class ExportPage extends BasePage{
                                     startDate = checker.getAttendanceEvent().getStartDateTime().toString();
                                 } catch (NullPointerException e) {/*don't need to do anything here*/}
                                 ICL.setEventDate(startDate);   //much of the data, like Event Date, will not change, so it can be grabbed from Checker.
-                                if(newData.getComment()!=null && newData.getComment().length() > 0){    //add the newData comment to the ICL if it's not empty.
+                                if(newData.getComment()!=null && !newData.getComment().isEmpty()){    //add the newData comment to the ICL if it's not empty.
                                     ICL.setComment(newData.getComment());
                                 }else{  //if it IS empty, just throw in the old comment.
                                     ICL.setComment(checker.getComment());
@@ -485,12 +481,12 @@ public class ExportPage extends BasePage{
                             }
                         }
                     }else{
-                        errors.add(new StringResourceModel("attendance.import.bad.event", null, new String[]{currentID.toString()}).getString());
+                        errors.add(new StringResourceModel("attendance.import.bad.event", this, Model.of(currentID)).getString());
                     }
                 }
             }else if (data.size()>2){
-                if(data.get(1).toString().length() > 0){
-                    errors.add(new StringResourceModel("attendance.import.fake.student", null, new String[]{data.get(1).toString()}).getString());   //when there's a fake student in Excel that isn't in Attendance
+                if(!data.get(1).isEmpty()){
+                    errors.add(new StringResourceModel("attendance.import.fake.student", this, Model.of(data.get(1).toString())).getString());
                 }else{
                     errors.add(getString("attendance.import.blank.row"));   //when there's a blank row in Excel that has no data
                 }

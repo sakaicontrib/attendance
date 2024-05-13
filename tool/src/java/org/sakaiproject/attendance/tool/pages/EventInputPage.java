@@ -1,22 +1,21 @@
 package org.sakaiproject.attendance.tool.pages;
 import org.apache.commons.codec.binary.StringUtils;
-import org.apache.wicket.Page;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
-import org.apache.wicket.extensions.yui.calendar.DateTimeField;
+import org.apache.wicket.extensions.markup.html.form.DateTextField;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.*;
 import org.sakaiproject.attendance.model.AttendanceEvent;
-import org.sakaiproject.attendance.tool.pages.EventView;
-import org.sakaiproject.attendance.tool.pages.Overview;
 import org.sakaiproject.attendance.tool.util.AttendanceFeedbackPanel;
-import org.sakaiproject.attendance.tool.util.ConfirmationLink;
 import org.sakaiproject.attendance.tool.util.PlaceholderBehavior;
+
+import java.util.Date;
+
 
 public class EventInputPage extends BasePage{
     private static final long serialVersionUID = 1L;
@@ -54,7 +53,7 @@ public class EventInputPage extends BasePage{
             private static final long serialVersionUID = 1L;
 
             @Override
-            public void onSubmit(final AjaxRequestTarget target, final Form<?> form) {
+            public void onSubmit(final AjaxRequestTarget target) {
                 // decide where to go based on where we came from.
                 String nextPage = EventInputPage.this.getNextPage();
                 if(StringUtils.equals(nextPage, EventInputPage.GRADING)) {
@@ -72,18 +71,16 @@ public class EventInputPage extends BasePage{
         };
         cancel.setDefaultFormProcessing(false);
         eventForm.add(cancel);
-        final TextField name = new TextField<String>("name") {
-            @Override
-            protected void onInitialize(){
-                super.onInitialize();
-                add(new PlaceholderBehavior(getString("event.placeholder.name")));
-            }
-        };
-        final DateTimeField startDateTime = new DateTimeField("startDateTime");
+        final TextField<String> name = new TextField<>("name");
         name.setRequired(true);
+        name.add(new PlaceholderBehavior(getString("event.placeholder.name")));
+
+        final DateTextField startDateTime = new DateTextField("startDateTime", null, "yyyy-MM-dd'T'HH:mm");
+
         eventForm.add(name);
         eventForm.add(startDateTime);
         return eventForm;
+
     }
 
     private void processSave(AjaxRequestTarget target, Form<?> form, boolean addAnother) {
@@ -91,7 +88,8 @@ public class EventInputPage extends BasePage{
         e.setAttendanceSite(attendanceLogic.getCurrentAttendanceSite());
         boolean result = attendanceLogic.updateAttendanceEvent(e);
         if(result){
-            StringResourceModel temp = new StringResourceModel("attendance.add.success", null, new String[]{e.getName()});
+            StringResourceModel temp = new StringResourceModel("attendance.add.success", this);
+            temp.setParameters(e.getName());
             getSession().success(temp.getString());
         } else {
             error(getString("attendance.add.failure"));
@@ -107,8 +105,8 @@ public class EventInputPage extends BasePage{
     private AjaxSubmitLink createSubmitLink(final String id, final Form<?> form, final boolean createAnother) {
         return new AjaxSubmitLink(id, form) {
             @Override
-            protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-                super.onSubmit(target, form);
+            protected void onSubmit(AjaxRequestTarget target) {
+                super.onSubmit(target);
                 processSave(target, form, createAnother);
             }
 
@@ -118,7 +116,7 @@ public class EventInputPage extends BasePage{
             }
 
             @Override
-            protected void onError(AjaxRequestTarget target, Form<?> form) {
+            protected void onError(AjaxRequestTarget target) {
                 target.addChildren(form, FeedbackPanel.class);
             }
 

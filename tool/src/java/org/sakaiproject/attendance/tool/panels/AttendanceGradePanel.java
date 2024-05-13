@@ -77,9 +77,13 @@ public class AttendanceGradePanel extends BasePanel {
 
                 if (result) {
                     String grade = aG.getGrade() == null ? "null" : aG.getGrade().toString();
-                    getSession().info(new StringResourceModel("attendance.grade.update.success", null, new String[]{grade, displayName}).getString());
+                    StringResourceModel messageModel = new StringResourceModel("attendance.grade.update.success", this);
+                    messageModel.setParameters(grade, displayName);
+                    info(messageModel.getString());
                 } else {
-                    getSession().error(new StringResourceModel("attendance.grade.update.failure", null, new String[]{displayName}).getString());
+                    StringResourceModel errorString = new StringResourceModel("attendance.grade.update.failure", this);
+                    errorString.setParameters(displayName);
+                    getSession().error(errorString);
                 }
 
             }
@@ -114,7 +118,7 @@ public class AttendanceGradePanel extends BasePanel {
 
         if(maximumGrade == null) {
             maximum = new Label("maximum", "/ -");
-            points.add(new AttributeModifier("title", new StringResourceModel("attendance.grade.tooltip.disabled", null, new String[]{new ResourceModel("settings.link.label").getObject()})));
+            points.add(new AttributeModifier("title", new StringResourceModel("attendance.grade.tooltip.disabled", this, Model.of(new ResourceModel("settings.link.label").getObject()))));
         } else {
             maximum = new Label("maximum", "/ "+ maximumGrade.toString());
         }

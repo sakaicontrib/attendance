@@ -54,7 +54,7 @@ public class AttendanceStatCalc {
             if("".equals(summary)) {
                 log.info("AttendanceStatCalc no sites left to sync");
             } else {
-                log.info("AttendanceStatCalc done, but there are errors\n" + summary);
+                log.info("AttendanceStatCalc done, but there are errors\n{}", summary);
             }
         } else {
             while(!ids.isEmpty()) {
@@ -63,10 +63,10 @@ public class AttendanceStatCalc {
                     calculateStats(id);
                     lastId = id > lastId ? id : lastId++; // never-ending loop protection
                 }
-                log.info("AttendanceStatCalc in progress " + getSummary());
+                log.info("AttendanceStatCalc in progress {}", getSummary());
                 ids = dao.getAttendanceSiteBatch(syncTime, lastId);
             }
-            log.info("AttendanceStatCalc finished " + getSummary());
+            log.info("AttendanceStatCalc finished {}", getSummary());
             log.info(getOverallSummary());
         }
 
@@ -105,22 +105,21 @@ public class AttendanceStatCalc {
                     }
                 } else {
                     sitesWithNoUsers++;
-                    log.debug("AttendanceSite, id: '" + id +"' has no users or Site, id: '"
-                            + attendanceSite.getSiteID() +"' no longer exists.");
+                    log.debug("AttendanceSite, id: '{}' has no users or Site, id: '{}' no longer exists.", id, attendanceSite.getSiteID());
                 }
 
                 attendanceSite.setIsSyncing(false);
                 attendanceLogic.updateAttendanceSite(attendanceSite);
 
-                log.debug("AttendanceSite synced with id: " + id);
+                log.debug("AttendanceSite synced with id: {}", id);
                 sitesProcessed++;
             } else {
-                log.debug("AttendanceSite not marked as in progress" + id);
+                log.debug("AttendanceSite not marked as in progress{}", id);
                 sitesNotMarked++;
             }
         } catch (Exception e) {
             sitesInError++;
-            log.warn("Error syncing AttendanceSite id: " + id, e);
+            log.warn("Error syncing AttendanceSite id: {}", id, e);
         }
     }
 
@@ -154,8 +153,7 @@ public class AttendanceStatCalc {
 
                 userStats.put(record.getUserID(), array);
             } else {
-                log.debug("AttendanceRecord user no longer present in course, record id: '" + record.getId()
-                        + "' and userID: " + record.getUserID());
+                log.debug("AttendanceRecord user no longer present in course, record id: '{}' and userID: {}", record.getId(), record.getUserID());
             }
         }
 
@@ -177,7 +175,7 @@ public class AttendanceStatCalc {
 
     private String getOverallSummary() {
         List<Long> inProgress = dao.getAttendanceSitesInSync();
-        if(inProgress.size() > 0) {
+        if(!inProgress.isEmpty()) {
             String message = "%d AttendanceSite(s) currently marked in sync. IDs marked in sync: %s";
             return String.format(message, inProgress.size(), inProgress);
         }

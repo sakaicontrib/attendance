@@ -145,19 +145,6 @@ table.itemListTable, table.eventViewTable, table.takeAttendanceTable {
     margin-left: 35px;
 }
 
-thead tr .tablesorter-header:not(.sorter-false):not(.tablesorter-headerAsc):not(.tablesorter-headerDesc), table.itemListTable thead tr .header, table.takeAttendanceTable thead tr .header, th.tablesorter-headerUnsorted, tr.div-table-row > th.header:not(.headerSortDown):not(.headerSortUp)  {
-    background: url(../images/bg.png) no-repeat bottom .5em right;
-    cursor: pointer;
-    padding-right: 24px;
-}
-
-thead tr .tablesorter-headerAsc, table.itemListTable thead tr .headerSortUp, table.takeAttendanceTable thead tr .headerSortUp, th.headerSortUp {
-    background: url(../images/asc.png) no-repeat bottom .5em right;
-}
-thead tr .tablesorter-headerDesc, table.itemListTable thead tr .headerSortDown, table.takeAttendanceTable thead tr .headerSortDown, th.headerSortDown {
-    background: url(../images/desc.png) no-repeat bottom .5em right;
-}
-
 table.itemListTable, table.eventViewTable, table.takeAttendanceTable, div.eventFormContainer, form.addEditForm, .addComment h3, td.overviewGradeCol form {
     margin: 0;
 }
@@ -607,15 +594,6 @@ label.addItemCaptions {
     top: 21%;
 }
 
-#buttonSection > button.saveNewItem {
-    background: #17214A;
-    color: white;
-}
-#buttonSection > button.saveNewItem:hover {
-    background: #111837;
-    border-color: #124466;
-}
-
 ul.actions-dropdown {
     z-index: 90;
 }
@@ -923,13 +901,6 @@ div.wicket-modal div.w_caption {
     height: auto;
 }
 
-div.wicket-modal h3.w_captionText {
-    padding: 20px;
-    font-size: 1.5em;
-    position: relative;
-    height: auto;
-    color: var(--sakai-text-color-1);
-}
 /* End janking */
 
 div.wicket-modal div.w_content_3 div.messageSuccess, div.wicket-modal div.w_content_3 div.alertMessage {
@@ -949,11 +920,6 @@ form.takeAttendanceNowForm input:hover {
     border-color: #124466;
     color: white;
 }
-
-span.yui-skin-sam img {
-    margin-right: .5em;
-}
-
 
 .cancel {
     background: #e54028;
@@ -1086,9 +1052,4 @@ span.yui-skin-sam img {
 .eventTablePager {
     text-align: center;
     font-size: 1.3em;
-}
-
-div#startDateTime span.yui-skin-sam span.yui-calcontainer, div#startDateTime th.calweekdaycell, div#startDateTime td.calcell:not(.oom), div#startDateTime span.yui-skin-sam span.yui-calcontainer a:not(.calnavright):not(.calnavleft), div#startDateTime span.yui-skin-sam span.yui-calcontainer div.title {
-    background: var(--sakai-background-color-2);
-    color: var(--sakai-text-color-2);
 }

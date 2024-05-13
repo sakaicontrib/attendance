@@ -27,7 +27,7 @@
             <form class = "exportPageDouble" wicket:id="export-form">
                 <p><input type="checkbox" wicket:id="exportIncludeComments" id="exportIncludeComments"> <label for="exportIncludeComments"><wicket:message key="attendance.export.checkbox.comments" /></label></p>
                 <p><input type="checkbox" wicket:id="exportBlankSheet" id="exportBlankSheet"> <label for="exportBlankSheet"><wicket:message key="attendance.export.checkbox.blank" /></label></p>
-                <button id="exportSave" type="submit" wicket:id="submit-link"><wicket:message key="attendance.export.exportButton" /></button>
+                <button id="exportSave" class="btn btn-primary" type="submit" wicket:id="submit-link"><wicket:message key="attendance.export.exportButton" /></button>
              </form>
 
             <h2><wicket:message key="attendance.export.importHeader" /></h2>
@@ -38,7 +38,7 @@
                 </fieldset>
 
                 <div class="act">
-                    <button type="submit" id="import-button" wicket:id="submitLink" disabled><wicket:message key="attendance.export.importButton" /></button>
+                    <button type="submit" id="import-button" class="btn btn-primary" wicket:id="submitLink" disabled><wicket:message key="attendance.export.importButton" /></button>
                 </div>
             </form>
         </div>

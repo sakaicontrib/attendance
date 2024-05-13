@@ -20,24 +20,18 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.sakaiproject.authz.api.*;
 import org.sakaiproject.component.api.ServerConfigurationService;
-import org.sakaiproject.entity.api.ResourceProperties;
-import org.sakaiproject.entity.api.ResourcePropertiesEdit;
 import org.sakaiproject.event.api.EventTrackingService;
 import org.sakaiproject.exception.IdUnusedException;
 import org.sakaiproject.site.api.Group;
 import org.sakaiproject.site.api.Site;
 import org.sakaiproject.site.api.SiteService;
-import org.sakaiproject.time.api.Time;
 import org.sakaiproject.tool.api.Session;
 import org.sakaiproject.tool.api.SessionManager;
 import org.sakaiproject.tool.api.ToolManager;
 import org.sakaiproject.user.api.*;
-import org.sakaiproject.util.ResourceLoader;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
 
 import java.util.*;
 
@@ -66,7 +60,6 @@ public class SakaiProxyImpl implements SakaiProxy {
 			return siteService.getSite(getCurrentSiteId()).getTitle();
 		} catch (IdUnusedException e) {
 			log.error("getCurrentSiteTitle()", e);
-			e.printStackTrace();
 			return "";
 		}
 	}
@@ -242,7 +235,6 @@ public class SakaiProxyImpl implements SakaiProxy {
 			return returnList;
 		} catch (IdUnusedException e) {
 			log.error("getAvailableGroupIdsForSite " + siteId + " IdUnusedException");
-			e.printStackTrace();
 			return new ArrayList<String>();
 		}
 	}
@@ -262,7 +254,6 @@ public class SakaiProxyImpl implements SakaiProxy {
 			return userDirectoryService.getUser(userId);
 		} catch (UserNotDefinedException e) {
 			log.error("Unable to get user " + userId + " " + e);
-			e.printStackTrace();
 			return null;
 		}
 	}
@@ -275,7 +266,6 @@ public class SakaiProxyImpl implements SakaiProxy {
 			return userDirectoryService.getUserByEid(userEid);
 		} catch (UserNotDefinedException e) {
 			log.error("Unable to get user " + userEid + " " + e);
-			e.printStackTrace();
 			return null;
 		}
 	}
@@ -333,7 +323,6 @@ public class SakaiProxyImpl implements SakaiProxy {
 			}
 		} catch (IdUnusedException e) {
 			log.error("Unable to get group title", e);
-			e.printStackTrace();
 		}
 		return "";
 	}

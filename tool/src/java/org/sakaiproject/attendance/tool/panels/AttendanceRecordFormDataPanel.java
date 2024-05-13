@@ -83,11 +83,13 @@ public class AttendanceRecordFormDataPanel extends BasePanel {
                 String[] resultMsgVars = new String[]{sakaiProxy.getUserSortName(aR.getUserID()), aR.getAttendanceEvent().getName(), getStatusString(aR.getStatus())};
                 StringResourceModel temp;
                 if(result){
-                    temp = new StringResourceModel("attendance.record.save.success", null, resultMsgVars);
+                    temp = new StringResourceModel("attendance.record.save.success", this);
+                    temp.setParameters(resultMsgVars);
                     getSession().info(temp.getString());
                     oldStatus = aR.getStatus();
                 } else {
-                    temp = new StringResourceModel("attendance.record.save.failure", null, resultMsgVars);
+                    temp = new StringResourceModel("attendance.record.save.failure", this);
+                    temp.setParameters(resultMsgVars);
                     getSession().error(temp.getString());
                 }
             }
@@ -119,7 +121,7 @@ public class AttendanceRecordFormDataPanel extends BasePanel {
                 final Status itemStatus = item.getModelObject().getStatus();
                 Radio statusRadio = new Radio<Status>("record-status", new Model<Status>(itemStatus));
                 item.add(statusRadio);
-                statusRadio.add(new AjaxFormSubmitBehavior(rF, "onclick") {
+                statusRadio.add(new AjaxFormSubmitBehavior(rF, "click") {
                     protected void onSubmit(AjaxRequestTarget target) {
                         target.appendJavaScript("attendance.recordFormRowSetup("+ this.getAttributes().getFormId() + ");");
                         for (Component c : ajaxTargets) {
@@ -195,8 +197,8 @@ public class AttendanceRecordFormDataPanel extends BasePanel {
 
         final AjaxSubmitLink saveComment = new AjaxSubmitLink("save-comment") {
             @Override
-            protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-                super.onSubmit(target, form);
+            protected void onSubmit(AjaxRequestTarget target) {
+                super.onSubmit(target);
                 if(recordIModel.getObject().getComment() != null && !recordIModel.getObject().getComment().equals("")) {
                     noComment.setVisible(false);
                     yesComment.setVisible(true);

@@ -16,12 +16,13 @@
 
 package org.sakaiproject.attendance.tool.panels;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.wicket.Page;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
-import org.apache.wicket.extensions.yui.calendar.DateTimeField;
+import org.apache.wicket.extensions.markup.html.form.DateTextField;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
@@ -31,9 +32,6 @@ import org.sakaiproject.attendance.model.AttendanceEvent;
 import org.sakaiproject.attendance.tool.pages.EventView;
 import org.sakaiproject.attendance.tool.pages.Overview;
 import org.sakaiproject.attendance.tool.util.AttendanceFeedbackPanel;
-import org.sakaiproject.attendance.tool.util.ConfirmationLink;
-import org.sakaiproject.attendance.tool.util.PlaceholderBehavior;
-
 
 /**
  * EventInputPanel is used to get AttendanceEvent settings for a new or existing AttendanceEvent
@@ -41,6 +39,7 @@ import org.sakaiproject.attendance.tool.util.PlaceholderBehavior;
  * @author Leonardo Canessa [lcanessa1 (at) udayton (dot) edu]
  * @author David Bauer [dbauer1 (at) udayton (dot) edu]
  */
+@Slf4j
 public class EventInputPanel extends BasePanel {
     private static final long serialVersionUID = 1L;
 
@@ -88,7 +87,7 @@ public class EventInputPanel extends BasePanel {
             private static final long serialVersionUID = 1L;
 
             @Override
-            public void onSubmit(final AjaxRequestTarget target, final Form<?> form) {
+            public void onSubmit(final AjaxRequestTarget target) {
                 window.close(target);
 
                 if(recursiveAddAnother) { // assumes will only occur from Overview page
@@ -109,7 +108,8 @@ public class EventInputPanel extends BasePanel {
         boolean result = attendanceLogic.updateAttendanceEvent(e);
 
         if(result){
-            StringResourceModel temp = new StringResourceModel("attendance.add.success", null, new String[]{e.getName()});
+            StringResourceModel temp = new StringResourceModel("attendance.add.success", this);
+            temp.setParameters(e.getName());
             getSession().success(temp.getString());
         } else {
             error(getString("attendance.add.failure"));
@@ -140,9 +140,8 @@ public class EventInputPanel extends BasePanel {
     private AjaxSubmitLink createSubmitLink(final String id, final Form<?> form, final boolean createAnother) {
         return new AjaxSubmitLink(id, form) {
             @Override
-            protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-                super.onSubmit(target, form);
-
+            protected void onSubmit(AjaxRequestTarget target) {
+                super.onSubmit(target);
                 processSave(target, form, createAnother);
             }
 
@@ -152,7 +151,7 @@ public class EventInputPanel extends BasePanel {
             }
 
             @Override
-            protected void onError(AjaxRequestTarget target, Form<?> form) {
+            protected void onError(AjaxRequestTarget target) {
                 target.addChildren(form, FeedbackPanel.class);
             }
 
@@ -167,17 +166,11 @@ public class EventInputPanel extends BasePanel {
         };
     }
 
-    private void createValues(Form<AttendanceEvent> event){
-        final TextField name = new TextField<String>("name") {
-            @Override
-            protected void onInitialize(){
-                super.onInitialize();
-                add(new PlaceholderBehavior(getString("event.placeholder.name")));
-            }
-        };
-        final DateTimeField startDateTime = new DateTimeField("startDateTime");
-
+    private void createValues(Form<AttendanceEvent> event) {
+        final TextField<String> name = new TextField<>("name");
         name.setRequired(true);
+
+        final DateTextField startDateTime = new DateTextField("startDateTime", "yyyy-MM-dd'T'HH:mm");
 
         event.add(name);
         event.add(startDateTime);

@@ -110,8 +110,8 @@ public class AttendanceStatusFormPanel extends BasePanel {
 
         AjaxSubmitLink submit = new AjaxSubmitLink("submit-link") {
             @Override
-            protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-                super.onSubmit(target, form);
+            protected void onSubmit(AjaxRequestTarget target) {
+                super.onSubmit(target);
                 target.add(pageFeedbackPanel);
             }
 

@@ -17,7 +17,6 @@
 package org.sakaiproject.attendance.tool.dataproviders;
 
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
 import org.sakaiproject.attendance.tool.models.DetachableUserModel;
 import org.sakaiproject.user.api.User;
 

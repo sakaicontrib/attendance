@@ -87,7 +87,7 @@ public class AttendanceStatCalcJob implements Job {
 
         eventTrackingService.post(eventTrackingService.newEvent("attend.calc.job", safeEventLength(whoAmI.toString()), true));
 
-        log.info("Start Job: " + whoAmI.toString());
+        log.info("Start Job: {}", whoAmI);
         attendanceStatCalc.execute();
 
         logoutFromSakai();
@@ -95,7 +95,7 @@ public class AttendanceStatCalcJob implements Job {
     }
 
     public void loginToSakai(String whoAs, String jobName, String jobError) {
-        log.debug(jobName + " loginToSakai()");
+        log.debug("{} loginToSakai()", jobName);
 
         UsageSession session = usageSessionService.startSession(whoAs, serverName, jobName);
         if (session == null) {
@@ -115,7 +115,7 @@ public class AttendanceStatCalcJob implements Job {
     }
 
     public void logoutFromSakai() {
-        log.debug(jobName + " Logging out of Sakai on " + serverName);
+        log.debug(jobName + " Logging out of Sakai on {}", serverName);
         eventTrackingService.post(eventTrackingService.newEvent(UsageSessionService.EVENT_LOGOUT, null, true));
         usageSessionService.logout(); // safe to logout? what if other jobs are running?
     }

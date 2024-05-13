@@ -45,7 +45,10 @@ public class Attendance extends WebApplication {
 	protected void init() {
 		super.init();
 
-		//Configure for Spring injection
+        // Disable the CSP header (we can handle this in root of application)
+        getCspSettings().blocking().disabled();
+
+        //Configure for Spring injection
         getComponentInstantiationListeners().add(new SpringComponentInjector(this));
 
 		//Don't throw an exception if we are missing a property, just fallback
@@ -53,10 +56,6 @@ public class Attendance extends WebApplication {
 		
 		//Remove the wicket specific tags from the generated markup
 		getMarkupSettings().setStripWicketTags(true);
-		
-		//Don't add any extra tags around a disabled link (default is <em></em>)
-		getMarkupSettings().setDefaultBeforeDisabledLink(null);
-		getMarkupSettings().setDefaultAfterDisabledLink(null);
 				
 		// On Wicket session timeout, redirect to main page
 		getApplicationSettings().setPageExpiredErrorPage(Overview.class);

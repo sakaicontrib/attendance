@@ -124,6 +124,14 @@ public class PrintPanel extends BasePanel {
 					public String getIdValue(String s, int i) {
 						return s;
 					}
+
+					@Override
+					public String getObject(String id, IModel<? extends List<? extends String>> choices) {
+						return choices.getObject().stream()
+								.filter(choice -> choice.equals(id))
+								.findFirst()
+								.orElse(null);
+					}
 				});
 		groupChoice.setNullValid(true);
 		printForm.add(groupChoice);
