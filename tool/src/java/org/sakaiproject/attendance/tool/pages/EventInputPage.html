@@ -18,33 +18,70 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:wicket="http://wicket.apache.org">
 <body>
 <wicket:extend>
-    <form wicket:id="event">
-        <div class="page-header">
-            <h1 wicket:id="addItemTitle" class="overHeaderSpan" />
-        </div>
-        <div wicket:id="addEditItemFeedback"></div>
-        <div class="addItemLine">
-            <label wicket:for="name">
-                <wicket:message key="attendance.add.label.name" />
-            </label>
-            <label class="addEditReq">*</label>
-            <div>
-                <input type="text" wicket:id="name" id="name" maxlength="200"/>
+    <div class="container">
+        <form wicket:id="event" class="needs-validation" novalidate>
+            <div class="row mb-4">
+                <div class="col">
+                    <h1 wicket:id="addItemTitle" class="display-6" />
+                </div>
             </div>
-        </div>
-        <div class="addItemLine">
-            <label wicket:for="startDateTime">
-                <wicket:message key="attendance.add.label.startDateTime" />
-            </label>
-            <input wicket:id="startDateTime" id="startDateTime" type="datetime-local" />
-        </div>
 
-        <div class="buttonSection" id="buttonSection">
-            <button type="submit" class="saveNewItem btn-primary" wicket:id="submit" value="Save"><wicket:container wicket:id="submitLabel" /></button>
-            <button type="submit" class="button" wicket:id="submitAndAddAnother" value="SaveAndAddAnother"><wicket:container wicket:id="submitMoreLabel"/></button>
-            <button type="button" class="button" wicket:id="cancel"><wicket:message key="button.cancel" /></button>
-        </div>
-    </form>
+            <div wicket:id="addEditItemFeedback" class="alert alert-info"></div>
+
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <div class="form-floating">
+                        <input type="text" 
+                               class="form-control" 
+                               wicket:id="name" 
+                               id="name" 
+                               maxlength="99" 
+                               placeholder="Enter name"
+                               required />
+                        <label wicket:for="name" class="form-label">
+                            <wicket:message key="attendance.add.label.name" />
+                            <span class="text-danger">*</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mb-4">
+                <div class="col-md-6">
+                    <div class="form-floating">
+                        <input type="datetime-local" 
+                               class="form-control" 
+                               wicket:id="startDateTime" 
+                               id="startDateTime" 
+                               placeholder="Select date and time" />
+                        <label wicket:for="startDateTime" class="form-label">
+                            <wicket:message key="attendance.add.label.startDateTime" />
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col d-flex gap-2">
+                    <button type="submit" 
+                            class="btn btn-primary" 
+                            wicket:id="submit">
+                        <wicket:container wicket:id="submitLabel" />
+                    </button>
+                    <button type="submit" 
+                            class="btn btn-secondary" 
+                            wicket:id="submitAndAddAnother">
+                        <wicket:container wicket:id="submitMoreLabel"/>
+                    </button>
+                    <button type="button" 
+                            class="btn btn-outline-secondary" 
+                            wicket:id="cancel">
+                        <wicket:message key="button.cancel" />
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
 </wicket:extend>
 </body>
 </html>
