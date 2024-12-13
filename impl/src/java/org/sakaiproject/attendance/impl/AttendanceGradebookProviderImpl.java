@@ -39,12 +39,13 @@ import java.util.Map;
  *
  * @author Leonardo Canessa [lcanessa1 (at) udayton (dot) edu]
  */
+@Setter
 @Slf4j
 public class AttendanceGradebookProviderImpl implements AttendanceGradebookProvider {
-    @Setter private AttendanceLogic                     attendanceLogic;
-    @Setter private SakaiProxy                          sakaiProxy;
-    @Setter private ToolManager                         toolManager;
-    @Setter private GradingService                      gradingService;
+    private AttendanceLogic                     attendanceLogic;
+    private SakaiProxy                          sakaiProxy;
+    private ToolManager                         toolManager;
+    private GradingService                      gradingService;
 
     /**
      * {@inheritDoc}
@@ -57,10 +58,7 @@ public class AttendanceGradebookProviderImpl implements AttendanceGradebookProvi
      * {@inheritDoc}
      */
     public boolean create(AttendanceSite aS, String categoryId) {
-        if(log.isDebugEnabled()) {
-            log.debug("create Gradebook");
-        }
-
+        log.debug("create Gradebook");
         boolean returnVal = false;
 
         String siteID = aS.getSiteID();
@@ -88,10 +86,7 @@ public class AttendanceGradebookProviderImpl implements AttendanceGradebookProvi
      * {@inheritDoc}
      */
     public boolean remove(AttendanceSite aS) {
-        if(log.isDebugEnabled()) {
-            log.debug("remove GB for AS " + aS.getSiteID());
-        }
-
+        log.debug("remove GB for AS {}", aS.getSiteID());
         String siteID = aS.getSiteID();
         String aUID = getAttendanceUID(aS);
         if(gradingService.isExternalAssignmentDefined(siteID, aUID)) {
@@ -99,7 +94,7 @@ public class AttendanceGradebookProviderImpl implements AttendanceGradebookProvi
                 gradingService.removeExternalAssignment(siteID, aUID);
                 return true;
             } catch (AssessmentNotFoundException e) {
-                log.warn("Attempted to remove AttendanceSite " + siteID + " from GB failed. Assessment not found", e);
+                log.warn("Attempted to remove AttendanceSite {} from GB failed. Assessment not found", siteID, e);
                 return false;
             }
         }
@@ -110,9 +105,7 @@ public class AttendanceGradebookProviderImpl implements AttendanceGradebookProvi
      * {@inheritDoc}
      */
     public boolean update(AttendanceSite aS, String categoryId) {
-        if(log.isDebugEnabled()) {
-            log.debug("Updating GB for AS " + aS.getSiteID());
-        }
+        log.debug("Updating GB for AS {}", aS.getSiteID());
         Long categoryIdNumber = null;
         if(categoryId != null){
             categoryIdNumber = Long.valueOf(categoryId);
@@ -124,7 +117,7 @@ public class AttendanceGradebookProviderImpl implements AttendanceGradebookProvi
         		    gradingService.updateExternalAssessment(siteID, aUID, null, null, aS.getGradebookItemName(), categoryIdNumber, aS.getMaximumGrade(), null, false);
                     return true;
             } catch (ConflictingAssignmentNameException e) {
-            	log.warn("Failed to update AttendanceSite for site " + siteID + " in Gradebook", e);
+                log.warn("Failed to update AttendanceSite for site {} in Gradebook", siteID, e);
                 return false;
             }
         }
@@ -143,7 +136,6 @@ public class AttendanceGradebookProviderImpl implements AttendanceGradebookProvi
         final AttendanceSite aS = aG.getAttendanceSite();
         final String siteID = aS.getSiteID();
         String aSUID = getAttendanceUID(aS);
-        
 
         final Boolean sendToGradebook = aS.getSendToGradebook();
         if(sendToGradebook != null && sendToGradebook) {

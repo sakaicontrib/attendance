@@ -22,13 +22,11 @@ import java.util.*;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
-
 import org.sakaiproject.attendance.api.AttendanceGradebookProvider;
 import org.sakaiproject.attendance.dao.AttendanceDao;
 import org.sakaiproject.attendance.model.*;
 import org.sakaiproject.entity.api.Entity;
 import org.sakaiproject.entity.api.EntityManager;
-import org.sakaiproject.entity.api.EntityProducer;
 import org.sakaiproject.entity.api.EntityTransferrer;
 import org.sakaiproject.user.api.User;
 
@@ -39,6 +37,7 @@ import org.sakaiproject.user.api.User;
  * @author David Bauer [dbauer1 (at) udayton (dot) edu]
  * @author Steve Swinsburg (steve.swinsburg@gmail.com)
  */
+@Setter
 @Slf4j
 public class AttendanceLogicImpl implements AttendanceLogic, EntityTransferrer {
 
@@ -850,7 +849,7 @@ public class AttendanceLogicImpl implements AttendanceLogic, EntityTransferrer {
 
 	@Override
 	public Map<String, String> transferCopyEntities(String fromContext, String toContext, List<String> ids, List<String> transferOptions) {
-		return transferCopyEntities(fromContext, toContext, ids, transferOptions);
+		return transferCopyEntities(fromContext, toContext, ids, transferOptions, false);
 	}
 
 	@Override
@@ -899,20 +898,11 @@ public class AttendanceLogicImpl implements AttendanceLogic, EntityTransferrer {
 		return transversalMap;
 	}
 
-	@Override
-	public void updateEntityReferences(String toContext, Map<String, String> transversalMap) {
-		return;
-	}
+    private AttendanceDao dao;
 
-	@Setter
-	private AttendanceDao dao;
-
-	@Setter
 	private SakaiProxy sakaiProxy;
 
-	@Setter
 	private AttendanceGradebookProvider attendanceGradebookProvider;
 
-	@Setter
 	private EntityManager entityManager;
 }

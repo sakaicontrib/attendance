@@ -28,7 +28,6 @@ import org.sakaiproject.exception.IdUnusedException;
 import org.sakaiproject.site.api.Group;
 import org.sakaiproject.site.api.Site;
 import org.sakaiproject.site.api.SiteService;
-import org.sakaiproject.tool.api.Session;
 import org.sakaiproject.tool.api.SessionManager;
 import org.sakaiproject.tool.api.ToolManager;
 import org.sakaiproject.user.api.*;
@@ -42,6 +41,8 @@ import java.util.*;
  * @author David Bauer [dbauer1 (at) udayton (dot) edu]
  * @author Steve Swinsburg (steve.swinsburg@gmail.com)
  */
+@Setter
+@Getter
 @Slf4j
 public class SakaiProxyImpl implements SakaiProxy {
 
@@ -357,38 +358,21 @@ public class SakaiProxyImpl implements SakaiProxy {
 		log.debug("SakaiProxyImpl init()");
 	}
 
-	private Preferences getCurrentUserPreferences() {
-		return preferencesService.getPreferences(getCurrentUserId());
-	}
-
-	private Session getCurrentSession() {
-		return sessionManager.getCurrentSession();
-	}
-
-	@Getter @Setter
 	private ToolManager toolManager;
 
-	@Getter @Setter
 	private SessionManager sessionManager;
 
-	@Getter @Setter
 	private UserDirectoryService userDirectoryService;
 
-	@Getter @Setter
 	private SecurityService securityService;
 
-	@Getter @Setter
 	private EventTrackingService eventTrackingService;
 
-	@Getter @Setter
 	private ServerConfigurationService serverConfigurationService;
 
-	@Getter @Setter
 	private SiteService siteService;
 
-	@Getter @Setter
 	private PreferencesService preferencesService;
 
-	@Getter @Setter
 	private AuthzGroupService authzGroupService;
 }

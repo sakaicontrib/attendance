@@ -116,7 +116,7 @@ public class PDFEventExporterImpl implements PDFEventExporter {
             document.close(); // no need to close PDFwriter?
 
         } catch (DocumentException e) {
-            e.printStackTrace();
+            log.warn("Exception creating PDF", e);
         }
     }
 
@@ -135,7 +135,7 @@ public class PDFEventExporterImpl implements PDFEventExporter {
         table.addCell(nameHeader);
         table.addCell(signatureHeader);
 
-        Collections.sort(users, new SortNameUserComparator());
+        users.sort(new SortNameUserComparator());
 
         for(User user : users) {
 
@@ -190,7 +190,7 @@ public class PDFEventExporterImpl implements PDFEventExporter {
             table.addCell(statusHeader);
         }
 
-        Collections.sort(users, new SortNameUserComparator());
+        users.sort(new SortNameUserComparator());
 
         for(User user : users) {
 

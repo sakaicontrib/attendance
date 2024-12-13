@@ -1,4 +1,6 @@
 package org.sakaiproject.attendance.tool.pages;
+import lombok.Getter;
+import lombok.Setter;
 import org.apache.commons.codec.binary.StringUtils;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
@@ -24,7 +26,7 @@ public class EventInputPage extends BasePage{
     private ModalWindow window;
     private boolean isEditing;
     private boolean recursiveAddAnother;
-    private String nextPage;
+    @Getter @Setter private String nextPage;
     public static String STUDENT_OVERVIEW = "org.sakaiproject.attendance.tool.pages.StudentView";
     public static String GRADING = "org.sakaiproject.attendance.tool.pages.GradingPage";
     public static String SETTINGS = "org.sakaiproject.attendance.tool.pages.SettingsPage";
@@ -127,11 +129,4 @@ public class EventInputPage extends BasePage{
         };
     }
 
-    public void setNextPage(String canonicalName){
-        this.nextPage = canonicalName;
-    }
-
-    public String getNextPage(){
-        return this.nextPage;
-    }
 }
