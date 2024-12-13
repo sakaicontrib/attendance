@@ -909,18 +909,6 @@ div.wicket-modal div.w_content_3 div.messageSuccess, div.wicket-modal div.w_cont
     padding: 7px 30px 7px 30px;
 }
 
-form.takeAttendanceNowForm input {
-    background:#17214A;
-    color: white;
-    margin-bottom: 1em;
-}
-
-form.takeAttendanceNowForm input:hover {
-    background: #111837;
-    border-color: #124466;
-    color: white;
-}
-
 .cancel {
     background: #e54028;
     -webkit-border-radius: 3px;
