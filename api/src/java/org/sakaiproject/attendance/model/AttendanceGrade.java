@@ -35,12 +35,12 @@ import java.util.Date;
 public class AttendanceGrade implements Serializable {
 	private static final 	long 		serialVersionUID = 1L;
 
-	private 				Long 			id;
+	private					Long 			id;
 	private					Double			grade;
 	private					String			userID;
 	private					Boolean			override;
 	private 				AttendanceSite 	attendanceSite;
-	private				String			lastModifiedBy;
+	private					String			lastModifiedBy;
 	private 				Date lastModifiedDate;
 
 	public AttendanceGrade(AttendanceSite aS, String userId){

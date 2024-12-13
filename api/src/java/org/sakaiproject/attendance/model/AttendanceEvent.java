@@ -47,9 +47,9 @@ public class AttendanceEvent implements Serializable {
 	private 				AttendanceSite 			attendanceSite;
 	private 				String 					location;
 	private 				Set<AttendanceRecord> 	records = new HashSet<AttendanceRecord>(0);
-	private				AttendanceItemStats 	stats;
-	private				String					lastModifiedBy;
-	private				Date					lastModifiedDate;
+	private					AttendanceItemStats 	stats;
+	private					String					lastModifiedBy;
+	private					Date					lastModifiedDate;
 
 	// Copy constructor
 	public AttendanceEvent(AttendanceEvent attendanceEvent){
