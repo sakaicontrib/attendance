@@ -45,6 +45,9 @@
             <one-to-many class="org.sakaiproject.attendance.model.AttendanceRecord" />
         </set>
         <one-to-one name="stats" cascade="all" lazy="false" class="AttendanceItemStats" />
+        <property name="lastModifiedBy" column="LAST_MODIFIED_BY" type="java.lang.String" length="99" not-null="true" />
+        <property name="lastModifiedDate" column="LAST_MODIFIED_DATE" type="timestamp" not-null="true" />
+
     </class>
 
     <query name="getAttendanceEvent">

@@ -35,6 +35,8 @@
         <property name="override"   column="OVERRIDE"   type="java.lang.Boolean" />
 
         <many-to-one name="attendanceSite" column="A_SITE_ID" unique="false" not-null="true" class="org.sakaiproject.attendance.model.AttendanceSite" lazy="false"/>
+        <property name="lastModifiedBy" column="LAST_MODIFIED_BY" type="java.lang.String" length="99" not-null="true" />
+        <property name="lastModifiedDate" column="LAST_MODIFIED_DATE" type="timestamp" not-null="true" />
 
     </class>
 

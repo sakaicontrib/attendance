@@ -106,6 +106,7 @@ public class AttendanceLogicImpl implements AttendanceLogic, EntityTransferrer {
 	 * {@inheritDoc}
 	 */
 	public Serializable addAttendanceEventNow(AttendanceEvent e) {
+		updateModifier(e);
 		return dao.addAttendanceEventNow(e);
 	}
 
@@ -117,6 +118,7 @@ public class AttendanceLogicImpl implements AttendanceLogic, EntityTransferrer {
 			throw new IllegalArgumentException("AttendanceEvent is null");
 		}
 
+		updateModifier(aE);
 		return dao.updateAttendanceEvent(aE);
 	}
 
@@ -140,6 +142,7 @@ public class AttendanceLogicImpl implements AttendanceLogic, EntityTransferrer {
 			}
 		}
 
+		sakaiProxy.postEvent("attendance.event.delete", aE.getId() + "", true);
 		return dao.deleteAttendanceEvent(aE);
 	}
 
@@ -206,8 +209,25 @@ public class AttendanceLogicImpl implements AttendanceLogic, EntityTransferrer {
 
 		updateStats(aR, oldStatus);
 		regradeForAttendanceRecord(aR);
+		updateModifier(aR);
 		return dao.updateAttendanceRecord(aR);
 	}
+
+private void updateModifier(Object obj) {
+	if (obj instanceof AttendanceRecord aR) {
+        aR.setLastModifiedBy(sakaiProxy.getCurrentUserId());
+		aR.setLastModifiedDate(new Date());
+	} else if (obj instanceof AttendanceEvent aE) {
+        aE.setLastModifiedBy(sakaiProxy.getCurrentUserId());
+		aE.setLastModifiedDate(new Date());
+	} else if (obj instanceof AttendanceGrade aG) {
+		aG.setLastModifiedBy(sakaiProxy.getCurrentUserId());
+		aG.setLastModifiedDate(new Date());
+	} else if (obj instanceof GradingRule gR) {
+		gR.setLastModifiedBy(sakaiProxy.getCurrentUserId());
+		gR.setLastModifiedDate(new Date());
+	}
+}
 
 	/**
 	 * {@inheritDoc}
@@ -278,6 +298,7 @@ public class AttendanceLogicImpl implements AttendanceLogic, EntityTransferrer {
 			aR.setStatus(s);
 			updateUserStats(aR, oldStatus);
 			regradeForAttendanceRecord(aR);
+			updateModifier(aR);
 			dao.updateAttendanceRecord(aR);	//change the actual data for the student we've just iterated past. This saves looping through it again as part of dao.updateAttendanceRecords on a whole array.
 		}
 
@@ -491,6 +512,7 @@ public class AttendanceLogicImpl implements AttendanceLogic, EntityTransferrer {
 			throw new IllegalArgumentException("AttendanceGrade cannot be null");
 		}
 
+		updateModifier(aG);
 		boolean saved = dao.updateAttendanceGrade(aG);
 
 		if(saved && aG.getAttendanceSite().getSendToGradebook()) {
@@ -525,14 +547,18 @@ public class AttendanceLogicImpl implements AttendanceLogic, EntityTransferrer {
 	 * {@inheritDoc}
 	 */
 	public boolean addGradingRule(GradingRule gradingRule) {
-		return gradingRule != null && dao.addGradingRule(gradingRule);
+		if (gradingRule == null) return false;
+		updateModifier(gradingRule);
+		return dao.addGradingRule(gradingRule);
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	public boolean deleteGradingRule(GradingRule gradingRule) {
-		return gradingRule != null && dao.deleteGradingRule(gradingRule);
+		if (gradingRule == null) return false;
+		updateModifier(gradingRule);
+		return dao.deleteGradingRule(gradingRule);
 	}
 
 	/**

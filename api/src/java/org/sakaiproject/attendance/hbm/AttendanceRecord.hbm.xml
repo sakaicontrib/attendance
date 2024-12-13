@@ -34,6 +34,9 @@
         <property name="status"     column="STATUS"             type="org.sakaiproject.attendance.types.StatusUserType"  length="20"   />
         <property name="comment"    column="RECORD_COMMENT"     type="text"                                              length="4000" />
 
+        <property name="lastModifiedBy" column="LAST_MODIFIED_BY" type="java.lang.String" length="99" not-null="true" />
+        <property name="lastModifiedDate" column="LAST_MODIFIED_DATE" type="timestamp" not-null="true" />
+
         <many-to-one name="attendanceEvent" column="A_EVENT_ID" unique="false" not-null="true" class="AttendanceEvent" lazy="false" unique-key="user_record" />
     </class>
 

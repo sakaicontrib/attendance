@@ -164,7 +164,7 @@ public class AttendanceDaoImpl extends HibernateDaoSupport implements Attendance
 			getHibernateTemplate().delete(getHibernateTemplate().merge(aE));
 			return true;
 		} catch (DataAccessException e) {
-			log.error("deleteAttendanceEvent, " + aE.getId() + ", failed.", e);
+            log.error("deleteAttendanceEvent, {}, failed.", aE.getId(), e);
 			return false;
 		}
 	}
@@ -424,13 +424,13 @@ public class AttendanceDaoImpl extends HibernateDaoSupport implements Attendance
 	 * {@inheritDoc}
 	 */
 	public boolean deleteGradingRule(GradingRule gradingRule) {
-		log.debug("Delete grading rule from site " + gradingRule.getAttendanceSite().getSiteID() + " grading rule: " + gradingRule.getId());
+        log.debug("Delete grading rule from site {} grading rule: {}", gradingRule.getAttendanceSite().getSiteID(), gradingRule.getId());
 
 		try {
 			getHibernateTemplate().delete(getHibernateTemplate().merge(gradingRule));
 			return true;
 		} catch (DataAccessException e) {
-			log.error("deleteGradingRule, " + gradingRule.getId() + ", failed.", e);
+            log.error("deleteGradingRule, {}, failed.", gradingRule.getId(), e);
 			return false;
 		}
 	}
