@@ -213,21 +213,25 @@ public class AttendanceLogicImpl implements AttendanceLogic, EntityTransferrer {
 		return dao.updateAttendanceRecord(aR);
 	}
 
-private void updateModifier(Object obj) {
-	if (obj instanceof AttendanceRecord aR) {
-        aR.setLastModifiedBy(sakaiProxy.getCurrentUserId());
-		aR.setLastModifiedDate(new Date());
-	} else if (obj instanceof AttendanceEvent aE) {
-        aE.setLastModifiedBy(sakaiProxy.getCurrentUserId());
-		aE.setLastModifiedDate(new Date());
-	} else if (obj instanceof AttendanceGrade aG) {
-		aG.setLastModifiedBy(sakaiProxy.getCurrentUserId());
-		aG.setLastModifiedDate(new Date());
-	} else if (obj instanceof GradingRule gR) {
-		gR.setLastModifiedBy(sakaiProxy.getCurrentUserId());
-		gR.setLastModifiedDate(new Date());
+	private void updateModifier(Object obj) {
+		if (obj instanceof AttendanceRecord) {
+			AttendanceRecord aR = (AttendanceRecord) obj;
+			aR.setLastModifiedBy(sakaiProxy.getCurrentUserId());
+			aR.setLastModifiedDate(new Date());
+		} else if (obj instanceof AttendanceEvent) {
+			AttendanceEvent aE = (AttendanceEvent) obj;
+			aE.setLastModifiedBy(sakaiProxy.getCurrentUserId());
+			aE.setLastModifiedDate(new Date());
+		} else if (obj instanceof AttendanceGrade) {
+			AttendanceGrade aG = (AttendanceGrade) obj;
+			aG.setLastModifiedBy(sakaiProxy.getCurrentUserId());
+			aG.setLastModifiedDate(new Date());
+		} else if (obj instanceof GradingRule) {
+			GradingRule gR = (GradingRule) obj;
+			gR.setLastModifiedBy(sakaiProxy.getCurrentUserId());
+			gR.setLastModifiedDate(new Date());
+		}
 	}
-}
 
 	/**
 	 * {@inheritDoc}
