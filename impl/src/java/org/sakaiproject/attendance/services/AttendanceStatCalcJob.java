@@ -89,9 +89,7 @@ public class AttendanceStatCalcJob implements Job {
 
         log.info("Start Job: {}", whoAmI);
         attendanceStatCalc.execute();
-
         logoutFromSakai();
-
     }
 
     public void loginToSakai(String whoAs, String jobName, String jobError) {

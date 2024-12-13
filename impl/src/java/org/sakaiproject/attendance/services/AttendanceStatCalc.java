@@ -51,7 +51,7 @@ public class AttendanceStatCalc {
         List<Long> ids = dao.getAttendanceSiteBatch(syncTime, lastId);
         if(ids.isEmpty()) {
             String summary = getOverallSummary();
-            if("".equals(summary)) {
+            if(summary.isEmpty()) {
                 log.info("AttendanceStatCalc no sites left to sync");
             } else {
                 log.info("AttendanceStatCalc done, but there are errors\n{}", summary);
