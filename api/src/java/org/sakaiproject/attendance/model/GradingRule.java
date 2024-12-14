@@ -21,6 +21,7 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * @author David P. Bauer [dbauer1 (at) udayton (dot) edu]
@@ -37,6 +38,8 @@ public class GradingRule implements Serializable {
     private Integer startRange;
     private Integer endRange;
     private Double points;
+    private String lastModifiedBy;
+    private Date lastModifiedDate;
 
     public GradingRule(AttendanceSite attendanceSite) {
         this.attendanceSite = attendanceSite;

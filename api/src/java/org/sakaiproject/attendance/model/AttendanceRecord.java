@@ -19,6 +19,7 @@ package org.sakaiproject.attendance.model;
 import lombok.*;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.Objects;
 
 /**
@@ -28,17 +29,21 @@ import java.util.Objects;
  * @author David Bauer [dbauer1 (at) udayton (dot) edu]
  * @author Steve Swinsburg (steve.swinsburg@gmail.com)
  */
+@Setter
+@Getter
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode
 public class AttendanceRecord implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    @Getter @Setter private Long            id;
-    @Getter @Setter private AttendanceEvent attendanceEvent;
-    @Getter @Setter private String          userID;
-    @Getter @Setter private Status          status;
-    @Getter @Setter private String          comment;
+    private Long            id;
+    private AttendanceEvent attendanceEvent;
+    private String          userID;
+    private Status          status;
+    private String          comment;
+    private String          lastModifiedBy;
+    private Date            lastModifiedDate;
 
     public AttendanceRecord(AttendanceEvent e, String uId, Status s) {
         this.attendanceEvent    = e;

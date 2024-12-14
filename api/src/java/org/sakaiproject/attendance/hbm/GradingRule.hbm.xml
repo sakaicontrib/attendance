@@ -36,7 +36,8 @@
         <property name="startRange" column="START_RANGE" type="java.lang.Integer" not-null="true"/>
         <property name="endRange" column="END_RANGE" type="java.lang.Integer" />
         <property name="points" column="POINTS" type="java.lang.Double" not-null="true"/>
-
+        <property name="lastModifiedBy" column="LAST_MODIFIED_BY" type="java.lang.String" length="99" not-null="true" />
+        <property name="lastModifiedDate" column="LAST_MODIFIED_DATE" type="timestamp" not-null="true" />
     </class>
 
     <query name="getGradingRulesForSite">

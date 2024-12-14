@@ -21,6 +21,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * The AttendanceGrade earned for the all AttendanceItems
@@ -34,12 +35,13 @@ import java.io.Serializable;
 public class AttendanceGrade implements Serializable {
 	private static final 	long 		serialVersionUID = 1L;
 
-	private 				Long 			id;
+	private					Long 			id;
 	private					Double			grade;
 	private					String			userID;
 	private					Boolean			override;
-
 	private 				AttendanceSite 	attendanceSite;
+	private					String			lastModifiedBy;
+	private 				Date lastModifiedDate;
 
 	public AttendanceGrade(AttendanceSite aS, String userId){
 		this.attendanceSite = aS;

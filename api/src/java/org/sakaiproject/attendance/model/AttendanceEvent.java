@@ -28,24 +28,28 @@ import java.util.*;
  * @author David Bauer [dbauer1 (at) udayton (dot) edu]
  * @author Steve Swinsburg (steve.swinsburg@gmail.com)
  */
+@Setter
+@Getter
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(exclude={"records","stats"})
 public class AttendanceEvent implements Serializable {
 	private static final 	long 		serialVersionUID = 1L;
 
-	@Getter	@Setter	private 				Long 					id;
-	@Getter @Setter private 				String 					name;
-	@Getter @Setter private 				Date 					startDateTime;
-	@Getter @Setter private 				Date	 				endDateTime;
-	@Getter @Setter private 				Boolean 				isReoccurring;
-	@Getter @Setter private 				Long 					reoccurringID;
-	@Getter @Setter private 				Boolean 				isRequired;
-	@Getter @Setter private 				String					releasedTo;
-	@Getter @Setter private 				AttendanceSite 			attendanceSite;
-	@Getter @Setter private 				String 					location;
-	@Getter @Setter private 				Set<AttendanceRecord> 	records = new HashSet<AttendanceRecord>(0);
-	@Getter @Setter private					AttendanceItemStats 	stats;
+	private 				Long 					id;
+	private 				String 					name;
+	private 				Date 					startDateTime;
+	private 				Date	 				endDateTime;
+	private 				Boolean 				isReoccurring;
+	private 				Long 					reoccurringID;
+	private 				Boolean 				isRequired;
+	private 				String					releasedTo;
+	private 				AttendanceSite 			attendanceSite;
+	private 				String 					location;
+	private 				Set<AttendanceRecord> 	records = new HashSet<AttendanceRecord>(0);
+	private					AttendanceItemStats 	stats;
+	private					String					lastModifiedBy;
+	private					Date					lastModifiedDate;
 
 	// Copy constructor
 	public AttendanceEvent(AttendanceEvent attendanceEvent){
