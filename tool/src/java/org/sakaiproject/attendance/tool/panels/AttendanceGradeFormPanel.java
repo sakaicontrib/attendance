@@ -275,10 +275,11 @@ public class AttendanceGradeFormPanel extends BasePanel {
 
         Radio<Boolean> subtractGrading = new Radio<>("subtract-grading", Model.of(Boolean.TRUE));
         Radio<Boolean> addGrading = new Radio<>("add-grading", Model.of(Boolean.FALSE));
+        Radio<Boolean> multiplyGrading = new Radio<>("multiply-grading", Model.of(Boolean.FALSE));
 
         autoGradeType.add(subtractGrading);
         autoGradeType.add(addGrading);
-
+        autoGradeType.add(multiplyGrading);
         aSForm.add(grading);
 
         AjaxSubmitLink submit = new AjaxSubmitLink("submit") {

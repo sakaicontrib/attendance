@@ -49,8 +49,33 @@
                     </div>
                     <span wicket:id="auto-grading-type" class="gradingType">
                         <div wicket:id="auto-grading-type-group">
-                            <div><label class="gradeSettingsLabel"><input type="radio" wicket:id="subtract-grading"> <wicket:message key="attendance.settings.grading.subtraction.based"/></label></div>
-                            <div><label class="gradeSettingsLabel"><input type="radio" wicket:id="add-grading"> <wicket:message key="attendance.settings.grading.addition.based"/></label></div>
+                            <div class="form-check mb-3">
+                                <input type="radio" wicket:id="subtract-grading" class="form-check-input" id="subtract-grading">
+                                <label class="form-check-label" for="subtract-grading">
+                                    <wicket:message key="attendance.settings.grading.subtraction.based"/>
+                                    <div class="form-text">
+                                        <wicket:message key="attendance.settings.grading.subtraction.description"/>
+                                    </div>
+                                </label>
+                            </div>
+                            <div class="form-check mb-3">
+                                <input type="radio" wicket:id="add-grading" class="form-check-input" id="add-grading">
+                                <label class="form-check-label" for="add-grading">
+                                    <wicket:message key="attendance.settings.grading.addition.based"/>
+                                    <div class="form-text">
+                                        <wicket:message key="attendance.settings.grading.addition.description"/>
+                                    </div>
+                                </label>
+                            </div>
+                            <div class="form-check mb-3">
+                                <input type="radio" wicket:id="multiply-grading" class="form-check-input" id="multiply-grading">
+                                <label class="form-check-label" for="multiply-grading">
+                                    <wicket:message key="attendance.settings.grading.multiply.based"/>
+                                    <div class="form-text">
+                                        <wicket:message key="attendance.settings.grading.multiply.description"/>
+                                    </div>
+                                </label>
+                            </div>
                         </div>
                     </span>
                 </li>
