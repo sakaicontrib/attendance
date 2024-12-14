@@ -561,7 +561,7 @@ public class AttendanceLogicImpl implements AttendanceLogic, EntityTransferrer {
 	 */
 	public boolean deleteGradingRule(GradingRule gradingRule) {
 		if (gradingRule == null) return false;
-		updateModifier(gradingRule);
+		sakaiProxy.postEvent("attendance.rule.delete", gradingRule.getId() + "", true);
 		return dao.deleteGradingRule(gradingRule);
 	}
 

@@ -67,7 +67,7 @@ public class AttendanceDaoImpl extends HibernateDaoSupport implements Attendance
 	 */
 	@SuppressWarnings("unchecked")
 	public AttendanceSite getAttendanceSite(final Long id) {
-        log.debug("getAttendanceSite by ID: {}", id);
+		log.debug("getAttendanceSite by ID: {}", id);
 
 		return (AttendanceSite) getByIDHelper(id, QUERY_GET_SITE_BY_ID);
 	}
@@ -77,7 +77,7 @@ public class AttendanceDaoImpl extends HibernateDaoSupport implements Attendance
 	 */
 	@SuppressWarnings("unchecked")
 	public boolean addAttendanceSite(AttendanceSite aS) {
-        log.debug("addAttendanceSite ( {})", aS.toString());
+		log.debug("addAttendanceSite ( {})", aS.toString());
 
 		try {
 			getHibernateTemplate().save(aS);
@@ -106,7 +106,7 @@ public class AttendanceDaoImpl extends HibernateDaoSupport implements Attendance
 	 */
 	@SuppressWarnings("unchecked")
 	public AttendanceEvent getAttendanceEvent(final long id) {
-        log.debug("getAttendanceEvent(){}", id);
+		log.debug("getAttendanceEvent(){}", id);
 
 		return (AttendanceEvent) getByIDHelper(id, QUERY_GET_ATTENDANCE_EVENT);
 	}
@@ -125,7 +125,7 @@ public class AttendanceDaoImpl extends HibernateDaoSupport implements Attendance
 	 * {@inheritDoc}
 	 */
 	public Serializable addAttendanceEventNow(AttendanceEvent attendanceEvent) {
-        log.debug("addAttendanceEventNow( {})", attendanceEvent.toString());
+		log.debug("addAttendanceEventNow( {})", attendanceEvent.toString());
 
 		try{
 			return getHibernateTemplate().save(attendanceEvent);
@@ -139,7 +139,7 @@ public class AttendanceDaoImpl extends HibernateDaoSupport implements Attendance
 	 * {@inheritDoc}
 	 */
 	public boolean updateAttendanceEvent(AttendanceEvent aE) {
-        log.debug("updateAttendanceEvent aE: {}", aE.getName());
+		log.debug("updateAttendanceEvent aE: {}", aE.getName());
 
 		try{
 			getHibernateTemplate().saveOrUpdate(aE);
@@ -154,7 +154,7 @@ public class AttendanceDaoImpl extends HibernateDaoSupport implements Attendance
 	 * {@inheritDoc}
 	 */
 	public boolean deleteAttendanceEvent(AttendanceEvent aE) {
-        log.debug("deleteAttendanceEvent aE: {}", aE.getName());
+		log.debug("deleteAttendanceEvent aE: {}", aE.getName());
 
 		if(aE.getStats() !=null && aE.getStats().getId() == null){
 			aE.setStats(null);
@@ -164,7 +164,7 @@ public class AttendanceDaoImpl extends HibernateDaoSupport implements Attendance
 			getHibernateTemplate().delete(getHibernateTemplate().merge(aE));
 			return true;
 		} catch (DataAccessException e) {
-            log.error("deleteAttendanceEvent, {}, failed.", aE.getId(), e);
+    		log.error("deleteAttendanceEvent, {}, failed.", aE.getId(), e);
 			return false;
 		}
 	}
@@ -173,7 +173,7 @@ public class AttendanceDaoImpl extends HibernateDaoSupport implements Attendance
 	 * {@inheritDoc}
 	 */
 	public AttendanceRecord getStatusRecord(final long id) {
-        log.debug("getAttendanceRecord(){}", id);
+		log.debug("getAttendanceRecord(){}", id);
 
 		return (AttendanceRecord) getByIDHelper(id, QUERY_GET_ATTENDANCE_RECORD);
 	}
@@ -182,7 +182,7 @@ public class AttendanceDaoImpl extends HibernateDaoSupport implements Attendance
 	 * {@inheritDoc}
 	 */
 	public boolean addAttendanceRecord(AttendanceRecord aR) {
-        log.debug("addAttendanceRecord sR for User '{}' event {} with Status {}", aR.getUserID(), aR.getAttendanceEvent().getName(), aR.getStatus().toString());
+		log.debug("addAttendanceRecord sR for User '{}' event {} with Status {}", aR.getUserID(), aR.getAttendanceEvent().getName(), aR.getStatus().toString());
 
 		try {
 			getHibernateTemplate().save(aR);
@@ -239,7 +239,7 @@ public class AttendanceDaoImpl extends HibernateDaoSupport implements Attendance
 	 */
 	@SuppressWarnings("unchecked")
 	public List<AttendanceStatus> getActiveStatusesForSite(final AttendanceSite attendanceSite) {
-        log.debug("getActiveStatusesForSite(AttendanceSite {} )", attendanceSite.getSiteID());
+		log.debug("getActiveStatusesForSite(AttendanceSite {} )", attendanceSite.getSiteID());
 
 		try {
 			return getHibernateTemplate().execute(session -> session
@@ -274,7 +274,7 @@ public class AttendanceDaoImpl extends HibernateDaoSupport implements Attendance
 	 * {@inheritDoc}
 	 */
 	public AttendanceStatus getAttendanceStatusById(final Long id) {
-        log.debug("getAttendanceStatus(){}", id);
+		log.debug("getAttendanceStatus(){}", id);
 
 		return (AttendanceStatus) getByIDHelper(id, QUERY_GET_ATTENDANCE_STATUS);
 	}
@@ -292,7 +292,7 @@ public class AttendanceDaoImpl extends HibernateDaoSupport implements Attendance
 	 * {@inheritDoc}
 	 */
 	public AttendanceGrade getAttendanceGrade(final String userID, final AttendanceSite aS) {
-        log.debug("getAttendanceGrades for user {} in site {}", userID, aS.getSiteID());
+		log.debug("getAttendanceGrades for user {} in site {}", userID, aS.getSiteID());
 
 		try{
 			return (AttendanceGrade) getHibernateTemplate().execute(session -> session
@@ -311,7 +311,7 @@ public class AttendanceDaoImpl extends HibernateDaoSupport implements Attendance
 	 */
 	@SuppressWarnings("unchecked")
 	public List<AttendanceGrade> getAttendanceGrades(final AttendanceSite aS) {
-        log.debug("getAttendanceGrades for: {}", aS.getSiteID());
+		log.debug("getAttendanceGrades for: {}", aS.getSiteID());
 
 		try{
 			return getHibernateTemplate().execute(session -> session
@@ -328,7 +328,7 @@ public class AttendanceDaoImpl extends HibernateDaoSupport implements Attendance
 	 * {@inheritDoc}
 	 */
 	public boolean addAttendanceGrade(AttendanceGrade aG) {
-        log.debug("addAttendanceGrade for User '{}' grade {} for site  {}", aG.getUserID(), aG.getGrade(), aG.getAttendanceSite().getSiteID());
+		log.debug("addAttendanceGrade for User '{}' grade {} for site  {}", aG.getUserID(), aG.getGrade(), aG.getAttendanceSite().getSiteID());
 
 		try {
 			getHibernateTemplate().save(aG);
@@ -343,7 +343,7 @@ public class AttendanceDaoImpl extends HibernateDaoSupport implements Attendance
 	 * {@inheritDoc}
 	 */
 	public boolean updateAttendanceGrade(AttendanceGrade aG) {
-        log.debug("updateAttendanceGrade for User '{}' grade {} for site  {}", aG.getUserID(), aG.getGrade(), aG.getAttendanceSite().getSiteID());
+		log.debug("updateAttendanceGrade for User '{}' grade {} for site  {}", aG.getUserID(), aG.getGrade(), aG.getAttendanceSite().getSiteID());
 
 		try {
 			getHibernateTemplate().saveOrUpdate(aG);
@@ -358,7 +358,7 @@ public class AttendanceDaoImpl extends HibernateDaoSupport implements Attendance
 	 * {@inheritDoc}
 	 */
 	public AttendanceUserStats getAttendanceUserStats(final String userId, final AttendanceSite aS) {
-        log.debug("getAttendanceUserStats for User '{}' and Site: '{}'.", userId, aS.getSiteID());
+		log.debug("getAttendanceUserStats for User '{}' and Site: '{}'.", userId, aS.getSiteID());
 
 		try{
 			return (AttendanceUserStats) getHibernateTemplate().execute(session -> session
@@ -367,7 +367,7 @@ public class AttendanceDaoImpl extends HibernateDaoSupport implements Attendance
 					.setParameter(USER_ID, userId)
 					.uniqueResult());
 		} catch (DataAccessException e) {
-            log.error("DataAccessException getting AttendanceUserStats for User '{}' and Site: '{}'.", userId, aS.getSiteID(), e);
+    		log.error("DataAccessException getting AttendanceUserStats for User '{}' and Site: '{}'.", userId, aS.getSiteID(), e);
 			return null;
 		}
 	}
@@ -377,7 +377,7 @@ public class AttendanceDaoImpl extends HibernateDaoSupport implements Attendance
 	 */
 	@SuppressWarnings("unchecked")
 	public List<AttendanceUserStats> getAttendanceUserStatsForSite(final AttendanceSite aS) {
-        log.debug("getAttendanceUserStatsForSite for site: {}", aS.getSiteID());
+		log.debug("getAttendanceUserStatsForSite for site: {}", aS.getSiteID());
 
 		try{
 			return getHibernateTemplate().execute(session -> session
@@ -394,13 +394,13 @@ public class AttendanceDaoImpl extends HibernateDaoSupport implements Attendance
 	 * {@inheritDoc}
 	 */
 	public boolean updateAttendanceUserStats(AttendanceUserStats aUS) {
-        log.debug("updateAttendanceUserStats for User '{}' and Site: '{}'.", aUS.getUserID(), aUS.getAttendanceSite().getSiteID());
+		log.debug("updateAttendanceUserStats for User '{}' and Site: '{}'.", aUS.getUserID(), aUS.getAttendanceSite().getSiteID());
 
 		try {
 			getHibernateTemplate().saveOrUpdate(aUS);
 			return true;
 		} catch (DataAccessException e) {
-            log.error("updateAttendanceUserStats, id: '{}' failed.", aUS.getId(), e);
+    		log.error("updateAttendanceUserStats, id: '{}' failed.", aUS.getId(), e);
 			return false;
 		}
 	}
@@ -409,7 +409,7 @@ public class AttendanceDaoImpl extends HibernateDaoSupport implements Attendance
 	 * {@inheritDoc}
 	 */
 	public boolean addGradingRule(GradingRule gradingRule) {
-        log.debug("add grading rule to site {} status: {} range: {} - {} points: {}", gradingRule.getAttendanceSite().getSiteID(), gradingRule.getStatus(), gradingRule.getStartRange(), gradingRule.getEndRange(), gradingRule.getPoints());
+			log.debug("add grading rule to site {} status: {} range: {} - {} points: {}", gradingRule.getAttendanceSite().getSiteID(), gradingRule.getStatus(), gradingRule.getStartRange(), gradingRule.getEndRange(), gradingRule.getPoints());
 
 		try {
 			getHibernateTemplate().save(gradingRule);
@@ -424,13 +424,13 @@ public class AttendanceDaoImpl extends HibernateDaoSupport implements Attendance
 	 * {@inheritDoc}
 	 */
 	public boolean deleteGradingRule(GradingRule gradingRule) {
-        log.debug("Delete grading rule from site {} grading rule: {}", gradingRule.getAttendanceSite().getSiteID(), gradingRule.getId());
+			log.debug("Delete grading rule from site {} grading rule: {}", gradingRule.getAttendanceSite().getSiteID(), gradingRule.getId());
 
 		try {
 			getHibernateTemplate().delete(getHibernateTemplate().merge(gradingRule));
 			return true;
 		} catch (DataAccessException e) {
-            log.error("deleteGradingRule, {}, failed.", gradingRule.getId(), e);
+			log.error("deleteGradingRule, {}, failed.", gradingRule.getId(), e);
 			return false;
 		}
 	}
@@ -439,7 +439,7 @@ public class AttendanceDaoImpl extends HibernateDaoSupport implements Attendance
 	 * {@inheritDoc}
 	 */
 	public AttendanceItemStats getAttendanceItemStats(AttendanceEvent aE) {
-        log.debug("getAttendanceUserStats for Event '{}' and Site: '{}'.", aE.getName(), aE.getAttendanceSite().getSiteID());
+			log.debug("getAttendanceUserStats for Event '{}' and Site: '{}'.", aE.getName(), aE.getAttendanceSite().getSiteID());
 
 		try{
 			return (AttendanceItemStats) getHibernateTemplate().execute(session -> session
@@ -447,7 +447,7 @@ public class AttendanceDaoImpl extends HibernateDaoSupport implements Attendance
 					.setParameter(ATTENDANCE_EVENT, aE)
 					.uniqueResult());
 		} catch (DataAccessException e) {
-            log.error("DataAccessException getting AttendanceItemStats for Event '{}' and Site: '{}'.", aE.getName(), aE.getAttendanceSite().getSiteID(), e);
+			log.error("DataAccessException getting AttendanceItemStats for Event '{}' and Site: '{}'.", aE.getName(), aE.getAttendanceSite().getSiteID(), e);
 			return null;
 		}
 	}
@@ -456,7 +456,7 @@ public class AttendanceDaoImpl extends HibernateDaoSupport implements Attendance
 	 * {@inheritDoc}
 	 */
 	public boolean updateAttendanceItemStats(AttendanceItemStats aIS) {
-        log.debug("updateAttendanceItemStats, '{}', for Event '{}' and site: '{}'.", aIS.getId(), aIS.getAttendanceEvent().getName(), aIS.getAttendanceEvent().getAttendanceSite().getSiteID());
+			log.debug("updateAttendanceItemStats, '{}', for Event '{}' and site: '{}'.", aIS.getId(), aIS.getAttendanceEvent().getName(), aIS.getAttendanceEvent().getAttendanceSite().getSiteID());
 
 		try {
 			getHibernateTemplate().saveOrUpdate(aIS);
@@ -472,7 +472,7 @@ public class AttendanceDaoImpl extends HibernateDaoSupport implements Attendance
 	 */
 	@SuppressWarnings("unchecked")
 	public List<GradingRule> getGradingRulesForSite(AttendanceSite attendanceSite) {
-        log.debug("getGradingRulesForSite(AttendanceSite {} )", attendanceSite.getSiteID());
+			log.debug("getGradingRulesForSite(AttendanceSite {} )", attendanceSite.getSiteID());
 
 		try {
 			return getHibernateTemplate().execute(session -> session
@@ -563,7 +563,7 @@ public class AttendanceDaoImpl extends HibernateDaoSupport implements Attendance
 
 	// Generic Function to get something by it's ID.
 	private Object getByIDHelper(final long id, final String queryString) {
-        log.debug("getByIDHelper() id: '{}' String: {}", id, queryString);
+		log.debug("getByIDHelper() id: '{}' String: {}", id, queryString);
 
 		try {
 			return getHibernateTemplate().execute(session -> session
@@ -573,7 +573,7 @@ public class AttendanceDaoImpl extends HibernateDaoSupport implements Attendance
 					.uniqueResult());
 
 		} catch (DataAccessException e) {
-            log.error("getByIDHelper for {} failed", queryString, e);
+   		log.error("getByIDHelper for {} failed", queryString, e);
 			return null;
 		}
 	}
