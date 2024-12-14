@@ -90,7 +90,7 @@ public class AttendanceGradeFormPanel extends BasePanel {
         this.previousSendToGradebook = aS.getSendToGradebook();
         this.previousName = aS.getGradebookItemName();
         this.previousMaxGrade = aS.getMaximumGrade();
-        this.useAutoGrading.setObject(aS.getUseAutoGrading());
+        this.useAutoGrading.setObject(aS.getGradingMethod() != null);
         this.gradingMethod.setObject(aS.getGradingMethod());
         this.previousCategory = null;
         if(attendanceGradebookProvider.doesGradebookHaveCategories(aS.getSiteID()) && attendanceGradebookProvider.getCategoryForItem(aS.getSiteID(), aS.getId())!=null){
@@ -138,7 +138,7 @@ public class AttendanceGradeFormPanel extends BasePanel {
                     previousSendToGradebook = aS.getSendToGradebook();
 
                     // Successful Save - Regrade All if Auto Grade is set to true and maximum points is set
-                    if (aS.getUseAutoGrading() != null && aS.getUseAutoGrading() && aS.getMaximumGrade() > 0) {
+                    if (aS.getGradingMethod() != null && aS.getMaximumGrade() > 0) {
                         attendanceLogic.regradeAll(aS);
                     }
 
