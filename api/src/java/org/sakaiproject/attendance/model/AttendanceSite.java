@@ -40,12 +40,11 @@ public class AttendanceSite implements Serializable {
 	@Getter	@Setter	private 				Status 					defaultStatus;
 	@Getter @Setter private					Double					maximumGrade;
 	@Getter @Setter private					Boolean					isGradeShown;
-			@Setter private					Boolean					sendToGradebook;
-			@Setter private					Boolean					useAutoGrading;
-			@Setter private					Boolean					autoGradeBySubtraction;
+		@Setter private					Boolean					sendToGradebook;
+	@Getter @Setter private					GradingMethod				gradingMethod;
 	@Getter @Setter private					String					gradebookItemName;
 	@Getter @Setter private					Boolean					showCommentsToStudents;
-			@Setter private					Boolean					isSyncing;
+		@Setter private					Boolean					isSyncing;
 	@Getter @Setter private					Date					syncTime;
 	@Getter	@Setter	private 				Set<AttendanceStatus>	attendanceStatuses	= new HashSet<>(0);
 
@@ -54,8 +53,7 @@ public class AttendanceSite implements Serializable {
 		this.defaultStatus 			= Status.UNKNOWN;
 		this.isGradeShown 			= false;
 		this.sendToGradebook 		= false;
-		this.useAutoGrading			= false;
-		this.autoGradeBySubtraction = true;
+		this.gradingMethod			= GradingMethod.NONE;
 		this.gradebookItemName 		= AttendanceConstants.GRADEBOOK_ITEM_NAME;
 		this.showCommentsToStudents = false;
 		this.isSyncing				= false;
@@ -78,19 +76,11 @@ public class AttendanceSite implements Serializable {
 	}
 
 	public Boolean getUseAutoGrading() {
-		if(this.useAutoGrading == null) {
+		if(this.gradingMethod == null) {
 			return false;
 		}
 
-		return this.useAutoGrading;
-	}
-
-	public Boolean getAutoGradeBySubtraction() {
-		if(this.autoGradeBySubtraction == null) {
-			return true;
-		}
-
-		return this.autoGradeBySubtraction;
+		return true;
 	}
 
 }

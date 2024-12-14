@@ -32,6 +32,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.ResourceModel;
 import org.sakaiproject.attendance.model.AttendanceSite;
+import org.sakaiproject.attendance.model.GradingMethod;
 import org.sakaiproject.attendance.tool.panels.util.GradebookItemNameValidator;
 
 import java.io.Serializable;
@@ -54,7 +55,7 @@ public class AttendanceGradeFormPanel extends BasePanel {
     private                 String          previousName;
     private                 Double          previousMaxGrade;
     private        final    IModel<Boolean> useAutoGrading              = new Model<>();
-    private        final    IModel<Boolean> autoGradeBySubtraction      = new Model<>();
+    private        final    IModel<GradingMethod> gradingMethod         = new Model<>();
     private                 GradingRulesPanel gradingRulesPanel;
     private                 WebMarkupContainer autoGradingTypeContainer;
     private                 String          previousCategory;
@@ -90,7 +91,7 @@ public class AttendanceGradeFormPanel extends BasePanel {
         this.previousName = aS.getGradebookItemName();
         this.previousMaxGrade = aS.getMaximumGrade();
         this.useAutoGrading.setObject(aS.getUseAutoGrading());
-        this.autoGradeBySubtraction.setObject(aS.getAutoGradeBySubtraction());
+        this.gradingMethod.setObject(aS.getGradingMethod());
         this.previousCategory = null;
         if(attendanceGradebookProvider.doesGradebookHaveCategories(aS.getSiteID()) && attendanceGradebookProvider.getCategoryForItem(aS.getSiteID(), aS.getId())!=null){
             this.previousCategory = String.valueOf(attendanceGradebookProvider.getCategoryForItem(aS.getSiteID(), aS.getId()));
@@ -105,12 +106,11 @@ public class AttendanceGradeFormPanel extends BasePanel {
                     catNow = (CategoryParts) gradebookCategories.getDefaultModelObject();
                     categoryId = catNow.getCategoryId();
                 }
-                aS.setUseAutoGrading(useAutoGrading.getObject());
-                aS.setAutoGradeBySubtraction(autoGradeBySubtraction.getObject());
+                aS.setGradingMethod(gradingMethod.getObject());
 
                 if(aS.getMaximumGrade() == null && previousMaxGrade != null) {
                     aS.setSendToGradebook(false);
-                    aS.setUseAutoGrading(false);
+                    aS.setGradingMethod(GradingMethod.NONE);
                 }
 
                 boolean result = attendanceLogic.updateAttendanceSite(aS);
@@ -269,13 +269,13 @@ public class AttendanceGradeFormPanel extends BasePanel {
         this.autoGradingTypeContainer.setOutputMarkupPlaceholderTag(true);
         grading.add(this.autoGradingTypeContainer);
 
-        final RadioGroup<Boolean> autoGradeType = new RadioGroup<>("auto-grading-type-group", this.autoGradeBySubtraction);
+        final RadioGroup<GradingMethod> autoGradeType = new RadioGroup<>("auto-grading-type-group", this.gradingMethod);
         autoGradeType.setRenderBodyOnly(false);
         this.autoGradingTypeContainer.add(autoGradeType);
 
-        Radio<Boolean> subtractGrading = new Radio<>("subtract-grading", Model.of(Boolean.TRUE));
-        Radio<Boolean> addGrading = new Radio<>("add-grading", Model.of(Boolean.FALSE));
-        Radio<Boolean> multiplyGrading = new Radio<>("multiply-grading", Model.of(Boolean.FALSE));
+        Radio<GradingMethod> subtractGrading = new Radio<>("subtract-grading", Model.of(GradingMethod.SUBTRACT));
+        Radio<GradingMethod> addGrading = new Radio<>("add-grading", Model.of(GradingMethod.ADD));
+        Radio<GradingMethod> multiplyGrading = new Radio<>("multiply-grading", Model.of(GradingMethod.MULTIPLY));
 
         autoGradeType.add(subtractGrading);
         autoGradeType.add(addGrading);
