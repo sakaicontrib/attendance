@@ -43,12 +43,14 @@
                 </li>
                 <li>
                     <h3><wicket:message key="attendance.settings.grading.mode"/></h3>
-                    <div wicket:id="use-auto-grading-group">
-                        <div><label class="gradeSettingsLabel"><input type="radio" wicket:id="manual-grading"> <wicket:message key="attendance.settings.grading.manually"/></label></div>
-                        <div><label class="gradeSettingsLabel"><input type="radio" wicket:id="auto-grading"> <wicket:message key="attendance.settings.grading.auto"/></label></div>
-                    </div>
                     <span wicket:id="auto-grading-type" class="gradingType">
                         <div wicket:id="auto-grading-type-group">
+                            <div class="form-check mb-3">
+                                <input type="radio" wicket:id="manual-grading" class="form-check-input" id="manual-grading">
+                                <label class="form-check-label" for="manual-grading">
+                                    <wicket:message key="attendance.settings.grading.manually"/>
+                                </label>
+                            </div>
                             <div class="form-check mb-3">
                                 <input type="radio" wicket:id="subtract-grading" class="form-check-input" id="subtract-grading">
                                 <label class="form-check-label" for="subtract-grading">

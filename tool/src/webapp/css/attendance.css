@@ -634,11 +634,6 @@ span.attendanceAlertMessage:before {
     font-size:18px;
 }
 
-span.gradingType > div div label {
-    font-size: 1em;
-    margin-left: 4em;
-}
-
 span.totalPointsColHeader {
     font-size: .75em;
 }
