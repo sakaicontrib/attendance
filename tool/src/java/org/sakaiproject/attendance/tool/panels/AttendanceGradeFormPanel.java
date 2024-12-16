@@ -20,6 +20,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.form.AjaxFormChoiceComponentUpdatingBehavior;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.ajax.markup.html.form.AjaxCheckBox;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
@@ -28,12 +29,12 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.*;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.CompoundPropertyModel;
-import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.ResourceModel;
 import org.sakaiproject.attendance.model.AttendanceSite;
 import org.sakaiproject.attendance.tool.panels.util.GradebookItemNameValidator;
+import org.sakaiproject.attendance.util.AttendanceConstants;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -57,19 +58,23 @@ public class AttendanceGradeFormPanel extends BasePanel {
     private                 Integer         selectedGradingMethod;
     private                 String          previousCategory;
     private                 WebMarkupContainer  gradebookCategories;
+    private                 GradingRulesPanel  gradingRulesPanel;
 
     public AttendanceGradeFormPanel(String id, FeedbackPanel pg) {
         super(id);
         enable(pg);
-
         init();
     }
 
     private void init() {
+        gradingRulesPanel = createGradingRulesPanel();
+        add(gradingRulesPanel);
         add(createSettingsForm());
+    }
 
-        // Grade rules container
-        GradingRulesPanel gradingRulesPanel = new GradingRulesPanel("grading-rules") {
+    private GradingRulesPanel createGradingRulesPanel() {
+        // Grade rules container only gets opened when the grading method is set to something other than none
+        GradingRulesPanel panel = new GradingRulesPanel("grading-rules") {
             private static final long serialVersionUID = 1L;
 
             @Override
@@ -77,8 +82,8 @@ public class AttendanceGradeFormPanel extends BasePanel {
                 return selectedGradingMethod != null && selectedGradingMethod > 0;
             }
         };
-        gradingRulesPanel.setOutputMarkupPlaceholderTag(true);
-        add(gradingRulesPanel);
+        panel.setOutputMarkupPlaceholderTag(true);
+        return panel;
     }
 
     private Form<AttendanceSite> createSettingsForm() {
@@ -236,16 +241,25 @@ public class AttendanceGradeFormPanel extends BasePanel {
         gradebook.add(gradebookCategories);
         gradebook.add(categoriesLabel);
 
+        // What type of grading rules to use?
         WebMarkupContainer autoGradingTypeContainer = new WebMarkupContainer("auto-grading-type");
         grading.add(autoGradingTypeContainer);
 
         final RadioGroup<Integer> autoGradeType = new RadioGroup<>("auto-grading-type-group", new PropertyModel<>(this, "selectedGradingMethod"));
         autoGradingTypeContainer.add(autoGradeType);
 
-        autoGradeType.add(new Radio<>("manual-grading", Model.of(0)));
-        autoGradeType.add(new Radio<>("subtract-grading", Model.of(1)));
-        autoGradeType.add(new Radio<>("add-grading", Model.of(2)));
-        autoGradeType.add(new Radio<>("multiply-grading", Model.of(3)));
+        autoGradeType.add(new Radio<>("manual-grading", Model.of(AttendanceConstants.GRADING_METHOD_NONE)));
+        autoGradeType.add(new Radio<>("subtract-grading", Model.of(AttendanceConstants.GRADING_METHOD_SUBTRACT)));
+        autoGradeType.add(new Radio<>("add-grading", Model.of(AttendanceConstants.GRADING_METHOD_ADD)));
+        autoGradeType.add(new Radio<>("multiply-grading", Model.of(AttendanceConstants.GRADING_METHOD_MULTIPLY)));
+
+        // Add the AjaxFormComponentUpdatingBehavior to the RadioGroup
+        autoGradeType.add(new AjaxFormChoiceComponentUpdatingBehavior() {
+            @Override
+            protected void onUpdate(AjaxRequestTarget target) {
+                target.add(gradingRulesPanel); // Update the gradingRulesPanel
+            }
+        });
 
         aSForm.add(grading);
 

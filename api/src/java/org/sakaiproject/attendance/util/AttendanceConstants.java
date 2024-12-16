@@ -30,4 +30,9 @@ public class AttendanceConstants {
     public static final String TOOL_NAME            = "Attendance";
     public static final String SAKAI_TOOL_NAME      = "sakai.attendance";
     public static final String GRADEBOOK_ITEM_NAME  = "Attendance";
+
+    public static final int GRADING_METHOD_NONE = 0;
+    public static final int GRADING_METHOD_SUBTRACT = 1;
+    public static final int GRADING_METHOD_ADD = 2;
+    public static final int GRADING_METHOD_MULTIPLY = 3;
 }
