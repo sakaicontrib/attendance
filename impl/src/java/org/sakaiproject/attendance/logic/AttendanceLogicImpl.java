@@ -840,19 +840,18 @@ public class AttendanceLogicImpl implements AttendanceLogic, EntityTransferrer {
 		Double totalPoints = 0D;
 		Double maximumGrade = attendanceSite.getMaximumGrade();
 		switch (attendanceSite.getGradingMethod()) {
-			case SUBTRACT:
+			case 1:
 				if (maximumGrade != null) {
 					totalPoints = maximumGrade;
 				}
 				break;
-			case ADD:
+			case 2:
 				// addition logic
 				break;
-			case MULTIPLY:
+			case 3:
 				// multiplication logic
 				break;
-			case MANUAL:
-			case NONE:
+			case 0:
 			default:
 				// handle manual/none cases
 				break;

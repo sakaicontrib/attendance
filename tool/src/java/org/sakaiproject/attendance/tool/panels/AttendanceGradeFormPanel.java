@@ -30,9 +30,9 @@ import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.ResourceModel;
 import org.sakaiproject.attendance.model.AttendanceSite;
-import org.sakaiproject.attendance.model.GradingMethod;
 import org.sakaiproject.attendance.tool.panels.util.GradebookItemNameValidator;
 
 import java.io.Serializable;
@@ -54,9 +54,7 @@ public class AttendanceGradeFormPanel extends BasePanel {
     private                 boolean         previousSendToGradebook;
     private                 String          previousName;
     private                 Double          previousMaxGrade;
-    private        final    IModel<GradingMethod> gradingMethod         = new Model<>();
-    private                 GradingRulesPanel gradingRulesPanel;
-    private                 WebMarkupContainer autoGradingTypeContainer;
+    private                 Integer         selectedGradingMethod;
     private                 String          previousCategory;
     private                 WebMarkupContainer  gradebookCategories;
 
@@ -71,16 +69,16 @@ public class AttendanceGradeFormPanel extends BasePanel {
         add(createSettingsForm());
 
         // Grade rules container
-        this.gradingRulesPanel = new GradingRulesPanel("grading-rules") {
+        GradingRulesPanel gradingRulesPanel = new GradingRulesPanel("grading-rules") {
             private static final long serialVersionUID = 1L;
 
             @Override
             public boolean isVisible() {
-                return gradingMethod.getObject() != null && gradingMethod.getObject() != GradingMethod.NONE;
+                return selectedGradingMethod != null && selectedGradingMethod > 0;
             }
         };
-        this.gradingRulesPanel.setOutputMarkupPlaceholderTag(true);
-        add(this.gradingRulesPanel);
+        gradingRulesPanel.setOutputMarkupPlaceholderTag(true);
+        add(gradingRulesPanel);
     }
 
     private Form<AttendanceSite> createSettingsForm() {
@@ -88,7 +86,7 @@ public class AttendanceGradeFormPanel extends BasePanel {
         this.previousSendToGradebook = aS.getSendToGradebook();
         this.previousName = aS.getGradebookItemName();
         this.previousMaxGrade = aS.getMaximumGrade();
-        this.gradingMethod.setObject(aS.getGradingMethod() != null ? aS.getGradingMethod() : GradingMethod.NONE);
+        this.selectedGradingMethod = aS.getGradingMethod() != null ? aS.getGradingMethod() : 0;
         this.previousCategory = null;
         if(attendanceGradebookProvider.doesGradebookHaveCategories(aS.getSiteID()) && attendanceGradebookProvider.getCategoryForItem(aS.getSiteID(), aS.getId())!=null){
             this.previousCategory = String.valueOf(attendanceGradebookProvider.getCategoryForItem(aS.getSiteID(), aS.getId()));
@@ -103,11 +101,11 @@ public class AttendanceGradeFormPanel extends BasePanel {
                     catNow = (CategoryParts) gradebookCategories.getDefaultModelObject();
                     categoryId = catNow.getCategoryId();
                 }
-                aS.setGradingMethod(gradingMethod.getObject());
+                aS.setGradingMethod(selectedGradingMethod);
 
                 if(aS.getMaximumGrade() == null && previousMaxGrade != null) {
                     aS.setSendToGradebook(false);
-                    aS.setGradingMethod(GradingMethod.NONE);
+                    aS.setGradingMethod(0);
                 }
 
                 boolean result = attendanceLogic.updateAttendanceSite(aS);
@@ -135,7 +133,7 @@ public class AttendanceGradeFormPanel extends BasePanel {
                     previousSendToGradebook = aS.getSendToGradebook();
 
                     // Successful Save - Regrade All if Auto Grade is set to true and maximum points is set
-                    if (aS.getGradingMethod() != null && aS.getMaximumGrade() > 0) {
+                    if (aS.getGradingMethod() != null && aS.getGradingMethod() > 0 && aS.getMaximumGrade() > 0) {
                         attendanceLogic.regradeAll(aS);
                     }
 
@@ -214,7 +212,7 @@ public class AttendanceGradeFormPanel extends BasePanel {
         Map<String,String> categories = attendanceGradebookProvider.getGradebookCategories(aS.getSiteID());
         final List<CategoryParts> categoryParts = categoryListLoader(categories);
         if(gradebookHasCategories){
-            gradebookCategories = new DropDownChoice<CategoryParts>("gradebookCategory",new Model<CategoryParts>(new CategoryParts(this.previousCategory,categories.get(this.previousCategory))),categoryParts,new ChoiceRenderer<CategoryParts>(){
+            gradebookCategories = new DropDownChoice<CategoryParts>("gradebookCategory",new Model<CategoryParts>(new CategoryParts(this.previousCategory, categories.get(this.previousCategory))),categoryParts,new ChoiceRenderer<CategoryParts>(){
                 private static final long serialVersionUID = 1L;
                 @Override
                 public Object getDisplayValue(final CategoryParts a) {
@@ -238,19 +236,17 @@ public class AttendanceGradeFormPanel extends BasePanel {
         gradebook.add(gradebookCategories);
         gradebook.add(categoriesLabel);
 
-        this.autoGradingTypeContainer = new WebMarkupContainer("auto-grading-type");
-        grading.add(this.autoGradingTypeContainer);
+        WebMarkupContainer autoGradingTypeContainer = new WebMarkupContainer("auto-grading-type");
+        grading.add(autoGradingTypeContainer);
 
-        final RadioGroup<GradingMethod> autoGradeType = new RadioGroup<>("auto-grading-type-group", this.gradingMethod);
-        autoGradeType.setRenderBodyOnly(false);
-        this.autoGradingTypeContainer.add(autoGradeType);
+        final RadioGroup<Integer> autoGradeType = new RadioGroup<>("auto-grading-type-group", new PropertyModel<>(this, "selectedGradingMethod"));
+        autoGradingTypeContainer.add(autoGradeType);
 
-        Radio<GradingMethod> manualGrading = new Radio<>("manual-grading", Model.of(GradingMethod.NONE));
-        Radio<GradingMethod> subtractGrading = new Radio<>("subtract-grading", Model.of(GradingMethod.SUBTRACT));
-        Radio<GradingMethod> addGrading = new Radio<>("add-grading", Model.of(GradingMethod.ADD));
-        Radio<GradingMethod> multiplyGrading = new Radio<>("multiply-grading", Model.of(GradingMethod.MULTIPLY));
+        autoGradeType.add(new Radio<>("manual-grading", Model.of(0)));
+        autoGradeType.add(new Radio<>("subtract-grading", Model.of(1)));
+        autoGradeType.add(new Radio<>("add-grading", Model.of(2)));
+        autoGradeType.add(new Radio<>("multiply-grading", Model.of(3)));
 
-        autoGradeType.add(manualGrading, subtractGrading, addGrading, multiplyGrading);
         aSForm.add(grading);
 
         AjaxSubmitLink submit = new AjaxSubmitLink("submit") {
@@ -276,7 +272,7 @@ public class AttendanceGradeFormPanel extends BasePanel {
             return parts;
         }
         for(String idNow: categoryMap.keySet()){
-            CategoryParts categoryNow = new CategoryParts(idNow,categoryMap.get(idNow));
+            CategoryParts categoryNow = new CategoryParts(idNow, categoryMap.get(idNow));
             parts.add(categoryNow);
         }
         return parts;
@@ -284,7 +280,7 @@ public class AttendanceGradeFormPanel extends BasePanel {
 
     @Data
     @AllArgsConstructor
-    private class CategoryParts implements Serializable {
+    private static class CategoryParts implements Serializable {
         private String categoryId;
         private String categoryName;
     }
