@@ -42,7 +42,7 @@ import java.util.*;
 public class GradingRulesPanel extends BasePanel {
     private static final long serialVersionUID = 1L;
 
-    private final IModel<Integer> selectedGradingMethodModel;
+    private IModel<Integer> selectedGradingMethodModel = new Model<>(AttendanceConstants.GRADING_METHOD_NONE); // Initialize the model with the default grading method;
     private GradingRulesListPanel gradingRulesListPanel;
 
     public GradingRulesPanel(String id, IModel<Integer> selectedGradingMethodModel, IModel<AttendanceSite> siteModel) {
@@ -87,6 +87,12 @@ public class GradingRulesPanel extends BasePanel {
             protected void onSubmit(final AjaxRequestTarget target) {
 
                 final GradingRule gradingRule = (GradingRule) getForm().getModelObject();
+
+                // We are sharing some rules table so just fake the start and end range for multiply
+                if (selectedGradingMethodModel != null && selectedGradingMethodModel.getObject().equals(AttendanceConstants.GRADING_METHOD_MULTIPLY)) {
+                    gradingRule.setStartRange(1);
+                    gradingRule.setEndRange(999);
+                }
 
                 if (gradingRule.getStartRange() < 0) {
                     rulesFeedbackPanel.error(getString("attendance.grading.start.range.error"));

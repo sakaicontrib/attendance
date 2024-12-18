@@ -93,13 +93,10 @@ public class GradingRulesListPanel extends BasePanel {
         this.regradeForm.setOutputMarkupId(true);
         this.regradeForm.setOutputMarkupPlaceholderTag(true);
 
-        this.regradeForm.add(new AjaxButton("regrade-submit1") {
-            @Override
-            public void onConfigure() {
-                super.onConfigure();
-                setVisible(getNeedRegrade());
-            }
+        // Set the form's visibility based on needRegrade
+        this.regradeForm.setVisible(needRegrade);
 
+        this.regradeForm.add(new AjaxButton("regrade-submit1") {
             @Override
             protected void onSubmit(AjaxRequestTarget target) {
                 super.onSubmit(target);
