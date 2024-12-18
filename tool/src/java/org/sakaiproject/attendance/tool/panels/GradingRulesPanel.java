@@ -93,6 +93,7 @@ public class GradingRulesPanel extends BasePanel {
                     gradingRule.setStartRange(1);
                     gradingRule.setEndRange(999);
                 }
+                // TODO we should check for duplicate rules here
 
                 if (gradingRule.getStartRange() < 0) {
                     rulesFeedbackPanel.error(getString("attendance.grading.start.range.error"));
@@ -100,8 +101,7 @@ public class GradingRulesPanel extends BasePanel {
                     rulesFeedbackPanel.error(getString("attendance.grading.end.range.error"));
                 } else if (gradingRule.getEndRange() != null && gradingRule.getEndRange() < gradingRule.getStartRange()) {
                     rulesFeedbackPanel.error(getString("attendance.grading.end.start.error"));
-                } else {
-                    attendanceLogic.addGradingRule(gradingRule);
+                } else if (attendanceLogic.addGradingRule(gradingRule)) {
                     rulesFeedbackPanel.info(getString("attendance.grading.add.rule.success"));
                     target.add(form);
                     gradingRulesListPanel.setNeedRegrade(true);

@@ -51,6 +51,7 @@ public class GradingRulesListPanel extends BasePanel {
                                 String.valueOf(gradingRule.getStartRange()),
                                 String.valueOf(gradingRule.getEndRange())
                         ));
+                // Different explanation for multiply rules
                 if (selectedGradingMethodModel != null && selectedGradingMethodModel.getObject().equals(AttendanceConstants.GRADING_METHOD_MULTIPLY)) {
                     rule.setDefaultModelObject(MessageFormat.format(getString("attendance.settings.grading.rule.sentence.multiply"),
                             String.valueOf(gradingRule.getPoints()),
