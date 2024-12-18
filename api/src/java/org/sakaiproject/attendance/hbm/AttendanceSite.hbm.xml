@@ -35,8 +35,7 @@
         <property name="maximumGrade"           column="MAXIMUM_GRADE"          type="java.lang.Double" />
         <property name="isGradeShown"           column="IS_GRADE_SHOWN"         type="java.lang.Boolean" />
         <property name="sendToGradebook"        column="SEND_TO_GRADEBOOK"      type="java.lang.Boolean" />
-        <property name="useAutoGrading"         column="AUTO_GRADING"           type="java.lang.Boolean" />
-        <property name="autoGradeBySubtraction" column="GRADE_BY_SUBTRACTION"   type="java.lang.Boolean" />
+        <property name="gradingMethod"          column="GRADING_METHOD"         type="java.lang.Integer" />
         <property name="gradebookItemName"      column="GRADEBOOK_ITEM_NAME"    type="java.lang.String" />
         <property name="showCommentsToStudents" column="SHOW_COMMENTS"          type="java.lang.Boolean" />
         <property name="isSyncing"              column="SYNC"                   type="java.lang.Boolean" />

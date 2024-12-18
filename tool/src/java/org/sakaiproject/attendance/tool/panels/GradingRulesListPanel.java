@@ -1,30 +1,15 @@
-/*
- *  Copyright (c) 2017, University of Dayton
- *
- *  Licensed under the Educational Community License, Version 2.0 (the "License");
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
- *
- *              http://opensource.org/licenses/ecl2
- *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
- */
-
 package org.sakaiproject.attendance.tool.panels;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
-import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.markup.repeater.data.ListDataProvider;
+import org.apache.wicket.model.IModel;
+import org.sakaiproject.attendance.model.AttendanceSite;
 import org.sakaiproject.attendance.model.GradingRule;
 
 import java.text.MessageFormat;
@@ -36,25 +21,23 @@ import java.util.List;
 public class GradingRulesListPanel extends BasePanel {
     private static final long serialVersionUID = 1L;
 
-    WebMarkupContainer regradeForm;
-
+    Form<Void> regradeForm;
     private boolean needRegrade;
 
-    public GradingRulesListPanel(String id, FeedbackPanel feedbackPanel, boolean needRegrade) {
-        super(id);
+    public GradingRulesListPanel(String id, IModel<AttendanceSite> model, FeedbackPanel feedbackPanel, boolean needRegrade, IModel<Integer> selectedGradingMethodModel) {
+        super(id, model);
 
-        enable(feedbackPanel);
-
+        this.pageFeedbackPanel = feedbackPanel;
         this.needRegrade = needRegrade;
 
-        final ListDataProvider<GradingRule> rulesProvider = new ListDataProvider<GradingRule>() {
+        final ListDataProvider<GradingRule> rulesProvider = new ListDataProvider<>() {
             @Override
             protected List<GradingRule> getData() {
                 return attendanceLogic.getGradingRulesForSite(attendanceLogic.getCurrentAttendanceSite());
             }
         };
 
-        final DataView<GradingRule> rules = new DataView<GradingRule>("rules", rulesProvider) {
+        final DataView<GradingRule> rules = new DataView<>("rules", rulesProvider) {
             @Override
             protected void populateItem(Item<GradingRule> item) {
                 GradingRule gradingRule = item.getModelObject();
@@ -101,14 +84,18 @@ public class GradingRulesListPanel extends BasePanel {
 
         add(rules);
 
-        // Use a WebMarkupContainer - it's simpler than a Form
-        this.regradeForm = new WebMarkupContainer("regrade-form1");
-        this.regradeForm.setVisibilityAllowed(getNeedRegrade());
+        // Use a Form - the markup will be removed
+        this.regradeForm = new Form<>("regrade-form1");
+        this.regradeForm.setMarkupId("regrade-form");
+        this.regradeForm.setOutputMarkupId(true);
+        this.regradeForm.setOutputMarkupPlaceholderTag(true);
 
-        this.regradeForm.add(new AjaxButton("regrade-submit1") {
+        this.regradeForm.add(new AjaxButton("regrade-submit1", regradeForm) {
             @Override
             protected void onSubmit(AjaxRequestTarget target) {
                 super.onSubmit(target);
+
+                setNeedRegrade(false);
 
                 attendanceLogic.regradeAll(attendanceLogic.getCurrentAttendanceSite());
 
@@ -116,7 +103,6 @@ public class GradingRulesListPanel extends BasePanel {
 
                 target.add(GradingRulesListPanel.this);
                 target.add(GradingRulesListPanel.this.pageFeedbackPanel);
-                setNeedRegrade(false);
                 target.add(GradingRulesListPanel.this.regradeForm);
             }
 
@@ -125,8 +111,15 @@ public class GradingRulesListPanel extends BasePanel {
                 target.add(GradingRulesListPanel.this.pageFeedbackPanel);
             }
         });
-        this.regradeForm.setOutputMarkupId(true);
+
         add(regradeForm);
+    }
+
+    @Override
+    protected void onConfigure() {
+        super.onConfigure();
+        // Set the form's visibility based on needRegrade during each render cycle
+        regradeForm.setVisible(needRegrade);
     }
 
     void setNeedRegrade(boolean needRegrade) {
