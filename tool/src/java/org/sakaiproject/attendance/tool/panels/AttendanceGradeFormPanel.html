@@ -44,15 +44,15 @@
                 <li>
                     <h3><wicket:message key="attendance.settings.grading.mode"/></h3>
                     <span wicket:id="auto-grading-type" class="gradingType">
-                        <div wicket:id="auto-grading-type-group">
+                        <div wicket:id="auto-grading-type-group" role="radiogroup">
                             <div class="form-check mb-3">
-                                <input type="radio" wicket:id="manual-grading" class="mt-1 align-top grading-mode-check-input" id="manual-grading">
+                                <input type="radio" wicket:id="manual-grading" class="mt-1 align-top grading-mode-check-input" id="manual-grading" name="grading-method">
                                 <label class="form-check-label" for="manual-grading">
                                     <wicket:message key="attendance.settings.grading.manually"/>
                                 </label>
                             </div>
                             <div class="form-check mb-3">
-                                <input type="radio" wicket:id="subtract-grading" class="mt-1 align-top grading-mode-check-input" id="subtract-grading">
+                                <input type="radio" wicket:id="subtract-grading" class="mt-1 align-top grading-mode-check-input" id="subtract-grading" name="grading-method">
                                 <label class="form-check-label" for="subtract-grading">
                                     <wicket:message key="attendance.settings.grading.subtraction.based"/>
                                     <div class="form-text">
@@ -61,7 +61,7 @@
                                 </label>
                             </div>
                             <div class="form-check mb-3">
-                                <input type="radio" wicket:id="add-grading" class="mt-1 align-top grading-mode-check-input" id="add-grading">
+                                <input type="radio" wicket:id="add-grading" class="mt-1 align-top grading-mode-check-input" id="add-grading" name="grading-method">
                                 <label class="form-check-label" for="add-grading">
                                     <wicket:message key="attendance.settings.grading.addition.based"/>
                                     <div class="form-text">
@@ -70,7 +70,7 @@
                                 </label>
                             </div>
                             <div class="form-check mb-3">
-                                <input type="radio" wicket:id="multiply-grading" class="mt-1 align-top grading-mode-check-input" id="multiply-grading">
+                                <input type="radio" wicket:id="multiply-grading" class="mt-1 align-top grading-mode-check-input" id="multiply-grading" name="grading-method">
                                 <label class="form-check-label" for="multiply-grading">
                                     <wicket:message key="attendance.settings.grading.multiply.based"/>
                                     <div class="form-text">
@@ -84,8 +84,8 @@
             </div>
         </ul>
         <input type="submit" wicket:id="submit"/>
+        <div wicket:id="grading-rules-panel" class="rulesContainer"></div>
     </form>
-    <div wicket:id="grading-rules" class="rulesContainer"></div>
 </wicket:panel>
 </body>
 </html>

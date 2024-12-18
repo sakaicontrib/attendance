@@ -20,15 +20,17 @@ import java.util.List;
  */
 public class GradingRulesListPanel extends BasePanel {
     private static final long serialVersionUID = 1L;
+    private final IModel<Integer> selectedGradingMethodModel;
 
     Form<Void> regradeForm;
 
     private boolean needRegrade;
 
-    public GradingRulesListPanel(String id, IModel<AttendanceSite> model, FeedbackPanel feedbackPanel, boolean needRegrade) {
+    public GradingRulesListPanel(String id, IModel<AttendanceSite> model, FeedbackPanel feedbackPanel, boolean needRegrade, IModel<Integer> selectedGradingMethodModel) {
         super(id, model);
         this.pageFeedbackPanel = feedbackPanel;
         this.needRegrade = needRegrade;
+        this.selectedGradingMethodModel = selectedGradingMethodModel;
 
         final ListDataProvider<GradingRule> rulesProvider = new ListDataProvider<>() {
             @Override

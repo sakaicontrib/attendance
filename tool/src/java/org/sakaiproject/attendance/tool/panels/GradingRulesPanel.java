@@ -20,7 +20,9 @@ import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
+import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.feedback.FeedbackMessage;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.*;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.IModel;
@@ -30,6 +32,7 @@ import org.sakaiproject.attendance.model.AttendanceSite;
 import org.sakaiproject.attendance.model.AttendanceStatus;
 import org.sakaiproject.attendance.model.GradingRule;
 import org.sakaiproject.attendance.model.Status;
+import org.sakaiproject.attendance.util.AttendanceConstants;
 
 import java.util.*;
 
@@ -39,10 +42,12 @@ import java.util.*;
 public class GradingRulesPanel extends BasePanel {
     private static final long serialVersionUID = 1L;
 
+    private final IModel<Integer> selectedGradingMethodModel;
     private GradingRulesListPanel gradingRulesListPanel;
 
-    public GradingRulesPanel(String id) {
+    public GradingRulesPanel(String id, IModel<Integer> selectedGradingMethodModel, IModel<AttendanceSite> siteModel) {
         super(id);
+        this.selectedGradingMethodModel = selectedGradingMethodModel;
 
         FeedbackPanel rulesFeedbackPanel = new FeedbackPanel("rules-feedback") {
             @Override
@@ -119,12 +124,47 @@ public class GradingRulesPanel extends BasePanel {
         status.setRequired(true);
         form.add(status);
 
+        // Container for the start-range field
+        final WebMarkupContainer startRangeContainer = new WebMarkupContainer("start-range-container");
+        startRangeContainer.setOutputMarkupId(true);
+        startRangeContainer.setOutputMarkupPlaceholderTag(true);
+        form.add(startRangeContainer);
+
+        // FROM
         final TextField<Integer> startRange = new TextField<>("start-range", new PropertyModel<Integer>(formModel, "startRange"));
         startRange.setRequired(true);
-        form.add(startRange);
+        startRangeContainer.add(startRange);
 
+        startRangeContainer.add(new Behavior() {
+            @Override
+            public void onConfigure(Component component) {
+                super.onConfigure(component);
+
+                Integer selectedMethod = selectedGradingMethodModel.getObject();
+                startRangeContainer.setVisible(selectedMethod == null || !selectedMethod.equals(AttendanceConstants.GRADING_METHOD_MULTIPLY));
+            }
+        });
+
+        // Container for the end-range field
+        final WebMarkupContainer endRangeContainer = new WebMarkupContainer("end-range-container");
+        endRangeContainer.setOutputMarkupId(true);
+        endRangeContainer.setOutputMarkupPlaceholderTag(true);
+        form.add(endRangeContainer);
+
+        // TO
         final TextField<Integer> endRange = new TextField<>("end-range", new PropertyModel<Integer>(formModel, "endRange"));
-        form.add(endRange);
+        endRangeContainer.add(endRange);
+
+        // Add behavior to show/hide endRangeContainer based on selectedGradingMethodModel
+        endRangeContainer.add(new Behavior() {
+            @Override
+            public void onConfigure(Component component) {
+                super.onConfigure(component);
+
+                Integer selectedMethod = selectedGradingMethodModel.getObject();
+                endRangeContainer.setVisible(selectedMethod == null || !selectedMethod.equals(AttendanceConstants.GRADING_METHOD_MULTIPLY));
+            }
+        });
 
         final TextField<Double> points = new TextField<>("points", new PropertyModel<Double>(formModel, "points"));
         points.setRequired(true);
@@ -132,8 +172,7 @@ public class GradingRulesPanel extends BasePanel {
 
         add(form);
 
-        IModel<AttendanceSite> siteModel = new Model<AttendanceSite>(attendanceLogic.getCurrentAttendanceSite());
-        gradingRulesListPanel = new GradingRulesListPanel("rules-list", siteModel, rulesFeedbackPanel, false);
+        gradingRulesListPanel = new GradingRulesListPanel("rules-list", siteModel, rulesFeedbackPanel, false, selectedGradingMethodModel);
         gradingRulesListPanel.setOutputMarkupId(true);
 
         add(gradingRulesListPanel);

@@ -29,6 +29,7 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.*;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.CompoundPropertyModel;
+import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.ResourceModel;
@@ -55,33 +56,26 @@ public class AttendanceGradeFormPanel extends BasePanel {
     private                 boolean         previousSendToGradebook;
     private                 String          previousName;
     private                 Double          previousMaxGrade;
-    private                 Integer         selectedGradingMethod;
+    private                 IModel<Integer> selectedGradingMethodModel;
     private                 String          previousCategory;
     private                 WebMarkupContainer  gradebookCategories;
     private                 GradingRulesPanel  gradingRulesPanel;
 
     public AttendanceGradeFormPanel(String id, FeedbackPanel pg) {
         super(id);
-        enable(pg);
+        this.pageFeedbackPanel = pg;
+        this.selectedGradingMethodModel = new Model<>(AttendanceConstants.GRADING_METHOD_NONE); // Initialize the model
         init();
     }
 
     private void init() {
-        gradingRulesPanel = createGradingRulesPanel();
-        add(gradingRulesPanel);
         add(createSettingsForm());
     }
 
     private GradingRulesPanel createGradingRulesPanel() {
         // Grade rules container only gets opened when the grading method is set to something other than none
-        GradingRulesPanel panel = new GradingRulesPanel("grading-rules") {
-            private static final long serialVersionUID = 1L;
 
-            @Override
-            public boolean isVisible() {
-                return selectedGradingMethod != null && selectedGradingMethod > 0;
-            }
-        };
+        GradingRulesPanel panel = new GradingRulesPanel("grading-rules-panel", selectedGradingMethodModel, new Model<AttendanceSite>(attendanceLogic.getCurrentAttendanceSite()));
         panel.setOutputMarkupPlaceholderTag(true);
         return panel;
     }
@@ -91,7 +85,7 @@ public class AttendanceGradeFormPanel extends BasePanel {
         this.previousSendToGradebook = aS.getSendToGradebook();
         this.previousName = aS.getGradebookItemName();
         this.previousMaxGrade = aS.getMaximumGrade();
-        this.selectedGradingMethod = aS.getGradingMethod() != null ? aS.getGradingMethod() : 0;
+        this.selectedGradingMethodModel = new Model<>(aS.getGradingMethod() != null ? aS.getGradingMethod() : 0);
         this.previousCategory = null;
         if(attendanceGradebookProvider.doesGradebookHaveCategories(aS.getSiteID()) && attendanceGradebookProvider.getCategoryForItem(aS.getSiteID(), aS.getId())!=null){
             this.previousCategory = String.valueOf(attendanceGradebookProvider.getCategoryForItem(aS.getSiteID(), aS.getId()));
@@ -106,7 +100,7 @@ public class AttendanceGradeFormPanel extends BasePanel {
                     catNow = (CategoryParts) gradebookCategories.getDefaultModelObject();
                     categoryId = catNow.getCategoryId();
                 }
-                aS.setGradingMethod(selectedGradingMethod);
+                aS.setGradingMethod(selectedGradingMethodModel.getObject());
 
                 if(aS.getMaximumGrade() == null && previousMaxGrade != null) {
                     aS.setSendToGradebook(false);
@@ -149,6 +143,10 @@ public class AttendanceGradeFormPanel extends BasePanel {
 
             }
         };
+
+        gradingRulesPanel = createGradingRulesPanel();
+        gradingRulesPanel.setOutputMarkupId(true);
+        aSForm.add(gradingRulesPanel);
 
         final WebMarkupContainer grading = new WebMarkupContainer("grading") {
             @Override
@@ -245,7 +243,7 @@ public class AttendanceGradeFormPanel extends BasePanel {
         WebMarkupContainer autoGradingTypeContainer = new WebMarkupContainer("auto-grading-type");
         grading.add(autoGradingTypeContainer);
 
-        final RadioGroup<Integer> autoGradeType = new RadioGroup<>("auto-grading-type-group", new PropertyModel<>(this, "selectedGradingMethod"));
+        final RadioGroup<Integer> autoGradeType = new RadioGroup<>("auto-grading-type-group", selectedGradingMethodModel);
         autoGradingTypeContainer.add(autoGradeType);
 
         autoGradeType.add(new Radio<>("manual-grading", Model.of(AttendanceConstants.GRADING_METHOD_NONE)));
