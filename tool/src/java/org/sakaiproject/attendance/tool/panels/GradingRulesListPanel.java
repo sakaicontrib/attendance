@@ -11,6 +11,7 @@ import org.apache.wicket.markup.repeater.data.ListDataProvider;
 import org.apache.wicket.model.IModel;
 import org.sakaiproject.attendance.model.AttendanceSite;
 import org.sakaiproject.attendance.model.GradingRule;
+import org.sakaiproject.attendance.util.AttendanceConstants;
 
 import java.text.MessageFormat;
 import java.util.List;
@@ -20,6 +21,7 @@ import java.util.List;
  */
 public class GradingRulesListPanel extends BasePanel {
     private static final long serialVersionUID = 1L;
+    private final IModel<Integer> selectedGradingMethodModel;
 
     Form<Void> regradeForm;
     private boolean needRegrade;
@@ -29,6 +31,7 @@ public class GradingRulesListPanel extends BasePanel {
 
         this.pageFeedbackPanel = feedbackPanel;
         this.needRegrade = needRegrade;
+        this.selectedGradingMethodModel = selectedGradingMethodModel;
 
         final ListDataProvider<GradingRule> rulesProvider = new ListDataProvider<>() {
             @Override
@@ -41,13 +44,19 @@ public class GradingRulesListPanel extends BasePanel {
             @Override
             protected void populateItem(Item<GradingRule> item) {
                 GradingRule gradingRule = item.getModelObject();
-                final Label rule = new Label("rule",
+                Label rule = new Label("rule",
                         MessageFormat.format(getString("attendance.settings.grading.rule.sentence"),
                                 String.valueOf(gradingRule.getPoints()),
                                 getStatusString(gradingRule.getStatus()),
                                 String.valueOf(gradingRule.getStartRange()),
                                 String.valueOf(gradingRule.getEndRange())
                         ));
+                if (selectedGradingMethodModel != null && selectedGradingMethodModel.getObject().equals(AttendanceConstants.GRADING_METHOD_MULTIPLY)) {
+                    rule.setDefaultModelObject(MessageFormat.format(getString("attendance.settings.grading.rule.sentence.multiply"),
+                            String.valueOf(gradingRule.getPoints()),
+                            getStatusString(gradingRule.getStatus())
+                    ));
+                }
                 rule.setEscapeModelStrings(false);
                 item.add(rule);
                 final Form<GradingRule> deleteForm = new Form<>("delete-form", item.getModel());
