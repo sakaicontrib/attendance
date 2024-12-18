@@ -19,7 +19,20 @@ package org.sakaiproject.attendance.model;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.NamedQueries;
+import org.hibernate.annotations.NamedQuery;
+import org.hibernate.annotations.Type;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -29,16 +42,45 @@ import java.util.Date;
 @Data
 @EqualsAndHashCode(of = "id")
 @NoArgsConstructor
+@Entity(name = "GradingRule")
+@Table(name = "ATTENDANCE_RULE_T", uniqueConstraints = {
+        @UniqueConstraint(name = "UK_ATTENDANCE_RULE", columnNames = {"A_SITE_ID", "STATUS", "START_RANGE", "END_RANGE"})
+})
+@NamedQueries({
+        @NamedQuery(
+                name = "getGradingRulesForSite",
+                query = "from GradingRule gradingRule JOIN FETCH gradingRule.attendanceSite WHERE gradingRule.attendanceSite = :attendanceSite"
+        )
+})
 public class GradingRule implements Serializable {
     private static final long serialVersionUID = 1L;
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "GRADING_RULE_ID", updatable = false, nullable = false)
     private Long id;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "A_SITE_ID", nullable = false)
     private AttendanceSite attendanceSite;
+
+    @Column(name = "STATUS", nullable = false)
+    @Type(type = "org.sakaiproject.attendance.types.StatusUserType")
     private Status status;
+
+    @Column(name = "START_RANGE", nullable = false)
     private Integer startRange;
+
+    @Column(name = "END_RANGE")
     private Integer endRange;
+
+    @Column(name = "POINTS", nullable = false)
     private Double points;
+
+    @Column(name = "LAST_MODIFIED_BY", nullable = false, length = 99)
     private String lastModifiedBy;
+
+    @Column(name = "LAST_MODIFIED_DATE", nullable = false)
     private Date lastModifiedDate;
 
     public GradingRule(AttendanceSite attendanceSite) {

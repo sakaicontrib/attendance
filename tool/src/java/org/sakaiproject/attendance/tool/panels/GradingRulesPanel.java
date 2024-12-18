@@ -93,7 +93,6 @@ public class GradingRulesPanel extends BasePanel {
                     gradingRule.setStartRange(1);
                     gradingRule.setEndRange(999);
                 }
-                // TODO we should check for duplicate rules here
 
                 if (gradingRule.getStartRange() < 0) {
                     rulesFeedbackPanel.error(getString("attendance.grading.start.range.error"));
@@ -101,11 +100,29 @@ public class GradingRulesPanel extends BasePanel {
                     rulesFeedbackPanel.error(getString("attendance.grading.end.range.error"));
                 } else if (gradingRule.getEndRange() != null && gradingRule.getEndRange() < gradingRule.getStartRange()) {
                     rulesFeedbackPanel.error(getString("attendance.grading.end.start.error"));
-                } else if (attendanceLogic.addGradingRule(gradingRule)) {
-                    rulesFeedbackPanel.info(getString("attendance.grading.add.rule.success"));
-                    target.add(form);
-                    gradingRulesListPanel.setNeedRegrade(true);
-                    target.add(gradingRulesListPanel);
+                } else {
+                    // Check for duplicate rules
+                    boolean isDuplicate = false;
+                    List<GradingRule> existingRules = attendanceLogic.getGradingRulesForSite(attendanceLogic.getCurrentAttendanceSite());
+                    for (GradingRule existingRule : existingRules) {
+                        if (existingRule.getStatus().equals(gradingRule.getStatus()) &&
+                                existingRule.getStartRange().equals(gradingRule.getStartRange()) &&
+                                Objects.equals(existingRule.getEndRange(), gradingRule.getEndRange())) {
+                            isDuplicate = true;
+                            break; // No need to continue checking once a duplicate is found
+                        }
+                    }
+
+                    if (isDuplicate) {
+                        rulesFeedbackPanel.error(getString("attendance.grading.rule.duplicate"));
+                    } else if (attendanceLogic.addGradingRule(gradingRule)) {
+                        rulesFeedbackPanel.info(getString("attendance.grading.add.rule.success"));
+                        target.add(form);
+                        gradingRulesListPanel.setNeedRegrade(true);
+                        target.add(gradingRulesListPanel);
+                    } else {
+                        rulesFeedbackPanel.error(getString("attendance.grading.add.rule.error"));
+                    }
                 }
                 target.add(rulesFeedbackPanel);
             }
