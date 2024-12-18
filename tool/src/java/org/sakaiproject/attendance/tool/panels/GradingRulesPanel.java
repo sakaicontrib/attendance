@@ -37,7 +37,7 @@ import java.util.*;
 public class GradingRulesPanel extends BasePanel {
     private static final long serialVersionUID = 1L;
 
-    private GradingRulesListPanel gradingRulesListPanel;
+    private final GradingRulesListPanel gradingRulesListPanel;
 
     public GradingRulesPanel(String id) {
         super(id);
@@ -133,7 +133,5 @@ public class GradingRulesPanel extends BasePanel {
         gradingRulesListPanel.setOutputMarkupId(true);
 
         add(gradingRulesListPanel);
-
-
     }
 }
