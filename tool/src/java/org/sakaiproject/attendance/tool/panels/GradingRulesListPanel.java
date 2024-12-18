@@ -20,17 +20,15 @@ import java.util.List;
  */
 public class GradingRulesListPanel extends BasePanel {
     private static final long serialVersionUID = 1L;
-    private final IModel<Integer> selectedGradingMethodModel;
 
     Form<Void> regradeForm;
-
     private boolean needRegrade;
 
     public GradingRulesListPanel(String id, IModel<AttendanceSite> model, FeedbackPanel feedbackPanel, boolean needRegrade, IModel<Integer> selectedGradingMethodModel) {
         super(id, model);
+
         this.pageFeedbackPanel = feedbackPanel;
         this.needRegrade = needRegrade;
-        this.selectedGradingMethodModel = selectedGradingMethodModel;
 
         final ListDataProvider<GradingRule> rulesProvider = new ListDataProvider<>() {
             @Override
@@ -52,7 +50,6 @@ public class GradingRulesListPanel extends BasePanel {
                         ));
                 rule.setEscapeModelStrings(false);
                 item.add(rule);
-
                 final Form<GradingRule> deleteForm = new Form<>("delete-form", item.getModel());
                 item.add(deleteForm);
 
@@ -93,10 +90,7 @@ public class GradingRulesListPanel extends BasePanel {
         this.regradeForm.setOutputMarkupId(true);
         this.regradeForm.setOutputMarkupPlaceholderTag(true);
 
-        // Set the form's visibility based on needRegrade
-        this.regradeForm.setVisible(needRegrade);
-
-        this.regradeForm.add(new AjaxButton("regrade-submit1") {
+        this.regradeForm.add(new AjaxButton("regrade-submit1", regradeForm) {
             @Override
             protected void onSubmit(AjaxRequestTarget target) {
                 super.onSubmit(target);
@@ -119,6 +113,13 @@ public class GradingRulesListPanel extends BasePanel {
         });
 
         add(regradeForm);
+    }
+
+    @Override
+    protected void onConfigure() {
+        super.onConfigure();
+        // Set the form's visibility based on needRegrade during each render cycle
+        regradeForm.setVisible(needRegrade);
     }
 
     void setNeedRegrade(boolean needRegrade) {
