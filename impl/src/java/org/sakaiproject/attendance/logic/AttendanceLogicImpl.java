@@ -865,12 +865,18 @@ public class AttendanceLogicImpl implements AttendanceLogic, EntityTransferrer {
 						break;
 				}
 
-				if (statusTotal != null && attendanceSite.getGradingMethod() == AttendanceConstants.GRADING_METHOD_MULTIPLY) {
-					// Multiply the number of occurrences of the status by the rule's points and then add to the total points (loop of mutiple rules)
-					totalPoints = Double.sum(totalPoints, Math.round(statusTotal * rule.getPoints() * 100.0) / 100.0); // Avoid floating point errors
+				if (statusTotal == null) {
+					log.debug("No status total for rule: {}", rule);
 				}
-				else if (statusTotal != null && (statusTotal >= rule.getStartRange() && (rule.getEndRange() == null || statusTotal <= rule.getEndRange()))) {
+				else if (attendanceSite.getGradingMethod() == AttendanceConstants.GRADING_METHOD_MULTIPLY) {
+					// Multiply the number of occurrences of the status by the rule's points and then add to the total points (loop of mutiple rules)
+					double newPoints = Math.round(statusTotal * rule.getPoints() * 100.0) / 100.0; // Avoid floating point errors
+					totalPoints = Double.sum(totalPoints, newPoints);
+					log.debug("Multiply Rule: {} Status: {} Total: {} Points: {} New Points: {} Total Points: {}", rule, rule.getStatus(), statusTotal, rule.getPoints(), newPoints, totalPoints);
+				}
+				else if (statusTotal >= rule.getStartRange() && (rule.getEndRange() == null || statusTotal <= rule.getEndRange())) {
 					totalPoints = Double.sum(totalPoints, rule.getPoints());
+					log.debug("Add Rule: {} Status: {} Total: {} Points: {} Total Points: {}", rule, rule.getStatus(), statusTotal, rule.getPoints(), totalPoints);
 				}
 			}
 		}

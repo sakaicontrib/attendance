@@ -23,8 +23,10 @@ import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.feedback.FeedbackMessage;
 import org.apache.wicket.markup.html.form.*;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
+import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
+import org.sakaiproject.attendance.model.AttendanceSite;
 import org.sakaiproject.attendance.model.AttendanceStatus;
 import org.sakaiproject.attendance.model.GradingRule;
 import org.sakaiproject.attendance.model.Status;
@@ -37,31 +39,32 @@ import java.util.*;
 public class GradingRulesPanel extends BasePanel {
     private static final long serialVersionUID = 1L;
 
-    private final GradingRulesListPanel gradingRulesListPanel;
+    private GradingRulesListPanel gradingRulesListPanel;
 
     public GradingRulesPanel(String id) {
         super(id);
 
-        enable(new FeedbackPanel("rules-feedback"){
-
+        FeedbackPanel rulesFeedbackPanel = new FeedbackPanel("rules-feedback") {
             @Override
             protected Component newMessageDisplayComponent(final String id, final FeedbackMessage message) {
                 final Component newMessageDisplayComponent = super.newMessageDisplayComponent(id, message);
 
-                if(message.getLevel() == FeedbackMessage.ERROR ||
+                if (message.getLevel() == FeedbackMessage.ERROR ||
                         message.getLevel() == FeedbackMessage.DEBUG ||
                         message.getLevel() == FeedbackMessage.FATAL ||
-                        message.getLevel() == FeedbackMessage.WARNING){
+                        message.getLevel() == FeedbackMessage.WARNING) {
                     add(AttributeModifier.replace("class", "alertMessage"));
-                } else if(message.getLevel() == FeedbackMessage.INFO){
+                } else if (message.getLevel() == FeedbackMessage.INFO) {
                     add(AttributeModifier.replace("class", "messageSuccess"));
                 }
 
                 return newMessageDisplayComponent;
             }
-        });
-        this.pageFeedbackPanel.setOutputMarkupId(true);
-        add(this.pageFeedbackPanel);
+        };
+
+        enable(rulesFeedbackPanel);
+        rulesFeedbackPanel.setOutputMarkupId(true);
+        add(rulesFeedbackPanel);
 
         // Backing object
         final GradingRule gradingRule = new GradingRule(attendanceLogic.getCurrentAttendanceSite());
@@ -81,24 +84,24 @@ public class GradingRulesPanel extends BasePanel {
                 final GradingRule gradingRule = (GradingRule) getForm().getModelObject();
 
                 if (gradingRule.getStartRange() < 0) {
-                    pageFeedbackPanel.error(getString("attendance.grading.start.range.error"));
+                    rulesFeedbackPanel.error(getString("attendance.grading.start.range.error"));
                 } else if (gradingRule.getEndRange() != null && gradingRule.getEndRange() < 0) {
-                    pageFeedbackPanel.error(getString("attendance.grading.end.range.error"));
+                    rulesFeedbackPanel.error(getString("attendance.grading.end.range.error"));
                 } else if (gradingRule.getEndRange() != null && gradingRule.getEndRange() < gradingRule.getStartRange()) {
-                    pageFeedbackPanel.error(getString("attendance.grading.end.start.error"));
+                    rulesFeedbackPanel.error(getString("attendance.grading.end.start.error"));
                 } else {
                     attendanceLogic.addGradingRule(gradingRule);
-                    pageFeedbackPanel.info(getString("attendance.grading.add.rule.success"));
+                    rulesFeedbackPanel.info(getString("attendance.grading.add.rule.success"));
                     target.add(form);
                     gradingRulesListPanel.setNeedRegrade(true);
                     target.add(gradingRulesListPanel);
                 }
-                target.add(pageFeedbackPanel);
+                target.add(rulesFeedbackPanel);
             }
 
             @Override
             protected void onError(AjaxRequestTarget target) {
-                target.add(pageFeedbackPanel);
+                target.add(rulesFeedbackPanel);
             }
         };
         form.add(addRuleButton);
@@ -129,7 +132,8 @@ public class GradingRulesPanel extends BasePanel {
 
         add(form);
 
-        gradingRulesListPanel = new GradingRulesListPanel("rules-list", pageFeedbackPanel, false);
+        IModel<AttendanceSite> siteModel = new Model<AttendanceSite>(attendanceLogic.getCurrentAttendanceSite());
+        gradingRulesListPanel = new GradingRulesListPanel("rules-list", siteModel, rulesFeedbackPanel, false);
         gradingRulesListPanel.setOutputMarkupId(true);
 
         add(gradingRulesListPanel);

@@ -18,10 +18,10 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:wicket="http://wicket.apache.org">
 <body>
 <wicket:panel>
-    <form wicket:id="regrade-form1" class="alert alert-warning">
-        <input type="submit" wicket:id="regrade-submit1" wicket:message="value:attendance.settings.grading.regrade" />
+    <div wicket:id="regrade-form1" class="alert alert-warning">
+        <button wicket:id="regrade-submit1"><wicket:message key="attendance.settings.grading.regrade" /></button>
         <span><wicket:message key="attendance.settings.grading.regrade.info" /></span>
-    </form>
+    </div>
     <h3><wicket:message key="attendance.settings.grading.rules"/></h3>
     <ul class="rulesList">
         <li wicket:id="rules">

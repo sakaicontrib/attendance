@@ -283,7 +283,7 @@ public class AttendanceDaoImpl extends HibernateDaoSupport implements Attendance
 	 * {@inheritDoc}
 	 */
 	public AttendanceGrade getAttendanceGrade(final Long id) {
-		log.debug("getAttendanceGrade, id: " + id.toString());
+        log.debug("getAttendanceGrade, id: {}", id.toString());
 
 		return (AttendanceGrade) getByIDHelper(id, QUERY_GET_ATTENDANCE_GRADE_BY_ID);
 	}
@@ -301,7 +301,7 @@ public class AttendanceDaoImpl extends HibernateDaoSupport implements Attendance
 					.setParameter(USER_ID, userID)
 					.uniqueResult());
 		} catch (DataAccessException e) {
-			log.error("Failed to get AttendanceGrade for " + userID + " in " + aS.getSiteID());
+            log.error("Failed to get AttendanceGrade for {} in {}", userID, aS.getSiteID());
 			return null;
 		}
 	}
@@ -319,7 +319,7 @@ public class AttendanceDaoImpl extends HibernateDaoSupport implements Attendance
 					.setParameter(ATTENDANCE_SITE, aS)
 					.getResultList());
 		} catch (DataAccessException e) {
-			log.error("DataAccessException getting AttendanceGrades for " + aS.getSiteID() + ". E:", e);
+            log.error("DataAccessException getting AttendanceGrades for {}. E:", aS.getSiteID(), e);
 			return null;
 		}
 	}
