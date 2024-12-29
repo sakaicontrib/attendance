@@ -48,6 +48,17 @@ public class GradingRulesPanel extends BasePanel {
     public GradingRulesPanel(String id, IModel<Integer> selectedGradingMethodModel, IModel<AttendanceSite> siteModel) {
         super(id);
         this.selectedGradingMethodModel = selectedGradingMethodModel;
+        setOutputMarkupPlaceholderTag(true);
+
+        // Add a behavior to control visibility based on selectedGradingMethodModel
+        add(new Behavior() {
+            @Override
+            public void onConfigure(Component component) {
+                super.onConfigure(component);
+                Integer selectedMethod = selectedGradingMethodModel.getObject();
+                component.setVisible(selectedMethod != null && selectedMethod != AttendanceConstants.GRADING_METHOD_NONE);
+            }
+        });
 
         FeedbackPanel rulesFeedbackPanel = new FeedbackPanel("rules-feedback") {
             @Override
