@@ -99,7 +99,7 @@ public class GradingRulesPanel extends BasePanel {
 
                 final GradingRule gradingRule = (GradingRule) getForm().getModelObject();
 
-                // We are sharing some rules table so just fake the start and end range for multiply
+                // We are sharing the rules table so just fake the start and end range for multiply
                 if (selectedGradingMethodModel != null && selectedGradingMethodModel.getObject().equals(AttendanceConstants.GRADING_METHOD_MULTIPLY)) {
                     gradingRule.setStartRange(1);
                     gradingRule.setEndRange(999);
@@ -155,7 +155,6 @@ public class GradingRulesPanel extends BasePanel {
         }
 
         final DropDownChoice<Status> status = new DropDownChoice<>("status", new PropertyModel<>(formModel, "status"), activeStatuses, new EnumChoiceRenderer<>(this));
-        status.setRequired(true);
         form.add(status);
 
         // Container for the start-range field
@@ -166,7 +165,6 @@ public class GradingRulesPanel extends BasePanel {
 
         // FROM
         final TextField<Integer> startRange = new TextField<>("start-range", new PropertyModel<Integer>(formModel, "startRange"));
-        startRange.setRequired(true);
         startRangeContainer.add(startRange);
 
         startRangeContainer.add(new Behavior() {
@@ -201,7 +199,6 @@ public class GradingRulesPanel extends BasePanel {
         });
 
         final TextField<Double> points = new TextField<>("points", new PropertyModel<Double>(formModel, "points"));
-        points.setRequired(true);
         form.add(points);
 
         add(form);

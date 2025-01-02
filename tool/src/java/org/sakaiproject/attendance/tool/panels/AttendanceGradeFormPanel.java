@@ -80,12 +80,61 @@ public class AttendanceGradeFormPanel extends BasePanel {
         return panel;
     }
 
+    private void updateAttendanceSiteGrading(AttendanceSite aS) {
+        CategoryParts catNow = null;
+        String categoryId = null;
+        if(attendanceGradebookProvider.doesGradebookHaveCategories(aS.getSiteID())){
+            catNow = (CategoryParts) gradebookCategories.getDefaultModelObject();
+            categoryId = catNow.getCategoryId();
+        }
+        aS.setGradingMethod(selectedGradingMethodModel.getObject());
+
+        if(aS.getMaximumGrade() == null && previousMaxGrade != null) {
+            aS.setSendToGradebook(false);
+            aS.setGradingMethod(0);
+        }
+
+        boolean result = attendanceLogic.updateAttendanceSite(aS);
+
+        if (result) {
+            if(aS.getSendToGradebook()){
+                if(previousSendToGradebook) { // if previously true, see if any relevant values have changed
+                    if(!previousName.equals(aS.getGradebookItemName()) || !previousMaxGrade.equals(aS.getMaximumGrade()) || (categoryId!=null && !previousCategory.equals(categoryId))){
+                        attendanceGradebookProvider.update(aS, categoryId);
+                    }
+                    if(attendanceGradebookProvider.doesGradebookHaveCategories(aS.getSiteID()) && attendanceGradebookProvider.getCategoryForItem(aS.getSiteID(), aS.getId())!=null) {
+                        previousCategory = String.valueOf(attendanceGradebookProvider.getCategoryForItem(aS.getSiteID(), aS.getId()));
+                    }
+                    previousName = aS.getGradebookItemName();
+                } else {
+                    attendanceGradebookProvider.create(aS, categoryId);
+                }
+            } else {
+                if(previousSendToGradebook) {
+                    attendanceGradebookProvider.remove(aS);
+                }
+            }
+
+            previousMaxGrade = aS.getMaximumGrade();
+            previousSendToGradebook = aS.getSendToGradebook();
+
+            // Successful Save - Regrade All if Auto Grade is set to true and maximum points is set
+            if (aS.getGradingMethod() != null && aS.getGradingMethod() > 0 && aS.getMaximumGrade() > 0) {
+                attendanceLogic.regradeAll(aS);
+            }
+
+            getSession().info(getString("attendance.settings.grading.success"));
+        } else {
+            getSession().error(getString("attendance.settings.grading.failure"));
+        }
+    }
+
     private Form<AttendanceSite> createSettingsForm() {
         final AttendanceSite aS = attendanceLogic.getCurrentAttendanceSite();
         this.previousSendToGradebook = aS.getSendToGradebook();
         this.previousName = aS.getGradebookItemName();
         this.previousMaxGrade = aS.getMaximumGrade();
-        this.selectedGradingMethodModel = new Model<>(aS.getGradingMethod() != null ? aS.getGradingMethod() : 0);
+        this.selectedGradingMethodModel = new Model<>(aS.getGradingMethod() != null ? aS.getGradingMethod() : AttendanceConstants.GRADING_METHOD_NONE);
         this.previousCategory = null;
         if(attendanceGradebookProvider.doesGradebookHaveCategories(aS.getSiteID()) && attendanceGradebookProvider.getCategoryForItem(aS.getSiteID(), aS.getId())!=null){
             this.previousCategory = String.valueOf(attendanceGradebookProvider.getCategoryForItem(aS.getSiteID(), aS.getId()));
@@ -94,53 +143,7 @@ public class AttendanceGradeFormPanel extends BasePanel {
             @Override
             public void onSubmit() {
                 AttendanceSite aS = (AttendanceSite) getDefaultModelObject();
-                CategoryParts catNow = null;
-                String categoryId = null;
-                if(attendanceGradebookProvider.doesGradebookHaveCategories(aS.getSiteID())){
-                    catNow = (CategoryParts) gradebookCategories.getDefaultModelObject();
-                    categoryId = catNow.getCategoryId();
-                }
-                aS.setGradingMethod(selectedGradingMethodModel.getObject());
-
-                if(aS.getMaximumGrade() == null && previousMaxGrade != null) {
-                    aS.setSendToGradebook(false);
-                    aS.setGradingMethod(0);
-                }
-
-                boolean result = attendanceLogic.updateAttendanceSite(aS);
-
-                if (result) {
-                    if(aS.getSendToGradebook()){
-                        if(previousSendToGradebook) { // if previously true, see if any relevant values have changed
-                            if(!previousName.equals(aS.getGradebookItemName()) || !previousMaxGrade.equals(aS.getMaximumGrade()) || (categoryId!=null && !previousCategory.equals(categoryId))){
-                                attendanceGradebookProvider.update(aS, categoryId);
-                            }
-                            if(attendanceGradebookProvider.doesGradebookHaveCategories(aS.getSiteID()) && attendanceGradebookProvider.getCategoryForItem(aS.getSiteID(), aS.getId())!=null) {
-                                previousCategory = String.valueOf(attendanceGradebookProvider.getCategoryForItem(aS.getSiteID(), aS.getId()));
-                            }
-                            previousName = aS.getGradebookItemName();
-                        } else {
-                            attendanceGradebookProvider.create(aS, categoryId);
-                        }
-                    } else {
-                        if(previousSendToGradebook) {
-                            attendanceGradebookProvider.remove(aS);
-                        }
-                    }
-
-                    previousMaxGrade = aS.getMaximumGrade();
-                    previousSendToGradebook = aS.getSendToGradebook();
-
-                    // Successful Save - Regrade All if Auto Grade is set to true and maximum points is set
-                    if (aS.getGradingMethod() != null && aS.getGradingMethod() > 0 && aS.getMaximumGrade() > 0) {
-                        attendanceLogic.regradeAll(aS);
-                    }
-
-                    getSession().info(getString("attendance.settings.grading.success"));
-                } else {
-                    getSession().error(getString("attendance.settings.grading.failure"));
-                }
-
+                updateAttendanceSiteGrading(aS);
             }
         };
 
@@ -255,7 +258,10 @@ public class AttendanceGradeFormPanel extends BasePanel {
         autoGradeType.add(new AjaxFormChoiceComponentUpdatingBehavior() {
             @Override
             protected void onUpdate(AjaxRequestTarget target) {
-                target.add(gradingRulesPanel); // Update the gradingRulesPanel
+                AttendanceSite currentSite = attendanceLogic.getCurrentAttendanceSite();
+                updateAttendanceSiteGrading(currentSite);
+                gradingRulesListPanel.setNeedRegrade(true);
+                target.add(gradingRulesPanel);
             }
         });
 

@@ -13,6 +13,8 @@ import org.sakaiproject.attendance.model.AttendanceSite;
 import org.sakaiproject.attendance.model.GradingRule;
 import org.sakaiproject.attendance.util.AttendanceConstants;
 
+import lombok.Setter;
+
 import java.text.MessageFormat;
 import java.util.List;
 
@@ -24,7 +26,7 @@ public class GradingRulesListPanel extends BasePanel {
     private final IModel<Integer> selectedGradingMethodModel;
 
     Form<Void> regradeForm;
-    private boolean needRegrade;
+    @Setter boolean needRegrade;
 
     public GradingRulesListPanel(String id, IModel<AttendanceSite> model, FeedbackPanel feedbackPanel, boolean needRegrade, IModel<Integer> selectedGradingMethodModel) {
         super(id, model);
@@ -132,11 +134,4 @@ public class GradingRulesListPanel extends BasePanel {
         regradeForm.setVisible(needRegrade);
     }
 
-    void setNeedRegrade(boolean needRegrade) {
-        this.needRegrade = needRegrade;
-    }
-
-    private boolean getNeedRegrade() {
-        return this.needRegrade;
-    }
 }
