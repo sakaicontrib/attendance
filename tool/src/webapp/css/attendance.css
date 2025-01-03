@@ -342,6 +342,13 @@ div.takeAttendanceContainer, div.itemInfoContainer, div.gradeContainer {
     margin: 2em;
 }
 
+@media (max-width: 576px) {
+    div.takeAttendanceContainer, div.itemInfoContainer, div.gradeContainer, div.gradingContainer {
+        margin: 2em 0;
+        padding: 2em 0.25em;
+    }
+}
+
 div.itemInfoContainer {
     display: flex;
 }
