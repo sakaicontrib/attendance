@@ -25,6 +25,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.sakaiproject.attendance.api.AttendanceGradebookProvider;
 import org.sakaiproject.attendance.dao.AttendanceDao;
 import org.sakaiproject.attendance.model.*;
+import org.sakaiproject.attendance.util.AttendanceConstants;
 import org.sakaiproject.entity.api.Entity;
 import org.sakaiproject.entity.api.EntityManager;
 import org.sakaiproject.entity.api.EntityTransferrer;
@@ -837,9 +838,9 @@ public class AttendanceLogicImpl implements AttendanceLogic, EntityTransferrer {
 		final List<GradingRule> rules = getGradingRulesForSite(attendanceSite);
 		final AttendanceUserStats userStats = getStatsForUser(userId);
 
-		Double totalPoints = 0D;
+		double totalPoints = 0D;
 		Double maximumGrade = attendanceSite.getMaximumGrade();
-		if (attendanceSite.getAutoGradeBySubtraction() && maximumGrade != null) {
+		if (maximumGrade != null && attendanceSite.getGradingMethod() == AttendanceConstants.GRADING_METHOD_SUBTRACT) {
 			totalPoints = maximumGrade;
 		}
 
@@ -863,18 +864,25 @@ public class AttendanceLogicImpl implements AttendanceLogic, EntityTransferrer {
 						statusTotal = userStats.getLeftEarly();
 						break;
 				}
-				if (statusTotal != null && (statusTotal >= rule.getStartRange() && (rule.getEndRange() == null || statusTotal <= rule.getEndRange()))) {
+
+				if (statusTotal == null) {
+					log.debug("No status total for rule: {}", rule);
+				}
+				else if (attendanceSite.getGradingMethod() == AttendanceConstants.GRADING_METHOD_MULTIPLY) {
+					// Multiply the number of occurrences of the status by the rule's points and then add to the total points (loop of mutiple rules)
+					double newPoints = Math.round(statusTotal * rule.getPoints() * 100.0) / 100.0; // Avoid floating point errors
+					totalPoints = Double.sum(totalPoints, newPoints);
+					log.debug("Multiply Rule: {} Status: {} Total: {} Points: {} New Points: {} Total Points: {}", rule, rule.getStatus(), statusTotal, rule.getPoints(), newPoints, totalPoints);
+				}
+				else if (statusTotal >= rule.getStartRange() && (rule.getEndRange() == null || statusTotal <= rule.getEndRange())) {
 					totalPoints = Double.sum(totalPoints, rule.getPoints());
+					log.debug("Add Rule: {} Status: {} Total: {} Points: {} Total Points: {}", rule, rule.getStatus(), statusTotal, rule.getPoints(), totalPoints);
 				}
 			}
 		}
 
 		// Don't allow negative total points
-		if (totalPoints < 0D) {
-			return 0D;
-		} else {
-			return totalPoints;
-		}
+        return Math.max(totalPoints, 0D);
 	}
 
 	@Override

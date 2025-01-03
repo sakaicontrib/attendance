@@ -35,6 +35,7 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.ResourceModel;
 import org.sakaiproject.attendance.model.AttendanceGrade;
+import org.sakaiproject.attendance.model.AttendanceSite;
 import org.sakaiproject.attendance.model.AttendanceStatus;
 import org.sakaiproject.attendance.model.AttendanceUserStats;
 import org.sakaiproject.attendance.model.Status;
@@ -114,7 +115,11 @@ public class StudentOverview extends BasePage {
         Label               studentName     = new Label("header-student-name",       new ResourceModel("attendance.header.student"));
         Label               studentPhoto    = new Label("header-student-photo",       new ResourceModel("attendance.header.photo"));
         Label               grade           = new Label("header-grade",               new ResourceModel("attendance.header.grade"));
-        Label               totalPoints     = new Label("total-points", "Total: " + attendanceLogic.getCurrentAttendanceSite().getMaximumGrade());
+
+        AttendanceSite currentSite = attendanceLogic.getCurrentAttendanceSite();
+        Double maxGrade = currentSite.getMaximumGrade();
+        String totalPointsLabel = "Total: " + (maxGrade != null ? maxGrade : "0");
+        Label totalPoints = new Label("total-points", totalPointsLabel);
 
         DataView<AttendanceStatus> statusHeaders = new DataView<AttendanceStatus>("status-headers", attendanceStatusProvider) {
             @Override

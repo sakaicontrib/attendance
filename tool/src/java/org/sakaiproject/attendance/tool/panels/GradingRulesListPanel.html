@@ -18,7 +18,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:wicket="http://wicket.apache.org">
 <body>
 <wicket:panel>
-    <form wicket:id="regrade-form1" class="alert alert-warning">
+    <form wicket:id="regrade-form1" class="alert alert-info">
         <input type="submit" wicket:id="regrade-submit1" wicket:message="value:attendance.settings.grading.regrade" />
         <span><wicket:message key="attendance.settings.grading.regrade.info" /></span>
     </form>
@@ -26,7 +26,7 @@
     <ul class="rulesList">
         <li wicket:id="rules">
             <span wicket:id="rule" />
-            <form wicket:id="delete-form">
+            <form wicket:id="delete-form" class="d-inline-block">
                 <input type="submit" wicket:id="delete-rule-button" wicket:message="value:attendance.settings.grading.delete.rule" />
             </form>
         </li>

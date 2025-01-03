@@ -87,6 +87,24 @@
 		<property name="gradingService" ref="org.sakaiproject.grading.api.GradingService" />
 	</bean>
 
+  <!-- Add our annotated classes to the Sakai global session factory -->
+  <bean id="org.sakaiproject.attendance.annotated.MappingList"
+      class="org.sakaiproject.springframework.orm.hibernate.impl.AdditionalHibernateMappingsImpl">
+
+    <property name="annotatedClasses">
+      <list>
+        <value>org.sakaiproject.attendance.model.GradingRule</value>
+        <value>org.sakaiproject.attendance.model.AttendanceEvent</value>
+        <value>org.sakaiproject.attendance.model.AttendanceGrade</value>
+        <value>org.sakaiproject.attendance.model.AttendanceItemStats</value>
+        <value>org.sakaiproject.attendance.model.AttendanceRecord</value>
+        <value>org.sakaiproject.attendance.model.AttendanceSite</value>
+        <value>org.sakaiproject.attendance.model.AttendanceStatus</value>
+        <value>org.sakaiproject.attendance.model.AttendanceUserStats</value>
+      </list>
+    </property>
+  </bean>
+
 	<!-- Add our HBM files to the Sakai global session factory -->
 	<bean id="org.sakaiproject.attendance.hbm.HBMMappingList"
 		  class="org.sakaiproject.springframework.orm.hibernate.impl.AdditionalHibernateMappingsImpl">
@@ -100,10 +118,8 @@
 				<value>org/sakaiproject/attendance/hbm/AttendanceSite.hbm.xml</value>
 				<value>org/sakaiproject/attendance/hbm/AttendanceStatus.hbm.xml</value>
 				<value>org/sakaiproject/attendance/hbm/AttendanceUserStats.hbm.xml</value>
-				<value>org/sakaiproject/attendance/hbm/GradingRule.hbm.xml</value>
 			</list>
 		</property>
-
 	</bean>
 
 	<!-- Cache: ttl=1 hour -->

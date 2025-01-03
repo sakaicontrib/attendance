@@ -324,7 +324,7 @@ div.activeStatusContainer, div.commentContainer, div.gradingContainer {
 }
 
 div.rulesContainer {
-    margin: 0 4em 1em 4em;
+    margin: 1em 4em 1em 4em;
     padding: 0 2em;
     border: 1px solid #ccc;
 }
@@ -634,11 +634,6 @@ span.attendanceAlertMessage:before {
     font-size:18px;
 }
 
-span.gradingType > div div label {
-    font-size: 1em;
-    margin-left: 4em;
-}
-
 span.totalPointsColHeader {
     font-size: .75em;
 }
@@ -655,7 +650,7 @@ div.addRulesContainer {
     border-bottom:1px solid #ccc;
 }
 
-form.addRuleForm div {
+.addRuleForm div {
     display: inline-block;
     margin-right: 8px;
 }
