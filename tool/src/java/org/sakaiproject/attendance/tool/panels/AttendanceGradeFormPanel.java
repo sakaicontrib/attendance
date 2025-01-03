@@ -260,7 +260,6 @@ public class AttendanceGradeFormPanel extends BasePanel {
             protected void onUpdate(AjaxRequestTarget target) {
                 AttendanceSite currentSite = attendanceLogic.getCurrentAttendanceSite();
                 updateAttendanceSiteGrading(currentSite);
-                gradingRulesListPanel.setNeedRegrade(true);
                 target.add(gradingRulesPanel);
             }
         });
