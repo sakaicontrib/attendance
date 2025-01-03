@@ -45,13 +45,13 @@
         <table id="takeAttendanceTable" class="table table-striped table-bordered">
             <thead>
             <tr class="div-table-row">
-                <th>
+                <th class="d-none d-sm-table-cell">
                     <span wicket:id="student-photo" />
                 </th>
-                <th class="col-sm-5">
+                <th class="col-sm-4">
                     <span wicket:id="student-name" />
                 </th>
-                <th class="row">
+                <th class="col-sm-8">
                     <div class="justify-flex-div" id="justify-flex-div" >
                         <span wicket:id="status-names">
                             <label class="status-label-centered" wicket:id="header-status-name" />
@@ -63,13 +63,13 @@
             </thead>
             <tbody>
             <tr wicket:id="records" class="div-table-row">
-                <td class="studentPhotoCol">
+                <td class="studentPhotoCol d-none d-sm-table-cell">
                     <img wicket:id="stu-photo"/>
                 </td>
-                <td>
+                <td class="col-sm-4">
                     <a wicket:id="stu-link"><span wicket:id="stu-name"></span></a>
                 </td>
-                <td id="attendanceStatusTd" class="attendanceStatusTd">
+                <td id="attendanceStatusTd" class="attendanceStatusTd col-sm-8">
                     <span wicket:id="dataPanelSlow"></span>
                 </td>
             </tr>
