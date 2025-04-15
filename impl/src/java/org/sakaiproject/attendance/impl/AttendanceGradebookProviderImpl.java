@@ -70,10 +70,10 @@ public class AttendanceGradebookProviderImpl implements AttendanceGradebookProvi
         }
         String aSUID = getAttendanceUID(aS);
         try {
-            gradingService.addExternalAssessment(siteID, aSUID, null, aS.getGradebookItemName(), aS.getMaximumGrade(), null, appName, null, false, categoryIdNumber);// add it to the gradebook
+            gradingService.addExternalAssessment(siteID, siteID, aSUID, null, aS.getGradebookItemName(), aS.getMaximumGrade(), null, appName, null, false, categoryIdNumber, null);// add it to the gradebook
 
             Map<String, String> scores = attendanceLogic.getAttendanceGradeScores();
-            gradingService.updateExternalAssessmentScoresString(siteID, aSUID, scores);
+            gradingService.updateExternalAssessmentScoresString(siteID, siteID, aSUID, scores);
             returnVal = true;
         } catch (Exception e) {
             log.warn("Error creating external GB", e);
@@ -91,7 +91,7 @@ public class AttendanceGradebookProviderImpl implements AttendanceGradebookProvi
         String aUID = getAttendanceUID(aS);
         if(gradingService.isExternalAssignmentDefined(siteID, aUID)) {
             try {
-                gradingService.removeExternalAssignment(siteID, aUID);
+                gradingService.removeExternalAssignment(siteID, siteID, aUID);
                 return true;
             } catch (AssessmentNotFoundException e) {
                 log.warn("Attempted to remove AttendanceSite {} from GB failed. Assessment not found", siteID, e);
@@ -142,7 +142,7 @@ public class AttendanceGradebookProviderImpl implements AttendanceGradebookProvi
             if(isAssessmentDefined(siteID, aSUID)) {
                 // exists, update current grade
                 String grade = aG.getGrade() == null ? null : aG.getGrade().toString();
-                gradingService.updateExternalAssessmentScore(siteID, aSUID, aG.getUserID(), grade);
+                gradingService.updateExternalAssessmentScore(siteID, siteID, aSUID, aG.getUserID(), grade);
                 return true;
             } else {
                 //does not exist, add to GB and add all grades
@@ -158,7 +158,7 @@ public class AttendanceGradebookProviderImpl implements AttendanceGradebookProvi
             return null;
         }
         Map<String,String> categoryMap = new HashMap<>();
-        List<CategoryDefinition> categories = gradingService.getCategoryDefinitions(gbUID);
+        List<CategoryDefinition> categories = gradingService.getCategoryDefinitions(gbUID, gbUID);
         for(CategoryDefinition d: categories){
             categoryMap.put(d.getId().toString(),d.getName());
         }
@@ -173,7 +173,7 @@ public class AttendanceGradebookProviderImpl implements AttendanceGradebookProvi
      * {@inheritDoc}
      */
     public boolean isGradebookAssignmentDefined(String gbUID, String title) {
-        return gradingService.isAssignmentDefined(gbUID, title);
+        return gradingService.isAssignmentDefined(gbUID, gbUID, title);
     }
 
     /**
