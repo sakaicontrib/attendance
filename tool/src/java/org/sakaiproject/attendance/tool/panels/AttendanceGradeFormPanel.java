@@ -119,7 +119,7 @@ public class AttendanceGradeFormPanel extends BasePanel {
             previousSendToGradebook = aS.getSendToGradebook();
 
             // Successful Save - Regrade All if Auto Grade is set to true and maximum points is set
-            if (aS.getGradingMethod() != null && aS.getGradingMethod() > 0 && aS.getMaximumGrade() > 0) {
+            if (aS.getGradingMethod() != null && aS.getGradingMethod() > 0 && aS.getMaximumGrade() != null && aS.getMaximumGrade() > 0) {
                 attendanceLogic.regradeAll(aS);
             }
 
@@ -167,6 +167,14 @@ public class AttendanceGradeFormPanel extends BasePanel {
             @Override
             protected void onUpdate(AjaxRequestTarget target) {
                 target.add(grading);
+            }
+        });
+        maximum.add(new AjaxFormComponentUpdatingBehavior("blur") {
+            @Override
+            protected void onUpdate(AjaxRequestTarget target) {
+                AttendanceSite aS = (AttendanceSite) aSForm.getDefaultModelObject();
+                updateAttendanceSiteGrading(aS);
+                target.add(pageFeedbackPanel);
             }
         });
         aSForm.add(maximum);
