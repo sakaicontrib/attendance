@@ -198,6 +198,17 @@ public class AttendanceDaoImpl extends HibernateDaoSupport implements Attendance
 	 */
     public boolean updateAttendanceRecord(AttendanceRecord aR) {
         try {
+            // Guard against duplicates on unique key (userID + attendanceEvent)
+            if (aR.getId() == null && aR.getAttendanceEvent() != null && aR.getUserID() != null) {
+                AttendanceRecord existing = (AttendanceRecord) getHibernateTemplate().execute(session -> session
+                    .createQuery("from AttendanceRecord r where r.attendanceEvent = :attendanceEvent and r.userID = :userId")
+                    .setParameter("attendanceEvent", aR.getAttendanceEvent())
+                    .setParameter("userId", aR.getUserID())
+                    .uniqueResult());
+                if (existing != null) {
+                    aR.setId(existing.getId());
+                }
+            }
             getHibernateTemplate().merge(aR);
             return true;
         } catch (Exception e) {
@@ -212,7 +223,7 @@ public class AttendanceDaoImpl extends HibernateDaoSupport implements Attendance
     public void updateAttendanceRecords(List<AttendanceRecord> aRs) {
         for(AttendanceRecord aR : aRs) {
             try {
-                getHibernateTemplate().merge(aR);
+                updateAttendanceRecord(aR);
                 log.debug("save attendanceRecord id: " + aR.getId());
             } catch (Exception e) {
                 log.error("update attendanceRecords failed.", e);
@@ -459,7 +470,9 @@ public class AttendanceDaoImpl extends HibernateDaoSupport implements Attendance
             log.debug("updateAttendanceItemStats, '{}', for Event '{}' and site: '{}'.", aIS.getId(), aIS.getAttendanceEvent().getName(), aIS.getAttendanceEvent().getAttendanceSite().getSiteID());
 
         try {
-            getHibernateTemplate().merge(aIS);
+            // For shared PK one-to-one (foreign id) mapping, use saveOrUpdate to
+            // let Hibernate assign id from the associated AttendanceEvent.
+            getHibernateTemplate().saveOrUpdate(aIS);
             return true;
         } catch (DataAccessException e) {
             log.error("updateAttendanceItemStats, '" + aIS.getId() + "' failed.", e);
