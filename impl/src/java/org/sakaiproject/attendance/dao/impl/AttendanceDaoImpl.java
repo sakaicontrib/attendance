@@ -91,15 +91,15 @@ public class AttendanceDaoImpl extends HibernateDaoSupport implements Attendance
 	/**
 	 * {@inheritDoc}
 	 */
-	public boolean updateAttendanceSite(AttendanceSite aS) {
-		try{
-			getHibernateTemplate().saveOrUpdate(aS);
-			return true;
-		} catch (DataAccessException e) {
-			log.error("updateAttendanceSite aS '" + aS.getSiteID() + "' failed.", e);
-			return false;
-		}
-	}
+    public boolean updateAttendanceSite(AttendanceSite aS) {
+        try{
+            getHibernateTemplate().merge(aS);
+            return true;
+        } catch (DataAccessException e) {
+            log.error("updateAttendanceSite aS '" + aS.getSiteID() + "' failed.", e);
+            return false;
+        }
+    }
 
 	/**
 	 * {@inheritDoc}
@@ -138,17 +138,17 @@ public class AttendanceDaoImpl extends HibernateDaoSupport implements Attendance
 	/**
 	 * {@inheritDoc}
 	 */
-	public boolean updateAttendanceEvent(AttendanceEvent aE) {
-		log.debug("updateAttendanceEvent aE: {}", aE.getName());
+    public boolean updateAttendanceEvent(AttendanceEvent aE) {
+        log.debug("updateAttendanceEvent aE: {}", aE.getName());
 
-		try{
-			getHibernateTemplate().saveOrUpdate(aE);
-			return true;
-		} catch (DataAccessException e){
-			log.error("updateAttendanceEvent failed.", e);
-			return false;
-		}
-	}
+        try{
+            getHibernateTemplate().merge(aE);
+            return true;
+        } catch (DataAccessException e){
+            log.error("updateAttendanceEvent failed.", e);
+            return false;
+        }
+    }
 
 	/**
 	 * {@inheritDoc}
@@ -196,43 +196,43 @@ public class AttendanceDaoImpl extends HibernateDaoSupport implements Attendance
 	/**
 	 * {@inheritDoc}
 	 */
-	public boolean updateAttendanceRecord(AttendanceRecord aR) {
-		try {
-			getHibernateTemplate().saveOrUpdate(aR);
-			return true;
-		} catch (Exception e) {
-			log.error("update attendanceRecord failed.", e);
-			return false;
-		}
-	}
+    public boolean updateAttendanceRecord(AttendanceRecord aR) {
+        try {
+            getHibernateTemplate().merge(aR);
+            return true;
+        } catch (Exception e) {
+            log.error("update attendanceRecord failed.", e);
+            return false;
+        }
+    }
 
 	/**
 	 * {@inheritDoc}
 	 */
-	public void updateAttendanceRecords(List<AttendanceRecord> aRs) {
-		for(AttendanceRecord aR : aRs) {
-			try {
-				getHibernateTemplate().saveOrUpdate(aR);
-				log.debug("save attendanceRecord id: " + aR.getId());
-			} catch (Exception e) {
-				log.error("update attendanceRecords failed.", e);
-			}
-		}
-	}
+    public void updateAttendanceRecords(List<AttendanceRecord> aRs) {
+        for(AttendanceRecord aR : aRs) {
+            try {
+                getHibernateTemplate().merge(aR);
+                log.debug("save attendanceRecord id: " + aR.getId());
+            } catch (Exception e) {
+                log.error("update attendanceRecords failed.", e);
+            }
+        }
+    }
 
 	/**
 	 * {@inheritDoc}
      */
-	public void updateAttendanceStatuses(List<AttendanceStatus> attendanceStatusList) {
-		for(AttendanceStatus aS : attendanceStatusList) {
-			try {
-				getHibernateTemplate().saveOrUpdate(aS);
-				log.debug("AttendanceStatus saved, id: " + aS.getId());
-			} catch (Exception e) {
-				log.error("update attendanceStatuses failed.", e);
-			}
-		}
-	}
+    public void updateAttendanceStatuses(List<AttendanceStatus> attendanceStatusList) {
+        for(AttendanceStatus aS : attendanceStatusList) {
+            try {
+                getHibernateTemplate().merge(aS);
+                log.debug("AttendanceStatus saved, id: " + aS.getId());
+            } catch (Exception e) {
+                log.error("update attendanceStatuses failed.", e);
+            }
+        }
+    }
 
 	/**
 	 * {@inheritDoc}
@@ -342,17 +342,17 @@ public class AttendanceDaoImpl extends HibernateDaoSupport implements Attendance
 	/**
 	 * {@inheritDoc}
 	 */
-	public boolean updateAttendanceGrade(AttendanceGrade aG) {
-		log.debug("updateAttendanceGrade for User '{}' grade {} for site  {}", aG.getUserID(), aG.getGrade(), aG.getAttendanceSite().getSiteID());
+    public boolean updateAttendanceGrade(AttendanceGrade aG) {
+        log.debug("updateAttendanceGrade for User '{}' grade {} for site  {}", aG.getUserID(), aG.getGrade(), aG.getAttendanceSite().getSiteID());
 
-		try {
-			getHibernateTemplate().saveOrUpdate(aG);
-			return true;
-		} catch (DataAccessException de) {
-			log.error("updateAttendanceGrade failed.", de);
-			return false;
-		}
-	}
+        try {
+            getHibernateTemplate().merge(aG);
+            return true;
+        } catch (DataAccessException de) {
+            log.error("updateAttendanceGrade failed.", de);
+            return false;
+        }
+    }
 
 	/**
 	 * {@inheritDoc}
@@ -393,17 +393,17 @@ public class AttendanceDaoImpl extends HibernateDaoSupport implements Attendance
 	/**
 	 * {@inheritDoc}
 	 */
-	public boolean updateAttendanceUserStats(AttendanceUserStats aUS) {
-		log.debug("updateAttendanceUserStats for User '{}' and Site: '{}'.", aUS.getUserID(), aUS.getAttendanceSite().getSiteID());
+    public boolean updateAttendanceUserStats(AttendanceUserStats aUS) {
+        log.debug("updateAttendanceUserStats for User '{}' and Site: '{}'.", aUS.getUserID(), aUS.getAttendanceSite().getSiteID());
 
-		try {
-			getHibernateTemplate().saveOrUpdate(aUS);
-			return true;
-		} catch (DataAccessException e) {
-    		log.error("updateAttendanceUserStats, id: '{}' failed.", aUS.getId(), e);
-			return false;
-		}
-	}
+        try {
+            getHibernateTemplate().merge(aUS);
+            return true;
+        } catch (DataAccessException e) {
+            log.error("updateAttendanceUserStats, id: '{}' failed.", aUS.getId(), e);
+            return false;
+        }
+    }
 
 	/**
 	 * {@inheritDoc}
@@ -455,17 +455,17 @@ public class AttendanceDaoImpl extends HibernateDaoSupport implements Attendance
 	/**
 	 * {@inheritDoc}
 	 */
-	public boolean updateAttendanceItemStats(AttendanceItemStats aIS) {
-			log.debug("updateAttendanceItemStats, '{}', for Event '{}' and site: '{}'.", aIS.getId(), aIS.getAttendanceEvent().getName(), aIS.getAttendanceEvent().getAttendanceSite().getSiteID());
+    public boolean updateAttendanceItemStats(AttendanceItemStats aIS) {
+            log.debug("updateAttendanceItemStats, '{}', for Event '{}' and site: '{}'.", aIS.getId(), aIS.getAttendanceEvent().getName(), aIS.getAttendanceEvent().getAttendanceSite().getSiteID());
 
-		try {
-			getHibernateTemplate().saveOrUpdate(aIS);
-			return true;
-		} catch (DataAccessException e) {
-			log.error("updateAttendanceItemStats, '" + aIS.getId() + "' failed.", e);
-			return false;
-		}
-	}
+        try {
+            getHibernateTemplate().merge(aIS);
+            return true;
+        } catch (DataAccessException e) {
+            log.error("updateAttendanceItemStats, '" + aIS.getId() + "' failed.", e);
+            return false;
+        }
+    }
 
 	/**
 	 * {@inheritDoc}
