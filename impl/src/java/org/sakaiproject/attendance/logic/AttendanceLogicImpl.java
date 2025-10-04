@@ -21,6 +21,7 @@ import java.util.*;
 
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.transaction.annotation.Transactional;
 
 import org.sakaiproject.attendance.api.AttendanceGradebookProvider;
 import org.sakaiproject.attendance.dao.AttendanceDao;
@@ -40,6 +41,7 @@ import org.sakaiproject.user.api.User;
  */
 @Setter
 @Slf4j
+@Transactional
 public class AttendanceLogicImpl implements AttendanceLogic, EntityTransferrer {
 
 	/**
