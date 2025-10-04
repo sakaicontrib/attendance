@@ -124,7 +124,7 @@ public class AttendanceStatCalcJob implements Job {
     }
 
     @Setter
-    private AttendanceStatCalc attendanceStatCalc;
+    private AttendanceStatCalcService attendanceStatCalc;
 
     @Setter
     private EventTrackingService eventTrackingService;

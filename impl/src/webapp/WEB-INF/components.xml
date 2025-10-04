@@ -16,7 +16,9 @@
   -->
 <beans xmlns="http://www.springframework.org/schema/beans"
 	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+	   xmlns:tx="http://www.springframework.org/schema/tx"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+	   		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
 
 	<!--  SakaiProxy -->
  	<bean id="org.sakaiproject.attendance.logic.SakaiProxy"
@@ -36,23 +38,17 @@
 
 	</bean>
 
-    <!-- DAO. This uses the DataSource that has already been setup by Sakai  -->
-	<bean id="org.sakaiproject.attendance.dao.AttendanceDaoTarget"
+    <!-- DAO uses the Sakai-managed DataSource via the global SessionFactory -->
+
+	<!-- Enable @Transactional annotations at the service layer -->
+	<!-- Use JDK proxies (default) to avoid forcing CGLIB across the shared context -->
+	<tx:annotation-driven transaction-manager="org.sakaiproject.springframework.orm.hibernate.GlobalTransactionManager" />
+
+	<!-- Attendance Data Access Object (no transaction proxy; transactions are managed in services) -->
+	<bean id="org.sakaiproject.attendance.dao.AttendanceDao"
 		  class="org.sakaiproject.attendance.dao.impl.AttendanceDaoImpl"
 		  init-method="init">
 		<property name="sessionFactory" ref="org.sakaiproject.springframework.orm.hibernate.GlobalSessionFactory" />
-	</bean>
-
-	<!-- Attendance Data Access Object -->
-	<bean id="org.sakaiproject.attendance.dao.AttendanceDao"
-		  class="org.sakaiproject.genericdao.springutil.CurrentClassLoaderTxProxyFactoryBean">
-		<property name="transactionManager" ref="org.sakaiproject.springframework.orm.hibernate.GlobalTransactionManager" />
-		<property name="target" ref="org.sakaiproject.attendance.dao.AttendanceDaoTarget" />
-		<property name="transactionAttributes">
-			<props>
-				<prop key="*">PROPAGATION_REQUIRED</prop>
-			</props>
-		</property>
 	</bean>
 
 	<!-- AttendanceLogic -->
@@ -153,5 +149,6 @@
 		<property name="dao" ref="org.sakaiproject.attendance.dao.AttendanceDao" />
 		<property name="sakaiProxy" ref="org.sakaiproject.attendance.logic.SakaiProxy" />
 		<property name="attendanceLogic" ref="org.sakaiproject.attendance.logic.AttendanceLogic" />
+		<property name="transactionManager" ref="org.sakaiproject.springframework.orm.hibernate.GlobalTransactionManager" />
 	</bean>
 </beans>
