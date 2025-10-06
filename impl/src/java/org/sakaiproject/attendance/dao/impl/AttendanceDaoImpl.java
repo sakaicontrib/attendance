@@ -56,10 +56,11 @@ public class AttendanceDaoImpl extends HibernateDaoSupport implements Attendance
 		HibernateCallback hcb = new HibernateCallback() {
 			@Override
 			public Object doInHibernate(Session session) throws HibernateException {
-				return session
-					.createQuery("from AttendanceSite s where s.siteID = :siteID")
-					.setParameter(SITE_ID, siteID)
-					.uniqueResult();
+				CriteriaBuilder cb = session.getCriteriaBuilder();
+				CriteriaQuery<AttendanceSite> cq = cb.createQuery(AttendanceSite.class);
+				Root<AttendanceSite> root = cq.from(AttendanceSite.class);
+				cq.select(root).where(cb.equal(root.get("siteID"), siteID));
+				return session.createQuery(cq).uniqueResult();
 			}
 		};
 
@@ -219,11 +220,16 @@ public class AttendanceDaoImpl extends HibernateDaoSupport implements Attendance
         try {
             // Guard against duplicates on unique key (userID + attendanceEvent)
             if (aR.getId() == null && aR.getAttendanceEvent() != null && aR.getUserID() != null) {
-                AttendanceRecord existing = (AttendanceRecord) getHibernateTemplate().execute(session -> session
-                    .createQuery("from AttendanceRecord r where r.attendanceEvent = :attendanceEvent and r.userID = :userId")
-                    .setParameter("attendanceEvent", aR.getAttendanceEvent())
-                    .setParameter("userId", aR.getUserID())
-                    .uniqueResult());
+                AttendanceRecord existing = (AttendanceRecord) getHibernateTemplate().execute(session -> {
+                    CriteriaBuilder cb = session.getCriteriaBuilder();
+                    CriteriaQuery<AttendanceRecord> cq = cb.createQuery(AttendanceRecord.class);
+                    Root<AttendanceRecord> root = cq.from(AttendanceRecord.class);
+                    cq.select(root).where(
+                        cb.equal(root.get("attendanceEvent"), aR.getAttendanceEvent()),
+                        cb.equal(root.get("userID"), aR.getUserID())
+                    );
+                    return session.createQuery(cq).uniqueResult();
+                });
                 if (existing != null) {
                     aR.setId(existing.getId());
                 }
@@ -272,10 +278,17 @@ public class AttendanceDaoImpl extends HibernateDaoSupport implements Attendance
 		log.debug("getActiveStatusesForSite(AttendanceSite {} )", attendanceSite.getSiteID());
 
 		try {
-			return getHibernateTemplate().execute(session -> session
-					.createQuery("from AttendanceStatus aStatus JOIN FETCH aStatus.attendanceSite where aStatus.attendanceSite = :attendanceSite and aStatus.isActive = true")
-					.setParameter(ATTENDANCE_SITE, attendanceSite)
-					.getResultList());
+			return getHibernateTemplate().execute(session -> {
+				CriteriaBuilder cb = session.getCriteriaBuilder();
+				CriteriaQuery<AttendanceStatus> cq = cb.createQuery(AttendanceStatus.class);
+				Root<AttendanceStatus> root = cq.from(AttendanceStatus.class);
+				root.fetch("attendanceSite", JoinType.INNER);
+				cq.select(root).where(
+					cb.equal(root.get("attendanceSite"), attendanceSite),
+					cb.isTrue(root.get("isActive"))
+				);
+				return session.createQuery(cq).getResultList();
+			});
 		} catch (DataAccessException e) {
 			log.error("getActiveStatusesForSite failed", e);
 			return null;
@@ -290,10 +303,14 @@ public class AttendanceDaoImpl extends HibernateDaoSupport implements Attendance
 		log.debug("getAllStatusesForSite(AttendanceSite attendanceSite)");
 
 		try {
-			return getHibernateTemplate().execute(session -> session
-					.createQuery("from AttendanceStatus aStatus JOIN FETCH aStatus.attendanceSite where aStatus.attendanceSite = :attendanceSite")
-					.setParameter(ATTENDANCE_SITE, attendanceSite)
-					.getResultList());
+			return getHibernateTemplate().execute(session -> {
+				CriteriaBuilder cb = session.getCriteriaBuilder();
+				CriteriaQuery<AttendanceStatus> cq = cb.createQuery(AttendanceStatus.class);
+				Root<AttendanceStatus> root = cq.from(AttendanceStatus.class);
+				root.fetch("attendanceSite", JoinType.INNER);
+				cq.select(root).where(cb.equal(root.get("attendanceSite"), attendanceSite));
+				return session.createQuery(cq).getResultList();
+			});
 		} catch (DataAccessException e) {
 			log.error("getAllStatusesForSite failed", e);
 			return null;
@@ -335,11 +352,17 @@ public class AttendanceDaoImpl extends HibernateDaoSupport implements Attendance
 		log.debug("getAttendanceGrades for user {} in site {}", userID, aS.getSiteID());
 
 		try{
-			return (AttendanceGrade) getHibernateTemplate().execute(session -> session
-					.createQuery("from AttendanceGrade aGrade JOIN FETCH aGrade.attendanceSite WHERE aGrade.attendanceSite = :attendanceSite AND aGrade.userID = :userID")
-					.setParameter(ATTENDANCE_SITE, aS)
-					.setParameter(USER_ID, userID)
-					.uniqueResult());
+			return (AttendanceGrade) getHibernateTemplate().execute(session -> {
+				CriteriaBuilder cb = session.getCriteriaBuilder();
+				CriteriaQuery<AttendanceGrade> cq = cb.createQuery(AttendanceGrade.class);
+				Root<AttendanceGrade> root = cq.from(AttendanceGrade.class);
+				root.fetch("attendanceSite", JoinType.INNER);
+				cq.select(root).where(
+					cb.equal(root.get("attendanceSite"), aS),
+					cb.equal(root.get("userID"), userID)
+				);
+				return session.createQuery(cq).uniqueResult();
+			});
 		} catch (DataAccessException e) {
             log.error("Failed to get AttendanceGrade for {} in {}", userID, aS.getSiteID());
 			return null;
@@ -354,10 +377,14 @@ public class AttendanceDaoImpl extends HibernateDaoSupport implements Attendance
 		log.debug("getAttendanceGrades for: {}", aS.getSiteID());
 
 		try{
-			return getHibernateTemplate().execute(session -> session
-					.createQuery("from AttendanceGrade aGrade JOIN FETCH aGrade.attendanceSite WHERE aGrade.attendanceSite = :attendanceSite")
-					.setParameter(ATTENDANCE_SITE, aS)
-					.getResultList());
+			return getHibernateTemplate().execute(session -> {
+				CriteriaBuilder cb = session.getCriteriaBuilder();
+				CriteriaQuery<AttendanceGrade> cq = cb.createQuery(AttendanceGrade.class);
+				Root<AttendanceGrade> root = cq.from(AttendanceGrade.class);
+				root.fetch("attendanceSite", JoinType.INNER);
+				cq.select(root).where(cb.equal(root.get("attendanceSite"), aS));
+				return session.createQuery(cq).getResultList();
+			});
 		} catch (DataAccessException e) {
             log.error("DataAccessException getting AttendanceGrades for {}. E:", aS.getSiteID(), e);
 			return null;
@@ -401,11 +428,17 @@ public class AttendanceDaoImpl extends HibernateDaoSupport implements Attendance
 		log.debug("getAttendanceUserStats for User '{}' and Site: '{}'.", userId, aS.getSiteID());
 
 		try{
-			return (AttendanceUserStats) getHibernateTemplate().execute(session -> session
-					.createQuery("FROM AttendanceUserStats aUS JOIN FETCH aUS.attendanceSite WHERE aUS.attendanceSite = :attendanceSite AND aUS.userID = :userID")
-					.setParameter(ATTENDANCE_SITE, aS)
-					.setParameter(USER_ID, userId)
-					.uniqueResult());
+			return (AttendanceUserStats) getHibernateTemplate().execute(session -> {
+				CriteriaBuilder cb = session.getCriteriaBuilder();
+				CriteriaQuery<AttendanceUserStats> cq = cb.createQuery(AttendanceUserStats.class);
+				Root<AttendanceUserStats> root = cq.from(AttendanceUserStats.class);
+				root.fetch("attendanceSite", JoinType.INNER);
+				cq.select(root).where(
+					cb.equal(root.get("attendanceSite"), aS),
+					cb.equal(root.get("userID"), userId)
+				);
+				return session.createQuery(cq).uniqueResult();
+			});
 		} catch (DataAccessException e) {
     		log.error("DataAccessException getting AttendanceUserStats for User '{}' and Site: '{}'.", userId, aS.getSiteID(), e);
 			return null;
@@ -420,10 +453,14 @@ public class AttendanceDaoImpl extends HibernateDaoSupport implements Attendance
 		log.debug("getAttendanceUserStatsForSite for site: {}", aS.getSiteID());
 
 		try{
-			return getHibernateTemplate().execute(session -> session
-					.createQuery("FROM AttendanceUserStats aUS JOIN FETCH aUS.attendanceSite WHERE aUS.attendanceSite = :attendanceSite")
-					.setParameter(ATTENDANCE_SITE, aS)
-					.getResultList());
+			return getHibernateTemplate().execute(session -> {
+				CriteriaBuilder cb = session.getCriteriaBuilder();
+				CriteriaQuery<AttendanceUserStats> cq = cb.createQuery(AttendanceUserStats.class);
+				Root<AttendanceUserStats> root = cq.from(AttendanceUserStats.class);
+				root.fetch("attendanceSite", JoinType.INNER);
+				cq.select(root).where(cb.equal(root.get("attendanceSite"), aS));
+				return session.createQuery(cq).getResultList();
+			});
 		} catch (DataAccessException e) {
 			log.error("DataAccessException getting AttendanceUserStats for Site: " + aS.getSiteID() + ".", e);
 			return null;
@@ -478,14 +515,17 @@ public class AttendanceDaoImpl extends HibernateDaoSupport implements Attendance
 	/**
 	 * {@inheritDoc}
 	 */
-	public AttendanceItemStats getAttendanceItemStats(AttendanceEvent aE) {
+public AttendanceItemStats getAttendanceItemStats(AttendanceEvent aE) {
 			log.debug("getAttendanceUserStats for Event '{}' and Site: '{}'.", aE.getName(), aE.getAttendanceSite().getSiteID());
 
 		try{
-			return (AttendanceItemStats) getHibernateTemplate().execute(session -> session
-					.createQuery("FROM AttendanceItemStats aIS WHERE aIS.attendanceEvent = :attendanceEvent")
-					.setParameter(ATTENDANCE_EVENT, aE)
-					.uniqueResult());
+			return (AttendanceItemStats) getHibernateTemplate().execute(session -> {
+				CriteriaBuilder cb = session.getCriteriaBuilder();
+				CriteriaQuery<AttendanceItemStats> cq = cb.createQuery(AttendanceItemStats.class);
+				Root<AttendanceItemStats> root = cq.from(AttendanceItemStats.class);
+				cq.select(root).where(cb.equal(root.get("attendanceEvent"), aE));
+				return session.createQuery(cq).uniqueResult();
+			});
 		} catch (DataAccessException e) {
 			log.error("DataAccessException getting AttendanceItemStats for Event '{}' and Site: '{}'.", aE.getName(), aE.getAttendanceSite().getSiteID(), e);
 			return null;
@@ -517,10 +557,14 @@ public class AttendanceDaoImpl extends HibernateDaoSupport implements Attendance
 			log.debug("getGradingRulesForSite(AttendanceSite {} )", attendanceSite.getSiteID());
 
 		try {
-			return getHibernateTemplate().execute(session -> session
-					.createQuery("from GradingRule gradingRule JOIN FETCH gradingRule.attendanceSite WHERE gradingRule.attendanceSite = :attendanceSite")
-					.setParameter(ATTENDANCE_SITE, attendanceSite)
-					.getResultList());
+			return getHibernateTemplate().execute(session -> {
+				CriteriaBuilder cb = session.getCriteriaBuilder();
+				CriteriaQuery<GradingRule> cq = cb.createQuery(GradingRule.class);
+				Root<GradingRule> root = cq.from(GradingRule.class);
+				root.fetch("attendanceSite", JoinType.INNER);
+				cq.select(root).where(cb.equal(root.get("attendanceSite"), attendanceSite));
+				return session.createQuery(cq).getResultList();
+			});
 		} catch (DataAccessException e) {
 			log.error("getGradingRulesForSite failed", e);
 			return null;
@@ -535,12 +579,18 @@ public class AttendanceDaoImpl extends HibernateDaoSupport implements Attendance
 		final HibernateCallback<List<Long>> hcb = new HibernateCallback<List<Long>>() {
 			@Override
 			public List<Long> doInHibernate(Session session) throws HibernateException {
-				return session
-					.createQuery("SELECT id FROM AttendanceSite attendanceSite WHERE (attendanceSite.syncTime IS NULL OR attendanceSite.syncTime < :syncTime) AND id > :id ORDER BY id ASC", Long.class)
-					.setParameter(SYNC_TIME, syncTime)
-					.setParameter(ID, lastId)
-					.setMaxResults(5)
-					.getResultList();
+				CriteriaBuilder cb = session.getCriteriaBuilder();
+				CriteriaQuery<Long> cq = cb.createQuery(Long.class);
+				Root<AttendanceSite> root = cq.from(AttendanceSite.class);
+				cq.select(root.get("id"))
+					.where(
+						cb.and(
+							cb.or(cb.isNull(root.get("syncTime")), cb.lessThan(root.get("syncTime"), syncTime)),
+							cb.greaterThan(root.get("id"), lastId)
+						)
+					)
+					.orderBy(cb.asc(root.get("id")));
+				return session.createQuery(cq).setMaxResults(5).getResultList();
 			}
 		};
 
@@ -555,9 +605,11 @@ public class AttendanceDaoImpl extends HibernateDaoSupport implements Attendance
 		final HibernateCallback<List<Long>> hcb = new HibernateCallback<List<Long>>() {
 			@Override
 			public List<Long> doInHibernate(Session session) throws HibernateException {
-				return session
-					.createQuery("SELECT id FROM AttendanceSite attendanceSite WHERE attendanceSite.isSyncing = TRUE", Long.class)
-					.getResultList();
+				CriteriaBuilder cb = session.getCriteriaBuilder();
+				CriteriaQuery<Long> cq = cb.createQuery(Long.class);
+				Root<AttendanceSite> root = cq.from(AttendanceSite.class);
+				cq.select(root.get("id")).where(cb.isTrue(root.get("isSyncing")));
+				return session.createQuery(cq).getResultList();
 			}
 		};
 
@@ -572,11 +624,13 @@ public class AttendanceDaoImpl extends HibernateDaoSupport implements Attendance
 		final HibernateCallback hcb = new HibernateCallback() {
 			@Override
 			public Integer doInHibernate(Session session) throws HibernateException {
-				return session
-					.createQuery("UPDATE AttendanceSite attendanceSite SET attendanceSite.isSyncing = true, attendanceSite.syncTime = :syncTime WHERE id in (:ids)")
-					.setParameterList(IDS, ids)
-					.setParameter(SYNC_TIME, syncTime)
-					.executeUpdate();
+				CriteriaBuilder cb = session.getCriteriaBuilder();
+				CriteriaUpdate<AttendanceSite> cu = cb.createCriteriaUpdate(AttendanceSite.class);
+				Root<AttendanceSite> root = cu.from(AttendanceSite.class);
+				cu.set(root.get("isSyncing"), true)
+				  .set(root.get("syncTime"), syncTime)
+				  .where(root.get("id").in(ids));
+				return session.createQuery(cu).executeUpdate();
 			}
 		};
 
@@ -595,10 +649,14 @@ public class AttendanceDaoImpl extends HibernateDaoSupport implements Attendance
 		log.debug("getAttendanceEventsForSiteHelper()");
 
 		try {
-			return getHibernateTemplate().execute(session -> session
-				.createQuery("from AttendanceEvent aEvent JOIN FETCH aEvent.attendanceSite WHERE aEvent.attendanceSite = :attendanceSite")
-				.setParameter(ATTENDANCE_SITE, aS)
-				.getResultList());
+			return getHibernateTemplate().execute(session -> {
+				CriteriaBuilder cb = session.getCriteriaBuilder();
+				CriteriaQuery<AttendanceEvent> cq = cb.createQuery(AttendanceEvent.class);
+				Root<AttendanceEvent> root = cq.from(AttendanceEvent.class);
+				root.fetch("attendanceSite", JoinType.INNER);
+				cq.select(root).where(cb.equal(root.get("attendanceSite"), aS));
+				return session.createQuery(cq).getResultList();
+			});
 
 		} catch (DataAccessException e) {
 			log.error("getEventsForAttendanceSiteHelper failed", e);
