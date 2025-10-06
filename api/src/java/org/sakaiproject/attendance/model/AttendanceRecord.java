@@ -18,9 +18,13 @@ package org.sakaiproject.attendance.model;
 
 import lombok.*;
 
+import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Parameter;
+import org.hibernate.annotations.Type;
+
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
-import java.util.Objects;
 
 /**
  * An AttendanceRecord for a specific user for a specific AttendanceEvent
@@ -34,15 +38,39 @@ import java.util.Objects;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode
+@Entity(name = "AttendanceRecord")
+@Table(name = "ATTENDANCE_RECORD_T", uniqueConstraints = {
+        @UniqueConstraint(name = "UK_ATTENDANCE_RECORD_USER", columnNames = {"USER_ID", "A_EVENT_ID"})
+})
 public class AttendanceRecord implements Serializable {
     private static final long serialVersionUID = 1L;
 
+    @Id
+    @GenericGenerator(name = "ATTENDANCE_RECORD_GEN", strategy = "native",
+            parameters = @Parameter(name = "sequence", value = "ATTENDANCE_RECORD_S"))
+    @GeneratedValue(generator = "ATTENDANCE_RECORD_GEN")
+    @Column(name = "A_RECORD_ID", nullable = false, updatable = false)
     private Long            id;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "A_EVENT_ID", nullable = false)
     private AttendanceEvent attendanceEvent;
+
+    @Column(name = "USER_ID", length = 99)
     private String          userID;
+
+    @Column(name = "STATUS")
+    @Type(type = "org.sakaiproject.attendance.types.StatusUserType")
     private Status          status;
+
+    @Column(name = "RECORD_COMMENT", length = 4000)
     private String          comment;
+
+    @Column(name = "LAST_MODIFIED_BY", nullable = false, length = 99)
     private String          lastModifiedBy;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "LAST_MODIFIED_DATE", nullable = false)
     private Date            lastModifiedDate;
 
     public AttendanceRecord(AttendanceEvent e, String uId, Status s) {

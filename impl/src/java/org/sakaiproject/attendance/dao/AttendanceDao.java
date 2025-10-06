@@ -284,35 +284,7 @@ public interface AttendanceDao {
 	 */
 	boolean deleteGradingRule(GradingRule gradingRule);
 
-	// Hibernate Query Constants
-	String QUERY_GET_ATTENDANCE_EVENT = "getAttendanceEvent";
-	String QUERY_GET_ATTENDANCE_EVENTS_FOR_SITE = "getAttendanceEventsForSite";
-	String QUERY_GET_ATTENDANCE_EVENTS = "getAttendanceEvents";
 
-	String QUERY_GET_SITE_BY_SITE_ID = "getSiteBySiteID";
-	String QUERY_GET_SITE_BY_ID = "getSiteByID";
-
-	String QUERY_GET_ATTENDANCE_RECORD = "getAttendanceRecord";
-	String QUERY_GET_ATTENDANCE_RECORDS_FOR_ATTENDANCE_EVENT = "getRecordsForAttendanceEvent";
-
-	String QUERY_GET_ATTENDANCE_STATUS = "getAttendanceStatus";
-	String QUERY_GET_ACTIVE_ATTENDANCE_STATUSES_FOR_SITE = "getActiveAttendanceStatusesForSite";
-	String QUERY_GET_ALL_ATTENDANCE_STATUSES_FOR_SITE = "getAllAttendanceStatusesForSite";
-
-	String QUERY_GET_ATTENDANCE_GRADES_FOR_SITE = "getAttendanceGradesForSite";
-	String QUERY_GET_ATTENDANCE_GRADE_BY_ID = "getAttendanceGradeByID";
-	String QUERY_GET_ATTENDANCE_GRADE = "getAttendanceGrade";
-
-	String QUERY_GET_ATTENDANCE_USER_STATS = "getAttendanceUserStats";
-	String QUERY_GET_ATTENDANCE_USER_STATS_FOR_SITE = "getAttendanceUserStatsForSite";
-	String QUERY_GET_ATTENDANCE_ITEM_STATS = "getAttendanceItemStats";
-
-	// Attendance Sync for Statistics Queries
-	String QUERY_GET_ATTENDANCE_SITE_BATCH = "getAttendanceSiteBatch";
-	String QUERY_GET_ATTENDANCE_SITES_IN_SYNC = "getAttendanceSitesInSync";
-	String QUERY_MARK_ATTENDANCE_SITE_IN_SYNC = "markAttendanceSiteForSync";
-
-	String QUERY_GET_GRADING_RULES_FOR_SITE = "getGradingRulesForSite";
 
 	// Hibernate Object Fields
 	String ID = "id";

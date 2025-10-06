@@ -19,8 +19,6 @@ package org.sakaiproject.attendance.model;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.NamedQueries;
-import org.hibernate.annotations.NamedQuery;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.Column;
@@ -45,12 +43,6 @@ import java.util.Date;
 @Entity(name = "GradingRule")
 @Table(name = "ATTENDANCE_RULE_T", uniqueConstraints = {
         @UniqueConstraint(name = "UK_ATTENDANCE_RULE", columnNames = {"A_SITE_ID", "STATUS", "START_RANGE", "END_RANGE"})
-})
-@NamedQueries({
-        @NamedQuery(
-                name = "getGradingRulesForSite",
-                query = "from GradingRule gradingRule JOIN FETCH gradingRule.attendanceSite WHERE gradingRule.attendanceSite = :attendanceSite"
-        )
 })
 public class GradingRule implements Serializable {
     private static final long serialVersionUID = 1L;

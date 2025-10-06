@@ -19,6 +19,9 @@ package org.sakaiproject.attendance.model;
 import lombok.Getter;
 import lombok.EqualsAndHashCode;
 import lombok.extern.slf4j.Slf4j;
+
+import javax.persistence.Column;
+import javax.persistence.MappedSuperclass;
 import java.io.Serializable;
 
 /**
@@ -26,18 +29,24 @@ import java.io.Serializable;
  */
 @Slf4j
 @EqualsAndHashCode
+@MappedSuperclass
 public class AttendanceStats implements Serializable {
     private static final    long            serialVersionUID    = 1L;
 
     @Getter
+    @Column(name = "PRESENT")
     private                 int             present             = 0;
     @Getter
+    @Column(name = "UNEXCUSED")
     private                 int             unexcused           = 0;
     @Getter
+    @Column(name = "EXCUSED")
     private                 int             excused             = 0;
     @Getter
+    @Column(name = "LATE")
     private                 int             late                = 0;
     @Getter
+    @Column(name = "LEFT_EARLY")
     private                 int             leftEarly           = 0;
 
     public void setPresent(int present) {

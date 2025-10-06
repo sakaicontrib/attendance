@@ -21,6 +21,11 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Parameter;
+
+import javax.persistence.*;
+
 /**
  * Created by Leonardo Canessa [lcanessa1 (at) udayton (dot) edu]
  */
@@ -28,11 +33,23 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode
+@Entity(name = "AttendanceUserStats")
+@Table(name = "ATTENDANCE_USER_STATS_T")
 public class AttendanceUserStats extends AttendanceStats {
     private static final    long            serialVersionUID    = 1L;
 
+    @Id
+    @GenericGenerator(name = "ATTENDANCE_USER_STATS_GEN", strategy = "native",
+            parameters = @Parameter(name = "sequence", value = "ATTENDANCE_USER_STATS_S"))
+    @GeneratedValue(generator = "ATTENDANCE_USER_STATS_GEN")
+    @Column(name = "A_USER_STATS_ID", nullable = false, updatable = false)
     private                 Long            id;
+
+    @Column(name = "USER_ID")
     private                 String          userID;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "A_SITE_ID", nullable = false)
     private                 AttendanceSite  attendanceSite;
 
     public AttendanceUserStats(String userID, AttendanceSite attendanceSite) {

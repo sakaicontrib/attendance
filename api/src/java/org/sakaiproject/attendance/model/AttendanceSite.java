@@ -21,8 +21,12 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Parameter;
+import org.hibernate.annotations.Type;
 import org.sakaiproject.attendance.util.AttendanceConstants;
 
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.*;
 
@@ -37,21 +41,52 @@ import java.util.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(exclude="attendanceStatuses")
+@Entity(name = "AttendanceSite")
+@Table(name = "ATTENDANCE_SITE_T")
 public class AttendanceSite implements Serializable {
 	private static final long serialVersionUID = 1L;
 
-	private Long id;
-	private String siteID;
-	private Status defaultStatus;
-	private Double maximumGrade;
-	private Boolean isGradeShown;
-	private Boolean sendToGradebook;
-	private Integer gradingMethod;
-	private String gradebookItemName;
-	private Boolean showCommentsToStudents;
-	private Boolean isSyncing;
-	private Date syncTime;
-	private Set<AttendanceStatus>	attendanceStatuses	= new HashSet<>(0);
+    @Id
+    @GenericGenerator(name = "ATTENDANCE_SITE_GEN", strategy = "native",
+            parameters = @Parameter(name = "sequence", value = "ATTENDANCE_SITE_S"))
+    @GeneratedValue(generator = "ATTENDANCE_SITE_GEN")
+    @Column(name = "A_SITE_ID", nullable = false, updatable = false)
+    private Long id;
+
+    @Column(name = "SITE_ID")
+    private String siteID;
+
+    @Column(name = "DEFAULT_STATUS")
+    @Type(type = "org.sakaiproject.attendance.types.StatusUserType")
+    private Status defaultStatus;
+
+    @Column(name = "MAXIMUM_GRADE")
+    private Double maximumGrade;
+
+    @Column(name = "IS_GRADE_SHOWN")
+    private Boolean isGradeShown;
+
+    @Column(name = "SEND_TO_GRADEBOOK")
+    private Boolean sendToGradebook;
+
+    @Column(name = "GRADING_METHOD")
+    private Integer gradingMethod;
+
+    @Column(name = "GRADEBOOK_ITEM_NAME")
+    private String gradebookItemName;
+
+    @Column(name = "SHOW_COMMENTS")
+    private Boolean showCommentsToStudents;
+
+    @Column(name = "SYNC")
+    private Boolean isSyncing;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "SYNC_TIME")
+    private Date syncTime;
+
+    @OneToMany(mappedBy = "attendanceSite", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private Set<AttendanceStatus> attendanceStatuses = new HashSet<>(0);
 
 	public AttendanceSite(String siteID){
 		this.siteID = siteID;

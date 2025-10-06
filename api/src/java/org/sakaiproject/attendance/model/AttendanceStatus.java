@@ -22,8 +22,12 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Parameter;
+import org.hibernate.annotations.Type;
+
+import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Objects;
 
 /**
  * An AttendanceStatus is a wrapper around the Status enum type defining meta information on individual Statuses.
@@ -34,14 +38,36 @@ import java.util.Objects;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of = {"id"})
+@Entity(name = "AttendanceStatus")
+@Table(name = "ATTENDANCE_STATUS_T")
 public class AttendanceStatus implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    @Getter @Setter	private 				Long 					id;
-    @Getter @Setter private 				Boolean 				isActive;
-    @Getter @Setter private 				Status  				status;
-    @Getter @Setter private 				int      	 			sortOrder;
-    @Getter @Setter private 				AttendanceSite 			attendanceSite;
+    @Getter @Setter
+    @Id
+    @GenericGenerator(name = "ATTENDANCE_STATUS_GEN", strategy = "native",
+            parameters = @Parameter(name = "sequence", value = "ATTENDANCE_STATUS_S"))
+    @GeneratedValue(generator = "ATTENDANCE_STATUS_GEN")
+    @Column(name = "A_STATUS_ID", nullable = false, updatable = false)
+    private                 Long                    id;
+
+    @Getter @Setter
+    @Column(name = "IS_ACTIVE")
+    private                 Boolean                 isActive;
+
+    @Getter @Setter
+    @Column(name = "STATUS")
+    @Type(type = "org.sakaiproject.attendance.types.StatusUserType")
+    private                 Status                  status;
+
+    @Getter @Setter
+    @Column(name = "SORT_ORDER")
+    private                 int                     sortOrder;
+
+    @Getter @Setter
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "A_SITE_ID", nullable = false)
+    private                 AttendanceSite          attendanceSite;
 
     // Create a copy constructor
     public AttendanceStatus(AttendanceStatus attendanceStatus) {

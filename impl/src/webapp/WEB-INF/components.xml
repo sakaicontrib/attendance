@@ -101,22 +101,7 @@
     </property>
   </bean>
 
-	<!-- Add our HBM files to the Sakai global session factory -->
-	<bean id="org.sakaiproject.attendance.hbm.HBMMappingList"
-		  class="org.sakaiproject.springframework.orm.hibernate.impl.AdditionalHibernateMappingsImpl">
-
-		<property name="mappingResources">
-			<list>
-				<value>org/sakaiproject/attendance/hbm/AttendanceEvent.hbm.xml</value>
-				<value>org/sakaiproject/attendance/hbm/AttendanceGrade.hbm.xml</value>
-				<value>org/sakaiproject/attendance/hbm/AttendanceItemStats.hbm.xml</value>
-				<value>org/sakaiproject/attendance/hbm/AttendanceRecord.hbm.xml</value>
-				<value>org/sakaiproject/attendance/hbm/AttendanceSite.hbm.xml</value>
-				<value>org/sakaiproject/attendance/hbm/AttendanceStatus.hbm.xml</value>
-				<value>org/sakaiproject/attendance/hbm/AttendanceUserStats.hbm.xml</value>
-			</list>
-		</property>
-	</bean>
+	<!-- HBM mappings removed: entities now use JPA annotations -->
 
 	<!-- Cache: ttl=1 hour -->
 	<bean id="org.sakaiproject.attendance.cache.CacheManager"

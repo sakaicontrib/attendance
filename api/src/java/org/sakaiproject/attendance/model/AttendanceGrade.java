@@ -20,6 +20,19 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Parameter;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -32,16 +45,37 @@ import java.util.Date;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Entity(name = "AttendanceGrade")
+@Table(name = "ATTENDANCE_GRADE_T")
 public class AttendanceGrade implements Serializable {
 	private static final 	long 		serialVersionUID = 1L;
 
-	private					Long 			id;
-	private					Double			grade;
-	private					String			userID;
-	private					Boolean			override;
-	private 				AttendanceSite 	attendanceSite;
-	private					String			lastModifiedBy;
-	private 				Date lastModifiedDate;
+    @Id
+    @GenericGenerator(name = "ATTENDANCE_GRADE_GEN", strategy = "native",
+            parameters = @Parameter(name = "sequence", value = "ATTENDANCE_GRADE_S"))
+    @GeneratedValue(generator = "ATTENDANCE_GRADE_GEN")
+    @Column(name = "A_GRADE_ID", nullable = false, updatable = false)
+    private Long id;
+
+    @Column(name = "GRADE")
+    private Double grade;
+
+    @Column(name = "USER_ID")
+    private String userID;
+
+    @Column(name = "OVERRIDE")
+    private Boolean override;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "A_SITE_ID", nullable = false)
+    private AttendanceSite attendanceSite;
+
+    @Column(name = "LAST_MODIFIED_BY", nullable = false, length = 99)
+    private String lastModifiedBy;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "LAST_MODIFIED_DATE", nullable = false)
+    private Date lastModifiedDate;
 
 	public AttendanceGrade(AttendanceSite aS, String userId){
 		this.attendanceSite = aS;
