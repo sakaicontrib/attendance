@@ -285,6 +285,11 @@ public class EventView extends BasePage {
                     public void onClick() {
                         setResponsePage(new StudentView(stuId, item.getModelObject().getAttendanceEvent().getId(), returnPage));
                     }
+
+                    @Override
+                    protected boolean useJSEventBindingWhenNeeded() {
+                        return false;
+                    }
                 };
                 studentLink.add(stuName);
                 item.add(studentLink);

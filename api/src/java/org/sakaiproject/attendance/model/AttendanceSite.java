@@ -21,6 +21,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
 import org.hibernate.annotations.Type;
@@ -86,6 +88,7 @@ public class AttendanceSite implements Serializable {
     private Date syncTime;
 
     @OneToMany(mappedBy = "attendanceSite", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @Fetch(FetchMode.JOIN)
     private Set<AttendanceStatus> attendanceStatuses = new HashSet<>(0);
 
 	public AttendanceSite(String siteID){

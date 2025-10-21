@@ -18,6 +18,8 @@ package org.sakaiproject.attendance.model;
 
 import lombok.*;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
 
@@ -80,6 +82,7 @@ public class AttendanceEvent implements Serializable {
     private String location;
 
     @OneToMany(mappedBy = "attendanceEvent", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @Fetch(FetchMode.JOIN)
     private Set<AttendanceRecord> records = new HashSet<AttendanceRecord>(0);
 
     @OneToOne(mappedBy = "attendanceEvent", cascade = CascadeType.ALL, fetch = FetchType.EAGER)

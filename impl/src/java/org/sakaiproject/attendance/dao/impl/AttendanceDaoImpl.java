@@ -17,6 +17,7 @@
 package org.sakaiproject.attendance.dao.impl;
 
 import org.hibernate.HibernateException;
+import org.hibernate.LockOptions;
 import org.hibernate.Session;
 import org.sakaiproject.attendance.dao.AttendanceDao;
 import org.sakaiproject.attendance.model.*;
@@ -539,9 +540,17 @@ public AttendanceItemStats getAttendanceItemStats(AttendanceEvent aE) {
             log.debug("updateAttendanceItemStats, '{}', for Event '{}' and site: '{}'.", aIS.getId(), aIS.getAttendanceEvent().getName(), aIS.getAttendanceEvent().getAttendanceSite().getSiteID());
 
         try {
-            // For shared PK one-to-one (foreign id) mapping, use saveOrUpdate to
-            // let Hibernate assign id from the associated AttendanceEvent.
-            getHibernateTemplate().saveOrUpdate(aIS);
+            getHibernateTemplate().execute(session -> {
+                AttendanceEvent event = aIS.getAttendanceEvent();
+                if (event != null && event.getId() != null && !session.contains(event)) {
+                    session.buildLockRequest(LockOptions.NONE).lock(event);
+                }
+
+                // For shared PK one-to-one (foreign id) mapping, use saveOrUpdate to
+                // let Hibernate assign id from the associated AttendanceEvent.
+                session.saveOrUpdate(aIS);
+                return null;
+            });
             return true;
         } catch (DataAccessException e) {
             log.error("updateAttendanceItemStats, '" + aIS.getId() + "' failed.", e);
