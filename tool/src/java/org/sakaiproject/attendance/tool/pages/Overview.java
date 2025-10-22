@@ -40,6 +40,7 @@ import org.sakaiproject.attendance.tool.dataproviders.EventDataProvider;
 import org.sakaiproject.attendance.tool.panels.PrintPanel;
 import org.sakaiproject.attendance.tool.util.ConfirmationLink;
 
+import java.time.Instant;
 import java.util.Date;
 
 /**
@@ -137,8 +138,9 @@ public class Overview extends BasePage {
 				eventLink.add(new Label("event-name", name));
 				item.add(eventLink);
 
-				Label eventDate = new Label("event-date", modelObject.getStartDateTime());
-				eventDate.add(new AttributeModifier("data-text", modelObject.getStartDateTime() != null ? modelObject.getStartDateTime().getTime() : 0));
+				Instant start = modelObject.getStartDateTime();
+				Label eventDate = new Label("event-date", start != null ? Date.from(start) : null);
+				eventDate.add(new AttributeModifier("data-text", start != null ? start.toEpochMilli() : 0));
 				item.add(eventDate);
 
 				DataView<AttendanceStatus> activeStatusStats = new DataView<AttendanceStatus>("active-status-stats", attendanceStatusProvider) {
@@ -212,7 +214,7 @@ public class Overview extends BasePage {
 				AttendanceEvent newEvent = new AttendanceEvent();
 				newEvent.setAttendanceSite(attendanceLogic.getCurrentAttendanceSite());
 				newEvent.setName(new ResourceModel("attendance.now.name").getObject());
-				newEvent.setStartDateTime(new Date());
+				newEvent.setStartDateTime(Instant.now());
 				Long newEventId = (Long) attendanceLogic.addAttendanceEventNow(newEvent);
 				if(newEventId != null) {
 					newEvent = attendanceLogic.getAttendanceEvent(newEventId);

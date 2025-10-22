@@ -16,10 +16,33 @@
 
 package org.sakaiproject.attendance.model;
 
-import lombok.*;
-
 import java.io.Serializable;
-import java.util.*;
+import java.time.Instant;
+import java.util.HashSet;
+import java.util.Set;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Parameter;
 
 /**
  * Represents an AttendanceEvent, such as a class meeting or seminar
@@ -33,23 +56,58 @@ import java.util.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(exclude={"records","stats"})
+@Entity(name = "AttendanceEvent")
+@Table(name = "ATTENDANCE_EVENT_T")
 public class AttendanceEvent implements Serializable {
 	private static final 	long 		serialVersionUID = 1L;
 
-	private 				Long 					id;
-	private 				String 					name;
-	private 				Date 					startDateTime;
-	private 				Date	 				endDateTime;
-	private 				Boolean 				isReoccurring;
-	private 				Long 					reoccurringID;
-	private 				Boolean 				isRequired;
-	private 				String					releasedTo;
-	private 				AttendanceSite 			attendanceSite;
-	private 				String 					location;
-	private 				Set<AttendanceRecord> 	records = new HashSet<AttendanceRecord>(0);
-	private					AttendanceItemStats 	stats;
-	private					String					lastModifiedBy;
-	private					Date					lastModifiedDate;
+    @Id
+    @GenericGenerator(name = "ATTENDANCE_EVENT_GEN", strategy = "native",
+            parameters = @Parameter(name = "sequence", value = "ATTENDANCE_EVENT_S"))
+    @GeneratedValue(generator = "ATTENDANCE_EVENT_GEN")
+    @Column(name = "A_EVENT_ID", nullable = false, updatable = false)
+    private Long id;
+
+    @Column(name = "NAME")
+    private String name;
+
+    @Column(name = "START_DATE_TIME")
+    private Instant startDateTime;
+
+    @Column(name = "END_DATE_TIME")
+    private Instant endDateTime;
+
+    @Column(name = "IS_REOCCURRING")
+    private Boolean isReoccurring;
+
+    @Column(name = "REOCCURRING_ID")
+    private Long reoccurringID;
+
+    @Column(name = "IS_REQUIRED")
+    private Boolean isRequired;
+
+    @Column(name = "RELEASED_TO")
+    private String releasedTo;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "A_SITE_ID", nullable = false)
+    private AttendanceSite attendanceSite;
+
+    @Column(name = "LOCATION")
+    private String location;
+
+    @OneToMany(mappedBy = "attendanceEvent", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @Fetch(FetchMode.JOIN)
+    private Set<AttendanceRecord> records = new HashSet<>(0);
+
+    @OneToOne(mappedBy = "attendanceEvent", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private AttendanceItemStats stats;
+
+    @Column(name = "LAST_MODIFIED_BY", nullable = false, length = 99)
+    private String lastModifiedBy;
+
+    @Column(name = "LAST_MODIFIED_DATE", nullable = false)
+    private Instant lastModifiedDate;
 
 	// Copy constructor
 	public AttendanceEvent(AttendanceEvent attendanceEvent){

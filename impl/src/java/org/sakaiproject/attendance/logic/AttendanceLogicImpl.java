@@ -17,14 +17,29 @@
 package org.sakaiproject.attendance.logic;
 
 import java.io.Serializable;
-import java.util.*;
+import java.time.Instant;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.transaction.annotation.Transactional;
 
 import org.sakaiproject.attendance.api.AttendanceGradebookProvider;
 import org.sakaiproject.attendance.dao.AttendanceDao;
-import org.sakaiproject.attendance.model.*;
+import org.sakaiproject.attendance.model.AttendanceEvent;
+import org.sakaiproject.attendance.model.AttendanceGrade;
+import org.sakaiproject.attendance.model.AttendanceItemStats;
+import org.sakaiproject.attendance.model.AttendanceRecord;
+import org.sakaiproject.attendance.model.AttendanceSite;
+import org.sakaiproject.attendance.model.AttendanceStatus;
+import org.sakaiproject.attendance.model.AttendanceStats;
+import org.sakaiproject.attendance.model.AttendanceUserStats;
+import org.sakaiproject.attendance.model.GradingRule;
+import org.sakaiproject.attendance.model.Status;
 import org.sakaiproject.attendance.util.AttendanceConstants;
 import org.sakaiproject.entity.api.Entity;
 import org.sakaiproject.entity.api.EntityManager;
@@ -40,6 +55,7 @@ import org.sakaiproject.user.api.User;
  */
 @Setter
 @Slf4j
+@Transactional
 public class AttendanceLogicImpl implements AttendanceLogic, EntityTransferrer {
 
 	/**
@@ -82,26 +98,29 @@ public class AttendanceLogicImpl implements AttendanceLogic, EntityTransferrer {
 		return getAttendanceSite(currentSiteID);
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
-	public AttendanceEvent getAttendanceEvent(long id) {
-		return dao.getAttendanceEvent(id);
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Transactional(readOnly = true)
+    public AttendanceEvent getAttendanceEvent(long id) {
+        return dao.getAttendanceEvent(id);
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	public List<AttendanceEvent> getAttendanceEventsForSite(AttendanceSite aS) {
-		return safeAttendanceEventListReturn(dao.getAttendanceEventsForSite(aS));
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Transactional(readOnly = true)
+    public List<AttendanceEvent> getAttendanceEventsForSite(AttendanceSite aS) {
+        return safeAttendanceEventListReturn(dao.getAttendanceEventsForSite(aS));
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	public List<AttendanceEvent> getAttendanceEventsForCurrentSite(){
-		return getAttendanceEventsForSite(getCurrentAttendanceSite());
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Transactional(readOnly = true)
+    public List<AttendanceEvent> getAttendanceEventsForCurrentSite(){
+        return getAttendanceEventsForSite(getCurrentAttendanceSite());
+    }
 
 	/**
 	 * {@inheritDoc}
@@ -147,58 +166,65 @@ public class AttendanceLogicImpl implements AttendanceLogic, EntityTransferrer {
 		return dao.deleteAttendanceEvent(aE);
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
-	public AttendanceRecord getAttendanceRecord(Long id) {
-		if(id == null) {
-			return null;
-		}
+    /**
+     * {@inheritDoc}
+     */
+    @Transactional(readOnly = true)
+    public AttendanceRecord getAttendanceRecord(Long id) {
+        if(id == null) {
+            return null;
+        }
 
 		return dao.getStatusRecord(id);
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
-	public List<AttendanceRecord> getAttendanceRecordsForUser(String id) {
-		return getAttendanceRecordsForUser(id, getCurrentAttendanceSite());
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Transactional(readOnly = true)
+    public List<AttendanceRecord> getAttendanceRecordsForUser(String id) {
+        return getAttendanceRecordsForUser(id, getCurrentAttendanceSite());
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	public List<AttendanceRecord> getAttendanceRecordsForUser(String id, AttendanceSite aS) {
-		return generateAttendanceRecords(id, aS);
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Transactional(readOnly = true)
+    public List<AttendanceRecord> getAttendanceRecordsForUser(String id, AttendanceSite aS) {
+        return generateAttendanceRecords(id, aS);
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	public List<AttendanceStatus> getActiveStatusesForCurrentSite() {
-		return getActiveStatusesForSite(getCurrentAttendanceSite());
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Transactional(readOnly = true)
+    public List<AttendanceStatus> getActiveStatusesForCurrentSite() {
+        return getActiveStatusesForSite(getCurrentAttendanceSite());
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	public List<AttendanceStatus> getActiveStatusesForSite(AttendanceSite attendanceSite) {
-		return safeAttendanceStatusListReturn(dao.getActiveStatusesForSite(attendanceSite));
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Transactional(readOnly = true)
+    public List<AttendanceStatus> getActiveStatusesForSite(AttendanceSite attendanceSite) {
+        return safeAttendanceStatusListReturn(dao.getActiveStatusesForSite(attendanceSite));
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	public List<AttendanceStatus> getAllStatusesForSite(AttendanceSite attendanceSite) {
-		return safeAttendanceStatusListReturn(dao.getAllStatusesForSite(attendanceSite));
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Transactional(readOnly = true)
+    public List<AttendanceStatus> getAllStatusesForSite(AttendanceSite attendanceSite) {
+        return safeAttendanceStatusListReturn(dao.getAllStatusesForSite(attendanceSite));
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	public AttendanceStatus getAttendanceStatusById(Long id) {
-		return dao.getAttendanceStatusById(id);
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Transactional(readOnly = true)
+    public AttendanceStatus getAttendanceStatusById(Long id) {
+        return dao.getAttendanceStatusById(id);
+    }
 
 	/**
 	 * {@inheritDoc}
@@ -215,22 +241,23 @@ public class AttendanceLogicImpl implements AttendanceLogic, EntityTransferrer {
 	}
 
 	private void updateModifier(Object obj) {
+		Instant now = Instant.now();
 		if (obj instanceof AttendanceRecord) {
 			AttendanceRecord aR = (AttendanceRecord) obj;
 			aR.setLastModifiedBy(sakaiProxy.getCurrentUserId());
-			aR.setLastModifiedDate(new Date());
+			aR.setLastModifiedDate(now);
 		} else if (obj instanceof AttendanceEvent) {
 			AttendanceEvent aE = (AttendanceEvent) obj;
 			aE.setLastModifiedBy(sakaiProxy.getCurrentUserId());
-			aE.setLastModifiedDate(new Date());
+			aE.setLastModifiedDate(now);
 		} else if (obj instanceof AttendanceGrade) {
 			AttendanceGrade aG = (AttendanceGrade) obj;
 			aG.setLastModifiedBy(sakaiProxy.getCurrentUserId());
-			aG.setLastModifiedDate(new Date());
+			aG.setLastModifiedDate(now);
 		} else if (obj instanceof GradingRule) {
 			GradingRule gR = (GradingRule) obj;
 			gR.setLastModifiedBy(sakaiProxy.getCurrentUserId());
-			gR.setLastModifiedDate(new Date());
+			gR.setLastModifiedDate(now);
 		}
 	}
 
@@ -354,11 +381,12 @@ public class AttendanceLogicImpl implements AttendanceLogic, EntityTransferrer {
 		return recordList;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
-	public AttendanceItemStats getStatsForEvent(AttendanceEvent event) {
-		AttendanceItemStats itemStats = dao.getAttendanceItemStats(event);
+    /**
+     * {@inheritDoc}
+     */
+    @Transactional(readOnly = true)
+    public AttendanceItemStats getStatsForEvent(AttendanceEvent event) {
+        AttendanceItemStats itemStats = dao.getAttendanceItemStats(event);
 
 		if(itemStats == null) {
 			itemStats = new AttendanceItemStats(event);
@@ -368,18 +396,20 @@ public class AttendanceLogicImpl implements AttendanceLogic, EntityTransferrer {
 		return itemStats;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
-	public AttendanceUserStats getStatsForUser(String userId) {
-		return getStatsForUser(userId, getCurrentAttendanceSite());
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Transactional(readOnly = true)
+    public AttendanceUserStats getStatsForUser(String userId) {
+        return getStatsForUser(userId, getCurrentAttendanceSite());
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	public AttendanceUserStats getStatsForUser(String userId, AttendanceSite aS) {
-		AttendanceUserStats userStats = dao.getAttendanceUserStats(userId, aS);
+    /**
+     * {@inheritDoc}
+     */
+    @Transactional(readOnly = true)
+    public AttendanceUserStats getStatsForUser(String userId, AttendanceSite aS) {
+        AttendanceUserStats userStats = dao.getAttendanceUserStats(userId, aS);
 
 		if(userStats == null) {
 			userStats = new AttendanceUserStats(userId, aS);
@@ -388,18 +418,20 @@ public class AttendanceLogicImpl implements AttendanceLogic, EntityTransferrer {
 		return userStats;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
-	public List<AttendanceUserStats> getUserStatsForCurrentSite(String group) {
-		return getUserStatsForSite(getCurrentAttendanceSite(), group);
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Transactional(readOnly = true)
+    public List<AttendanceUserStats> getUserStatsForCurrentSite(String group) {
+        return getUserStatsForSite(getCurrentAttendanceSite(), group);
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	public List<AttendanceUserStats> getUserStatsForSite(AttendanceSite aS, String group) {
-		List<AttendanceUserStats> userStatsList = dao.getAttendanceUserStatsForSite(aS);
+    /**
+     * {@inheritDoc}
+     */
+    @Transactional(readOnly = true)
+    public List<AttendanceUserStats> getUserStatsForSite(AttendanceSite aS, String group) {
+        List<AttendanceUserStats> userStatsList = dao.getAttendanceUserStatsForSite(aS);
 		List<String> users;
 		if(group == null || group.isEmpty()) {
 			users = sakaiProxy.getCurrentSiteMembershipIds();
@@ -433,24 +465,26 @@ public class AttendanceLogicImpl implements AttendanceLogic, EntityTransferrer {
 		return returnList;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
-	public AttendanceGrade getAttendanceGrade(Long id) throws IllegalArgumentException {
-		if(id == null) {
-			throw new IllegalArgumentException("ID must not be null");
-		}
+    /**
+     * {@inheritDoc}
+     */
+    @Transactional(readOnly = true)
+    public AttendanceGrade getAttendanceGrade(Long id) throws IllegalArgumentException {
+        if(id == null) {
+            throw new IllegalArgumentException("ID must not be null");
+        }
 
 		return dao.getAttendanceGrade(id);
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
-	public AttendanceGrade getAttendanceGrade(String uID) throws IllegalArgumentException {
-		if(uID == null || uID.isEmpty()) {
-			throw new IllegalArgumentException("uID must not be null or empty.");
-		}
+    /**
+     * {@inheritDoc}
+     */
+    @Transactional(readOnly = true)
+    public AttendanceGrade getAttendanceGrade(String uID) throws IllegalArgumentException {
+        if(uID == null || uID.isEmpty()) {
+            throw new IllegalArgumentException("uID must not be null or empty.");
+        }
 
 		final AttendanceSite currentSite = getCurrentAttendanceSite();
 		final AttendanceGrade grade = dao.getAttendanceGrade(uID, currentSite);
@@ -462,11 +496,12 @@ public class AttendanceLogicImpl implements AttendanceLogic, EntityTransferrer {
 		return grade;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
-	public Map<String, AttendanceGrade> getAttendanceGrades() {
-		Map<String, AttendanceGrade> aGHashMap = new HashMap<>();
+    /**
+     * {@inheritDoc}
+     */
+    @Transactional(readOnly = true)
+    public Map<String, AttendanceGrade> getAttendanceGrades() {
+        Map<String, AttendanceGrade> aGHashMap = new HashMap<>();
 		AttendanceSite aS = getCurrentAttendanceSite();
 		List<AttendanceGrade> aGs = dao.getAttendanceGrades(aS);
 		if(aGs == null || aGs.isEmpty()) {
@@ -491,11 +526,12 @@ public class AttendanceLogicImpl implements AttendanceLogic, EntityTransferrer {
 		return aGHashMap;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
-	public Map<String, String> getAttendanceGradeScores() {
-		Map<String, AttendanceGrade> gradeMap = getAttendanceGrades();
+    /**
+     * {@inheritDoc}
+     */
+    @Transactional(readOnly = true)
+    public Map<String, String> getAttendanceGradeScores() {
+        Map<String, AttendanceGrade> gradeMap = getAttendanceGrades();
 
 		Map<String, String> returnMap = new HashMap<>(gradeMap.size());
 
@@ -527,11 +563,12 @@ public class AttendanceLogicImpl implements AttendanceLogic, EntityTransferrer {
 		return saved;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
-	public int getStatsForStatus(AttendanceStats stats, Status status) {
-		int stat = 0;
+    /**
+     * {@inheritDoc}
+     */
+    @Transactional(readOnly = true)
+    public int getStatsForStatus(AttendanceStats stats, Status status) {
+        int stat = 0;
 
 		if (status == Status.PRESENT) {
 			stat = stats.getPresent();
@@ -566,12 +603,13 @@ public class AttendanceLogicImpl implements AttendanceLogic, EntityTransferrer {
 		return dao.deleteGradingRule(gradingRule);
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
-	public List<GradingRule> getGradingRulesForSite(AttendanceSite attendanceSite) {
-		return dao.getGradingRulesForSite(attendanceSite);
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Transactional(readOnly = true)
+    public List<GradingRule> getGradingRulesForSite(AttendanceSite attendanceSite) {
+        return dao.getGradingRulesForSite(attendanceSite);
+    }
 
 	/**
 	 * {@inheritDoc}

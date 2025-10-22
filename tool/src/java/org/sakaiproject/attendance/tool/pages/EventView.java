@@ -47,11 +47,17 @@ import org.sakaiproject.attendance.tool.dataproviders.AttendanceRecordProvider;
 import org.sakaiproject.attendance.tool.dataproviders.AttendanceStatusProvider;
 import org.sakaiproject.attendance.tool.models.ProfileImage;
 import org.sakaiproject.attendance.tool.panels.AttendanceRecordFormDataPanel;
-import org.sakaiproject.attendance.tool.panels.AttendanceRecordFormHeaderPanel;
 import org.sakaiproject.attendance.tool.panels.PrintPanel;
 import org.sakaiproject.attendance.tool.panels.StatisticsPanel;
 
-import java.util.*;
+import java.time.Instant;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 /**
  * EventView is a view into an AttendanceEvent
@@ -127,7 +133,8 @@ public class EventView extends BasePage {
         createStatsTable();
 
         add(new Label("event-name", attendanceEvent.getName()));
-        add(new Label("event-date", attendanceEvent.getStartDateTime()));
+        Instant start = attendanceEvent.getStartDateTime();
+        add(new Label("event-date", start != null ? Date.from(start) : null));
         add(new Label("take-attendance-header", getString("attendance.event.view.take.attendance")));
 
         final Form<?> setAllForm = new Form<Void>("set-all-form"){
@@ -284,6 +291,11 @@ public class EventView extends BasePage {
                     @Override
                     public void onClick() {
                         setResponsePage(new StudentView(stuId, item.getModelObject().getAttendanceEvent().getId(), returnPage));
+                    }
+
+                    @Override
+                    protected boolean useJSEventBindingWhenNeeded() {
+                        return false;
                     }
                 };
                 studentLink.add(stuName);

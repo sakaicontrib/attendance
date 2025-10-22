@@ -17,7 +17,11 @@
 package org.sakaiproject.attendance.tool.panels;
 
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.*;
+import org.apache.wicket.markup.html.form.DropDownChoice;
+import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.IChoiceRenderer;
+import org.apache.wicket.markup.html.form.RadioChoice;
+import org.apache.wicket.markup.html.form.SubmitLink;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
@@ -29,9 +33,11 @@ import org.sakaiproject.user.api.User;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.time.Instant;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -100,7 +106,8 @@ public class PrintPanel extends BasePanel {
 
 		if (eventModel.getObject() != null) {
 			printForm.add(new Label("event-name", eventModel.getObject().getName()));
-			printForm.add(new Label("event-date", eventModel.getObject().getStartDateTime()));
+			Instant start = eventModel.getObject().getStartDateTime();
+			printForm.add(new Label("event-date", start != null ? Date.from(start) : null));
 		} else {
 			printForm.add(new Label("event-name", ""));
 			printForm.add(new Label("event-date", ""));

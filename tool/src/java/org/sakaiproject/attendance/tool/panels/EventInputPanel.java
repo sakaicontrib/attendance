@@ -27,7 +27,14 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
-import org.apache.wicket.model.*;
+import java.time.Instant;
+import java.util.Date;
+
+import org.apache.wicket.model.CompoundPropertyModel;
+import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
+import org.apache.wicket.model.ResourceModel;
+import org.apache.wicket.model.StringResourceModel;
 import org.sakaiproject.attendance.model.AttendanceEvent;
 import org.sakaiproject.attendance.tool.pages.EventView;
 import org.sakaiproject.attendance.tool.pages.Overview;
@@ -170,7 +177,27 @@ public class EventInputPanel extends BasePanel {
         final TextField<String> name = new TextField<>("name");
         name.setRequired(true);
 
-        final DateTextField startDateTime = new DateTextField("startDateTime", "yyyy-MM-dd'T'HH:mm");
+        final IModel<Date> startDateModel = new IModel<Date>() {
+            private static final long serialVersionUID = 1L;
+
+            @Override
+            public Date getObject() {
+                Instant start = eventModel.getObject().getStartDateTime();
+                return start != null ? Date.from(start) : null;
+            }
+
+            @Override
+            public void setObject(Date object) {
+                eventModel.getObject().setStartDateTime(object != null ? object.toInstant() : null);
+            }
+
+            @Override
+            public void detach() {
+                eventModel.detach();
+            }
+        };
+
+        final DateTextField startDateTime = new DateTextField("startDateTime", startDateModel, "yyyy-MM-dd'T'HH:mm");
 
         event.add(name);
         event.add(startDateTime);
@@ -184,6 +211,5 @@ public class EventInputPanel extends BasePanel {
         return new ResourceModel("attendance.add.create");
     }
 }
-
 
 

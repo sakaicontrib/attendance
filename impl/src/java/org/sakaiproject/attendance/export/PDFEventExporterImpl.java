@@ -16,7 +16,11 @@
 
 package org.sakaiproject.attendance.export;
 
-import com.lowagie.text.*;
+import com.lowagie.text.Document;
+import com.lowagie.text.DocumentException;
+import com.lowagie.text.Element;
+import com.lowagie.text.Font;
+import com.lowagie.text.Paragraph;
 import com.lowagie.text.pdf.PdfPCell;
 import com.lowagie.text.pdf.PdfPTable;
 import com.lowagie.text.pdf.PdfWriter;
@@ -33,6 +37,7 @@ import org.sakaiproject.user.api.User;
 import java.awt.Color;
 import java.io.OutputStream;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -83,8 +88,8 @@ public class PDFEventExporterImpl implements PDFEventExporter {
     }
 
     private void buildDocumentShell(OutputStream outputStream, boolean isSignInSheet) {
-        String eventName = event.getName();
-        Date eventDate = event.getStartDateTime();
+		String eventName = event.getName();
+		Instant eventDate = event.getStartDateTime();
 
 
         SimpleDateFormat dateFormat = new SimpleDateFormat("EEE, MMM d, yyyy h:mm a");
@@ -101,7 +106,8 @@ public class PDFEventExporterImpl implements PDFEventExporter {
 
             document.add(title);
 
-            String eventDateString = eventDate==null?"":" (" + dateFormat.format(eventDate) + ")";
+			Date printableDate = eventDate == null ? null : Date.from(eventDate);
+			String eventDateString = printableDate == null ? "" : " (" + dateFormat.format(printableDate) + ")";
 
             Paragraph eventHeader = new Paragraph(eventName + eventDateString, h3);
             eventHeader.setSpacingBefore(14);

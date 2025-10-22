@@ -16,15 +16,33 @@
 
 package org.sakaiproject.attendance.model;
 
+import java.io.Serializable;
+import java.time.Instant;
+import java.util.HashSet;
+import java.util.Set;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Parameter;
 import org.sakaiproject.attendance.util.AttendanceConstants;
-
-import java.io.Serializable;
-import java.util.*;
 
 /**
  * An AttendanceSite represents all the Attendance related data for a specific Sakai Site.
@@ -37,21 +55,57 @@ import java.util.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(exclude="attendanceStatuses")
+@Entity(name = "AttendanceSite")
+@Table(
+    name = "ATTENDANCE_SITE_T",
+    uniqueConstraints = {
+        @UniqueConstraint(name = "UK_ATT_SITE_SITE_ID", columnNames = "SITE_ID")
+    }
+)
 public class AttendanceSite implements Serializable {
 	private static final long serialVersionUID = 1L;
 
-	private Long id;
-	private String siteID;
-	private Status defaultStatus;
-	private Double maximumGrade;
-	private Boolean isGradeShown;
-	private Boolean sendToGradebook;
-	private Integer gradingMethod;
-	private String gradebookItemName;
-	private Boolean showCommentsToStudents;
-	private Boolean isSyncing;
-	private Date syncTime;
-	private Set<AttendanceStatus>	attendanceStatuses	= new HashSet<>(0);
+    @Id
+    @GenericGenerator(name = "ATTENDANCE_SITE_GEN", strategy = "native",
+            parameters = @Parameter(name = "sequence", value = "ATTENDANCE_SITE_S"))
+    @GeneratedValue(generator = "ATTENDANCE_SITE_GEN")
+    @Column(name = "A_SITE_ID", nullable = false, updatable = false)
+    private Long id;
+
+    @Column(name = "SITE_ID", length = 99)
+    private String siteID;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "DEFAULT_STATUS", length = 20)
+    private Status defaultStatus;
+
+    @Column(name = "MAXIMUM_GRADE")
+    private Double maximumGrade;
+
+    @Column(name = "IS_GRADE_SHOWN")
+    private Boolean isGradeShown;
+
+    @Column(name = "SEND_TO_GRADEBOOK")
+    private Boolean sendToGradebook;
+
+    @Column(name = "GRADING_METHOD")
+    private Integer gradingMethod;
+
+    @Column(name = "GRADEBOOK_ITEM_NAME")
+    private String gradebookItemName;
+
+    @Column(name = "SHOW_COMMENTS")
+    private Boolean showCommentsToStudents;
+
+    @Column(name = "SYNC")
+    private Boolean isSyncing;
+
+    @Column(name = "SYNC_TIME")
+    private Instant syncTime;
+
+    @OneToMany(mappedBy = "attendanceSite", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @Fetch(FetchMode.JOIN)
+    private Set<AttendanceStatus> attendanceStatuses = new HashSet<>(0);
 
 	public AttendanceSite(String siteID){
 		this.siteID = siteID;

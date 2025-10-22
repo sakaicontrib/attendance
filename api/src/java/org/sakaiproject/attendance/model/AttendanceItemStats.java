@@ -21,6 +21,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.*;
+
 /**
  * Created by Leonardo Canessa [lcanessa1 (at) udayton (dot) edu]
  */
@@ -28,10 +30,18 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode
+@Entity(name = "AttendanceItemStats")
+@Table(name = "ATTENDANCE_ITEM_STATS_T")
 public class AttendanceItemStats extends AttendanceStats{
     private static final    long            serialVersionUID    = 1L;
 
+    @Id
+    @Column(name = "A_ITEM_STATS_ID", nullable = false)
     private                 Long            id;
+
+    @OneToOne
+    @MapsId
+    @JoinColumn(name = "A_ITEM_STATS_ID")
     private                 AttendanceEvent attendanceEvent;
 
     public AttendanceItemStats(AttendanceEvent attendanceEvent) {

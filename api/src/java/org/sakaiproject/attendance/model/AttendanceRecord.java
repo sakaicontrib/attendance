@@ -16,11 +16,29 @@
 
 package org.sakaiproject.attendance.model;
 
-import lombok.*;
-
 import java.io.Serializable;
-import java.util.Date;
-import java.util.Objects;
+import java.time.Instant;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
+
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Parameter;
 
 /**
  * An AttendanceRecord for a specific user for a specific AttendanceEvent
@@ -34,16 +52,39 @@ import java.util.Objects;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode
+@Entity(name = "AttendanceRecord")
+@Table(name = "ATTENDANCE_RECORD_T", uniqueConstraints = {
+        @UniqueConstraint(name = "UK_ATTENDANCE_RECORD_USER", columnNames = {"USER_ID", "A_EVENT_ID"})
+})
 public class AttendanceRecord implements Serializable {
     private static final long serialVersionUID = 1L;
 
+    @Id
+    @GenericGenerator(name = "ATTENDANCE_RECORD_GEN", strategy = "native",
+            parameters = @Parameter(name = "sequence", value = "ATTENDANCE_RECORD_S"))
+    @GeneratedValue(generator = "ATTENDANCE_RECORD_GEN")
+    @Column(name = "A_RECORD_ID", nullable = false, updatable = false)
     private Long            id;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "A_EVENT_ID", nullable = false)
     private AttendanceEvent attendanceEvent;
+
+    @Column(name = "USER_ID", length = 99)
     private String          userID;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "STATUS")
     private Status          status;
+
+    @Column(name = "RECORD_COMMENT", length = 4000)
     private String          comment;
+
+    @Column(name = "LAST_MODIFIED_BY", nullable = false, length = 99)
     private String          lastModifiedBy;
-    private Date            lastModifiedDate;
+
+    @Column(name = "LAST_MODIFIED_DATE", nullable = false)
+    private Instant         lastModifiedDate;
 
     public AttendanceRecord(AttendanceEvent e, String uId, Status s) {
         this.attendanceEvent    = e;

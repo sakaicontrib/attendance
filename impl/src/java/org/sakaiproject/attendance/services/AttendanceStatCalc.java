@@ -18,18 +18,33 @@ package org.sakaiproject.attendance.services;
 
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.support.TransactionCallbackWithoutResult;
+import org.springframework.transaction.support.TransactionTemplate;
 import org.sakaiproject.attendance.dao.AttendanceDao;
 import org.sakaiproject.attendance.logic.AttendanceLogic;
 import org.sakaiproject.attendance.logic.SakaiProxy;
-import org.sakaiproject.attendance.model.*;
+import org.sakaiproject.attendance.model.AttendanceEvent;
+import org.sakaiproject.attendance.model.AttendanceItemStats;
+import org.sakaiproject.attendance.model.AttendanceRecord;
+import org.sakaiproject.attendance.model.AttendanceSite;
+import org.sakaiproject.attendance.model.AttendanceStatus;
+import org.sakaiproject.attendance.model.AttendanceUserStats;
+import org.sakaiproject.attendance.model.Status;
 
-import java.util.*;
+import java.time.Instant;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * @author Leonardo Canessa [lcanessa1 (at) udayton (dot) edu]
  */
 @Slf4j
-public class AttendanceStatCalc {
+public class AttendanceStatCalc implements AttendanceStatCalcService {
     private int     sitesProcessed = 0;
     private int     sitesNotMarked = 0;
     private int     sitesInError = 0;
@@ -45,7 +60,7 @@ public class AttendanceStatCalc {
 
     public void execute() {
         log.debug("AttendanceStatCalc execute()");
-        Date syncTime = new Date();
+	Instant syncTime = Instant.now();
         Long lastId = 0L;
 
         List<Long> ids = dao.getAttendanceSiteBatch(syncTime, lastId);
@@ -58,9 +73,23 @@ public class AttendanceStatCalc {
             }
         } else {
             while(!ids.isEmpty()) {
-                dao.markAttendanceSiteForSync(ids, syncTime);
-                for (Long id : ids) {
-                    calculateStats(id);
+                // capture current batch because 'ids' will be reassigned later
+                final List<Long> batchIds = new ArrayList<>(ids);
+                // mark batch in-progress in a single transaction
+                txTemplate.execute(new TransactionCallbackWithoutResult() {
+                    @Override
+                    protected void doInTransactionWithoutResult(TransactionStatus status) {
+                        dao.markAttendanceSiteForSync(batchIds, syncTime);
+                    }
+                });
+                for (Long id : batchIds) {
+                    // execute per-site calculation in its own transaction
+                    txTemplate.execute(new TransactionCallbackWithoutResult() {
+                        @Override
+                        protected void doInTransactionWithoutResult(TransactionStatus status) {
+                            calculateStats(id);
+                        }
+                    });
                     lastId = id > lastId ? id : lastId++; // never-ending loop protection
                 }
                 log.info("AttendanceStatCalc in progress {}", getSummary());
@@ -197,4 +226,11 @@ public class AttendanceStatCalc {
 
     @Setter
     private AttendanceLogic attendanceLogic;
+
+    private TransactionTemplate txTemplate;
+
+    // Injected via Spring to build a TransactionTemplate without proxies
+    public void setTransactionManager(PlatformTransactionManager transactionManager) {
+        this.txTemplate = new TransactionTemplate(transactionManager);
+    }
 }

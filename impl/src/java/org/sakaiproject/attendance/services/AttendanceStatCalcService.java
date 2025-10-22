@@ -14,18 +14,13 @@
  *  limitations under the License.
  */
 
-package org.sakaiproject.attendance.types;
-
-import org.sakaiproject.attendance.model.Status;
-import org.sakaiproject.springframework.orm.hibernate.EnumUserType;
+package org.sakaiproject.attendance.services;
 
 /**
- * @author Leonardo Canessa [lcanessa1 (at) udayton (dot) edu]
- * @author Duffy Gillman
- * Modeled after org.sakaiproject.scheduler.events.hibernate.TriggerEventEnumUserType.java
+ * Simple interface so Spring can create JDK proxies for transactional boundaries
+ * without requiring CGLIB class-based proxies in the shared Sakai context.
  */
-public class StatusUserType extends EnumUserType<Status> {
-    public StatusUserType(){
-        super(Status.class);
-    }
+public interface AttendanceStatCalcService {
+    void execute();
 }
+

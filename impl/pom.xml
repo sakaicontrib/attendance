@@ -86,10 +86,6 @@
 			<groupId>org.sakaiproject.kernel</groupId>
   			<artifactId>sakai-kernel-util</artifactId>
 		</dependency>
-		<dependency>
-			<groupId>org.sakaiproject.genericdao</groupId>
-			<artifactId>generic-dao</artifactId>
-		</dependency>
         <dependency>
             <groupId>org.sakaiproject.grading</groupId>
             <artifactId>sakai-grading-api</artifactId>
