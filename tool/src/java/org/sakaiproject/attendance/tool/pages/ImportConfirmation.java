@@ -86,8 +86,8 @@ public class ImportConfirmation  extends BasePage{
         };
         attendanceItemTableContainer.add(oldCommentContainer);
         attendanceItemTableContainer.add(newCommentContainer);
-        oldCommentContainer.add(new Label("old-comment", "Old Comment"));
-        newCommentContainer.add(new Label("new-comment", "New Comment"));
+        oldCommentContainer.add(new Label("old-comment", getString("attendance.export.confirmation.header.oldComment")));
+        newCommentContainer.add(new Label("new-comment", getString("attendance.export.confirmation.header.newComment")));
     }
 
     private void createStatsTableData(WebMarkupContainer attendanceItemTableContainer, List<ImportConfirmList> attendanceItemDataList, boolean commentsChanged) {
