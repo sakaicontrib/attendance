@@ -37,7 +37,7 @@ describe("Attendance tool smoke test", () => {
     cy.get("input#name", { timeout: 15000 }).should("be.visible").clear().type(eventName);
     cy.get("input#startDateTime").clear().type(startTime);
 
-    cy.get("button[id^='submit'][class*='btn-primary']", { timeout: 15000 }).first().click();
+    cy.get("button.btn-primary").contains("Create").first().click();
 
     cy.contains("#feedbackSpan", eventName, { timeout: 15000 }).should("exist");
     cy.get("#overviewTable").contains("td", eventName).should("exist");
