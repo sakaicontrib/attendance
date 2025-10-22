@@ -9,6 +9,7 @@ jobs:
     runs-on: ubuntu-22.04
     timeout-minutes: 120
     env:
+      TERM: xterm
       JAVA_OPTS: "-Dhttp.agent=Sakai -Xms2512m -Xmx2512m -Dsakai.cookieName=SAKAIID -Dsakai.demo=true"
       MAVEN_OPTS: "-Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=WARN -Dorg.slf4j.simpleLogger.showDateTime=true -Djava.awt.headless=true -Dmaven.wagon.http.retryHandler.count=2 -Dmaven.wagon.http.pool=true"
       TOMCAT_DIR: "${{ github.workspace }}/tomcat"
@@ -53,6 +54,7 @@ jobs:
           git clone https://github.com/sakaiproject/nightly-config.git sakai
           cp sakai/setenv.sh bin/setenv.sh
           cp sakai/cypress.properties sakai/sakai.properties
+          sed -i '/DEBUG/d' sakai/sakai.properties
           cp -f sakai/context.xml conf/context.xml
           cp -f sakai/catalina.properties conf/catalina.properties
           sed -i 's:<Service name="Catalina">:<Service name="Catalina"><Connector port="8443" protocol="org.apache.coyote.http11.Http11NioProtocol" scheme="https" secure="true" />:g' conf/server.xml
@@ -101,6 +103,24 @@ jobs:
         env:
           CYPRESS_BASE_URL: http://localhost:8080
         run: npm run test:e2e
+
+      - name: Upload Cypress screenshots
+        if: ${{ failure() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: cypress-screenshots
+          path: cypress/screenshots/**
+          retention-days: 7
+          if-no-files-found: ignore
+
+      - name: Upload Cypress videos
+        if: ${{ failure() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: cypress-videos
+          path: cypress/videos/**
+          retention-days: 7
+          if-no-files-found: ignore
 
       - name: Upload Tomcat logs
         if: always()
