@@ -16,16 +16,33 @@
 
 package org.sakaiproject.attendance.model;
 
-import lombok.*;
+import java.io.Serializable;
+import java.time.Instant;
+import java.util.HashSet;
+import java.util.Set;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
-
-import javax.persistence.*;
-import java.io.Serializable;
-import java.util.*;
 
 /**
  * Represents an AttendanceEvent, such as a class meeting or seminar
@@ -54,13 +71,11 @@ public class AttendanceEvent implements Serializable {
     @Column(name = "NAME")
     private String name;
 
-    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "START_DATE_TIME")
-    private Date startDateTime;
+    private Instant startDateTime;
 
-    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "END_DATE_TIME")
-    private Date endDateTime;
+    private Instant endDateTime;
 
     @Column(name = "IS_REOCCURRING")
     private Boolean isReoccurring;
@@ -83,7 +98,7 @@ public class AttendanceEvent implements Serializable {
 
     @OneToMany(mappedBy = "attendanceEvent", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @Fetch(FetchMode.JOIN)
-    private Set<AttendanceRecord> records = new HashSet<AttendanceRecord>(0);
+    private Set<AttendanceRecord> records = new HashSet<>(0);
 
     @OneToOne(mappedBy = "attendanceEvent", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private AttendanceItemStats stats;
@@ -91,9 +106,8 @@ public class AttendanceEvent implements Serializable {
     @Column(name = "LAST_MODIFIED_BY", nullable = false, length = 99)
     private String lastModifiedBy;
 
-    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "LAST_MODIFIED_DATE", nullable = false)
-    private Date lastModifiedDate;
+    private Instant lastModifiedDate;
 
 	// Copy constructor
 	public AttendanceEvent(AttendanceEvent attendanceEvent){

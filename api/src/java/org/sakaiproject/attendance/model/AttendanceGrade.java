@@ -16,12 +16,8 @@
 
 package org.sakaiproject.attendance.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
-import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.Parameter;
+import java.io.Serializable;
+import java.time.Instant;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -31,10 +27,13 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-import java.io.Serializable;
-import java.util.Date;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Parameter;
 
 /**
  * The AttendanceGrade earned for the all AttendanceItems
@@ -73,9 +72,8 @@ public class AttendanceGrade implements Serializable {
     @Column(name = "LAST_MODIFIED_BY", nullable = false, length = 99)
     private String lastModifiedBy;
 
-    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "LAST_MODIFIED_DATE", nullable = false)
-    private Date lastModifiedDate;
+    private Instant lastModifiedDate;
 
 	public AttendanceGrade(AttendanceSite aS, String userId){
 		this.attendanceSite = aS;

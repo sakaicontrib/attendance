@@ -16,11 +16,18 @@
 
 package org.sakaiproject.attendance.dao;
 
-import org.sakaiproject.attendance.model.*;
-
 import java.io.Serializable;
-import java.util.Date;
+import java.time.Instant;
 import java.util.List;
+
+import org.sakaiproject.attendance.model.AttendanceEvent;
+import org.sakaiproject.attendance.model.AttendanceGrade;
+import org.sakaiproject.attendance.model.AttendanceItemStats;
+import org.sakaiproject.attendance.model.AttendanceRecord;
+import org.sakaiproject.attendance.model.AttendanceSite;
+import org.sakaiproject.attendance.model.AttendanceStatus;
+import org.sakaiproject.attendance.model.AttendanceUserStats;
+import org.sakaiproject.attendance.model.GradingRule;
 
 /**
  * DAO interface for the Attendance Tool
@@ -245,7 +252,7 @@ public interface AttendanceDao {
 	 * Return a batch of AttendanceSites
 	 * @return a List of AttendanceSite IDs (max 5)
 	 */
-	List<Long> getAttendanceSiteBatch(Date syncTime, Long lastId);
+	List<Long> getAttendanceSiteBatch(Instant syncTime, Long lastId);
 
 	/**
 	 * Return a list of all AttendanceSites In Sync
@@ -258,7 +265,7 @@ public interface AttendanceDao {
 	 * @param ids, a list of IDs to mark
 	 * @return boolean value of success
 	 */
-	boolean markAttendanceSiteForSync(List<Long> ids, Date syncTime);
+	boolean markAttendanceSiteForSync(List<Long> ids, Instant syncTime);
 
 	/**
 	 * Returns a list containing all of the grading rules for a given AttendanceSite.

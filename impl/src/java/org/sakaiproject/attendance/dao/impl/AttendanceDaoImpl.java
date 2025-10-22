@@ -20,13 +20,20 @@ import org.hibernate.HibernateException;
 import org.hibernate.LockOptions;
 import org.hibernate.Session;
 import org.sakaiproject.attendance.dao.AttendanceDao;
-import org.sakaiproject.attendance.model.*;
+import org.sakaiproject.attendance.model.AttendanceEvent;
+import org.sakaiproject.attendance.model.AttendanceGrade;
+import org.sakaiproject.attendance.model.AttendanceItemStats;
+import org.sakaiproject.attendance.model.AttendanceRecord;
+import org.sakaiproject.attendance.model.AttendanceSite;
+import org.sakaiproject.attendance.model.AttendanceStatus;
+import org.sakaiproject.attendance.model.AttendanceUserStats;
+import org.sakaiproject.attendance.model.GradingRule;
 import org.springframework.dao.DataAccessException;
 import org.springframework.orm.hibernate5.HibernateCallback;
 import org.springframework.orm.hibernate5.support.HibernateDaoSupport;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.time.Instant;
 import java.util.List;
 
 import lombok.extern.slf4j.Slf4j;
@@ -584,7 +591,7 @@ public AttendanceItemStats getAttendanceItemStats(AttendanceEvent aE) {
 	 * {@inheritDoc}
 	 */
 	@SuppressWarnings("unchecked")
-	public List<Long> getAttendanceSiteBatch(final Date syncTime, final Long lastId) {
+	public List<Long> getAttendanceSiteBatch(final Instant syncTime, final Long lastId) {
 		final HibernateCallback<List<Long>> hcb = new HibernateCallback<List<Long>>() {
 			@Override
 			public List<Long> doInHibernate(Session session) throws HibernateException {
@@ -629,7 +636,7 @@ public AttendanceItemStats getAttendanceItemStats(AttendanceEvent aE) {
 	 * {@inheritDoc}
 	 */
 	@SuppressWarnings("unchecked")
-	public boolean markAttendanceSiteForSync(final List<Long> ids, final Date syncTime) {
+	public boolean markAttendanceSiteForSync(final List<Long> ids, final Instant syncTime) {
 		final HibernateCallback hcb = new HibernateCallback() {
 			@Override
 			public Integer doInHibernate(Session session) throws HibernateException {

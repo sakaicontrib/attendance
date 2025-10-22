@@ -25,9 +25,20 @@ import org.springframework.transaction.support.TransactionTemplate;
 import org.sakaiproject.attendance.dao.AttendanceDao;
 import org.sakaiproject.attendance.logic.AttendanceLogic;
 import org.sakaiproject.attendance.logic.SakaiProxy;
-import org.sakaiproject.attendance.model.*;
+import org.sakaiproject.attendance.model.AttendanceEvent;
+import org.sakaiproject.attendance.model.AttendanceItemStats;
+import org.sakaiproject.attendance.model.AttendanceRecord;
+import org.sakaiproject.attendance.model.AttendanceSite;
+import org.sakaiproject.attendance.model.AttendanceStatus;
+import org.sakaiproject.attendance.model.AttendanceUserStats;
+import org.sakaiproject.attendance.model.Status;
 
-import java.util.*;
+import java.time.Instant;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * @author Leonardo Canessa [lcanessa1 (at) udayton (dot) edu]
@@ -49,7 +60,7 @@ public class AttendanceStatCalc implements AttendanceStatCalcService {
 
     public void execute() {
         log.debug("AttendanceStatCalc execute()");
-        Date syncTime = new Date();
+	Instant syncTime = Instant.now();
         Long lastId = 0L;
 
         List<Long> ids = dao.getAttendanceSiteBatch(syncTime, lastId);

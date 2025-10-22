@@ -16,6 +16,22 @@
 
 package org.sakaiproject.attendance.model;
 
+import java.io.Serializable;
+import java.time.Instant;
+import java.util.HashSet;
+import java.util.Set;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -25,12 +41,7 @@ import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
-import org.hibernate.annotations.Type;
 import org.sakaiproject.attendance.util.AttendanceConstants;
-
-import javax.persistence.*;
-import java.io.Serializable;
-import java.util.*;
 
 /**
  * An AttendanceSite represents all the Attendance related data for a specific Sakai Site.
@@ -58,8 +69,8 @@ public class AttendanceSite implements Serializable {
     @Column(name = "SITE_ID")
     private String siteID;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "DEFAULT_STATUS")
-    @Type(type = "org.sakaiproject.attendance.types.StatusUserType")
     private Status defaultStatus;
 
     @Column(name = "MAXIMUM_GRADE")
@@ -83,9 +94,8 @@ public class AttendanceSite implements Serializable {
     @Column(name = "SYNC")
     private Boolean isSyncing;
 
-    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "SYNC_TIME")
-    private Date syncTime;
+    private Instant syncTime;
 
     @OneToMany(mappedBy = "attendanceSite", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @Fetch(FetchMode.JOIN)

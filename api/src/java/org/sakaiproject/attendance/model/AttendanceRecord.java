@@ -16,15 +16,29 @@
 
 package org.sakaiproject.attendance.model;
 
-import lombok.*;
+import java.io.Serializable;
+import java.time.Instant;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
+
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
-import org.hibernate.annotations.Type;
-
-import javax.persistence.*;
-import java.io.Serializable;
-import java.util.Date;
 
 /**
  * An AttendanceRecord for a specific user for a specific AttendanceEvent
@@ -59,8 +73,8 @@ public class AttendanceRecord implements Serializable {
     @Column(name = "USER_ID", length = 99)
     private String          userID;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "STATUS")
-    @Type(type = "org.sakaiproject.attendance.types.StatusUserType")
     private Status          status;
 
     @Column(name = "RECORD_COMMENT", length = 4000)
@@ -69,9 +83,8 @@ public class AttendanceRecord implements Serializable {
     @Column(name = "LAST_MODIFIED_BY", nullable = false, length = 99)
     private String          lastModifiedBy;
 
-    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "LAST_MODIFIED_DATE", nullable = false)
-    private Date            lastModifiedDate;
+    private Instant         lastModifiedDate;
 
     public AttendanceRecord(AttendanceEvent e, String uId, Status s) {
         this.attendanceEvent    = e;

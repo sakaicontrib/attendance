@@ -16,13 +16,13 @@
 
 package org.sakaiproject.attendance.model;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
-import org.hibernate.annotations.Type;
+import java.io.Serializable;
+import java.time.Instant;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -31,8 +31,10 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
-import java.io.Serializable;
-import java.util.Date;
+
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 /**
  * @author David P. Bauer [dbauer1 (at) udayton (dot) edu]
@@ -56,8 +58,8 @@ public class GradingRule implements Serializable {
     @JoinColumn(name = "A_SITE_ID", nullable = false)
     private AttendanceSite attendanceSite;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "STATUS", nullable = false)
-    @Type(type = "org.sakaiproject.attendance.types.StatusUserType")
     private Status status;
 
     @Column(name = "START_RANGE", nullable = false)
@@ -73,7 +75,7 @@ public class GradingRule implements Serializable {
     private String lastModifiedBy;
 
     @Column(name = "LAST_MODIFIED_DATE", nullable = false)
-    private Date lastModifiedDate;
+    private Instant lastModifiedDate;
 
     public GradingRule(AttendanceSite attendanceSite) {
         this.attendanceSite = attendanceSite;

@@ -17,6 +17,9 @@
 package org.sakaiproject.attendance.tool.pages;
 
 
+import java.time.Instant;
+import java.util.Date;
+
 import org.apache.wicket.Component;
 import org.apache.wicket.extensions.ajax.markup.html.AjaxLazyLoadPanel;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -220,7 +223,8 @@ public class StudentView extends BasePage {
                     disableLink(eventLink);
                 }
                 item.add(eventLink);
-                item.add(new Label("event-date", item.getModelObject().getAttendanceEvent().getStartDateTime()));
+                Instant start = item.getModelObject().getAttendanceEvent().getStartDateTime();
+                item.add(new Label("event-date", start != null ? Date.from(start) : null));
                 AjaxLazyLoadPanel dataPanelSlow = new AjaxLazyLoadPanel("dataPanelSlow") {
                     @Override
                     public Component getLazyLoadComponent(String s) {

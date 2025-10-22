@@ -17,7 +17,12 @@
 package org.sakaiproject.attendance.logic;
 
 import java.io.Serializable;
-import java.util.*;
+import java.time.Instant;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -25,7 +30,16 @@ import org.springframework.transaction.annotation.Transactional;
 
 import org.sakaiproject.attendance.api.AttendanceGradebookProvider;
 import org.sakaiproject.attendance.dao.AttendanceDao;
-import org.sakaiproject.attendance.model.*;
+import org.sakaiproject.attendance.model.AttendanceEvent;
+import org.sakaiproject.attendance.model.AttendanceGrade;
+import org.sakaiproject.attendance.model.AttendanceItemStats;
+import org.sakaiproject.attendance.model.AttendanceRecord;
+import org.sakaiproject.attendance.model.AttendanceSite;
+import org.sakaiproject.attendance.model.AttendanceStatus;
+import org.sakaiproject.attendance.model.AttendanceStats;
+import org.sakaiproject.attendance.model.AttendanceUserStats;
+import org.sakaiproject.attendance.model.GradingRule;
+import org.sakaiproject.attendance.model.Status;
 import org.sakaiproject.attendance.util.AttendanceConstants;
 import org.sakaiproject.entity.api.Entity;
 import org.sakaiproject.entity.api.EntityManager;
@@ -227,22 +241,23 @@ public class AttendanceLogicImpl implements AttendanceLogic, EntityTransferrer {
 	}
 
 	private void updateModifier(Object obj) {
+		Instant now = Instant.now();
 		if (obj instanceof AttendanceRecord) {
 			AttendanceRecord aR = (AttendanceRecord) obj;
 			aR.setLastModifiedBy(sakaiProxy.getCurrentUserId());
-			aR.setLastModifiedDate(new Date());
+			aR.setLastModifiedDate(now);
 		} else if (obj instanceof AttendanceEvent) {
 			AttendanceEvent aE = (AttendanceEvent) obj;
 			aE.setLastModifiedBy(sakaiProxy.getCurrentUserId());
-			aE.setLastModifiedDate(new Date());
+			aE.setLastModifiedDate(now);
 		} else if (obj instanceof AttendanceGrade) {
 			AttendanceGrade aG = (AttendanceGrade) obj;
 			aG.setLastModifiedBy(sakaiProxy.getCurrentUserId());
-			aG.setLastModifiedDate(new Date());
+			aG.setLastModifiedDate(now);
 		} else if (obj instanceof GradingRule) {
 			GradingRule gR = (GradingRule) obj;
 			gR.setLastModifiedBy(sakaiProxy.getCurrentUserId());
-			gR.setLastModifiedDate(new Date());
+			gR.setLastModifiedDate(now);
 		}
 	}
 
