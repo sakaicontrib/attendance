@@ -59,7 +59,7 @@ public class AttendanceGrade implements Serializable {
     @Column(name = "GRADE")
     private Double grade;
 
-    @Column(name = "USER_ID")
+    @Column(name = "USER_ID", length = 99)
     private String userID;
 
     @Column(name = "OVERRIDE")

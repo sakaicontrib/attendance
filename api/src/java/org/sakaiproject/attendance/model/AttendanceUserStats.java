@@ -45,7 +45,7 @@ public class AttendanceUserStats extends AttendanceStats {
     @Column(name = "A_USER_STATS_ID", nullable = false, updatable = false)
     private                 Long            id;
 
-    @Column(name = "USER_ID")
+    @Column(name = "USER_ID", length = 99)
     private                 String          userID;
 
     @ManyToOne(fetch = FetchType.EAGER)

@@ -31,6 +31,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -55,7 +56,12 @@ import org.sakaiproject.attendance.util.AttendanceConstants;
 @AllArgsConstructor
 @EqualsAndHashCode(exclude="attendanceStatuses")
 @Entity(name = "AttendanceSite")
-@Table(name = "ATTENDANCE_SITE_T")
+@Table(
+    name = "ATTENDANCE_SITE_T",
+    uniqueConstraints = {
+        @UniqueConstraint(name = "UK_ATT_SITE_SITE_ID", columnNames = "SITE_ID")
+    }
+)
 public class AttendanceSite implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -66,11 +72,11 @@ public class AttendanceSite implements Serializable {
     @Column(name = "A_SITE_ID", nullable = false, updatable = false)
     private Long id;
 
-    @Column(name = "SITE_ID")
+    @Column(name = "SITE_ID", length = 99)
     private String siteID;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "DEFAULT_STATUS")
+    @Column(name = "DEFAULT_STATUS", length = 20)
     private Status defaultStatus;
 
     @Column(name = "MAXIMUM_GRADE")
