@@ -25,7 +25,8 @@ jobs:
           repository: sakaiproject/sakai
           ref: master
           path: sakai
-          fetch-depth: 0
+          fetch-depth: 1
+          fetch-tags: false
 
       - name: Set up Temurin JDK 17
         uses: actions/setup-java@v4
@@ -63,7 +64,7 @@ jobs:
         run: mvn --batch-mode -DskipTests -Denforcer.skip -Dmaven.source.skip install sakai:deploy-exploded -Dmaven.tomcat.home="${TOMCAT_DIR}"
 
       - name: Build attendance tool and deploy to Tomcat
-        run: mvn --batch-mode -DskipTests -Denforcer.skip install sakai:deploy-exploded -Dmaven.tomcat.home="${TOMCAT_DIR}"
+        run: mvn --batch-mode install sakai:deploy-exploded -Dmaven.tomcat.home="${TOMCAT_DIR}"
 
       - name: Start Tomcat and verify startup
         run: |
