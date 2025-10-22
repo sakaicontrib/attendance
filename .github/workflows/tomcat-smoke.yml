@@ -59,6 +59,15 @@ jobs:
           popd
           mysql -u root -proot -e "DROP DATABASE IF EXISTS sakai; CREATE DATABASE sakai;"
 
+      - name: Cache Maven repository
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.m2/repository
+          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-m2-
+
       - name: Build Sakai master and deploy to Tomcat
         working-directory: sakai
         run: mvn --batch-mode -DskipTests -Denforcer.skip -Dmaven.source.skip install sakai:deploy-exploded -Dmaven.tomcat.home="${TOMCAT_DIR}"
