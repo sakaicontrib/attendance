@@ -20,7 +20,7 @@
 	<parent>
     <artifactId>attendance</artifactId>
     <groupId>org.sakaiproject.attendance</groupId>
-    <version>25-SNAPSHOT</version>
+    <version>26-SNAPSHOT</version>
   </parent>
 	
 	<name>attendance - Implementation</name>
