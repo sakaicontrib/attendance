@@ -24,37 +24,37 @@
     <h2> </h2>
     <form wicket:id="form">
         <div class="iclPage">
-            <button type="submit" wicket:id="submitLink2" class="cancel"><wicket:message key="attendance.export.confirmation.button.cancel"/></button>
-            <button type="submit" wicket:id="submitLink" class="confirm" ><wicket:message key="attendance.export.confirmation.button.confirm"/></button>
+            <button type="submit" wicket:id="submitLink2" class="btn btn-outline-secondary me-2"><wicket:message key="attendance.export.confirmation.button.cancel"/></button>
+            <button type="submit" wicket:id="submitLink" class="btn btn-primary"><wicket:message key="attendance.export.confirmation.button.confirm"/></button>
             <label wicket:id="lowerErrorAlert" class="text-danger" />
         </div>
     </form>
     <br />
     <h3 class="iclPage"><wicket:message key="attendance.export.confirmation.tableHeader" /></h3>
-    <table wicket:id="student-overview-stats-table" id="overviewTable" class="importChangeTable">
+    <table wicket:id="student-overview-stats-table" id="overviewTable" class="table table-striped table-hover align-middle ms-3">
         <thead>
         <tr>
-            <th class="importEventandStudentHeader"><span> <wicket:message key="attendance.export.confirmation.header.event" /></span></th>
-            <th class="importEventandStudentHeader"><span> <wicket:message key="attendance.export.confirmation.header.student" /></span></th>
-            <th class="importOldCommentandStatusHeader"><span> <wicket:message key="attendance.export.confirmation.header.oldStatus" /></span></th>
-            <th wicket:id="old-comment-header" class="importOldCommentandStatusHeader"><span> <wicket:message key="attendance.export.confirmation.header.oldComment" /> </span> </th>
-            <th class="importNewCommentandStatusHeader"><span> <wicket:message key="attendance.export.confirmation.header.newStatus" /></span></th>
-            <th wicket:id="new-comment-header" class="importNewCommentandStatusHeader"><span> <wicket:message key="attendance.export.confirmation.header.newComment" /> </span></th>
+            <th scope="col" class="text-start"><span><wicket:message key="attendance.export.confirmation.header.event" /></span></th>
+            <th scope="col" class="text-start"><span><wicket:message key="attendance.export.confirmation.header.student" /></span></th>
+            <th scope="col" class="text-center"><span><wicket:message key="attendance.export.confirmation.header.oldStatus" /></span></th>
+            <th wicket:id="old-comment-header" scope="col" class="text-start"><span wicket:id="old-comment" /></th>
+            <th scope="col" class="text-center"><span><wicket:message key="attendance.export.confirmation.header.newStatus" /></span></th>
+            <th wicket:id="new-comment-header" scope="col" class="text-start"><span wicket:id="new-comment" /></th>
         </tr>
         </thead>
         <tbody>
         <tr wicket:id="students">
-            <td class="importColumn"><span wicket:id="event-name-label" /></td>
-            <td class="importColumn"><span wicket:id="student-name-label" /></td>
-            <td class="importColumn"><span wicket:id="old-status-label" /></td>
-            <td class="importColumn" wicket:id="old-comment-wmc"><span wicket:id="old-comment-label" /></td>
-            <td class="importColumn"><span wicket:id="new-status-label" /></td>
-            <td class="importColumn" wicket:id="new-comment-wmc"><span wicket:id="new-comment-label" /></td>
+            <td class="text-start"><span wicket:id="event-name-label" /></td>
+            <td class="text-start"><span wicket:id="student-name-label" /></td>
+            <td class="text-center"><span wicket:id="old-status-label" /></td>
+            <td class="text-start" wicket:id="old-comment-wmc"><span wicket:id="old-comment-label" /></td>
+            <td class="text-center"><span wicket:id="new-status-label" /></td>
+            <td class="text-start" wicket:id="new-comment-wmc"><span wicket:id="new-comment-label" /></td>
             <!--<td wicket:id="active-status-stats" class="overviewStatusCol"><span wicket:id="student-stats" /></td>-->
         </tr>
         <wicket:enclosure child="no-changes">
             <tr>
-                <td colspan="100" class="importColumn">
+                <td colspan="100" class="text-start">
                     <span wicket:id="no-changes" />
                 </td>
             </tr>
