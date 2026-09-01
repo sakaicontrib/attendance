@@ -139,6 +139,11 @@ public class AttendanceLogicImpl implements AttendanceLogic, EntityTransferrer {
 		}
 
 		updateModifier(aE);
+		for (AttendanceRecord record : aE.getRecords()) {
+			if (record.getId() == null) {
+				updateModifier(record);
+			}
+		}
 		return dao.updateAttendanceEvent(aE);
 	}
 
