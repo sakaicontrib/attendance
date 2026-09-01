@@ -109,28 +109,12 @@ public interface AttendanceDao {
 	AttendanceRecord getStatusRecord(long id);
 
 	/**
-	 * Add an AttendanceRecord
-	 *
-	 * @param aR, the AttendanceRecord to add
-	 * @return true if success, false if not
-     */
-	boolean addAttendanceRecord(AttendanceRecord aR);
-
-	/**
 	 * Updates an AttendanceRecord
 	 *
 	 * @param aR, the AttendanceRecord to update with new values
 	 * @return success of the operation
      */
 	boolean updateAttendanceRecord(AttendanceRecord aR);
-
-	/**
-	 * Update a set of AttendanceRecords
-	 *
-	 * @param aRs, a List of AttendanceRecords
-	 * @return success of the operation
-     */
-	void updateAttendanceRecords(List<AttendanceRecord> aRs);
 
 	/**
 	 * Update a set of AttendanceStatuses
@@ -189,14 +173,6 @@ public interface AttendanceDao {
      */
 	List<AttendanceGrade> getAttendanceGrades(AttendanceSite aS);
 	
-	/**
-	 * Add an AttendanceGrade to DB
-	 *
-	 * @param aG, AttendanceGrade to add
-	 * @return success of operation
-     */
-	boolean addAttendanceGrade(AttendanceGrade aG);
-
 	/**
 	 * Updates an AttendanceGrade
 	 *

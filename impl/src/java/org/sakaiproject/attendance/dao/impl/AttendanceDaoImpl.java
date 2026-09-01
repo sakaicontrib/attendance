@@ -126,6 +126,7 @@ public class AttendanceDaoImpl extends HibernateDaoSupport implements Attendance
 	 */
 	public Serializable addAttendanceEventNow(AttendanceEvent attendanceEvent) {
 		log.debug("addAttendanceEventNow( {})", attendanceEvent.toString());
+		requireAuditFields(attendanceEvent);
 
 		try{
 			return getHibernateTemplate().save(attendanceEvent);
@@ -140,6 +141,7 @@ public class AttendanceDaoImpl extends HibernateDaoSupport implements Attendance
 	 */
 	public boolean updateAttendanceEvent(AttendanceEvent aE) {
 		log.debug("updateAttendanceEvent aE: {}", aE.getName());
+		requireAuditFields(aE);
 
 		try{
 			getHibernateTemplate().saveOrUpdate(aE);
@@ -181,42 +183,15 @@ public class AttendanceDaoImpl extends HibernateDaoSupport implements Attendance
 	/**
 	 * {@inheritDoc}
 	 */
-	public boolean addAttendanceRecord(AttendanceRecord aR) {
-		log.debug("addAttendanceRecord sR for User '{}' event {} with Status {}", aR.getUserID(), aR.getAttendanceEvent().getName(), aR.getStatus().toString());
-
-		try {
-			getHibernateTemplate().save(aR);
-			return true;
-		} catch (DataAccessException de) {
-			log.error("addAttendanceRecord failed.", de);
-			return false;
-		}
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
 	public boolean updateAttendanceRecord(AttendanceRecord aR) {
+		requireAuditFields("AttendanceRecord", aR.getLastModifiedBy(), aR.getLastModifiedDate());
+
 		try {
 			getHibernateTemplate().saveOrUpdate(aR);
 			return true;
 		} catch (Exception e) {
 			log.error("update attendanceRecord failed.", e);
 			return false;
-		}
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public void updateAttendanceRecords(List<AttendanceRecord> aRs) {
-		for(AttendanceRecord aR : aRs) {
-			try {
-				getHibernateTemplate().saveOrUpdate(aR);
-				log.debug("save attendanceRecord id: " + aR.getId());
-			} catch (Exception e) {
-				log.error("update attendanceRecords failed.", e);
-			}
 		}
 	}
 
@@ -327,23 +302,9 @@ public class AttendanceDaoImpl extends HibernateDaoSupport implements Attendance
 	/**
 	 * {@inheritDoc}
 	 */
-	public boolean addAttendanceGrade(AttendanceGrade aG) {
-		log.debug("addAttendanceGrade for User '{}' grade {} for site  {}", aG.getUserID(), aG.getGrade(), aG.getAttendanceSite().getSiteID());
-
-		try {
-			getHibernateTemplate().save(aG);
-			return true;
-		} catch (DataAccessException de) {
-			log.error("addAttendanceGrade failed.", de);
-			return false;
-		}
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
 	public boolean updateAttendanceGrade(AttendanceGrade aG) {
 		log.debug("updateAttendanceGrade for User '{}' grade {} for site  {}", aG.getUserID(), aG.getGrade(), aG.getAttendanceSite().getSiteID());
+		requireAuditFields("AttendanceGrade", aG.getLastModifiedBy(), aG.getLastModifiedDate());
 
 		try {
 			getHibernateTemplate().saveOrUpdate(aG);
@@ -410,6 +371,7 @@ public class AttendanceDaoImpl extends HibernateDaoSupport implements Attendance
 	 */
 	public boolean addGradingRule(GradingRule gradingRule) {
 			log.debug("add grading rule to site {} status: {} range: {} - {} points: {}", gradingRule.getAttendanceSite().getSiteID(), gradingRule.getStatus(), gradingRule.getStartRange(), gradingRule.getEndRange(), gradingRule.getPoints());
+		requireAuditFields("GradingRule", gradingRule.getLastModifiedBy(), gradingRule.getLastModifiedDate());
 
 		try {
 			getHibernateTemplate().save(gradingRule);
@@ -543,6 +505,19 @@ public class AttendanceDaoImpl extends HibernateDaoSupport implements Attendance
 	 */
 	public void init() {
 		log.debug("AttendanceDaoImpl init()");
+	}
+
+	private void requireAuditFields(AttendanceEvent attendanceEvent) {
+		requireAuditFields("AttendanceEvent", attendanceEvent.getLastModifiedBy(), attendanceEvent.getLastModifiedDate());
+		for (AttendanceRecord record : attendanceEvent.getRecords()) {
+			requireAuditFields("AttendanceRecord", record.getLastModifiedBy(), record.getLastModifiedDate());
+		}
+	}
+
+	private void requireAuditFields(String entityName, String lastModifiedBy, Date lastModifiedDate) {
+		if (lastModifiedBy == null || lastModifiedDate == null) {
+			throw new IllegalArgumentException(entityName + " audit fields must be set before persistence");
+		}
 	}
 
 	@SuppressWarnings("unchecked")
